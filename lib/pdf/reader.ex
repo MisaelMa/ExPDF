@@ -859,14 +859,11 @@ defmodule Pdf.Reader do
 
       {:error, _} when recover_mode ->
         # %%EOF missing — linear scan needed.
-        # Log :eof_marker_missing PLUS :xref_recovered.
-        case do_xref_linear_scan(binary) do
-          {:ok, entries, trailer, events} ->
-            {:ok, entries, trailer, [{:eof_marker_missing, :linear_scan_used} | events]}
-
-          err ->
-            err
-        end
+        # Log :eof_marker_missing PLUS :xref_recovered. `do_xref_linear_scan/1`
+        # is total per `XRef.recover/1`'s spec (PDF 1.7 § 7.5.4), so destructure
+        # directly — a defensive case-clause would be dead code per Dialyzer.
+        {:ok, entries, trailer, events} = do_xref_linear_scan(binary)
+        {:ok, entries, trailer, [{:eof_marker_missing, :linear_scan_used} | events]}
 
       {:error, _} = err ->
         err

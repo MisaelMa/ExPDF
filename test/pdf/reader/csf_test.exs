@@ -28,12 +28,9 @@ defmodule Pdf.Reader.CsfTest do
 
     test "extracts the document title from page 1" do
       {:ok, doc} = Pdf.Reader.open(@csf_path)
-      {:ok, pages = [page1, _page2], _doc} = Pdf.Reader.read_text(doc)
-
-      IO.inspect(pages, label: "Opened CSF document", pretty: true, limit: :infinity)
+      {:ok, [page1, _page2], _doc} = Pdf.Reader.read_text(doc)
 
       page1_n = normalize(page1)
-      IO.inspect(page1_n, label: "Normalized page 1")
 
       assert page1_n =~ "CÉDULADEIDENTIFICACIÓNFISCAL"
       assert page1_n =~ "REGISTROFEDERALDECONTRIBUYENTES"
@@ -147,6 +144,7 @@ defmodule Pdf.Reader.CsfTest do
       {:ok, lines, _} = Pdf.Reader.read_lines(doc)
 
       multi_token = Enum.find(lines, &(length(&1.tokens) >= 2))
+
       assert multi_token != nil
 
       xs = Enum.map(multi_token.tokens, & &1.x)

@@ -255,16 +255,19 @@ defmodule Pdf.Reader.Font.WidthsTest do
       assert widths_map["F1"].(<<65>>) == [600]
     end
 
-    test "font without /Widths produces zero-list closure" do
-      # A font dict with no Widths/FirstChar/LastChar — all codes return 0
+    test "font without /Widths falls back to Standard-14 average (500 units)" do
+      # A font dict with no Widths/FirstChar/LastChar — typical of Standard 14
+      # Type 1 fonts. Per PDF 1.7 § 9.6.2.2 the reader is expected to use
+      # bundled AFM metrics; we approximate every glyph as 500 units instead.
+      # This prevents the all-glyphs-at-same-X regression in
+      # read_text_with_positions/1 for Standard-14-only PDFs.
       font_dict = %{"Subtype" => {:name, "Type1"}}
 
       resources = %{"Font" => %{"F2" => font_dict}}
 
       assert {:ok, widths_map, _doc} = Widths.build_widths_for_resources(resources, empty_doc())
       assert Map.has_key?(widths_map, "F2")
-      # No widths → missing width = 0
-      assert widths_map["F2"].(<<65>>) == [0]
+      assert widths_map["F2"].(<<65>>) == [500]
     end
 
     test "empty resources Font map returns empty widths map" do

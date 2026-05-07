@@ -53,6 +53,15 @@ defmodule Pdf.Reader.Page do
 
   alias Pdf.Reader.{Document, ObjectResolver}
 
+  # `ref_key/1` and `extract_kid_key/1` keep a defensive fallback clause that
+  # accepts already-unwrapped `{n, g}` tuples (or any other shape, in
+  # `extract_kid_key/1`'s case). Dialyzer's success-typing on the call sites
+  # proves the input is always a parser-emitted `{:ref, _, _}` tuple — the
+  # fallback is unreachable today but cheap insurance against parser shape
+  # widening in the future. Silence the "pattern can never match" warnings.
+  # Reference for the wrap convention: PDF 1.7 § 7.3.10 (indirect references).
+  @dialyzer {:nowarn_function, ref_key: 1, extract_kid_key: 1}
+
   @doc """
   Walks the page tree and returns a list of leaf `/Page` object refs in order.
 

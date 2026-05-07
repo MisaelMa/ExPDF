@@ -12,6 +12,21 @@ defmodule Pdf.Reader.Font.Widths do
   Out-of-range codes fall back to `/MissingWidth` from `/FontDescriptor`, or
   `0` if absent. (§ 9.6.2.1, § 9.6.4)
 
+  ### Standard-14 fallback
+
+  When `/Widths` is entirely absent — typical of Standard 14 Type 1 fonts
+  (Helvetica, Times-Roman, Courier, Symbol, ZapfDingbats and their styled
+  variants) — the spec (§ 9.6.2.2) requires the reader to use bundled AFM
+  metrics. We do not bundle AFMs (documented gap), so every glyph is
+  approximated as **500 units (~0.5 em)**, the rough average across the
+  Adobe Standard 14 AFM tables. This restores usable text positioning for
+  Standard-14-only PDFs (most government forms, RFCs, simple reports);
+  exact column alignment still requires AFM bundling.
+
+  Source: Adobe Font Metrics for the Core 14 — public domain via
+  https://github.com/adobe-type-tools/Adobe-Core-14-Font-AFM-Files (avg
+  glyph width across the 14 fonts ≈ 500 units).
+
   ## CIDFonts (Type0 → DescendantFonts[0])
 
   Width lookup uses `/W` (Form A and Form B entries) and `/DW` (default: 1000).
@@ -163,6 +178,17 @@ defmodule Pdf.Reader.Font.Widths do
 
     {missing_width, doc2} = resolve_missing_width(font_dict, doc)
 
+    # PDF 1.7 § 9.6.2.2: when a font has NO embedded /Widths array (typical
+    # of Standard 14 Type 1 fonts), the reader is expected to use bundled
+    # AFM metrics. We don't bundle AFMs (documented gap), so we approximate
+    # every glyph as 500 units (~0.5 em) — the rough average across the
+    # Adobe Core-14 AFM tables. Without this, every glyph would advance by
+    # 0 and `read_text_with_positions/1` would collapse all glyphs onto the
+    # same X coordinate (seen in the wild on government tax PDFs and RFCs).
+    # When /Widths IS present but a code is out of range, the spec-correct
+    # /MissingWidth (default 0) still applies.
+    fallback_width = if widths_list == [], do: 500, else: missing_width
+
     widths_fn = fn bytes ->
       for <<byte <- bytes>> do
         if byte >= first_char and byte <= last_char do
@@ -173,7 +199,7 @@ defmodule Pdf.Reader.Font.Widths do
             w -> int_val(w, missing_width)
           end
         else
-          missing_width
+          fallback_width
         end
       end
     end
