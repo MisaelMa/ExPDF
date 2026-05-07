@@ -28,9 +28,12 @@ defmodule Pdf.Reader.CsfTest do
 
     test "extracts the document title from page 1" do
       {:ok, doc} = Pdf.Reader.open(@csf_path)
-      {:ok, [page1, _page2], _doc} = Pdf.Reader.read_text(doc)
+      {:ok, pages = [page1, _page2], _doc} = Pdf.Reader.read_text(doc)
+
+      IO.inspect(pages, label: "Opened CSF document", pretty: true, limit: :infinity)
 
       page1_n = normalize(page1)
+      IO.inspect(page1_n, label: "Normalized page 1")
 
       assert page1_n =~ "CÉDULADEIDENTIFICACIÓNFISCAL"
       assert page1_n =~ "REGISTROFEDERALDECONTRIBUYENTES"
@@ -88,6 +91,66 @@ defmodule Pdf.Reader.CsfTest do
         assert is_number(run.y)
         assert is_binary(run.text)
       end)
+    end
+  end
+
+  describe "real-world CSF — line reconstruction" do
+    test "read_lines/1 produces logical lines with tokens" do
+      {:ok, doc} = Pdf.Reader.open(@csf_path)
+      {:ok, lines, _doc} = Pdf.Reader.read_lines(doc)
+
+      # Sanity: the CSF has many lines across 2 pages.
+      assert length(lines) > 30
+      assert Enum.all?(lines, &(&1.page in 1..2))
+
+      # Every line carries its position and at least one token.
+      Enum.each(lines, fn line ->
+        assert is_number(line.y)
+        assert is_number(line.x)
+        assert line.tokens != []
+        assert is_binary(line.text)
+      end)
+    end
+
+    test "RFC, idCIF and CURP appear as detectable line content" do
+      {:ok, doc} = Pdf.Reader.open(@csf_path)
+      {:ok, lines, _} = Pdf.Reader.read_lines(doc)
+
+      texts = Enum.map(lines, & &1.text)
+
+      assert Enum.any?(texts, &String.contains?(&1, "XAXX010101000"))
+      assert Enum.any?(texts, &String.contains?(&1, "17030554538"))
+      assert Enum.any?(texts, &String.contains?(&1, "XEXX010101HNEXXXA4"))
+    end
+
+    test "the Asalariado activity row is detected as a multi-token line" do
+      {:ok, doc} = Pdf.Reader.open(@csf_path)
+      {:ok, lines, _} = Pdf.Reader.read_lines(doc)
+
+      activity_line =
+        Enum.find(lines, fn line ->
+          String.contains?(line.text, "Asalariado") and
+            String.contains?(line.text, "29/06/2015")
+        end)
+
+      assert activity_line != nil, "Could not find the Asalariado activity row"
+      assert activity_line.page == 2
+      # Order column + activity name + percentage + start date = 3+ tokens
+      assert length(activity_line.tokens) >= 3
+
+      xs = Enum.map(activity_line.tokens, & &1.x)
+      assert xs == Enum.sort(xs), "Tokens must be ordered left-to-right"
+    end
+
+    test "tokens within a line have distinct X positions" do
+      {:ok, doc} = Pdf.Reader.open(@csf_path)
+      {:ok, lines, _} = Pdf.Reader.read_lines(doc)
+
+      multi_token = Enum.find(lines, &(length(&1.tokens) >= 2))
+      assert multi_token != nil
+
+      xs = Enum.map(multi_token.tokens, & &1.x)
+      assert xs == Enum.uniq(xs)
     end
   end
 end

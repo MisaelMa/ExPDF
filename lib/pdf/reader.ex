@@ -409,6 +409,165 @@ defmodule Pdf.Reader do
   end
 
   @doc """
+  Reconstructs logical text lines from the page's `TextRun`s.
+
+  Many machine-generated PDFs (government forms, tax documents) place
+  glyphs individually with TJ + per-glyph kerning, producing one
+  `TextRun` per character. This function coalesces those runs into a
+  list of `Pdf.Reader.Line` structs, where each line carries:
+
+  - `:page`, `:y`, `:x` — absolute position in user space
+  - `:text` — the joined text with single spaces between tokens
+  - `:tokens` — `[%{x, text, width}]` separated by visible whitespace
+
+  The token list lets callers detect column layouts (e.g. table rows
+  where every line has tokens at the same X positions).
+
+  ## Options
+
+  - `:y_tolerance` (default `2.0`) — runs whose Y differs by less than
+    this many points collapse onto the same line. PDFs often jitter
+    by fractional points within a line.
+  - `:gap_factor` (default `1.0`) — split into a new token when the
+    horizontal gap between two consecutive runs exceeds
+    `font_size × gap_factor`. Lower factor = more splits. The default
+    of 1 em separates tokens at visible whitespace (typical inter-glyph
+    advance is ~0.5 em, so 1 em reliably catches real spaces).
+
+  Returns `{:ok, [Line.t()], doc}`. Lines are ordered by page ascending,
+  then by Y descending (top-to-bottom in PDF user space).
+
+  ## Spec references
+
+  - PDF 1.7 § 9.4 — Text objects
+  - PDF 1.7 § 9.4.4 — Text-showing operators
+  """
+  @spec read_lines(Document.t(), keyword()) ::
+          {:ok, [Pdf.Reader.Line.t()], Document.t()} | {:error, reason()}
+  def read_lines(%Document{} = doc, opts \\ []) do
+    with {:ok, runs, doc2} <- read_text_with_positions(doc) do
+      {:ok, lines_from_runs(runs, opts), doc2}
+    end
+  end
+
+  @doc """
+  Bang variant of `read_lines/2`. Raises `Pdf.Reader.Error` on failure.
+  """
+  @spec read_lines!(Document.t(), keyword()) :: [Pdf.Reader.Line.t()]
+  def read_lines!(doc, opts \\ []) do
+    case read_lines(doc, opts) do
+      {:ok, lines, _doc} -> lines
+      {:error, reason} -> raise Pdf.Reader.Error, reason
+    end
+  end
+
+  @doc """
+  Pure helper: groups a flat `TextRun` list into `Line` structs.
+
+  Exposed publicly so callers who already have a runs list (from
+  `read_text_with_positions/1` or hand-crafted in tests) can reuse the
+  grouping logic without reopening the document.
+
+  See `read_lines/2` for option semantics.
+  """
+  @spec lines_from_runs([Pdf.Reader.TextRun.t()], keyword()) :: [Pdf.Reader.Line.t()]
+  def lines_from_runs(runs, opts \\ []) when is_list(runs) do
+    y_tol = Keyword.get(opts, :y_tolerance, 2.0)
+    gap_factor = Keyword.get(opts, :gap_factor, 1.0)
+
+    runs
+    |> Enum.reject(&(&1.text == ""))
+    |> Enum.group_by(& &1.page)
+    |> Enum.sort_by(fn {page, _} -> page end)
+    |> Enum.flat_map(fn {page, page_runs} ->
+      page_runs
+      |> bucket_by_y(y_tol)
+      |> Enum.map(&build_line(page, &1, gap_factor))
+    end)
+  end
+
+  # Sort by Y descending (PDF Y goes up — top of page = highest Y),
+  # then walk the sorted list, opening a new bucket whenever the Y drop
+  # exceeds the tolerance.
+  #
+  # Buckets are accumulated by prepend for O(1) growth, then reversed so
+  # the runs within each bucket retain their parser-emit order. This is
+  # critical for PDFs that use a single `TJ` operator across many glyphs:
+  # all glyph runs share the same starting X, so the X-sort below cannot
+  # recover natural reading order — the parser order is the only signal.
+  defp bucket_by_y(runs, y_tol) do
+    runs
+    |> Enum.sort_by(& &1.y, :desc)
+    |> Enum.reduce([], fn run, acc ->
+      case acc do
+        [] ->
+          [[run]]
+
+        [[head | _] = current | rest] ->
+          if abs(run.y - head.y) <= y_tol do
+            [[run | current] | rest]
+          else
+            [[run], current | rest]
+          end
+      end
+    end)
+    |> Enum.reverse()
+    |> Enum.map(&Enum.reverse/1)
+  end
+
+  defp build_line(page, line_runs, gap_factor) do
+    sorted = Enum.sort_by(line_runs, & &1.x)
+    tokens = tokenize_runs(sorted, gap_factor)
+    text = tokens |> Enum.map(& &1.text) |> Enum.join(" ")
+    first = List.first(sorted)
+
+    %Pdf.Reader.Line{
+      page: page,
+      y: first.y,
+      x: first.x,
+      text: text,
+      tokens: tokens
+    }
+  end
+
+  # Split a sorted-by-X list of runs into tokens, separating wherever
+  # the gap to the next run exceeds `prev.size * gap_factor`.
+  defp tokenize_runs([], _factor), do: []
+
+  defp tokenize_runs([first | _] = runs, factor) do
+    runs
+    |> Enum.chunk_while(
+      [first],
+      fn run, [prev | _] = acc ->
+        threshold = max(prev.size, 1.0) * factor
+        gap = run.x - prev.x
+
+        cond do
+          # Same run as seed (chunk_while feeds the seed back on the first call)
+          run == prev and acc == [first] ->
+            {:cont, acc}
+
+          gap > threshold ->
+            {:cont, Enum.reverse(acc), [run]}
+
+          true ->
+            {:cont, [run | acc]}
+        end
+      end,
+      fn acc -> {:cont, Enum.reverse(acc), []} end
+    )
+    |> Enum.map(&run_chunk_to_token/1)
+  end
+
+  defp run_chunk_to_token([first | _] = chunk) do
+    text = chunk |> Enum.map(& &1.text) |> Enum.join("")
+    last = List.last(chunk)
+    width = max(last.x - first.x, 0.0)
+
+    %{x: first.x, text: text, width: width}
+  end
+
+  @doc """
   Returns the plain text for each page as a list of strings.
 
   Options:
