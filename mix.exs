@@ -1,13 +1,14 @@
-defmodule Pdf.Mixfile do
+defmodule ExPdf.Mixfile do
   use Mix.Project
 
-  @version "0.7.2"
-  @github_url "https://github.com/andrewtimberlake/elixir-pdf"
+  @version "1.0.1"
+  @github_url "https://github.com/MisaelMa/ExPDF"
+  @upstream_url "https://github.com/andrewtimberlake/elixir-pdf"
 
   def project do
     [
-      app: :pdf,
-      name: "PDF",
+      app: :ex_pdf,
+      name: "ExPDF",
       version: @version,
       elixir: "~> 1.3",
       build_embedded: Mix.env() == :prod,
@@ -15,7 +16,13 @@ defmodule Pdf.Mixfile do
       deps: deps(),
       docs: docs(),
       package: package(),
-      elixirc_paths: elixirc_paths(Mix.env())
+      elixirc_paths: elixirc_paths(Mix.env()),
+      # Releaser config (https://hexdocs.pm/releaser/0.0.7) — single-project
+      # layout: this mix.exs is the only app, publishable to Hex.
+      releaser: [
+        apps_root: ".",
+        publish: true
+      ]
     ]
   end
 
@@ -35,6 +42,10 @@ defmodule Pdf.Mixfile do
       # Docs
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
 
+      # Release automation: bumps @version, updates CHANGELOG, tags + publishes.
+      # See https://hexdocs.pm/releaser/0.0.7.
+      {:releaser, "~> 0.0.7", only: :dev, runtime: false},
+
       # Dev server for previewing PDFs
       {:plug_cowboy, "~> 2.7", only: :dev, runtime: false},
       {:jason, "~> 1.4", only: [:dev, :test], runtime: false}
@@ -43,12 +54,20 @@ defmodule Pdf.Mixfile do
 
   defp package do
     [
-      description: "Elixir API for generating PDF documents.",
-      maintainers: ["Andrew Timberlake"],
-      contributors: ["Andrew Timberlake"],
+      description:
+        "Native Elixir PDF reader and writer. Writes PDFs from declarative " <>
+          "page descriptions; reads PDFs (text, layout, links, images, metadata, " <>
+          "encryption, AcroForm, outlines, annotations) using Erlang/OTP stdlib only — " <>
+          "no Hex or system dependencies.",
+      maintainers: ["Misael Sánchez"],
+      contributors: ["Andrew Timberlake (original elixir-pdf)", "Misael Sánchez"],
       licenses: ["MIT"],
-      files: ~w(lib mix.exs README* fonts priv),
-      links: %{"GitHub" => @github_url}
+      files: ~w(lib mix.exs README* CHANGELOG* LICENSE* fonts priv),
+      links: %{
+        "GitHub" => @github_url,
+        "Forked from" => @upstream_url,
+        "Changelog" => "#{@github_url}/blob/main/CHANGELOG.md"
+      }
     ]
   end
 
@@ -62,10 +81,34 @@ defmodule Pdf.Mixfile do
       ],
       main: "readme",
       source_url: @github_url,
-      source_ref: @version,
-      canonical: "http://hexdocs.pm/pdf",
+      source_ref: "v#{@version}",
+      canonical: "https://hexdocs.pm/ex_pdf",
       assets: %{"extra_doc/assets" => "assets"},
-      formatters: ["html"]
+      formatters: ["html"],
+      groups_for_modules: [
+        Reader: [
+          Pdf.Reader,
+          Pdf.Reader.Document,
+          Pdf.Reader.Result,
+          Pdf.Reader.Result.Page,
+          Pdf.Reader.Line,
+          Pdf.Reader.Shape,
+          Pdf.Reader.TextRun,
+          Pdf.Reader.Image,
+          Pdf.Reader.Annotation,
+          Pdf.Reader.Outline,
+          Pdf.Reader.FormField
+        ],
+        Writer: [
+          Pdf,
+          Pdf.Document,
+          Pdf.Page,
+          Pdf.Builder,
+          Pdf.Layout,
+          Pdf.Fonts,
+          Pdf.StyledTable
+        ]
+      ]
     ]
   end
 end

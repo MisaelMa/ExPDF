@@ -300,7 +300,7 @@ defmodule Pdf.Reader.CID.CMapParserTest do
   describe "parse/1 — real CMap file integration" do
     @tag :integration
     test "UniJIS-UTF16-V: has codespaces, cidchars, and parent = UniJIS-UTF16-H" do
-      path = Path.join(:code.priv_dir(:pdf), "cmap/UniJIS-UTF16-V")
+      path = Path.join(:code.priv_dir(:ex_pdf), "cmap/UniJIS-UTF16-V")
       text = File.read!(path)
 
       assert {:ok, cmap} = CMapParser.parse(text)
@@ -311,7 +311,7 @@ defmodule Pdf.Reader.CID.CMapParserTest do
 
     @tag :integration
     test "UniJIS-UTF16-H: large file parses to non-empty cidchars without timeout" do
-      path = Path.join(:code.priv_dir(:pdf), "cmap/UniJIS-UTF16-H")
+      path = Path.join(:code.priv_dir(:ex_pdf), "cmap/UniJIS-UTF16-H")
       text = File.read!(path)
 
       assert {:ok, cmap} = CMapParser.parse(text)

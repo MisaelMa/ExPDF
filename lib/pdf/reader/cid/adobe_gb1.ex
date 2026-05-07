@@ -18,7 +18,7 @@ defmodule Pdf.Reader.CID.AdobeGB1 do
   - CMap resources (source data): https://github.com/adobe-type-tools/cmap-resources
   """
 
-  @priv_path Path.join([:code.priv_dir(:pdf), "adobe-gb1-cid2unicode.txt"])
+  @priv_path Path.join([:code.priv_dir(:ex_pdf), "adobe-gb1-cid2unicode.txt"])
   @external_resource @priv_path
 
   @doc """

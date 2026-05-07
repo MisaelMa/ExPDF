@@ -5,6 +5,154 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.0.1 — 2026-05-07 (fork: ExPDF)
+
+First release of `ex_pdf` on Hex. Fork of
+[`andrewtimberlake/elixir-pdf`](https://github.com/andrewtimberlake/elixir-pdf)
+v0.7.2 (Hex package `:pdf`, ©Andrew Timberlake, MIT). The writer API is
+preserved unchanged; this release adds a native PDF reader, error
+recovery, AcroForm/outlines/annotations extraction, encryption support,
+and many quality-of-life improvements.
+
+### Renamed
+
+- OTP app and Hex package: `:pdf` → `:ex_pdf`. Module names are
+  unchanged (`Pdf`, `Pdf.Reader`, etc. — the namespace `Pdf.*` was kept
+  to avoid breaking writer callers).
+- Mixfile module: `Pdf.Mixfile` → `ExPdf.Mixfile`.
+- Repo: `andrewtimberlake/elixir-pdf` → `MisaelMa/ExPDF`.
+- All internal `:code.priv_dir(:pdf)` and `Application.compile_env(:pdf, …)`
+  references updated to `:ex_pdf` (transparent to library users).
+
+### Added — Native PDF reader
+
+The reader is implemented in pure Elixir + Erlang/OTP stdlib (`:zlib`,
+`:crypto`, `:binary`, `:unicode`, `:xmerl`). No new Hex runtime deps,
+no system tool deps.
+
+#### Unified entry point
+
+- **`Pdf.Reader.read/2`** — one call returns `%Pdf.Reader.Result{meta,
+  pages}` carrying document-level metadata + per-page lines with
+  `:kind`-tagged tokens (`:text | :link | :email | :image`). See
+  `Pdf.Reader.Result` and `Pdf.Reader.Line` for the full shape.
+- Convenience shapes: `read(doc, shape: :text)` returns `[String.t()]`,
+  `read(doc, shape: :shapes)` returns `[%Pdf.Reader.Shape{}]`.
+- Image opt: `image_bytes: true` includes raw decoded `:bytes` in
+  shape meta (off by default — `:data_uri` is always present).
+
+#### Core extraction primitives
+
+- `Pdf.Reader.open/2` (with optional `password:` and `recover:` opts)
+- `Pdf.Reader.read_text/1` — plain text per page
+- `Pdf.Reader.read_text_with_positions/1` — text runs with absolute X/Y
+- `Pdf.Reader.read_lines/2` — logical lines with token tokenisation
+- `Pdf.Reader.read_metadata/1` — Info dict + XMP (PDF 1.7 § 14.3)
+- `Pdf.Reader.read_images/1` — embedded raster images with positions
+- `Pdf.Reader.read_outlines/1` — bookmark tree
+- `Pdf.Reader.read_annotations/1` — per-page annotations
+- `Pdf.Reader.read_acroform/1` — interactive form fields
+- `Pdf.Reader.read_shapes/1` — link-like elements (annotations + inferred)
+- `Pdf.Reader.recovery_log/1` — recovery event accessor
+- `Pdf.Reader.page_count/1`
+- Bang variants for every read function
+
+#### Encryption (PDF 1.7 § 7.6, PDF 2.0 § 7.6)
+
+- Standard Security Handler V1/V2 (RC4-40, RC4-128)
+- V4 with /AESV2 (AES-128) — `crypto:crypto_init_dyn/4`
+- V5/R6 with /AESV3 (AES-256) — full Algorithm 2.A round trip
+- Empty-password auto-try, file-key derivation per Algorithms 2/3/5/6/8
+
+#### CID fonts (PDF 1.7 § 9.7)
+
+- Identity-H/V composite fonts via 2-byte CID tokenisation
+- 40 predefined CMaps from `adobe-type-tools/cmap-resources` bundled in
+  `priv/cmap/` (UniJIS, GBK, KSC, ETen, Identity, …)
+- Adobe Japan1/CNS1/Korea1/GB1 collections bundled in `priv/`
+- PostScript-subset CMap parser with codespace-aware variable-length
+  tokenizer
+- ToUnicode CMap fallback for glyphs outside predefined ranges
+
+#### Per-glyph widths (PDF 1.7 § 9.4.4, § 9.6.2.1, § 9.7.4.3)
+
+- Full advance formula `tx = ((w/1000 - Tj_kern) × Tfs + Tc + Tw_space) × Th`
+  applied per glyph
+- Heterogeneous CIDFont `/W` parsing (Form A + Form B + interleaved)
+- Standard 14 fallback to 500-unit average glyph width when `/Widths`
+  is absent — restores correct positional advance for Helvetica /
+  Times-Roman / Courier PDFs
+
+#### Form XObject recursion (PDF 1.7 § 8.10)
+
+- `Do` operator transparent recursion into `/Subtype /Form` XObjects
+- CTM × Form `/Matrix` multiplication, resource merging, cycle
+  detection, depth cap (8)
+
+#### AcroForm field extraction (PDF 1.7 § 12.7)
+
+- `Pdf.Reader.FormField` struct with `/FT` inheritance walk
+- Text, button, choice, signature field types
+
+#### Outlines and annotations (PDF 1.7 § 12.3, § 12.5)
+
+- `Pdf.Reader.Outline` tree with destinations resolved
+- `Pdf.Reader.Annotation` struct with subtype detection (link, text,
+  highlight, file attachment, …)
+- Annotation-source links automatically merge into the unified
+  `Pdf.Reader.Shape` API
+
+#### Image extraction (PDF 1.7 § 8.9)
+
+- `/Subtype /Image` XObjects with absolute positions and CTM-derived
+  rendered dimensions
+- `:jpeg` (DCTDecode passthrough) and `:png_like` (FlateDecode +
+  Predictor) classification
+- **`shape.meta.data_uri`** — RFC 2397 `data:` URI ready for HTML
+  embedding. JPEG is passthrough; png_like is re-encoded into a real
+  PNG (PNG 1.2 § 5: signature + IHDR + IDAT + IEND with filter byte
+  0 + zlib) so the URI is browser-loadable.
+
+#### Shape inference
+
+- `Pdf.Reader.Shape` struct unifies link annotations and pattern-
+  inferred URIs/emails/images.
+- URL regex per RFC 3986 § 3, email regex per RFC 5321 § 4.1.2.
+- Trailing punctuation (`. , ; : ) ]`) stripped from inferred URIs.
+
+#### Error recovery
+
+- Opt-in `recover: true` flag with four orthogonal phases:
+  - **R-1** Per-page isolation — one bad page does not kill the doc
+  - **R-2** Font lenience — bad font refs fall back to U+FFFD per byte
+  - **R-3** XRef linear scan — `:binary.matches/2` recovers from
+    corrupted xref tables; trailer synthesis from last `trailer<<…>>`
+    block or `/Type /Catalog` scan; multi-gen dedup (highest gen wins)
+  - **R-4** Catalog/Pages tree fallback — `/Type /Page` xref scan when
+    `/Root` or `/Pages` doesn't resolve
+- Closed set of recovery event tuples observable via `recovery_log/1`:
+  `:eof_marker_missing`, `:xref_recovered`, `:page_tree_recovered`,
+  `:page_failed`, `:font_skipped`.
+- Fatal errors (`:not_a_pdf`, `:encrypted_password_required`,
+  `:encrypted_wrong_password`, `:encrypted_unsupported_handler`)
+  remain hard errors even under `recover: true`.
+
+### Added — Tooling
+
+- **`releaser` ~> 0.0.7** dev dependency for monorepo-aware version
+  bumping, changelog generation, and Hex publishing.
+- Hex package metadata: maintainers, contributors (Andrew Timberlake +
+  Misael Sánchez), licenses, links (GitHub + upstream + changelog).
+- ExDoc `groups_for_modules` separating Reader and Writer namespaces.
+- Comprehensive README documenting every reader feature with spec
+  citations.
+
+### Test suite
+
+1180 tests, 0 failures, 30 excluded as of this release.
+
+---
+
 ## Unreleased — pdf-reader-error-recovery
 
 ### Added

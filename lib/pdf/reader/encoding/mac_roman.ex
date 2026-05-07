@@ -12,7 +12,7 @@ defmodule Pdf.Reader.Encoding.MacRoman do
   Bytes that are not present in the source file return `:undefined`.
   """
 
-  @external_resource Path.join([:code.priv_dir(:pdf), "mac_roman.txt"])
+  @external_resource Path.join([:code.priv_dir(:ex_pdf), "mac_roman.txt"])
 
   @table @external_resource
          |> File.read!()

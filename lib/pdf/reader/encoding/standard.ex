@@ -12,8 +12,8 @@ defmodule Pdf.Reader.Encoding.StandardEncoding do
   (`priv/glyphlist.txt`). Bytes that have no entry return `:undefined`.
   """
 
-  @glyphlist_path Path.join([:code.priv_dir(:pdf), "glyphlist.txt"])
-  @encoding_path Path.join([:code.priv_dir(:pdf), "standard_encoding.txt"])
+  @glyphlist_path Path.join([:code.priv_dir(:ex_pdf), "glyphlist.txt"])
+  @encoding_path Path.join([:code.priv_dir(:ex_pdf), "standard_encoding.txt"])
 
   @external_resource @glyphlist_path
   @external_resource @encoding_path

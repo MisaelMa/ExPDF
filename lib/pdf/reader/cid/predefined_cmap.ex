@@ -99,7 +99,7 @@ defmodule Pdf.Reader.CID.PredefinedCMap do
 
   defp read_priv_file(name) do
     if bundled?(name) do
-      path = Path.join([:code.priv_dir(:pdf), "cmap", name])
+      path = Path.join([:code.priv_dir(:ex_pdf), "cmap", name])
 
       case File.read(path) do
         {:ok, text} -> {:ok, text}
