@@ -68,12 +68,17 @@ defmodule Pdf.Reader.ContentStream do
 
   Spec: PDF 1.7 § 8.3.3 (row-vector convention), § 9.4.4 (text advance).
 
-  ## Phase 1 limitation: glyph advance
+  ## Glyph advance (§ 9.4.4)
 
-  Per-glyph advance uses a default of `font_size × 1.0` per character (1 em),
-  since font /Widths arrays are not loaded in Phase 1. This means Tm is advanced
-  approximately after each Tj/TJ call. Position of the START of each run is exact
-  (derived from Tm at call time). Documented per batch 4 task spec.
+  Text-matrix advance uses the full PDF § 9.4.4 formula per glyph:
+
+      tx = ((w/1000 - Tj_kern) * Tfs + Tc + Tw_if_space) * Th
+
+  Where `w` comes from the active font's `widths_fn` closure (set by `Tf`).
+  Fonts without embedded `/Widths` produce `w=0`; advance is then driven
+  only by `Tc`/`Tw`/`Tj_kern` (documented gap for Standard-14 fonts).
+
+  Position of the START of each run is exact (derived from Tm at call time).
 
   ## Unknown operator strategy
 
@@ -154,6 +159,7 @@ defmodule Pdf.Reader.ContentStream do
       ) do
     xobjects = Keyword.get(opts, :xobjects, %{})
     font_decoders = Keyword.get(opts, :font_decoders, %{})
+    font_widths = Keyword.get(opts, :font_widths, %{})
 
     state = %{
       gs: GraphicsState.new(),
@@ -163,6 +169,7 @@ defmodule Pdf.Reader.ContentStream do
       xobjects: xobjects,
       default_decoder: default_decoder,
       font_decoders: font_decoders,
+      font_widths: font_widths,
       decoder: default_decoder,
       doc: doc,
       page_resources: page_resources,
@@ -270,6 +277,8 @@ defmodule Pdf.Reader.ContentStream do
     xobjects = Keyword.get(opts, :xobjects, %{})
     font_decoders = Keyword.get(opts, :font_decoders, %{})
 
+    font_widths = Keyword.get(opts, :font_widths, %{})
+
     # R-FX6, R-FX12, R-FX16: new fields added with safe defaults so all existing
     # callers that do not pass doc: continue to behave exactly as before.
     state = %{
@@ -280,6 +289,7 @@ defmodule Pdf.Reader.ContentStream do
       xobjects: xobjects,
       default_decoder: decoder,
       font_decoders: font_decoders,
+      font_widths: font_widths,
       decoder: decoder,
       # Form XObject recursion fields — nil/empty defaults preserve legacy behaviour
       doc: nil,
@@ -542,18 +552,54 @@ defmodule Pdf.Reader.ContentStream do
     %{state | in_text: false, operands: []}
   end
 
-  # Tf — set font and size; swap active decoder from font_decoders map
-  # Spec: PDF 1.7 § 9.4.5
+  # Tf — set font and size; swap active decoder from font_decoders map;
+  #      set widths_fn from font_widths map (§ 9.4.4, § 9.4.5)
   defp handle_operator(
          "Tf",
-         %{gs: gs, font_decoders: font_decoders, default_decoder: default_decoder} = state
+         %{
+           gs: gs,
+           font_decoders: font_decoders,
+           default_decoder: default_decoder
+         } = state
        ) do
     {font_name, font_size, rest_ops} = pop2(state.operands)
     size = to_float(font_size)
     name = to_name(font_name)
-    new_gs = %{gs | font: name, font_size: size}
     new_decoder = Map.get(font_decoders, name, default_decoder)
+    # widths_fn: look up from font_widths map (nil if font not present)
+    font_widths = Map.get(state, :font_widths, %{})
+    new_widths_fn = Map.get(font_widths, name, nil)
+    new_gs = %{gs | font: name, font_size: size, widths_fn: new_widths_fn}
     %{state | gs: new_gs, operands: rest_ops, decoder: new_decoder}
+  end
+
+  # Tc — set character spacing (§ 9.4.1)
+  defp handle_operator("Tc", %{gs: gs} = state) do
+    {spacing, rest_ops} = pop1(state.operands)
+    new_gs = %{gs | char_spacing: to_float(spacing)}
+    %{state | gs: new_gs, operands: rest_ops}
+  end
+
+  # Tw — set word spacing (§ 9.4.1)
+  defp handle_operator("Tw", %{gs: gs} = state) do
+    {spacing, rest_ops} = pop1(state.operands)
+    new_gs = %{gs | word_spacing: to_float(spacing)}
+    %{state | gs: new_gs, operands: rest_ops}
+  end
+
+  # Tz — set horizontal scaling (§ 9.4.1); argument is percentage (e.g. 100 = normal)
+  defp handle_operator("Tz", %{gs: gs} = state) do
+    {scale, rest_ops} = pop1(state.operands)
+    # Store as-is (100 = 100%); advance_tm divides by 100 to get Th
+    new_gs = %{gs | horizontal_scaling: to_float(scale)}
+    %{state | gs: new_gs, operands: rest_ops}
+  end
+
+  # TL — set leading (§ 9.4.1)
+  defp handle_operator("TL", %{gs: gs} = state) do
+    {leading, rest_ops} = pop1(state.operands)
+    new_gs = %{gs | leading: to_float(leading)}
+    %{state | gs: new_gs, operands: rest_ops}
   end
 
   # Tj — show string
@@ -571,7 +617,7 @@ defmodule Pdf.Reader.ContentStream do
       {:text,
        %{text: text, unresolved: unresolved, x: x, y: y, font: gs.font, size: gs.font_size}}
 
-    new_gs = advance_tm(gs, text)
+    new_gs = advance_tm(gs, bytes)
     %{state | gs: new_gs, operands: rest_ops, events: [event | events]}
   end
 
@@ -778,9 +824,20 @@ defmodule Pdf.Reader.ContentStream do
       {:ok, form_resources, doc1} ->
         merged_resources = merge_resources(state.page_resources, form_resources)
 
-        # R-FX5: build per-Form font decoders (cache hits via Document.cache)
+        # R-FX5: build per-Form font decoders (cache hits via Document.cache).
+        # R-2: build_decoders_for_resources returns 4-tuple; font_failures are
+        # discarded here because the page-level log_font_failures already handles
+        # page-numbered logging. Form XObject font failures are silently skipped
+        # (fallback decoder installed by build_decoders_for_resources in recover mode).
         case Pdf.Reader.Font.build_decoders_for_resources(merged_resources, doc1) do
-          {:ok, form_font_decoders, doc2} ->
+          {:ok, form_font_decoders, _font_failures, doc2} ->
+            # Build per-Form font widths closures (§ 9.4.4); mirrors decoder build above.
+            {form_font_widths, doc3} =
+              case Pdf.Reader.Font.Widths.build_widths_for_resources(merged_resources, doc2) do
+                {:ok, widths_map, updated_doc} -> {widths_map, updated_doc}
+                {:error, _} -> {%{}, doc2}
+              end
+
             # R-FX1: decode form stream through filter chain
             case decode_form_stream(form_stream) do
               {:ok, form_bytes} ->
@@ -788,9 +845,10 @@ defmodule Pdf.Reader.ContentStream do
                 child_state = %{
                   state
                   | gs: %{saved_gs | ctm: form_ctm},
-                    doc: doc2,
+                    doc: doc3,
                     page_resources: merged_resources,
                     font_decoders: form_font_decoders,
+                    font_widths: form_font_widths,
                     decoder: state.default_decoder,
                     visited: MapSet.put(state.visited, {n, g}),
                     depth: state.depth + 1,
@@ -872,7 +930,7 @@ defmodule Pdf.Reader.ContentStream do
           {:text,
            %{text: text, unresolved: unresolved, x: x, y: y, font: gs.font, size: gs.font_size}}
 
-        new_gs = advance_tm(gs, text)
+        new_gs = advance_tm(gs, bytes)
         process_tj_array(rest, new_gs, decoder, [event | events])
     end
   end
@@ -888,21 +946,92 @@ defmodule Pdf.Reader.ContentStream do
     {e, f}
   end
 
-  # Advance Tm after showing text.
-  # Phase 1 approximation: 1 character = 1 em = font_size units in text space.
-  # Real advance requires font /Widths — deferred to Phase 2.
-  defp advance_tm(%{tm: {a, b, c, d, e, f}, font_size: size} = gs, text) do
-    char_count = String.length(text)
-    # advance in text space x direction: char_count × size (1 em per glyph)
-    # Tm is the text matrix; advance multiplies Tm by a translation
-    advance = char_count * size
-    new_tm = {a, b, c, d, e + advance * a, f + advance * b}
+  # Advance Tm after showing text, using the full § 9.4.4 formula:
+  #
+  #   tx = sum over each glyph byte/pair of:
+  #     ((w / 1000.0) * Tfs + Tc + (if byte == 0x20, do: Tw, else: 0)) * Th
+  #
+  # Where:
+  #   w      — per-glyph width in glyph-space units (from gs.widths_fn, or 0 if nil)
+  #   Tfs    — font size (gs.font_size)
+  #   Tc     — character spacing (gs.char_spacing)
+  #   Tw     — word spacing (gs.word_spacing), applied IFF raw glyph bytes == <<0x20>>
+  #   Th     — horizontal scaling (gs.horizontal_scaling / 100.0)
+  #
+  # `bytes` is the raw binary passed to the font (before decoding).
+  # Spec reference: PDF 1.7 § 9.4.4
+  @doc false
+  def advance_tm(gs, bytes) when is_binary(bytes) do
+    %{
+      tm: {a, b, c, d, e, f},
+      font_size: tfs,
+      char_spacing: tc,
+      word_spacing: tw,
+      horizontal_scaling: th_pct,
+      widths_fn: widths_fn
+    } = gs
+
+    th = th_pct / 100.0
+
+    widths =
+      if is_function(widths_fn, 1) do
+        widths_fn.(bytes)
+      else
+        # nil widths_fn → w=0 for every glyph
+        glyph_count_for_nil_widths(bytes, widths_fn)
+      end
+
+    tx = compute_tx(bytes, widths, tfs, tc, tw, th)
+
+    new_tm = {a, b, c, d, e + tx * a, f + tx * b}
     %{gs | tm: new_tm}
   end
 
-  # Kern Tm by -n/1000 × font_size (TJ numeric element)
-  defp kern_tm(%{tm: {a, b, c, d, e, f}, font_size: size} = gs, n) do
-    shift = -(n / 1000.0) * size
+  # Compute total tx from the glyph list.
+  # Each glyph contributes its portion. The byte matching for Tw uses the raw bytes
+  # consumed per glyph: for simple fonts 1 byte/glyph, for CID 2 bytes/glyph.
+  defp compute_tx(bytes, widths, tfs, tc, tw, th) do
+    glyph_size = if length(widths) > 0, do: div(byte_size(bytes), length(widths)), else: 1
+
+    {tx_total, _} =
+      Enum.reduce(widths, {0.0, 0}, fn w, {acc_tx, offset} ->
+        glyph_bytes = binary_part(bytes, offset, min(glyph_size, byte_size(bytes) - offset))
+        tx = glyph_advance(w, glyph_bytes, tfs, tc, tw, th)
+        {acc_tx + tx, offset + glyph_size}
+      end)
+
+    tx_total
+  end
+
+  # Compute tx for a single glyph. Pure function; no side effects.
+  # Formula: ((w / 1000.0) * Tfs + Tc + Tw_if_space) * Th
+  # Tw_if_space: word spacing applied IFF raw glyph bytes are <<0x20>> or <<0x00, 0x20>>.
+  # Spec reference: PDF 1.7 § 9.4.4
+  defp glyph_advance(w, glyph_bytes, tfs, tc, tw, th) do
+    tw_term = if is_space_glyph(glyph_bytes), do: tw, else: 0.0
+    (w / 1000.0 * tfs + tc + tw_term) * th
+  end
+
+  # Space glyph detection (before decoding).
+  # Simple font: single byte 0x20. CID font: two bytes <<0x00, 0x20>>.
+  defp is_space_glyph(<<0x20>>), do: true
+  defp is_space_glyph(<<0x00, 0x20>>), do: true
+  defp is_space_glyph(_), do: false
+
+  # When widths_fn is nil: return list of zeros, one per glyph.
+  # Simple heuristic: 1 zero per byte (simple font default).
+  defp glyph_count_for_nil_widths(bytes, _nil_fn) do
+    List.duplicate(0, byte_size(bytes))
+  end
+
+  # Kern Tm by -(n/1000) × Tfs × Th (TJ numeric element).
+  # Spec § 9.4.4: Tc and Tw do NOT apply to kerning adjustments.
+  defp kern_tm(
+         %{tm: {a, b, c, d, e, f}, font_size: size, horizontal_scaling: th_pct} = gs,
+         n
+       ) do
+    th = th_pct / 100.0
+    shift = -(n / 1000.0) * size * th
     new_tm = {a, b, c, d, e + shift * a, f + shift * b}
     %{gs | tm: new_tm}
   end

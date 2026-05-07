@@ -30,7 +30,7 @@ defmodule Pdf.Reader.PublicApiTest do
     test "returns text runs with positions" do
       bin = build_simple_pdf()
       {:ok, doc} = Pdf.Reader.open(bin)
-      assert {:ok, runs} = Pdf.Reader.read_text_with_positions(doc)
+      assert {:ok, runs, _doc} = Pdf.Reader.read_text_with_positions(doc)
       assert is_list(runs)
       # writer-generated PDF should have at least one text run
       assert length(runs) >= 1
@@ -40,7 +40,7 @@ defmodule Pdf.Reader.PublicApiTest do
     test "each run has text, x, y, font, size, page fields" do
       bin = build_simple_pdf()
       {:ok, doc} = Pdf.Reader.open(bin)
-      {:ok, [run | _]} = Pdf.Reader.read_text_with_positions(doc)
+      {:ok, [run | _], _doc} = Pdf.Reader.read_text_with_positions(doc)
       assert is_binary(run.text)
       assert is_float(run.x) or is_integer(run.x)
       assert is_float(run.y) or is_integer(run.y)
@@ -52,7 +52,7 @@ defmodule Pdf.Reader.PublicApiTest do
     test "returns {:ok, []} when no text in PDF" do
       bin = build_empty_pdf()
       {:ok, doc} = Pdf.Reader.open(bin)
-      assert {:ok, runs} = Pdf.Reader.read_text_with_positions(doc)
+      assert {:ok, runs, _doc} = Pdf.Reader.read_text_with_positions(doc)
       assert runs == []
     end
 
@@ -63,7 +63,7 @@ defmodule Pdf.Reader.PublicApiTest do
     test "does not error on a PDF that has no form xobjects" do
       bin = build_simple_pdf()
       {:ok, doc} = Pdf.Reader.open(bin)
-      assert {:ok, _runs} = Pdf.Reader.read_text_with_positions(doc)
+      assert {:ok, _runs, _doc} = Pdf.Reader.read_text_with_positions(doc)
     end
   end
 
@@ -76,7 +76,7 @@ defmodule Pdf.Reader.PublicApiTest do
     test "returns {:ok, [page_string]} for a single-page PDF" do
       bin = build_simple_pdf()
       {:ok, doc} = Pdf.Reader.open(bin)
-      assert {:ok, texts} = Pdf.Reader.read_text(doc)
+      assert {:ok, texts, _doc} = Pdf.Reader.read_text(doc)
       assert is_list(texts)
     end
 
@@ -84,7 +84,7 @@ defmodule Pdf.Reader.PublicApiTest do
     test "page text contains 'Hello, world!'" do
       bin = build_simple_pdf()
       {:ok, doc} = Pdf.Reader.open(bin)
-      {:ok, texts} = Pdf.Reader.read_text(doc)
+      {:ok, texts, _doc} = Pdf.Reader.read_text(doc)
       full_text = Enum.join(texts, " ")
       assert String.contains?(full_text, "Hello, world!")
     end
@@ -93,15 +93,15 @@ defmodule Pdf.Reader.PublicApiTest do
     test "returns {:ok, []} when no text" do
       bin = build_empty_pdf()
       {:ok, doc} = Pdf.Reader.open(bin)
-      assert {:ok, []} = Pdf.Reader.read_text(doc)
+      assert {:ok, [], _doc} = Pdf.Reader.read_text(doc)
     end
 
     # 9.5.4 — pages: option filters to specific page numbers
     test "pages: [1] returns only page 1 text" do
       bin = build_simple_pdf()
       {:ok, doc} = Pdf.Reader.open(bin)
-      assert {:ok, texts_all} = Pdf.Reader.read_text(doc)
-      assert {:ok, texts_p1} = Pdf.Reader.read_text(doc, pages: [1])
+      assert {:ok, texts_all, _doc} = Pdf.Reader.read_text(doc)
+      assert {:ok, texts_p1, _doc} = Pdf.Reader.read_text(doc, pages: [1])
       # For a 1-page PDF both should return the same content
       assert texts_p1 == texts_all
     end
@@ -166,6 +166,62 @@ defmodule Pdf.Reader.PublicApiTest do
   end
 
   # ---------------------------------------------------------------------------
+  # Phase 5: read_acroform/1 and read_acroform!/1 delegation (S-AF18, R-AF19)
+  # ---------------------------------------------------------------------------
+
+  describe "Pdf.Reader.read_acroform/1 and read_acroform!/1" do
+    test "5.1a: read_acroform/1 on a PDF with no AcroForm returns {:ok, [], doc}" do
+      bin = build_simple_pdf()
+      {:ok, doc} = Pdf.Reader.open(bin)
+      assert {:ok, [], _doc} = Pdf.Reader.read_acroform(doc)
+    end
+
+    test "5.1b: read_acroform!/1 returns list on success (no AcroForm → [])" do
+      bin = build_simple_pdf()
+      {:ok, doc} = Pdf.Reader.open(bin)
+      result = Pdf.Reader.read_acroform!(doc)
+      assert result == []
+    end
+
+    test "5.1c: read_acroform!/1 raises Pdf.Reader.Error on error" do
+      # We inject a broken document to force an error — corrupted trailer Root ref
+      bin = build_broken_root_pdf()
+      {:ok, doc} = Pdf.Reader.open(bin)
+
+      assert_raise Pdf.Reader.Error, fn ->
+        Pdf.Reader.read_acroform!(doc)
+      end
+    end
+  end
+
+  # ---------------------------------------------------------------------------
+  # 7.3 — CID regression guard (S-CID14, R-CID13b)
+  # ---------------------------------------------------------------------------
+
+  describe "CID regression guard — simple fonts unaffected (S-CID14, R-CID13b)" do
+    test "existing simple-font (Helvetica/WinAnsi) PDF still decodes correctly after CID path added" do
+      bin = build_simple_pdf()
+      {:ok, doc} = Pdf.Reader.open(bin)
+      {:ok, texts, _doc} = Pdf.Reader.read_text(doc)
+      full_text = Enum.join(texts, " ")
+      # The writer-generated PDF uses Helvetica with WinAnsiEncoding.
+      # The simple 1-byte path must remain intact.
+      assert String.contains?(full_text, "Hello, world!")
+    end
+
+    test "simple-font PDF returns valid UTF-8 runs with no crashes after CID code added" do
+      bin = build_simple_pdf()
+      {:ok, doc} = Pdf.Reader.open(bin)
+      {:ok, runs, _doc} = Pdf.Reader.read_text_with_positions(doc)
+
+      for run <- runs do
+        assert String.valid?(run.text)
+        assert is_list(run.unresolved)
+      end
+    end
+  end
+
+  # ---------------------------------------------------------------------------
   # Helpers
   # ---------------------------------------------------------------------------
 
@@ -184,5 +240,31 @@ defmodule Pdf.Reader.PublicApiTest do
       pdf
     end)
     |> Pdf.export()
+  end
+
+  # Build a PDF with a broken /Root reference (points to non-existent obj)
+  # to force {:error, _} on read_acroform
+  defp build_broken_root_pdf do
+    header = "%PDF-1.4\n"
+    # No real objects — just a trailer pointing to Root 99 0 R which doesn't exist
+    obj1 = "1 0 obj\n42\nendobj\n"
+
+    obj1_offset = byte_size(header)
+    xref_offset = obj1_offset + byte_size(obj1)
+
+    xref =
+      "xref\n0 2\n" <>
+        "0000000000 65535 f\r\n" <>
+        pad_offset(obj1_offset) <> " 00000 n\r\n"
+
+    # Root points to obj 99 which does not exist → resolve_catalog will fail
+    trailer =
+      "trailer\n<</Size 2 /Root 99 0 R>>\nstartxref\n#{xref_offset}\n%%EOF\n"
+
+    header <> obj1 <> xref <> trailer
+  end
+
+  defp pad_offset(n) do
+    n |> Integer.to_string() |> String.pad_leading(10, "0")
   end
 end

@@ -19,7 +19,7 @@ defmodule Pdf.Reader.Trailer do
           info: Pdf.Reader.Document.ref() | nil,
           size: pos_integer() | nil,
           encrypt: term(),
-          id: [binary()] | nil,
+          id: [{:hex_string, binary()} | {:string, binary()} | binary()] | nil,
           prev: non_neg_integer() | nil,
           dict: map()
         }

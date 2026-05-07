@@ -173,33 +173,33 @@ defmodule Pdf.Images.PNG do
   # Grayscale
   defp prepare_extra(%{color_type: 0} = image, objects) do
     {%{
-      "Filter" => n("FlateDecode"),
-      "DecodeParms" =>
-        Dictionary.new(%{
-          "Predictor" => 15,
-          "Colors" => get_colors(image.color_type),
-          "BitsPerComponent" => image.bit_depth,
-          "Columns" => image.width
-        }),
-      "ColorSpace" => n(get_colorspace(image.color_type)),
-      "BitsPerComponent" => image.bit_depth
-    }, objects}
+       "Filter" => n("FlateDecode"),
+       "DecodeParms" =>
+         Dictionary.new(%{
+           "Predictor" => 15,
+           "Colors" => get_colors(image.color_type),
+           "BitsPerComponent" => image.bit_depth,
+           "Columns" => image.width
+         }),
+       "ColorSpace" => n(get_colorspace(image.color_type)),
+       "BitsPerComponent" => image.bit_depth
+     }, objects}
   end
 
   # Truecolour
   defp prepare_extra(%{color_type: 2} = image, objects) do
     {%{
-      "Filter" => n("FlateDecode"),
-      "DecodeParms" =>
-        Dictionary.new(%{
-          "Predictor" => 15,
-          "Colors" => get_colors(image.color_type),
-          "BitsPerComponent" => image.bit_depth,
-          "Columns" => image.width
-        }),
-      "ColorSpace" => n(get_colorspace(image.color_type)),
-      "BitsPerComponent" => image.bit_depth
-    }, objects}
+       "Filter" => n("FlateDecode"),
+       "DecodeParms" =>
+         Dictionary.new(%{
+           "Predictor" => 15,
+           "Colors" => get_colors(image.color_type),
+           "BitsPerComponent" => image.bit_depth,
+           "Columns" => image.width
+         }),
+       "ColorSpace" => n(get_colorspace(image.color_type)),
+       "BitsPerComponent" => image.bit_depth
+     }, objects}
   end
 
   # Indexed-colour
@@ -209,23 +209,23 @@ defmodule Pdf.Images.PNG do
     _object = Pdf.Object.new(number, ObjectCollection.get_object(objects, object_key))
 
     {%{
-      "Filter" => n("FlateDecode"),
-      "DecodeParms" =>
-        Dictionary.new(%{
-          "Predictor" => 15,
-          "Colors" => get_colors(image.color_type),
-          "BitsPerComponent" => image.bit_depth,
-          "Columns" => image.width
-        }),
-      "ColorSpace" =>
-        a([
-          n("Indexed"),
-          n("DeviceRGB"),
-          round(byte_size(image.palette) / 3 - 1),
-          object_key
-        ]),
-      "BitsPerComponent" => image.bit_depth
-    }, objects}
+       "Filter" => n("FlateDecode"),
+       "DecodeParms" =>
+         Dictionary.new(%{
+           "Predictor" => 15,
+           "Colors" => get_colors(image.color_type),
+           "BitsPerComponent" => image.bit_depth,
+           "Columns" => image.width
+         }),
+       "ColorSpace" =>
+         a([
+           n("Indexed"),
+           n("DeviceRGB"),
+           round(byte_size(image.palette) / 3 - 1),
+           object_key
+         ]),
+       "BitsPerComponent" => image.bit_depth
+     }, objects}
   end
 
   # Greyscale with alpha (4)
@@ -259,18 +259,18 @@ defmodule Pdf.Images.PNG do
     _object = Pdf.Object.new(number, ObjectCollection.get_object(objects, object_key))
 
     {%{
-      "Filter" => n("FlateDecode"),
-      "DecodeParms" =>
-        Dictionary.new(%{
-          "Predictor" => 15,
-          "Colors" => get_colors(color_type),
-          "BitsPerComponent" => image.bit_depth,
-          "Columns" => image.width
-        }),
-      "ColorSpace" => n(get_colorspace(color_type)),
-      "BitsPerComponent" => image.bit_depth,
-      "SMask" => object_key
-    }, objects}
+       "Filter" => n("FlateDecode"),
+       "DecodeParms" =>
+         Dictionary.new(%{
+           "Predictor" => 15,
+           "Colors" => get_colors(color_type),
+           "BitsPerComponent" => image.bit_depth,
+           "Columns" => image.width
+         }),
+       "ColorSpace" => n(get_colorspace(color_type)),
+       "BitsPerComponent" => image.bit_depth,
+       "SMask" => object_key
+     }, objects}
   end
 
   defp get_colorspace(0), do: "DeviceGray"

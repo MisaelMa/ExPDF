@@ -159,7 +159,7 @@ defmodule Pdf.ReaderTest do
     test "read_text_with_positions/1 returns TextRun structs for all pages" do
       bin = build_two_page_pdf()
       {:ok, doc} = Pdf.Reader.open(bin)
-      assert {:ok, runs} = Pdf.Reader.read_text_with_positions(doc)
+      assert {:ok, runs, _doc} = Pdf.Reader.read_text_with_positions(doc)
       assert is_list(runs)
       # 2-page PDF with text on both pages must produce >= 2 runs
       assert length(runs) >= 2
@@ -172,7 +172,7 @@ defmodule Pdf.ReaderTest do
     test "read_text/2 returns non-empty string list for a 2-page PDF" do
       bin = build_two_page_pdf()
       {:ok, doc} = Pdf.Reader.open(bin)
-      assert {:ok, texts} = Pdf.Reader.read_text(doc)
+      assert {:ok, texts, _doc} = Pdf.Reader.read_text(doc)
       assert is_list(texts)
       assert length(texts) >= 1
     end
@@ -209,7 +209,7 @@ defmodule Pdf.ReaderTest do
         |> Pdf.export()
 
       {:ok, doc} = Pdf.Reader.open(bin)
-      {:ok, images} = Pdf.Reader.read_images(doc)
+      {:ok, images, _doc} = Pdf.Reader.read_images(doc)
 
       assert length(images) >= 1
       img = hd(images)
@@ -253,7 +253,7 @@ defmodule Pdf.ReaderTest do
         |> Pdf.export()
 
       {:ok, doc} = Pdf.Reader.open(bin)
-      {:ok, images} = Pdf.Reader.read_images(doc)
+      {:ok, images, _doc} = Pdf.Reader.read_images(doc)
 
       assert [img | _] = images
       # ctm must be a 6-float tuple
@@ -288,7 +288,7 @@ defmodule Pdf.ReaderTest do
         |> Pdf.export()
 
       {:ok, doc} = Pdf.Reader.open(bin)
-      {:ok, images} = Pdf.Reader.read_images(doc)
+      {:ok, images, _doc} = Pdf.Reader.read_images(doc)
 
       assert [img | _] = images
       # Bytes must be identical to the source file (decompressed from FlateDecode)
@@ -314,7 +314,7 @@ defmodule Pdf.ReaderTest do
         |> Pdf.export()
 
       {:ok, doc} = Pdf.Reader.open(bin)
-      {:ok, images} = Pdf.Reader.read_images(doc)
+      {:ok, images, _doc} = Pdf.Reader.read_images(doc)
 
       assert [img | _] = images
 
@@ -437,7 +437,7 @@ defmodule Pdf.ReaderTest do
         |> Pdf.export()
 
       {:ok, doc} = Pdf.Reader.open(bin)
-      {:ok, page_texts} = Pdf.Reader.read_text(doc)
+      {:ok, page_texts, _doc} = Pdf.Reader.read_text(doc)
 
       assert length(page_texts) >= 1
       page_text = hd(page_texts)
@@ -448,7 +448,7 @@ defmodule Pdf.ReaderTest do
       pdf_bin = craft_differences_pdf(65, "eacute", "A")
 
       {:ok, doc} = Pdf.Reader.open(pdf_bin)
-      {:ok, page_texts} = Pdf.Reader.read_text(doc)
+      {:ok, page_texts, _doc} = Pdf.Reader.read_text(doc)
 
       assert length(page_texts) >= 1
       page_text = hd(page_texts)
@@ -461,7 +461,7 @@ defmodule Pdf.ReaderTest do
       pdf_bin = craft_tou_over_differences_pdf()
 
       {:ok, doc} = Pdf.Reader.open(pdf_bin)
-      {:ok, page_texts} = Pdf.Reader.read_text(doc)
+      {:ok, page_texts, _doc} = Pdf.Reader.read_text(doc)
 
       assert length(page_texts) >= 1
       page_text = hd(page_texts)
@@ -473,7 +473,7 @@ defmodule Pdf.ReaderTest do
       pdf_bin = craft_unknown_glyph_pdf()
 
       {:ok, doc} = Pdf.Reader.open(pdf_bin)
-      {:ok, runs} = Pdf.Reader.read_text_with_positions(doc)
+      {:ok, runs, _doc} = Pdf.Reader.read_text_with_positions(doc)
 
       assert length(runs) >= 1
       # At least one run must have an unresolved entry
@@ -490,7 +490,7 @@ defmodule Pdf.ReaderTest do
       pdf_bin = craft_unknown_glyph_pdf()
 
       {:ok, doc} = Pdf.Reader.open(pdf_bin)
-      {:ok, page_texts} = Pdf.Reader.read_text(doc)
+      {:ok, page_texts, _doc} = Pdf.Reader.read_text(doc)
 
       assert length(page_texts) >= 1
       page_text = hd(page_texts)
@@ -508,7 +508,7 @@ defmodule Pdf.ReaderTest do
         |> Pdf.export()
 
       {:ok, doc} = Pdf.Reader.open(bin)
-      {:ok, runs} = Pdf.Reader.read_text_with_positions(doc)
+      {:ok, runs, _doc} = Pdf.Reader.read_text_with_positions(doc)
 
       assert length(runs) >= 1
       run = hd(runs)
@@ -528,7 +528,7 @@ defmodule Pdf.ReaderTest do
       # After Phase 6 wiring, read_text/1 must include the Form's text.
       bin = craft_form_xobject_pdf("FORM")
       assert {:ok, doc} = Pdf.Reader.open(bin)
-      assert {:ok, texts} = Pdf.Reader.read_text(doc)
+      assert {:ok, texts, _doc} = Pdf.Reader.read_text(doc)
 
       combined = Enum.join(texts, " ")
 
@@ -546,7 +546,7 @@ defmodule Pdf.ReaderTest do
         |> Pdf.export()
 
       assert {:ok, doc} = Pdf.Reader.open(bin)
-      assert {:ok, texts} = Pdf.Reader.read_text(doc)
+      assert {:ok, texts, _doc} = Pdf.Reader.read_text(doc)
       combined = Enum.join(texts, " ")
       assert String.contains?(combined, "Regression")
     end
@@ -558,7 +558,7 @@ defmodule Pdf.ReaderTest do
       # After Phase 6 wiring, read_images/1 must include the image from inside the Form.
       bin = craft_form_with_image_pdf()
       assert {:ok, doc} = Pdf.Reader.open(bin)
-      assert {:ok, images} = Pdf.Reader.read_images(doc)
+      assert {:ok, images, _doc} = Pdf.Reader.read_images(doc)
 
       assert length(images) >= 1, "Expected at least 1 image from Form, got: #{inspect(images)}"
     end
@@ -573,7 +573,7 @@ defmodule Pdf.ReaderTest do
       # A {:deferred, :form_xobject, _} is NOT a {:text, _} event so it falls through
       # to the catch-all in events_to_text_runs and is silently dropped. The assertion
       # here is that read_text returns :ok (no crash) and the Form's text IS present.
-      assert {:ok, texts} = Pdf.Reader.read_text(doc)
+      assert {:ok, texts, _doc} = Pdf.Reader.read_text(doc)
       combined = Enum.join(texts, " ")
       assert String.contains?(combined, "DEFERRED_CHECK")
     end
@@ -593,7 +593,7 @@ defmodule Pdf.ReaderTest do
       assert {:ok, doc} = Pdf.Reader.open(bin)
 
       # Must return without hanging or crashing (cycle is detected and halted)
-      assert {:ok, _texts} = Pdf.Reader.read_text(doc)
+      assert {:ok, _texts, _doc} = Pdf.Reader.read_text(doc)
     end
 
     test "page resource cache is populated after read_text_with_positions/1" do
@@ -604,8 +604,8 @@ defmodule Pdf.ReaderTest do
       bin = craft_inherited_resources_pdf()
       assert {:ok, doc} = Pdf.Reader.open(bin)
 
-      assert {:ok, texts1} = Pdf.Reader.read_text(doc)
-      assert {:ok, texts2} = Pdf.Reader.read_text(doc)
+      assert {:ok, texts1, _doc} = Pdf.Reader.read_text(doc)
+      assert {:ok, texts2, _doc} = Pdf.Reader.read_text(doc)
       assert texts1 == texts2
     end
 
@@ -614,11 +614,81 @@ defmodule Pdf.ReaderTest do
       # The walk must go 2 levels up to find /Font /F1. If it stops at one level, text is empty.
       bin = craft_multilevel_inherited_resources_pdf()
       assert {:ok, doc} = Pdf.Reader.open(bin)
-      assert {:ok, texts} = Pdf.Reader.read_text(doc)
+      assert {:ok, texts, _doc} = Pdf.Reader.read_text(doc)
       combined = Enum.join(texts, " ")
 
       assert String.contains?(combined, "MULTILEVEL"),
              "Expected 'MULTILEVEL' in extracted text, got: #{inspect(texts)}"
+    end
+  end
+
+  # ---------------------------------------------------------------------------
+  # Phase 4 — font_widths threading (pdf-reader-per-glyph-widths)
+  #
+  # Task 4.1: extract_page_runs must build font_widths from font resources and
+  # thread them through do_interpret_with_doc so that per-glyph advance works.
+  #
+  # Test strategy: build a synthetic PDF whose font dict has /Widths entries
+  # that are deliberately NON-uniform (e.g. first char width 250, rest 750).
+  # Issue two single-byte Tj calls — the x-position of the second run must
+  # reflect the width of the first glyph, NOT a uniform 1-em advance.
+  #
+  # Spec: § 9.4.4, § 9.6.2.1
+  # ---------------------------------------------------------------------------
+
+  describe "per-glyph widths threading — Phase 4 (§ 9.4.4)" do
+    # 4.1: font_widths map is built and threaded through extract_page_runs.
+    # Font has /FirstChar 65, /LastChar 67 with widths [250, 750, 750] (A=250, B=750, C=750).
+    # Content: "BT /F1 12 Tf 0 0 Td (A) Tj (B) Tj ET"
+    # Expected tx for 'A' (65): (250/1000 * 12) * 1.0 = 3.0
+    # So second run's x should be ~3.0, not 12.0 (uniform 1 em).
+    test "4.1 — non-uniform /Widths in font dict produce non-uniform x advances" do
+      bin = craft_widths_threading_pdf()
+      assert {:ok, doc} = Pdf.Reader.open(bin)
+      assert {:ok, runs, _doc} = Pdf.Reader.read_text_with_positions(doc)
+
+      # Two text runs: 'A' at x=0, 'B' at x= tx_of_A = (250/1000 * 12) = 3.0
+      assert length(runs) == 2
+      [run_a, run_b] = runs
+
+      assert_in_delta run_a.x, 0.0, 0.1
+
+      # Per-glyph width: tx = (250/1000 * 12) * 1.0 = 3.0
+      # If font_widths is NOT threaded (old uniform 1-em), x would be 12.0.
+      assert_in_delta run_b.x, 3.0, 0.1,
+                      "Expected per-glyph advance of 3.0 for width=250, got #{run_b.x}. " <>
+                        "If 12.0, font_widths is not threaded through extract_page_runs."
+    end
+
+    # 5.1: E2E regression on rfc.pdf — per-glyph widths do not crash and produce
+    # a full multi-run extraction. rfc.pdf uses Standard-14 fonts (no embedded /Widths)
+    # so widths_fn returns zeros; advance is Tc/Tw only (documented gap).
+    # Assertion: many text runs are extracted with valid text content — no crash,
+    # no empty output, text integrity preserved.
+    test "5.1 — rfc.pdf: extracts text runs without crash (per-glyph widths active)" do
+      path = "test/fixtures/pdfs/rfc.pdf"
+      assert {:ok, doc} = Pdf.Reader.open(path)
+      assert {:ok, runs, _doc} = Pdf.Reader.read_text_with_positions(doc)
+
+      assert length(runs) >= 10, "Expected at least 10 text runs from rfc.pdf, got #{length(runs)}"
+
+      # Verify text integrity: rfc.pdf should contain known RFC content
+      all_text = runs |> Enum.map(& &1.text) |> Enum.join(" ")
+      assert String.contains?(all_text, "JavaScript") or
+               String.contains?(all_text, "JSON") or
+               String.contains?(all_text, "Internet"),
+             "Expected RFC content keywords in extracted text"
+    end
+
+    # 5.2: Font without embedded /Widths → widths_fn returns zeros → no crash.
+    # Documented gap: advance driven by Tc/Tw only.
+    test "5.2 — font without /Widths: no crash, advance is Tc/Tw only" do
+      # Craft a PDF with a Type1 font that has NO /Widths, NO /FirstChar, NO /LastChar
+      bin = craft_no_widths_pdf()
+      assert {:ok, doc} = Pdf.Reader.open(bin)
+
+      # Must not crash; may return empty text or the raw bytes
+      assert {:ok, _runs, _doc} = Pdf.Reader.read_text_with_positions(doc)
     end
   end
 
@@ -1755,5 +1825,163 @@ defmodule Pdf.ReaderTest do
         "%%EOF\n"
 
     header <> obj1 <> obj2 <> obj3 <> obj4 <> obj5 <> obj6 <> xref <> trailer
+  end
+
+  # ---------------------------------------------------------------------------
+  # craft_widths_threading_pdf/0
+  #
+  # Builds a minimal PDF with a Type1 font that has:
+  #   /FirstChar 65 /LastChar 67 /Widths [250 750 750]
+  #
+  # Content stream issues two single-byte Tj calls:
+  #   BT /F1 12 Tf 0 0 Td (A) Tj (B) Tj ET
+  #
+  # With font_widths threaded (Phase 4), tx for 'A' = (250/1000 * 12) = 3.0
+  # so the second run should appear at x=3.0.
+  # Without threading (pre-Phase 4), tx = 0 (widths_fn nil) → x stays 0.
+  #
+  # Spec: § 9.4.4, § 9.6.2.1
+  # ---------------------------------------------------------------------------
+  defp craft_widths_threading_pdf do
+    header = "%PDF-1.4\n"
+
+    # Content: two single-char Tj calls
+    content_body = "BT /F1 12 Tf 0 0 Td (A) Tj (B) Tj ET"
+    content_length = byte_size(content_body)
+
+    obj1 = "1 0 obj\n<</Type /Catalog /Pages 2 0 R>>\nendobj\n"
+
+    obj2 =
+      "2 0 obj\n" <>
+        "<</Type /Pages /Kids [3 0 R] /Count 1>>\n" <>
+        "endobj\n"
+
+    obj3 =
+      "3 0 obj\n" <>
+        "<</Type /Page /Parent 2 0 R" <>
+        " /MediaBox [0 0 612 792]" <>
+        " /Contents 4 0 R" <>
+        " /Resources <</Font <</F1 5 0 R>>>>>>\n" <>
+        "endobj\n"
+
+    obj4 =
+      "4 0 obj\n" <>
+        "<</Length #{content_length}>>\n" <>
+        "stream\n" <>
+        content_body <>
+        "\nendstream\n" <>
+        "endobj\n"
+
+    # Font with /Widths: A(65)=250, B(66)=750, C(67)=750
+    obj5 =
+      "5 0 obj\n" <>
+        "<</Type /Font /Subtype /Type1 /BaseFont /Helvetica" <>
+        " /FirstChar 65 /LastChar 67 /Widths [250 750 750]>>\n" <>
+        "endobj\n"
+
+    obj1_offset = byte_size(header)
+    obj2_offset = obj1_offset + byte_size(obj1)
+    obj3_offset = obj2_offset + byte_size(obj2)
+    obj4_offset = obj3_offset + byte_size(obj3)
+    obj5_offset = obj4_offset + byte_size(obj4)
+    xref_offset = obj5_offset + byte_size(obj5)
+
+    xref =
+      "xref\n" <>
+        "0 6\n" <>
+        "0000000000 65535 f\r\n" <>
+        pad_offset(obj1_offset) <>
+        " 00000 n\r\n" <>
+        pad_offset(obj2_offset) <>
+        " 00000 n\r\n" <>
+        pad_offset(obj3_offset) <>
+        " 00000 n\r\n" <>
+        pad_offset(obj4_offset) <>
+        " 00000 n\r\n" <>
+        pad_offset(obj5_offset) <> " 00000 n\r\n"
+
+    trailer =
+      "trailer\n" <>
+        "<</Size 6 /Root 1 0 R>>\n" <>
+        "startxref\n" <>
+        "#{xref_offset}\n" <>
+        "%%EOF\n"
+
+    header <> obj1 <> obj2 <> obj3 <> obj4 <> obj5 <> xref <> trailer
+  end
+
+  # ---------------------------------------------------------------------------
+  # craft_no_widths_pdf/0
+  #
+  # Builds a minimal PDF with a Type1 font that has NO /Widths, /FirstChar,
+  # or /LastChar. This exercises the documented gap: widths_fn returns zeros,
+  # so glyph advance is 0 (only Tc/Tw contribute). Must not crash.
+  #
+  # Spec: § 9.4.4 (advance formula), § 9.6.2.1 (missing /Widths fallback)
+  # ---------------------------------------------------------------------------
+  defp craft_no_widths_pdf do
+    header = "%PDF-1.4\n"
+
+    content_body = "BT /F1 12 Tf 0 0 Td (Hello) Tj ET"
+    content_length = byte_size(content_body)
+
+    obj1 = "1 0 obj\n<</Type /Catalog /Pages 2 0 R>>\nendobj\n"
+
+    obj2 =
+      "2 0 obj\n" <>
+        "<</Type /Pages /Kids [3 0 R] /Count 1>>\n" <>
+        "endobj\n"
+
+    obj3 =
+      "3 0 obj\n" <>
+        "<</Type /Page /Parent 2 0 R" <>
+        " /MediaBox [0 0 612 792]" <>
+        " /Contents 4 0 R" <>
+        " /Resources <</Font <</F1 5 0 R>>>>>>\n" <>
+        "endobj\n"
+
+    obj4 =
+      "4 0 obj\n" <>
+        "<</Length #{content_length}>>\n" <>
+        "stream\n" <>
+        content_body <>
+        "\nendstream\n" <>
+        "endobj\n"
+
+    # Font with NO /Widths — tests the fallback path
+    obj5 =
+      "5 0 obj\n" <>
+        "<</Type /Font /Subtype /Type1 /BaseFont /Helvetica>>\n" <>
+        "endobj\n"
+
+    obj1_offset = byte_size(header)
+    obj2_offset = obj1_offset + byte_size(obj1)
+    obj3_offset = obj2_offset + byte_size(obj2)
+    obj4_offset = obj3_offset + byte_size(obj3)
+    obj5_offset = obj4_offset + byte_size(obj4)
+    xref_offset = obj5_offset + byte_size(obj5)
+
+    xref =
+      "xref\n" <>
+        "0 6\n" <>
+        "0000000000 65535 f\r\n" <>
+        pad_offset(obj1_offset) <>
+        " 00000 n\r\n" <>
+        pad_offset(obj2_offset) <>
+        " 00000 n\r\n" <>
+        pad_offset(obj3_offset) <>
+        " 00000 n\r\n" <>
+        pad_offset(obj4_offset) <>
+        " 00000 n\r\n" <>
+        pad_offset(obj5_offset) <> " 00000 n\r\n"
+
+    trailer =
+      "trailer\n" <>
+        "<</Size 6 /Root 1 0 R>>\n" <>
+        "startxref\n" <>
+        "#{xref_offset}\n" <>
+        "%%EOF\n"
+
+    header <> obj1 <> obj2 <> obj3 <> obj4 <> obj5 <> xref <> trailer
   end
 end

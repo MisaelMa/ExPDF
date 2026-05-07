@@ -8,6 +8,13 @@ defmodule Pdf.Reader.GraphicsState do
 
   The `:stack` holds snapshots pushed by the `q` operator and restored by `Q`.
 
+  ## Text state additions (§ 9.4.4)
+
+  The `:widths_fn` field holds the per-glyph width closure for the active font.
+  It is set by the `Tf` operator handler and used by `advance_tm/2` to compute
+  exact horizontal text advance per the full § 9.4.4 formula. When `nil`, advance
+  defaults to 0 per glyph (only `Tc`, `Tw`, and `Tfs` terms contribute).
+
   ## Matrix convention
 
   PDF uses the row-vector convention (§ 8.3.3):
@@ -39,8 +46,9 @@ defmodule Pdf.Reader.GraphicsState do
           leading: float(),
           char_spacing: float(),
           word_spacing: float(),
-          horizontal_scaling: float(),
+          horizontal_scaling: float(),  # percentage (100.0 = normal); Th = value / 100.0
           rise: float(),
+          widths_fn: nil | (binary() -> [non_neg_integer()]),
           stack: [t()]
         }
 
@@ -52,8 +60,11 @@ defmodule Pdf.Reader.GraphicsState do
             leading: 0.0,
             char_spacing: 0.0,
             word_spacing: 0.0,
-            horizontal_scaling: 1.0,
+            # horizontal_scaling is stored as a percentage (e.g. 100.0 = normal).
+            # Th = horizontal_scaling / 100.0. Default per PDF spec § 9.4.4 is 100%.
+            horizontal_scaling: 100.0,
             rise: 0.0,
+            widths_fn: nil,
             stack: []
 
   # ---------------------------------------------------------------------------

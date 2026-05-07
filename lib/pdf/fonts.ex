@@ -107,7 +107,12 @@ defmodule Pdf.Fonts do
     end
   end
 
-  defp lookup_font(%{fonts: fonts} = fonts_state, objects, %ExternalFont{family_name: family_name}, opts) do
+  defp lookup_font(
+         %{fonts: fonts} = fonts_state,
+         objects,
+         %ExternalFont{family_name: family_name},
+         opts
+       ) do
     Enum.find(fonts, fn {_, %{module: font}} ->
       font.family_name == family_name && Font.matches_attributes(font, opts)
     end)
@@ -130,7 +135,9 @@ defmodule Pdf.Fonts do
 
   defp load_font(%{fonts: fonts, last_id: last_id} = fonts_state, objects, font_module) do
     id = last_id + 1
-    {font_object, objects} = ObjectCollection.create_object(objects, Font.to_dictionary(font_module, id))
+
+    {font_object, objects} =
+      ObjectCollection.create_object(objects, Font.to_dictionary(font_module, id))
 
     reference = %FontReference{
       name: n("F#{id}"),

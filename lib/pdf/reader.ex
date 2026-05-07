@@ -1,17 +1,72 @@
 defmodule Pdf.Reader do
   @moduledoc """
   Native PDF reader — opens a PDF binary or file path and provides pure-functional
-  access to text runs with positions, raster images, and document metadata.
+  access to text runs with positions, raster images, document metadata, interactive
+  form fields, document outlines (bookmarks), and page annotations.
   No GenServer, no mutable state; the reader is a fully lazy, immutable pipeline.
 
   ## Typical usage
 
-      {:ok, doc} = Pdf.Reader.open("report.pdf")
-      {:ok, [page1_text | _]} = Pdf.Reader.read_text(doc)
-      {:ok, runs}             = Pdf.Reader.read_text_with_positions(doc)
-      {:ok, meta, _doc}       = Pdf.Reader.read_metadata(doc)
-      {:ok, n}                = Pdf.Reader.page_count(doc)
-      :ok                     = Pdf.Reader.close(doc)
+      {:ok, doc}                          = Pdf.Reader.open("report.pdf")
+      {:ok, [page1_text | _], doc}        = Pdf.Reader.read_text(doc)
+      {:ok, runs, doc}                    = Pdf.Reader.read_text_with_positions(doc)
+      {:ok, meta, doc}                    = Pdf.Reader.read_metadata(doc)
+      {:ok, n}                            = Pdf.Reader.page_count(doc)
+      :ok                                 = Pdf.Reader.close(doc)
+
+  ## Outlines (bookmarks)
+
+      {:ok, outlines, _doc} = Pdf.Reader.read_outlines(doc)
+      # => [%Pdf.Reader.Outline{title: "Chapter 1", level: 0, dest_page: 1, children: [...]}, ...]
+
+      # Bang variant — raises Pdf.Reader.Error on failure
+      outlines = Pdf.Reader.read_outlines!(doc)
+
+  ## Annotations
+
+      {:ok, annotations, _doc} = Pdf.Reader.read_annotations(doc)
+      # => [%Pdf.Reader.Annotation{type: :highlight, page: 2, rect: {x1, y1, x2, y2}, ...}, ...]
+
+      # Bang variant — raises Pdf.Reader.Error on failure
+      annotations = Pdf.Reader.read_annotations!(doc)
+
+  ## Error recovery
+
+  `open/2` accepts a `recover: true` option that activates four orthogonal
+  recovery phases (R-1..R-4). Each recovery action is logged as a structured
+  event tuple appended to `doc.recovery_log`. Use `recovery_log/1` to inspect:
+
+      {:ok, doc} = Pdf.Reader.open(bin, recover: true)
+      Pdf.Reader.recovery_log(doc)
+      # => [] when the PDF was well-formed
+      # => [{:xref_recovered, 5}, {:page_failed, 2, :unresolved_ref}] on a corrupt PDF
+
+  **Closed set of recovery event tuples:**
+
+  | Tuple | Meaning |
+  |---|---|
+  | `{:xref_recovered, n}` | Linear scan recovered `n` object entries (R-3) |
+  | `{:eof_marker_missing, :linear_scan_used}` | `%%EOF` absent; linear scan used (R-3) |
+  | `{:page_failed, page_n, reason}` | Page skipped; text/images from other pages returned (R-1) |
+  | `{:font_skipped, page_n, font_name, reason}` | Font replaced with U+FFFD fallback (R-2) |
+  | `{:page_tree_recovered, n_pages}` | Catalog/Pages fallback; `n_pages` recovered (R-4) |
+
+  An empty `recovery_log` after `open/2` **guarantees** no recovery occurred.
+  No other tuple shapes are appended by the recovery paths.
+
+  The following errors remain fatal even with `recover: true`:
+  `:not_a_pdf`, `:encrypted_password_required`, `:encrypted_wrong_password`,
+  `:encrypted_unsupported_handler`, `{:io_error, reason}`.
+
+  **Known gaps (documented limitations):**
+
+  - **Encrypted AND corrupted PDFs** — the synthetic trailer from R-3 does not
+    include `/Encrypt`; decryption cannot proceed.
+  - **Catalog-fallback page order (R-4)** — the page list is in xref-insertion
+    order, NOT document order. `{:page_tree_recovered, n}` signals this.
+  - **R-4 probe cost** — `recover: true` triggers a full page-tree walk at
+    `open/2` time (O(pages)). Acceptable for opt-in mode; document in callers
+    that open very large PDFs.
 
   ## Encryption (Phase 2)
 
@@ -35,7 +90,7 @@ defmodule Pdf.Reader do
   capped at 8 (`{:cycle_detected, ref}` and `{:max_depth_exceeded, ref}`
   events are emitted internally and dropped from text output).
 
-  ## Known limitations (carried forward)
+  ## Known limitations
 
   - **No CID fonts beyond ToUnicode** — CID-keyed fonts that rely on `/CIDToGIDMap`
     or registry/ordering/supplement data are not decoded. Only `bfchar`/`bfrange`
@@ -43,16 +98,25 @@ defmodule Pdf.Reader do
   - **No CCITT / JBIG2 / JPEG2000 image filters** — images using `CCITTFaxDecode`,
     `JBIG2Decode`, or `JPXDecode` produce `{:error, {:unsupported_filter, name}}`.
   - **No OCR** — scanned PDFs with no embedded text produce an empty text list.
-  - **Per-glyph `/Widths`** — glyph advance is approximated as uniform
-    (`char_count × font_size`). Per-glyph widths are a separate change.
+  - **Standard-14 font metrics** — fonts without embedded `/Widths` (Standard-14
+    such as Helvetica, Times-Roman) produce zero-width glyph advance; only `Tc`/`Tw`
+    character/word spacing contribute. Hardcoded AFM metrics are a separate change.
   - **No BBox clipping** — text outside a Form's `/BBox` is still extracted.
-  - **No AcroForm field extraction** — interactive form field values are not read.
+  - **Annotation appearance streams not rendered** — visual rendering is out of scope.
+  - **Markup popup hierarchies not resolved** — popup windows are not extracted.
+  - **Sound/movie/screen/redact/3D annotations** — not extracted; surface as `:unknown`.
+  - **AcroForm widget annotations** — covered by `read_acroform/1`, not `read_annotations/1`.
 
   ## Spec references
 
   - PDF 1.7 § 7.7.3 — Page Tree
   - PDF 1.7 § 7.7.3.4 — Inheritance of Page Attributes (resource walk, cycle guard):
     https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf
+  - PDF 1.7 § 12.3.2 — Destinations
+  - PDF 1.7 § 12.3.3 — Document Outline
+  - PDF 1.7 § 12.5 — Annotations
+  - PDF 1.7 § 12.5.6.x — Annotation subtypes
+  - PDF 1.7 § 12.6 — Actions
   - PDF 1.7 § 14.3.2 — Metadata Streams (XMP merge precedence):
     https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf
 
@@ -61,7 +125,26 @@ defmodule Pdf.Reader do
   See `Pdf.Reader.Errors` for the complete documented reason set.
   """
 
-  alias Pdf.Reader.{Document, Encryption, Filter, Font, ObjectResolver, Page, Trailer, XMP, XRef}
+  alias Pdf.Reader.{
+    AcroForm,
+    Annotation,
+    Annotations,
+    Document,
+    Encryption,
+    Filter,
+    Font,
+    Font.Widths,
+    FormField,
+    ObjectResolver,
+    Outline,
+    Outlines,
+    Page,
+    Trailer,
+    Utils,
+    XMP,
+    XRef
+  }
+
   alias Pdf.Reader.Encryption.StandardHandler
 
   @type reason ::
@@ -173,6 +256,22 @@ defmodule Pdf.Reader do
   def close(_doc), do: :ok
 
   @doc """
+  Returns the recovery event log for a document in chronological (oldest-first) order.
+
+  An empty list guarantees that no recovery action occurred during `open/2`.
+  This is the canonical way for callers to inspect recovery events — direct
+  access to `doc.recovery_log` MUST NOT be used in application code.
+
+  The closed set of recovery event tuples is documented in `Pdf.Reader.Document`.
+
+  ## Spec reference
+
+  PDF 1.7 § 7.5 — PDF file structure (recovery model).
+  """
+  @spec recovery_log(Document.t()) :: [Document.recovery_event()]
+  def recovery_log(%Document{recovery_log: log}), do: Enum.reverse(log)
+
+  @doc """
   Extracts document metadata from the Info dictionary.
 
   Resolves the trailer's `/Info` reference and returns its key-value pairs
@@ -234,23 +333,52 @@ defmodule Pdf.Reader do
   Cross-validates the `/Count` entry in the page tree root against the
   actual number of leaf page refs found by traversal. If they disagree,
   returns `{:error, {:malformed, :page_tree_count_mismatch, %{declared: n, actual: m}}}`.
+
+  ## Recovery mode (R-4)
+
+  When `recover_mode: true` and the page list was recovered via the catalog
+  fallback (xref scan), there is no `/Pages /Count` to cross-validate against.
+  In that case, the declared-count lookup is skipped and the actual count from
+  the xref scan is returned directly. This branch is signalled by
+  `{:page_tree_recovered, n}` in `recovery_log`.
+
+  Spec references: PDF 1.7 § 7.7.3 (Page Tree), § 7.7.3.4 (Inheritance).
   """
   @spec page_count(Document.t()) :: {:ok, pos_integer()} | {:error, reason()}
   def page_count(%Document{} = doc) do
-    with {:ok, refs, updated_doc} <- Page.list_refs(doc),
-         {:ok, declared_count} <- read_declared_count(updated_doc) do
+    with {:ok, refs, updated_doc} <- Page.list_refs(doc) do
       actual = length(refs)
 
-      cond do
-        actual == 0 ->
-          {:error, :no_pages}
+      if actual == 0 do
+        {:error, :no_pages}
+      else
+        # R-4: when the page list was obtained via catalog-fallback (xref scan),
+        # there is no /Pages /Count to cross-validate. Detect this by checking
+        # if a :page_tree_recovered event was appended during list_refs/1.
+        # In that case return the actual count directly, bypassing the cross-check.
+        page_tree_recovered? =
+          Enum.any?(updated_doc.recovery_log, &match?({:page_tree_recovered, _}, &1))
 
-        declared_count != actual ->
-          {:error,
-           {:malformed, :page_tree_count_mismatch, %{declared: declared_count, actual: actual}}}
-
-        true ->
+        if page_tree_recovered? do
           {:ok, actual}
+        else
+          case read_declared_count(updated_doc) do
+            {:ok, declared_count} when declared_count == actual ->
+              {:ok, actual}
+
+            {:ok, declared_count} ->
+              {:error,
+               {:malformed, :page_tree_count_mismatch,
+                %{declared: declared_count, actual: actual}}}
+
+            {:error, _} when doc.recover_mode ->
+              # recover_mode active but no /Pages /Count found — return actual count
+              {:ok, actual}
+
+            {:error, _} = err ->
+              err
+          end
+        end
       end
     end
   end
@@ -262,14 +390,18 @@ defmodule Pdf.Reader do
   `%Pdf.Reader.TextRun{}` structs ordered by page then appearance in the
   content stream.
 
-  Returns `{:ok, []}` when no text is found. Never returns `:no_text_found`
+  Returns `{:ok, [], doc}` when no text is found. Never returns `:no_text_found`
   as an error per the spec resolution (empty is valid).
+
+  The returned `doc` carries an updated `:recovery_log` when opened with
+  `recover: true` — callers should pass the returned doc to `recovery_log/1`
+  to inspect per-page failures.
 
   Form XObjects (`Do` operator referencing `/Type /Form`) are NOT recursed —
   per Phase 1 scope. A deferred marker is recorded but produces no TextRun.
   """
   @spec read_text_with_positions(Document.t()) ::
-          {:ok, [Pdf.Reader.TextRun.t()]} | {:error, reason()}
+          {:ok, [Pdf.Reader.TextRun.t()], Document.t()} | {:error, reason()}
   def read_text_with_positions(%Document{} = doc) do
     with {:ok, page_refs, doc2} <- Page.list_refs(doc) do
       collect_text_runs(page_refs, doc2, 1, [])
@@ -283,13 +415,15 @@ defmodule Pdf.Reader do
   - `:pages` — `[pos_integer]` to filter to specific 1-indexed page numbers.
     Default: all pages.
 
-  Returns `{:ok, page_strings}` where each element is the concatenated text
-  for one page. Unresolved glyphs appear as `U+FFFD` (already encoded by the
-  encoding cascade layer).
+  Returns `{:ok, page_strings, doc}` where each element is the concatenated
+  text for one page. The returned `doc` carries an updated `:recovery_log`
+  when opened with `recover: true`. Unresolved glyphs appear as `U+FFFD`
+  (already encoded by the encoding cascade layer).
   """
-  @spec read_text(Document.t(), keyword()) :: {:ok, [String.t()]} | {:error, reason()}
+  @spec read_text(Document.t(), keyword()) ::
+          {:ok, [String.t()], Document.t()} | {:error, reason()}
   def read_text(%Document{} = doc, opts \\ []) do
-    with {:ok, runs} <- read_text_with_positions(doc) do
+    with {:ok, runs, updated_doc} <- read_text_with_positions(doc) do
       pages_filter = Keyword.get(opts, :pages, :all)
 
       runs_by_page =
@@ -297,7 +431,7 @@ defmodule Pdf.Reader do
         |> Enum.group_by(& &1.page)
 
       if map_size(runs_by_page) == 0 do
-        {:ok, []}
+        {:ok, [], updated_doc}
       else
         page_nums =
           case pages_filter do
@@ -312,7 +446,7 @@ defmodule Pdf.Reader do
           end)
           |> Enum.reject(&(&1 == ""))
 
-        {:ok, texts}
+        {:ok, texts, updated_doc}
       end
     end
   end
@@ -323,9 +457,11 @@ defmodule Pdf.Reader do
   For each page, resolves the XObject references from content-stream `Do`
   operators and classifies them as JPEG or PNG-like based on their `/Filter`.
 
-  Returns `{:ok, []}` when no images are found.
+  Returns `{:ok, [], doc}` when no images are found. The returned `doc`
+  carries an updated `:recovery_log` when opened with `recover: true`.
   """
-  @spec read_images(Document.t()) :: {:ok, [Pdf.Reader.Image.t()]} | {:error, reason()}
+  @spec read_images(Document.t()) ::
+          {:ok, [Pdf.Reader.Image.t()], Document.t()} | {:error, reason()}
   def read_images(%Document{} = doc) do
     with {:ok, page_refs, doc2} <- Page.list_refs(doc) do
       collect_images(page_refs, doc2, 1, [])
@@ -348,10 +484,8 @@ defmodule Pdf.Reader do
   """
   @spec read_metadata!(Document.t()) :: %{String.t() => String.t()}
   def read_metadata!(doc) do
-    case read_metadata(doc) do
-      {:ok, meta, _doc} -> meta
-      {:error, reason} -> raise Pdf.Reader.Error, reason
-    end
+    {:ok, meta, _doc} = read_metadata(doc)
+    meta
   end
 
   @doc """
@@ -371,7 +505,7 @@ defmodule Pdf.Reader do
   @spec read_text_with_positions!(Document.t()) :: [Pdf.Reader.TextRun.t()]
   def read_text_with_positions!(doc) do
     case read_text_with_positions(doc) do
-      {:ok, runs} -> runs
+      {:ok, runs, _doc} -> runs
       {:error, reason} -> raise Pdf.Reader.Error, reason
     end
   end
@@ -382,7 +516,7 @@ defmodule Pdf.Reader do
   @spec read_text!(Document.t(), keyword()) :: [String.t()]
   def read_text!(doc, opts \\ []) do
     case read_text(doc, opts) do
-      {:ok, texts} -> texts
+      {:ok, texts, _doc} -> texts
       {:error, reason} -> raise Pdf.Reader.Error, reason
     end
   end
@@ -393,7 +527,101 @@ defmodule Pdf.Reader do
   @spec read_images!(Document.t()) :: [Pdf.Reader.Image.t()]
   def read_images!(doc) do
     case read_images(doc) do
-      {:ok, images} -> images
+      {:ok, images, _doc} -> images
+      {:error, reason} -> raise Pdf.Reader.Error, reason
+    end
+  end
+
+  @doc """
+  Extracts AcroForm interactive form fields from the document.
+
+  Walks the `/AcroForm /Fields` tree depth-first, emitting only leaf fields
+  as a flat list of `%Pdf.Reader.FormField{}` structs. Hierarchical names
+  (`/T` dot-joined from ancestor path) are resolved. `/FT` is inherited
+  downward from the nearest ancestor that defines it.
+
+  Returns `{:ok, [], doc}` when no `/AcroForm` is present or `/Fields` is empty.
+  Never returns `{:error, _}` for absent or empty AcroForms.
+
+  ## Spec references
+
+  - PDF 1.7 § 12.7 (Interactive Forms)
+  - PDF 1.7 § 12.7.3 (Field Dictionaries)
+  - PDF 1.7 § 12.7.4 (Field Types)
+  """
+  @spec read_acroform(Document.t()) ::
+          {:ok, [FormField.t()], Document.t()} | {:error, reason()}
+  def read_acroform(doc), do: AcroForm.read(doc)
+
+  @doc """
+  Bang variant of `read_acroform/1`. Raises `Pdf.Reader.Error` on failure.
+  """
+  @spec read_acroform!(Document.t()) :: [FormField.t()]
+  def read_acroform!(doc) do
+    case read_acroform(doc) do
+      {:ok, fields, _} -> fields
+      {:error, reason} -> raise Pdf.Reader.Error, reason
+    end
+  end
+
+  @doc """
+  Extracts document outline (bookmarks) from the PDF catalog's `/Outlines` tree.
+
+  Walks the `/First`/`/Next` linked list at each nesting level, threading
+  `/Parent` for depth. Cycle detection via `MapSet` and a depth cap of 32
+  prevent hangs on corrupt PDFs.
+
+  Returns `{:ok, [], doc}` when no `/Outlines` entry is present — never an error.
+
+  ## Spec references
+
+  - PDF 1.7 § 12.3.3 — Document Outline
+  - PDF 1.7 § 12.3.2 — Destinations
+  """
+  @spec read_outlines(Document.t()) :: {:ok, [Outline.t()], Document.t()} | {:error, reason()}
+  def read_outlines(doc), do: Outlines.read(doc)
+
+  @doc """
+  Bang variant of `read_outlines/1`. Raises `Pdf.Reader.Error` on failure.
+  Returns the outlines list directly on success.
+  """
+  @spec read_outlines!(Document.t()) :: [Outline.t()]
+  def read_outlines!(doc) do
+    case read_outlines(doc) do
+      {:ok, outlines, _} -> outlines
+      {:error, reason} -> raise Pdf.Reader.Error, reason
+    end
+  end
+
+  @doc """
+  Extracts all annotations from all pages in the document.
+
+  Enumerates every page via `Page.list_refs/1` and, for each page, resolves
+  its `/Annots` array. Supports 10 annotation subtypes:
+  `:link`, `:text`, `:highlight`, `:underline`, `:strikeout`, `:squiggly`,
+  `:square`, `:circle`, `:freetext`, `:file_attachment`. Other subtypes
+  surface as `:unknown` with raw fields preserved in `:kind_specific`.
+
+  Returns `{:ok, [], doc}` when no page has an `/Annots` array — never an error.
+
+  ## Spec references
+
+  - PDF 1.7 § 12.5 — Annotations
+  - PDF 1.7 § 12.5.6.x — Annotation subtypes
+  - PDF 1.7 § 12.6 — Actions
+  """
+  @spec read_annotations(Document.t()) ::
+          {:ok, [Annotation.t()], Document.t()} | {:error, reason()}
+  def read_annotations(doc), do: Annotations.read(doc)
+
+  @doc """
+  Bang variant of `read_annotations/1`. Raises `Pdf.Reader.Error` on failure.
+  Returns the annotations list directly on success.
+  """
+  @spec read_annotations!(Document.t()) :: [Annotation.t()]
+  def read_annotations!(doc) do
+    case read_annotations(doc) do
+      {:ok, anns, _} -> anns
       {:error, reason} -> raise Pdf.Reader.Error, reason
     end
   end
@@ -404,11 +632,12 @@ defmodule Pdf.Reader do
 
   defp do_open(binary, opts) when is_binary(binary) do
     password = Keyword.get(opts, :password, "")
+    recover_mode = Keyword.get(opts, :recover, false)
 
     with :ok <- check_header(binary),
          {version, _} <- extract_version(binary),
-         {:ok, startxref_offset} <- Trailer.locate_startxref(binary),
-         {:ok, xref_entries, trailer} <- XRef.load(binary, startxref_offset) do
+         {:ok, xref_entries, trailer, recovery_events} <-
+           load_xref_or_recover(binary, recover_mode) do
       doc = %Document{
         binary: binary,
         version: version,
@@ -416,10 +645,81 @@ defmodule Pdf.Reader do
         trailer: trailer.dict,
         cache: %{},
         page_refs: nil,
-        encryption: nil
+        encryption: nil,
+        recover_mode: recover_mode,
+        recovery_log: Enum.reduce(recovery_events, [], fn ev, log -> [ev | log] end)
       }
 
-      attempt_unlock(doc, trailer, password)
+      # R-4: when recover_mode is true, probe the page tree immediately so that
+      # any catalog-fallback recovery events (e.g. {:page_tree_recovered, n}) are
+      # present in the doc returned from open/2. If the probe succeeds via normal
+      # tree walk, no events are added. If it triggers the fallback branch, the
+      # recovered page refs are stored in doc.page_refs and the recovery_log is
+      # populated. Downstream callers (page_count/1, read_text/1) then use the
+      # cached page_refs and see the populated recovery_log.
+      doc2 =
+        if recover_mode do
+          case Page.list_refs(doc) do
+            {:ok, refs, updated_doc} ->
+              %{updated_doc | page_refs: refs}
+
+            {:error, _} ->
+              doc
+          end
+        else
+          doc
+        end
+
+      attempt_unlock(doc2, trailer, password)
+    end
+  end
+
+  # ---------------------------------------------------------------------------
+  # XRef loading with optional linear-scan recovery
+  #
+  # Attempt strict XRef load first. If it fails AND recover_mode is true,
+  # fall back to XRef.recover/1 (linear scan). Collect recovery events.
+  #
+  # Returns {:ok, entries, trailer, [recovery_event()]} or {:error, reason}.
+  # ---------------------------------------------------------------------------
+
+  defp load_xref_or_recover(binary, recover_mode) do
+    case Trailer.locate_startxref(binary) do
+      {:ok, startxref_offset} ->
+        case XRef.load(binary, startxref_offset) do
+          {:ok, entries, trailer} ->
+            {:ok, entries, trailer, []}
+
+          {:error, _reason} when recover_mode ->
+            # Strict xref load failed with a valid %%EOF but bad offset.
+            do_xref_linear_scan(binary)
+
+          {:error, _reason} = err ->
+            err
+        end
+
+      {:error, _} when recover_mode ->
+        # %%EOF missing — linear scan needed.
+        # Log :eof_marker_missing PLUS :xref_recovered.
+        case do_xref_linear_scan(binary) do
+          {:ok, entries, trailer, events} ->
+            {:ok, entries, trailer, [{:eof_marker_missing, :linear_scan_used} | events]}
+
+          err ->
+            err
+        end
+
+      {:error, _} = err ->
+        err
+    end
+  end
+
+  # Run XRef.recover/1 and wrap result with recovery event tuple.
+  defp do_xref_linear_scan(binary) do
+    case XRef.recover(binary) do
+      {:ok, entries, trailer} ->
+        n_objects = map_size(entries)
+        {:ok, entries, trailer, [{:xref_recovered, n_objects}]}
     end
   end
 
@@ -487,16 +787,14 @@ defmodule Pdf.Reader do
   defp resolve_encrypt_dict(_doc, _other), do: {:error, :malformed}
 
   # Extract the first element of the /ID array as the document ID binary.
-  # Trailer.id may be [{:hex_string, bin}, {:hex_string, bin}] or similar.
-  defp extract_doc_id([first | _]) do
-    case first do
-      {:hex_string, bin} when is_binary(bin) -> bin
-      {:string, bin} when is_binary(bin) -> bin
-      bin when is_binary(bin) -> bin
-      _ -> <<>>
-    end
-  end
-
+  # The parser emits hex strings as `{:hex_string, bin}` and literal strings as
+  # `{:string, bin}`. Some legacy paths feed in plain binaries already-decoded.
+  # All three shapes must yield a binary; Dialyzer's success-typing of
+  # `Trailer.extract_id/1` is too narrow because the list contents are wider
+  # than the declared `[binary()]`.
+  defp extract_doc_id([{:hex_string, bin} | _]) when is_binary(bin), do: bin
+  defp extract_doc_id([{:string, bin} | _]) when is_binary(bin), do: bin
+  defp extract_doc_id([first | _]) when is_binary(first), do: first
   defp extract_doc_id(_), do: <<>>
 
   # R-ENC3: verify /V is in the supported set
@@ -543,33 +841,13 @@ defmodule Pdf.Reader do
   # Literal strings come as {:string, binary} from the parser.
   # Hex strings come as {:hex_string, binary}.
   # Scalars (integers, names) are stringified.
-  defp decode_info_value({:string, binary}), do: decode_pdf_string(binary)
+  defp decode_info_value({:string, binary}), do: Utils.decode_pdf_string(binary)
   defp decode_info_value({:hex_string, binary}), do: binary
   defp decode_info_value({:name, name}), do: name
   defp decode_info_value(n) when is_integer(n), do: Integer.to_string(n)
   defp decode_info_value(f) when is_float(f), do: Float.to_string(f)
   defp decode_info_value(s) when is_binary(s), do: s
   defp decode_info_value(_), do: nil
-
-  # Decode a PDF literal string byte sequence to UTF-8.
-  # UTF-16BE BOM (FE FF) → decode via :unicode.
-  # Otherwise treat as ASCII/UTF-8 best effort.
-  # Spec ref: PDF 1.7 § 7.9.2.2
-  defp decode_pdf_string(<<0xFE, 0xFF, rest::binary>>) do
-    case :unicode.characters_to_binary(rest, {:utf16, :big}, :utf8) do
-      result when is_binary(result) -> result
-      _ -> rest
-    end
-  end
-
-  defp decode_pdf_string(binary) do
-    if String.valid?(binary) do
-      binary
-    else
-      # Best-effort: replace non-UTF-8 bytes with replacement char
-      for <<b <- binary>>, into: "", do: if(b < 128, do: <<b>>, else: "?")
-    end
-  end
 
   # Resolve the catalog's /Metadata XMP stream and parse it.
   # Returns {xmp_map, updated_doc} — empty map on any failure (graceful).
@@ -634,44 +912,90 @@ defmodule Pdf.Reader do
   # Text extraction helpers
   # ---------------------------------------------------------------------------
 
-  defp collect_text_runs([], _doc, _page_num, acc) do
-    {:ok, Enum.reverse(acc)}
+  defp collect_text_runs([], doc, _page_num, acc) do
+    {:ok, Enum.reverse(acc), doc}
   end
 
+  # R-1: per-page isolation — when recover_mode is true, wrap each page in
+  # try/rescue so that a single failing page does not abort the whole document.
+  # On failure, append {:page_failed, page_num, reason} to recovery_log and
+  # emit [] runs for that page, then continue with the next page.
+  # When recover_mode is false, the MatchError from the parser is rescued and
+  # converted to {:error, :malformed} to satisfy the strict-mode contract.
   defp collect_text_runs([page_ref | rest], doc, page_num, acc) do
     # page_refs from Page.list_refs are {n, g} tuples — wrap to {:ref, n, g}
     ref = ensure_ref(page_ref)
 
-    case extract_page_runs(doc, ref, page_num) do
-      {:ok, runs, updated_doc} ->
-        collect_text_runs(rest, updated_doc, page_num + 1, Enum.reverse(runs) ++ acc)
+    if doc.recover_mode do
+      {result_acc, result_doc} =
+        try do
+          case extract_page_runs(doc, ref, page_num) do
+            {:ok, runs, updated_doc} ->
+              {Enum.reverse(runs) ++ acc, updated_doc}
 
-      {:error, _} = err ->
-        err
+            {:error, reason} ->
+              updated_doc = Document.log_recovery(doc, {:page_failed, page_num, reason})
+              {acc, updated_doc}
+          end
+        rescue
+          _ ->
+            updated_doc = Document.log_recovery(doc, {:page_failed, page_num, :parse_error})
+            {acc, updated_doc}
+        end
+
+      collect_text_runs(rest, result_doc, page_num + 1, result_acc)
+    else
+      try do
+        case extract_page_runs(doc, ref, page_num) do
+          {:ok, runs, updated_doc} ->
+            collect_text_runs(rest, updated_doc, page_num + 1, Enum.reverse(runs) ++ acc)
+
+          {:error, _} = err ->
+            err
+        end
+      rescue
+        _ -> {:error, :malformed}
+      end
     end
   end
 
   # R-FX1, R-FX19: use do_interpret_with_doc/5 to thread doc through for Form
   # XObject recursion. Raw xobjects refs are passed — classification happens
   # on demand inside the Do handler. Updated doc (with cache) is returned.
+  #
+  # R-2: build_decoders_for_resources now returns font_failures list. On recovery
+  # mode, each failure is logged as {:font_skipped, page_num, font_name, reason}.
   defp extract_page_runs(doc, page_ref, page_num) do
     with {:ok, page_dict, doc2} <- ObjectResolver.resolve(doc, page_ref),
          {:ok, content_bytes, doc3} <- resolve_page_contents(doc2, page_dict),
          {:ok, resources, doc4} <- resolve_page_resources(doc3, page_ref, page_dict),
-         {:ok, font_decoders, doc5} <- Font.build_decoders_for_resources(resources, doc4),
+         {:ok, font_decoders, font_failures, doc5} <-
+           Font.build_decoders_for_resources(resources, doc4),
+         doc5a <- log_font_failures(doc5, font_failures, page_num),
+         {:ok, font_widths, doc6} <- Widths.build_widths_for_resources(resources, doc5a),
          xobjects <- build_xobjects_map(resources),
-         {:ok, events, doc6} <-
+         {:ok, events, doc7} <-
            Pdf.Reader.ContentStream.do_interpret_with_doc(
              content_bytes,
              &identity_decoder/1,
-             [xobjects: xobjects, font_decoders: font_decoders],
-             doc5,
+             [xobjects: xobjects, font_decoders: font_decoders, font_widths: font_widths],
+             doc6,
              resources
            ) do
       runs = events_to_text_runs(events, page_num)
-      # doc6 carries decryption cache and Form resolution cache populated during interpretation
-      {:ok, runs, doc6}
+      # doc7 carries decryption cache and Form resolution cache populated during interpretation
+      {:ok, runs, doc7}
     end
+  end
+
+  # Convert font_failures list to {:font_skipped, page_num, name, reason} events
+  # and log them on the doc. Returns doc unchanged when failures list is empty.
+  defp log_font_failures(doc, [], _page_num), do: doc
+
+  defp log_font_failures(doc, failures, page_num) do
+    Enum.reduce(failures, doc, fn {name, reason}, acc_doc ->
+      Document.log_recovery(acc_doc, {:font_skipped, page_num, name, reason})
+    end)
   end
 
   # Default decoder used when no font-specific decoder is available.
@@ -757,35 +1081,22 @@ defmodule Pdf.Reader do
   # corrupt PDFs where the /Parent chain forms a loop.
   defp resolve_page_resources(doc, leaf_ref, page_dict, visited \\ MapSet.new()) do
     # Normalise the leaf ref to {n, g} for use as a cache key.
-    leaf_key =
-      case leaf_ref do
-        {:ref, n, g} -> {n, g}
-        {n, g} -> {n, g}
-        _ -> nil
-      end
+    {:ref, n, g} = leaf_ref
+    leaf_key = {n, g}
 
     # Cache hit: return immediately without walking.
-    if leaf_key != nil and Map.has_key?(doc.cache, {:page_resources, leaf_key}) do
+    if Map.has_key?(doc.cache, {:page_resources, leaf_key}) do
       {:ok, Map.fetch!(doc.cache, {:page_resources, leaf_key}), doc}
     else
-      {result, updated_doc} = do_resolve_page_resources(doc, leaf_key, page_dict, visited)
+      {{:ok, resources}, updated_doc} =
+        do_resolve_page_resources(doc, leaf_key, page_dict, visited)
 
-      # Cache write: store under the leaf page ref so future calls short-circuit.
-      case {result, leaf_key} do
-        {{:ok, resources}, key} when key != nil ->
-          cached_doc = %{
-            updated_doc
-            | cache: Map.put(updated_doc.cache, {:page_resources, key}, resources)
-          }
+      cached_doc = %{
+        updated_doc
+        | cache: Map.put(updated_doc.cache, {:page_resources, leaf_key}, resources)
+      }
 
-          {:ok, resources, cached_doc}
-
-        {{:ok, resources}, nil} ->
-          {:ok, resources, updated_doc}
-
-        {{:error, _} = err, _} ->
-          err
-      end
+      {:ok, resources, cached_doc}
     end
   end
 
@@ -798,23 +1109,15 @@ defmodule Pdf.Reader do
           nil ->
             {{:ok, %{}}, doc}
 
-          parent_ref ->
+          {:ref, n, g} = parent_ref ->
             # Extract {n, g} from the parent ref for cycle detection.
-            parent_key =
-              case parent_ref do
-                {:ref, n, g} -> {n, g}
-                {n, g} -> {n, g}
-                _ -> nil
-              end
+            parent_key = {n, g}
 
             # Cycle guard: if this ancestor was already visited, break the loop.
-            if parent_key != nil and MapSet.member?(visited, parent_key) do
+            if MapSet.member?(visited, parent_key) do
               {{:ok, %{}}, doc}
             else
-              new_visited =
-                if parent_key != nil,
-                  do: MapSet.put(visited, parent_key),
-                  else: visited
+              new_visited = MapSet.put(visited, parent_key)
 
               # Also add the leaf ref itself on the first call so a page pointing
               # /Parent to itself is caught on the very first ancestor resolution.
@@ -897,37 +1200,69 @@ defmodule Pdf.Reader do
   # Image extraction helpers
   # ---------------------------------------------------------------------------
 
-  defp collect_images([], _doc, _page_num, acc) do
-    {:ok, Enum.reverse(acc)}
+  defp collect_images([], doc, _page_num, acc) do
+    {:ok, Enum.reverse(acc), doc}
   end
 
+  # R-1: per-page isolation — mirror of collect_text_runs/4 for images.
+  # When recover_mode is true, catch per-page failures (including raises) and continue.
+  # When recover_mode is false, raises are rescued and converted to {:error, :malformed}.
   defp collect_images([page_ref | rest], doc, page_num, acc) do
     ref = ensure_ref(page_ref)
 
-    case extract_page_images(doc, ref, page_num) do
-      {:ok, images, updated_doc} ->
-        collect_images(rest, updated_doc, page_num + 1, Enum.reverse(images) ++ acc)
+    if doc.recover_mode do
+      {result_acc, result_doc} =
+        try do
+          case extract_page_images(doc, ref, page_num) do
+            {:ok, images, updated_doc} ->
+              {Enum.reverse(images) ++ acc, updated_doc}
 
-      {:error, _} = err ->
-        err
+            {:error, reason} ->
+              updated_doc = Document.log_recovery(doc, {:page_failed, page_num, reason})
+              {acc, updated_doc}
+          end
+        rescue
+          _ ->
+            updated_doc = Document.log_recovery(doc, {:page_failed, page_num, :parse_error})
+            {acc, updated_doc}
+        end
+
+      collect_images(rest, result_doc, page_num + 1, result_acc)
+    else
+      try do
+        case extract_page_images(doc, ref, page_num) do
+          {:ok, images, updated_doc} ->
+            collect_images(rest, updated_doc, page_num + 1, Enum.reverse(images) ++ acc)
+
+          {:error, _} = err ->
+            err
+        end
+      rescue
+        _ -> {:error, :malformed}
+      end
     end
   end
 
   # R-FX13: image events from Form XObjects bubble up through recurse_into_form.
   # Use do_interpret_with_doc/5 (same as extract_page_runs) so Form recursion
   # is enabled and nested image events are included in the event list.
+  #
+  # R-2: build_decoders_for_resources now returns font_failures list. On recovery
+  # mode, each failure is logged as {:font_skipped, page_num, font_name, reason}.
   defp extract_page_images(doc, page_ref, page_num) do
     with {:ok, page_dict, doc2} <- ObjectResolver.resolve(doc, page_ref),
          {:ok, resources, doc3} <- resolve_page_resources(doc2, page_ref, page_dict),
          {:ok, content_bytes, doc4} <- resolve_page_contents(doc3, page_dict),
-         {:ok, font_decoders, doc5} <- Font.build_decoders_for_resources(resources, doc4),
+         {:ok, font_decoders, font_failures, doc5} <-
+           Font.build_decoders_for_resources(resources, doc4),
+         doc5a <- log_font_failures(doc5, font_failures, page_num),
          xobjects <- build_xobjects_map(resources),
          {:ok, events, doc6} <-
            Pdf.Reader.ContentStream.do_interpret_with_doc(
              content_bytes,
              &identity_decoder/1,
              [xobjects: xobjects, font_decoders: font_decoders],
-             doc5,
+             doc5a,
              resources
            ) do
       image_events = Enum.filter(events, &match?({:image, _}, &1))

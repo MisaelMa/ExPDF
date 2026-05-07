@@ -29,14 +29,20 @@ defmodule Pdf.FontsTest do
   test "looking up an internal font by name, bold, italic" do
     document = Document.new()
 
-    assert {%Fonts.FontReference{module: %Pdf.Font{name: "Helvetica-BoldOblique"}}, _fonts, _objects} =
-             Fonts.get_font(document.fonts, document.objects, "Helvetica", italic: true, bold: true)
+    assert {%Fonts.FontReference{module: %Pdf.Font{name: "Helvetica-BoldOblique"}}, _fonts,
+            _objects} =
+             Fonts.get_font(document.fonts, document.objects, "Helvetica",
+               italic: true,
+               bold: true
+             )
   end
 
   test "cannot look up an internal font by name, that has no variants" do
     document = Document.new()
 
-    {ref, _fonts, _objects} = Fonts.get_font(document.fonts, document.objects, "Symbol", bold: true)
+    {ref, _fonts, _objects} =
+      Fonts.get_font(document.fonts, document.objects, "Symbol", bold: true)
+
     refute ref
   end
 
@@ -56,7 +62,12 @@ defmodule Pdf.FontsTest do
       |> Document.add_external_font("test/fonts/Verdana-Bold.afm")
 
     assert {%Fonts.FontReference{module: %ExternalFont{name: "Verdana-Bold"}}, _fonts, _objects} =
-             Fonts.get_font(document.fonts, document.objects, %ExternalFont{family_name: "Verdana"}, bold: true)
+             Fonts.get_font(
+               document.fonts,
+               document.objects,
+               %ExternalFont{family_name: "Verdana"},
+               bold: true
+             )
   end
 
   test "Looking up an external font by name, and non-existing variant" do
@@ -64,7 +75,11 @@ defmodule Pdf.FontsTest do
       Document.new()
       |> Document.add_external_font("test/fonts/Verdana.afm")
 
-    {ref, _fonts, _objects} = Fonts.get_font(document.fonts, document.objects, %ExternalFont{family_name: "Verdana"}, bold: true)
+    {ref, _fonts, _objects} =
+      Fonts.get_font(document.fonts, document.objects, %ExternalFont{family_name: "Verdana"},
+        bold: true
+      )
+
     refute ref
   end
 end

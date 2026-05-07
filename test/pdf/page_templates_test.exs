@@ -61,6 +61,7 @@ defmodule Pdf.PageTemplatesTest do
         Pdf.new(size: :a4, compress: false)
         |> Pdf.on_page(:header, fn doc, info ->
           send(test_pid, {:header_called, info.number})
+
           Pdf.set_font(doc, "Helvetica", 10)
           |> Pdf.text_at({40, 820}, "Header Text")
         end)

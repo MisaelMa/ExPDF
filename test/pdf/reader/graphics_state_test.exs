@@ -184,5 +184,17 @@ defmodule Pdf.Reader.GraphicsStateTest do
       assert state.leading == 0.0
       assert state.stack == []
     end
+
+    # Phase 2 addition: widths_fn field for per-glyph advance (§ 9.4.4)
+    test "new/0 has widths_fn: nil by default" do
+      state = GraphicsState.new()
+      assert state.widths_fn == nil
+    end
+
+    test "GraphicsState struct has widths_fn field" do
+      state = %GraphicsState{}
+      assert Map.has_key?(state, :widths_fn)
+      assert state.widths_fn == nil
+    end
   end
 end

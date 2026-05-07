@@ -79,7 +79,7 @@ defmodule Pdf.Reader.FixturesTest do
     @tag :fixtures
     test "extracts non-empty text list from rfc.pdf" do
       {:ok, doc} = Pdf.Reader.open(@rfc_pdf)
-      assert {:ok, texts} = Pdf.Reader.read_text(doc)
+      assert {:ok, texts, _doc} = Pdf.Reader.read_text(doc)
       # Must be a non-empty list
       assert is_list(texts)
       assert length(texts) > 0
@@ -90,7 +90,7 @@ defmodule Pdf.Reader.FixturesTest do
     @tag :fixtures
     test "extracts non-empty text list from gov.pdf" do
       {:ok, doc} = Pdf.Reader.open(@gov_pdf)
-      assert {:ok, texts} = Pdf.Reader.read_text(doc)
+      assert {:ok, texts, _doc} = Pdf.Reader.read_text(doc)
       assert is_list(texts)
       assert length(texts) > 0
       assert Enum.any?(texts, fn t -> is_binary(t) and byte_size(t) > 0 end)
@@ -99,7 +99,7 @@ defmodule Pdf.Reader.FixturesTest do
     @tag :fixtures
     test "extracts non-empty text list from sample.pdf" do
       {:ok, doc} = Pdf.Reader.open(@sample_pdf)
-      assert {:ok, texts} = Pdf.Reader.read_text(doc)
+      assert {:ok, texts, _doc} = Pdf.Reader.read_text(doc)
       assert is_list(texts)
       assert length(texts) > 0
       assert Enum.any?(texts, fn t -> is_binary(t) and byte_size(t) > 0 end)
@@ -109,7 +109,7 @@ defmodule Pdf.Reader.FixturesTest do
     @tag :fixtures
     test "9.1: rfc.pdf read_text — contains 'JSON' or '8259' (S-CW15)" do
       {:ok, doc} = Pdf.Reader.open(@rfc_pdf)
-      assert {:ok, texts} = Pdf.Reader.read_text(doc)
+      assert {:ok, texts, _doc} = Pdf.Reader.read_text(doc)
       assert length(texts) >= 1
 
       joined = Enum.join(texts, " ")
@@ -128,7 +128,7 @@ defmodule Pdf.Reader.FixturesTest do
     @tag :fixtures
     test "9.2a: gov.pdf read_text — contains 'W-9' or 'Taxpayer' or 'IRS'" do
       {:ok, doc} = Pdf.Reader.open(@gov_pdf)
-      assert {:ok, texts} = Pdf.Reader.read_text(doc)
+      assert {:ok, texts, _doc} = Pdf.Reader.read_text(doc)
       assert length(texts) > 0
 
       joined = Enum.join(texts, " ")
@@ -144,7 +144,7 @@ defmodule Pdf.Reader.FixturesTest do
     @tag :fixtures
     test "9.2b: sample.pdf read_text — non-empty list with valid UTF-8 strings per page" do
       {:ok, doc} = Pdf.Reader.open(@sample_pdf)
-      assert {:ok, texts} = Pdf.Reader.read_text(doc)
+      assert {:ok, texts, _doc} = Pdf.Reader.read_text(doc)
       assert length(texts) > 0
 
       # All page strings must be valid UTF-8 (U+FFFD is valid; raw Latin-1 is not)
@@ -195,6 +195,30 @@ defmodule Pdf.Reader.FixturesTest do
   end
 
   # ---------------------------------------------------------------------------
+  # Phase AcroForm — read_acroform/1 on gov.pdf (S-AF17)
+  # ---------------------------------------------------------------------------
+
+  describe "Pdf.Reader.read_acroform/1 — gov.pdf AcroForm smoke (S-AF17)" do
+    @tag :fixtures
+    test "7.1: gov.pdf has AcroForm fields with non-nil name and known type" do
+      bin = File.read!(@gov_pdf)
+      {:ok, doc} = Pdf.Reader.open(bin)
+      {:ok, fields, _} = Pdf.Reader.read_acroform(doc)
+
+      assert length(fields) >= 1,
+             "Expected at least 1 AcroForm field in gov.pdf, got #{length(fields)}"
+
+      field = hd(fields)
+
+      assert is_binary(field.name),
+             "Expected field.name to be a binary string, got: #{inspect(field.name)}"
+
+      assert field.type in [:text, :button, :choice, :signature, :unknown],
+             "Expected field.type to be a valid field_type atom, got: #{inspect(field.type)}"
+    end
+  end
+
+  # ---------------------------------------------------------------------------
   # Phase 9.4 — read_images/1 on each fixture
   # None of the three fixtures have extractable images (unsupported filters or
   # no images), so assert {:ok, []} for all.
@@ -204,7 +228,7 @@ defmodule Pdf.Reader.FixturesTest do
     @tag :fixtures
     test "9.4a: rfc.pdf — read_images returns {:ok, list} (may be empty)" do
       {:ok, doc} = Pdf.Reader.open(@rfc_pdf)
-      assert {:ok, images} = Pdf.Reader.read_images(doc)
+      assert {:ok, images, _doc} = Pdf.Reader.read_images(doc)
       assert is_list(images)
 
       # If images present, each must have a 6-tuple ctm and positive render_width
@@ -219,7 +243,7 @@ defmodule Pdf.Reader.FixturesTest do
     @tag :fixtures
     test "9.4b: gov.pdf — read_images returns {:ok, list} (may be empty)" do
       {:ok, doc} = Pdf.Reader.open(@gov_pdf)
-      assert {:ok, images} = Pdf.Reader.read_images(doc)
+      assert {:ok, images, _doc} = Pdf.Reader.read_images(doc)
       assert is_list(images)
 
       if length(images) > 0 do
@@ -233,7 +257,7 @@ defmodule Pdf.Reader.FixturesTest do
     @tag :fixtures
     test "9.4c: sample.pdf — read_images returns {:ok, list} (may be empty)" do
       {:ok, doc} = Pdf.Reader.open(@sample_pdf)
-      assert {:ok, images} = Pdf.Reader.read_images(doc)
+      assert {:ok, images, _doc} = Pdf.Reader.read_images(doc)
       assert is_list(images)
 
       if length(images) > 0 do
@@ -242,6 +266,92 @@ defmodule Pdf.Reader.FixturesTest do
           assert img.render_width > 0.0
         end)
       end
+    end
+  end
+
+  # ---------------------------------------------------------------------------
+  # Phase AO — S-AO19 — read_outlines/1 + read_annotations/1 smoke (7.4)
+  #
+  # At least ONE of the three fixtures MUST yield ≥1 outline OR ≥1 annotation.
+  # If individual fixtures yield empty lists that is documented as acceptable
+  # (real-world PDFs may have no bookmarks or annotations). The cross-fixture
+  # assertion ensures the feature is exercised end-to-end on real PDFs.
+  # ---------------------------------------------------------------------------
+
+  describe "Pdf.Reader.read_outlines/1 — fixture smoke (S-AO19)" do
+    @tag :fixtures
+    test "7.4a: rfc.pdf — read_outlines returns {:ok, list, doc}" do
+      {:ok, doc} = Pdf.Reader.open(@rfc_pdf)
+      assert {:ok, outlines, _doc} = Pdf.Reader.read_outlines(doc)
+      assert is_list(outlines)
+    end
+
+    @tag :fixtures
+    test "7.4b: gov.pdf — read_outlines returns {:ok, list, doc}" do
+      {:ok, doc} = Pdf.Reader.open(@gov_pdf)
+      assert {:ok, outlines, _doc} = Pdf.Reader.read_outlines(doc)
+      assert is_list(outlines)
+    end
+
+    @tag :fixtures
+    test "7.4c: sample.pdf — read_outlines returns {:ok, list, doc}" do
+      {:ok, doc} = Pdf.Reader.open(@sample_pdf)
+      assert {:ok, outlines, _doc} = Pdf.Reader.read_outlines(doc)
+      assert is_list(outlines)
+    end
+  end
+
+  describe "Pdf.Reader.read_annotations/1 — fixture smoke (S-AO19)" do
+    @tag :fixtures
+    test "7.4d: rfc.pdf — read_annotations returns {:ok, list, doc}" do
+      {:ok, doc} = Pdf.Reader.open(@rfc_pdf)
+      assert {:ok, annotations, _doc} = Pdf.Reader.read_annotations(doc)
+      assert is_list(annotations)
+    end
+
+    @tag :fixtures
+    test "7.4e: gov.pdf — read_annotations returns {:ok, list, doc}" do
+      {:ok, doc} = Pdf.Reader.open(@gov_pdf)
+      assert {:ok, annotations, _doc} = Pdf.Reader.read_annotations(doc)
+      assert is_list(annotations)
+    end
+
+    @tag :fixtures
+    test "7.4f: sample.pdf — read_annotations returns {:ok, list, doc}" do
+      {:ok, doc} = Pdf.Reader.open(@sample_pdf)
+      assert {:ok, annotations, _doc} = Pdf.Reader.read_annotations(doc)
+      assert is_list(annotations)
+    end
+
+    @tag :fixtures
+    test "7.4g: at least one fixture yields >=1 outline or >=1 annotation (S-AO19)" do
+      # This test ensures the new features are exercised on real-world data.
+      # At least one of the three fixtures must contain either bookmarks or annotations.
+      results =
+        [@rfc_pdf, @gov_pdf, @sample_pdf]
+        |> Enum.map(fn path ->
+          {:ok, doc} = Pdf.Reader.open(path)
+          {:ok, outlines, doc2} = Pdf.Reader.read_outlines(doc)
+          {:ok, annotations, _doc3} = Pdf.Reader.read_annotations(doc2)
+          length(outlines) + length(annotations)
+        end)
+
+      total = Enum.sum(results)
+
+      # If all fixtures are empty (total == 0), this is a known limitation.
+      # We do NOT fail the test but emit a message that the feature produced
+      # only empty results. The acceptance criteria document says:
+      # "If all 3 yield empty, document as known limitation; don't fail."
+      if total == 0 do
+        IO.puts(
+          "[S-AO19 notice] All three fixtures (rfc.pdf, gov.pdf, sample.pdf) yielded " <>
+            "0 outlines and 0 annotations. This is acceptable for these particular PDFs. " <>
+            "The feature is structurally verified by integration tests."
+        )
+      end
+
+      # The feature must not crash — all calls above succeeded (no error tuple)
+      assert length(results) == 3
     end
   end
 

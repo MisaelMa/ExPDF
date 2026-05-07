@@ -98,12 +98,15 @@ defmodule Pdf.Builder do
 
   defp maybe_debug_grid(doc, nil), do: doc
   defp maybe_debug_grid(doc, true), do: Pdf.debug_grid(doc)
-  defp maybe_debug_grid(doc, debug_opts) when is_map(debug_opts), do: Pdf.debug_grid(doc, debug_opts)
+
+  defp maybe_debug_grid(doc, debug_opts) when is_map(debug_opts),
+    do: Pdf.debug_grid(doc, debug_opts)
 
   defp register_styles(doc, styles) when map_size(styles) == 0, do: doc
   defp register_styles(doc, styles), do: Pdf.register_styles(doc, styles)
 
   defp maybe_register(doc, _name, nil), do: doc
+
   defp maybe_register(doc, name, func) when is_function(func, 2) do
     Pdf.on_page(doc, name, func)
   end

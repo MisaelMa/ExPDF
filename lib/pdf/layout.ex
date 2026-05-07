@@ -137,14 +137,20 @@ defmodule Pdf.Layout do
 
       page =
         if br > 0 do
-          page |> Page.set_line_width(br) |> Page.line({x + w, y}, {x + w, y - h}) |> Page.stroke()
+          page
+          |> Page.set_line_width(br)
+          |> Page.line({x + w, y}, {x + w, y - h})
+          |> Page.stroke()
         else
           page
         end
 
       page =
         if bb > 0 do
-          page |> Page.set_line_width(bb) |> Page.line({x, y - h}, {x + w, y - h}) |> Page.stroke()
+          page
+          |> Page.set_line_width(bb)
+          |> Page.line({x, y - h}, {x + w, y - h})
+          |> Page.stroke()
         else
           page
         end

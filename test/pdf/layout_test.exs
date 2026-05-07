@@ -27,7 +27,8 @@ defmodule Pdf.LayoutTest do
 
     test "applies margin", %{page: page} do
       {_page, area} =
-        Layout.box(page, {50, 700}, {200, 100}, [style: %{margin: 5, padding: 0}], fn page, area ->
+        Layout.box(page, {50, 700}, {200, 100}, [style: %{margin: 5, padding: 0}], fn page,
+                                                                                      area ->
           {page, area}
         end)
 
@@ -64,8 +65,16 @@ defmodule Pdf.LayoutTest do
     test "distributes width by weight", %{page: page} do
       _page =
         Layout.row(page, {0, 700}, {300, 50}, [
-          {1, fn page, area -> send(self(), {:area, area}); page end},
-          {2, fn page, area -> send(self(), {:area, area}); page end}
+          {1,
+           fn page, area ->
+             send(self(), {:area, area})
+             page
+           end},
+          {2,
+           fn page, area ->
+             send(self(), {:area, area})
+             page
+           end}
         ])
 
       assert_receive {:area, %{x: 0, width: w1}}
@@ -78,10 +87,24 @@ defmodule Pdf.LayoutTest do
 
     test "applies gap between columns", %{page: page} do
       _page =
-        Layout.row(page, {0, 700}, {310, 50}, [
-          {1, fn page, area -> send(self(), {:area, 1, area}); page end},
-          {1, fn page, area -> send(self(), {:area, 2, area}); page end}
-        ], gap: 10)
+        Layout.row(
+          page,
+          {0, 700},
+          {310, 50},
+          [
+            {1,
+             fn page, area ->
+               send(self(), {:area, 1, area})
+               page
+             end},
+            {1,
+             fn page, area ->
+               send(self(), {:area, 2, area})
+               page
+             end}
+          ],
+          gap: 10
+        )
 
       assert_receive {:area, 1, %{x: 0, width: w1}}
       assert_receive {:area, 2, %{x: x2}}
@@ -95,8 +118,16 @@ defmodule Pdf.LayoutTest do
     test "stacks items vertically", %{page: page} do
       _page =
         Layout.column(page, {50, 700}, {200, 300}, [
-          {30, fn page, area -> send(self(), {:area, 1, area}); page end},
-          {40, fn page, area -> send(self(), {:area, 2, area}); page end}
+          {30,
+           fn page, area ->
+             send(self(), {:area, 1, area})
+             page
+           end},
+          {40,
+           fn page, area ->
+             send(self(), {:area, 2, area})
+             page
+           end}
         ])
 
       assert_receive {:area, 1, %{y: 700, height: 30}}
@@ -105,10 +136,24 @@ defmodule Pdf.LayoutTest do
 
     test "applies gap between rows", %{page: page} do
       _page =
-        Layout.column(page, {50, 700}, {200, 300}, [
-          {30, fn page, area -> send(self(), {:area, 1, area}); page end},
-          {40, fn page, area -> send(self(), {:area, 2, area}); page end}
-        ], gap: 5)
+        Layout.column(
+          page,
+          {50, 700},
+          {200, 300},
+          [
+            {30,
+             fn page, area ->
+               send(self(), {:area, 1, area})
+               page
+             end},
+            {40,
+             fn page, area ->
+               send(self(), {:area, 2, area})
+               page
+             end}
+          ],
+          gap: 5
+        )
 
       assert_receive {:area, 1, %{y: 700}}
       assert_receive {:area, 2, %{y: 665}}

@@ -155,10 +155,11 @@ defmodule Pdf.BuilderTest do
         Pdf.new(size: :a4, compress: false)
         |> Pdf.set_font("Helvetica", 12)
 
-      doc = Builder.render_into(doc, [
-        {:text, "Added via render_into"},
-        {:spacer, 10}
-      ])
+      doc =
+        Builder.render_into(doc, [
+          {:text, "Added via render_into"},
+          {:spacer, 10}
+        ])
 
       output = export(doc.current)
       assert output =~ "Added via render_into"

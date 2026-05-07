@@ -1119,4 +1119,232 @@ defmodule Pdf.Reader.ContentStreamTest do
       assert events == []
     end
   end
+
+  # ---------------------------------------------------------------------------
+  # Phase 3 — advance_tm rewrite with per-glyph widths (§ 9.4.4)
+  #
+  # These tests use synthetic widths_fn closures injected via font_widths opt.
+  # All expected values are hand-computed from the § 9.4.4 formula:
+  #
+  #   tx = ((w/1000 - Tj_kern) * Tfs + Tc + Tw_if_space) * Th
+  #
+  # widths_fn signature: (binary() -> [non_neg_integer()])
+  # Injection: font_widths: %{"F1" => widths_fn} opt → Tf /F1 sets gs.widths_fn
+  # ---------------------------------------------------------------------------
+
+  # Helper: build a widths_fn that always returns [w] for a 1-byte binary
+  defp constant_widths_fn(w), do: fn bytes -> List.duplicate(w, byte_size(bytes)) end
+
+  describe "advance_tm — § 9.4.4 full formula" do
+    # 3.1: widths_fn=600, Tfs=12, Th=1.0, Tc=0, Tw=0
+    # tx = (600/1000 * 12 + 0 + 0) * 1.0 = 7.2
+    # Starting x=0, after Tj with 1 byte: x should be 7.2
+    test "3.1 — w=600, Tfs=12, Th=1.0, Tc=0, Tw=0 → tx=7.2 per glyph" do
+      widths_fn = constant_widths_fn(600)
+      font_dict = %{"Subtype" => {:name, "Type1"}, "__test_widths__" => widths_fn}
+      font_widths = %{"F1" => widths_fn}
+
+      # After first Tj at (0,0): x starts at 0, one byte, tx=7.2
+      # After second Tj (same spot virtually): let's check with two-byte string
+      stream = "BT /F1 12 Tf 0 0 Td (A) Tj (A) Tj ET"
+
+      {:ok, events} =
+        ContentStream.interpret(stream, &ascii_decoder/1, font_widths: font_widths)
+
+      assert length(events) == 2
+      [first, second] = events
+      {_, run1} = first
+      {_, run2} = second
+
+      # First run: x=0
+      assert_in_delta run1.x, 0.0, 0.001
+      # Second run: x=0 + tx = 7.2
+      assert_in_delta run2.x, 7.2, 0.01
+    end
+
+    # 3.2: Tc=1.0 applied to every glyph
+    # w=500, Tfs=10, Th=1.0, Tc=1.0, Tw=0
+    # tx = (500/1000 * 10 + 1.0) * 1.0 = 6.0
+    test "3.2 — Tc=1.0 applied to every glyph: w=500, Tfs=10 → tx=6.0" do
+      widths_fn = constant_widths_fn(500)
+      font_widths = %{"F1" => widths_fn}
+
+      # Set Tc=1.0 before Tf (Tc operator)
+      stream = "BT 1 Tc /F1 10 Tf 0 0 Td (A) Tj (B) Tj ET"
+
+      {:ok, events} =
+        ContentStream.interpret(stream, &ascii_decoder/1, font_widths: font_widths)
+
+      assert length(events) == 2
+      [{_, run1}, {_, run2}] = events
+      assert_in_delta run1.x, 0.0, 0.001
+      assert_in_delta run2.x, 6.0, 0.01
+    end
+
+    # 3.3: Tw=2.0 applied only when glyph byte is 0x20 (space)
+    # For space: w=250, Tfs=10, Th=1.0, Tc=0, Tw=2.0
+    #   tx_space = (250/1000 * 10 + 0 + 2.0) * 1.0 = 4.5
+    # For 'A' (0x41): no Tw
+    #   tx_A = (250/1000 * 10 + 0) * 1.0 = 2.5
+    test "3.3 — Tw=2.0 on space byte, not on 0x41" do
+      widths_fn = constant_widths_fn(250)
+      font_widths = %{"F1" => widths_fn}
+
+      # Three Tj calls: space, 'A', space
+      stream = "BT 2 Tw /F1 10 Tf 0 0 Td ( ) Tj (A) Tj ( ) Tj ET"
+
+      {:ok, events} =
+        ContentStream.interpret(stream, &ascii_decoder/1, font_widths: font_widths)
+
+      assert length(events) == 3
+      [{_, run1}, {_, run2}, {_, run3}] = events
+
+      # run1 at x=0 (space)
+      assert_in_delta run1.x, 0.0, 0.001
+      # run2 at x=0 + tx_space = 4.5
+      assert_in_delta run2.x, 4.5, 0.01
+      # run3 at x=4.5 + tx_A = 4.5 + 2.5 = 7.0
+      assert_in_delta run3.x, 7.0, 0.01
+    end
+
+    # 3.4: Th=0.5 scales entire advance
+    # w=1000, Tfs=10, Th=0.5, Tc=0, Tw=0
+    # tx = (1000/1000 * 10 + 0) * 0.5 = 5.0
+    test "3.4 — Th=0.5 scales advance: w=1000, Tfs=10 → tx=5.0" do
+      widths_fn = constant_widths_fn(1000)
+      font_widths = %{"F1" => widths_fn}
+
+      # Th is horizontal_scaling; set via Tz operator (50 = 50%)
+      stream = "BT 50 Tz /F1 10 Tf 0 0 Td (A) Tj (B) Tj ET"
+
+      {:ok, events} =
+        ContentStream.interpret(stream, &ascii_decoder/1, font_widths: font_widths)
+
+      assert length(events) == 2
+      [{_, run1}, {_, run2}] = events
+      assert_in_delta run1.x, 0.0, 0.001
+      assert_in_delta run2.x, 5.0, 0.01
+    end
+
+    # 3.5: TJ kern n=100, Th=0.8
+    # kern shift = -(100/1000) * Tfs * Th = -(0.1) * 12 * 0.8 = -0.96
+    # Verify kern_tm fix: Th IS applied
+    test "3.5 — TJ kerning n=100 with Th=0.8: shift=-(100/1000)*Tfs*Th=-0.96" do
+      widths_fn = constant_widths_fn(600)
+      font_widths = %{"F1" => widths_fn}
+
+      # TJ array: [string, kern, string]
+      # String "A" at x=0, kern=100 shifts by -0.96, string "B" should be at:
+      # x1=0 (first A), after A: x=0+7.2*0.8=5.76, after kern: x=5.76-0.96=4.8, B at 4.8
+      # Wait: tx for A with Th=0.8: (600/1000 * 12) * 0.8 = 5.76
+      # kern: -(100/1000)*12*0.8 = -0.96 → x = 5.76-0.96 = 4.8
+      stream = "BT 80 Tz /F1 12 Tf 0 0 Td [(A) 100 (B)] TJ ET"
+
+      {:ok, events} =
+        ContentStream.interpret(stream, &ascii_decoder/1, font_widths: font_widths)
+
+      assert length(events) == 2
+      [{_, run_a}, {_, run_b}] = events
+      assert_in_delta run_a.x, 0.0, 0.001
+      assert_in_delta run_b.x, 4.8, 0.05
+    end
+
+    # 3.6: multi-byte CID binary — Tw fires only on <<0x00, 0x20>>
+    # CID font: 2 bytes → 1 width
+    test "3.6 — CID multi-byte: Tw on <<0x00, 0x20>> only" do
+      # widths_fn for CID: always returns [500] per pair
+      cid_widths_fn = fn bytes ->
+        count = div(byte_size(bytes), 2)
+        for i <- 0..(count - 1), count > 0 do
+          <<_::binary-size(i * 2), _h, _l, _::binary>> = bytes
+          500
+        end
+      end
+
+      font_widths = %{"F1" => cid_widths_fn}
+
+      # Two 2-byte strings: <<0x00, 0x20>> (CID space) and <<0x00, 0x41>> (not space)
+      # tx for space (Tw=2.0): (500/1000 * 10 + 0 + 2.0) * 1.0 = 7.0
+      # tx for 0x0041: (500/1000 * 10 + 0) * 1.0 = 5.0
+      space_hex = "0020"
+      non_space_hex = "0041"
+      stream = "BT 2 Tw /F1 10 Tf 0 0 Td <#{space_hex}> Tj <#{non_space_hex}> Tj ET"
+
+      {:ok, events} =
+        ContentStream.interpret(stream, &ascii_decoder/1, font_widths: font_widths)
+
+      assert length(events) == 2
+      [{_, run1}, {_, run2}] = events
+      assert_in_delta run1.x, 0.0, 0.001
+      # After space CID (<<0x00, 0x20>>): x = 7.0
+      assert_in_delta run2.x, 7.0, 0.05
+    end
+
+    # 3.7: widths_fn: nil → w=0, advance driven only by Tc/Tw/Tfs
+    # Tc=1.0, Tw=0, Tfs=10, Th=1.0 → tx = (0 + 1.0) * 1.0 = 1.0 per byte
+    test "3.7 — widths_fn: nil → w=0, advance = (Tc + Tw_if_space) * Th" do
+      # No font_widths → widths_fn stays nil
+      stream = "BT 1 Tc /F1 10 Tf 0 0 Td (A) Tj (B) Tj ET"
+
+      {:ok, events} = ContentStream.interpret(stream, &ascii_decoder/1)
+
+      assert length(events) == 2
+      [{_, run1}, {_, run2}] = events
+      assert_in_delta run1.x, 0.0, 0.001
+      # With w=0, tx = (0 + 1.0) * 1.0 = 1.0
+      assert_in_delta run2.x, 1.0, 0.01
+    end
+  end
+
+  # ---------------------------------------------------------------------------
+  # Phase 4 — Tf handler: widths_fn swap (§ 9.4.4, § 9.4.5)
+  #
+  # Tasks 4.3/4.4: Tf must set gs.widths_fn from font_widths map.
+  # Two-font swap and nil fallback for absent font.
+  # ---------------------------------------------------------------------------
+
+  describe "Tf — widths_fn swap from font_widths map" do
+    # 4.3a: Tf F1 sets widths_fn to fn1; Tj advances by fn1-derived width
+    # fn1 returns [1000] per byte → tx = (1000/1000 * 12 + 0) * 1.0 = 12.0
+    # fn2 returns [500] per byte → tx = (500/1000 * 10 + 0) * 1.0 = 5.0
+    test "4.3a — Tf F1 then Tf F2: widths_fn swaps correctly" do
+      fn1 = fn bytes -> List.duplicate(1000, byte_size(bytes)) end
+      fn2 = fn bytes -> List.duplicate(500, byte_size(bytes)) end
+      font_widths = %{"F1" => fn1, "F2" => fn2}
+
+      # After Tf F1 (size 12): Tj (A) → tx = (1000/1000 * 12) * 1 = 12
+      # After Tf F2 (size 10): Tj (B) → starts at x=12, tx = (500/1000 * 10) * 1 = 5
+      stream = "BT /F1 12 Tf 0 0 Td (A) Tj /F2 10 Tf (B) Tj ET"
+
+      {:ok, events} = ContentStream.interpret(stream, &ascii_decoder/1, font_widths: font_widths)
+
+      text_events = Enum.filter(events, &match?({:text, _}, &1))
+      assert length(text_events) == 2
+      [{:text, run1}, {:text, run2}] = text_events
+
+      assert_in_delta run1.x, 0.0, 0.001
+      # run2 starts where run1 ended: 0 + 12 = 12
+      assert_in_delta run2.x, 12.0, 0.01
+    end
+
+    # 4.3b: Font not in font_widths map → widths_fn set to nil
+    # With widths_fn nil, advance = (0 + Tc) * Th; here Tc=0 so tx=0 → x stays at 0
+    test "4.3b — Tf for font absent in font_widths sets widths_fn to nil" do
+      fn1 = fn bytes -> List.duplicate(600, byte_size(bytes)) end
+      font_widths = %{"F1" => fn1}
+
+      # Tf F2 (not in font_widths) → widths_fn = nil → advance = 0
+      stream = "BT /F2 12 Tf 0 0 Td (A) Tj (B) Tj ET"
+
+      {:ok, events} = ContentStream.interpret(stream, &ascii_decoder/1, font_widths: font_widths)
+
+      text_events = Enum.filter(events, &match?({:text, _}, &1))
+      assert length(text_events) == 2
+      [{:text, run1}, {:text, run2}] = text_events
+
+      # widths_fn nil → w=0, Tc=0, Tw=0 → tx=0 for each glyph → x stays at 0
+      assert_in_delta run1.x, 0.0, 0.001
+      assert_in_delta run2.x, 0.0, 0.001
+    end
+  end
 end

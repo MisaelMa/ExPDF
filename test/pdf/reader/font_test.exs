@@ -306,7 +306,7 @@ defmodule Pdf.Reader.FontTest do
       }
 
       doc = empty_doc()
-      assert {:ok, decoders, _doc2} = Font.build_decoders_for_resources(resources, doc)
+      assert {:ok, decoders, _font_failures, _doc2} = Font.build_decoders_for_resources(resources, doc)
 
       assert Map.has_key?(decoders, "F1")
       assert Map.has_key?(decoders, "F2")
@@ -323,7 +323,7 @@ defmodule Pdf.Reader.FontTest do
       resources = %{"Font" => %{}}
       doc = empty_doc()
 
-      assert {:ok, decoders, _doc2} = Font.build_decoders_for_resources(resources, doc)
+      assert {:ok, decoders, _font_failures, _doc2} = Font.build_decoders_for_resources(resources, doc)
       assert decoders == %{}
     end
 
@@ -331,7 +331,7 @@ defmodule Pdf.Reader.FontTest do
       resources = %{}
       doc = empty_doc()
 
-      assert {:ok, decoders, _doc2} = Font.build_decoders_for_resources(resources, doc)
+      assert {:ok, decoders, _font_failures, _doc2} = Font.build_decoders_for_resources(resources, doc)
       assert decoders == %{}
     end
 
@@ -343,12 +343,107 @@ defmodule Pdf.Reader.FontTest do
       }
 
       doc = empty_doc()
-      assert {:ok, decoders, _doc2} = Font.build_decoders_for_resources(resources, doc)
+      assert {:ok, decoders, _font_failures, _doc2} = Font.build_decoders_for_resources(resources, doc)
 
       f1_decoder = Map.get(decoders, "F1")
       {text, unresolved} = f1_decoder.(<<"Hi">>)
       assert text == "Hi"
       assert unresolved == []
+    end
+  end
+
+  # ---------------------------------------------------------------------------
+  # 2.9 — Type0/Identity-H dispatch to CID decoder (R-CID1, S-CID1)
+  # ---------------------------------------------------------------------------
+
+  describe "build_decoder/2 — Type0/Identity-H dispatches to CID decoder (R-CID1, S-CID1)" do
+    test "font dict with Identity-H encoding returns a 2-byte decoder" do
+      font_dict = %{
+        "Subtype" => {:name, "Type0"},
+        "Encoding" => {:name, "Identity-H"},
+        "DescendantFonts" => [
+          %{
+            "Subtype" => {:name, "CIDFontType2"},
+            "CIDSystemInfo" => %{
+              "Registry" => "Adobe",
+              "Ordering" => "Japan1",
+              "Supplement" => 7
+            },
+            "CIDToGIDMap" => {:name, "Identity"}
+          }
+        ]
+      }
+
+      doc = empty_doc()
+      assert {:ok, decoder, _doc2} = Font.build_decoder(font_dict, doc)
+      assert is_function(decoder, 1)
+
+      # Decoder must consume 2-byte pairs; <<0, 1>> = CID 1 = space in Japan1
+      {text, unresolved} = decoder.(<<0, 1>>)
+      assert text == " "
+      assert unresolved == []
+    end
+
+    test "font dict with Identity-V encoding dispatches same CID path" do
+      font_dict = %{
+        "Subtype" => {:name, "Type0"},
+        "Encoding" => {:name, "Identity-V"},
+        "DescendantFonts" => [
+          %{
+            "Subtype" => {:name, "CIDFontType2"},
+            "CIDSystemInfo" => %{
+              "Registry" => "Adobe",
+              "Ordering" => "Japan1",
+              "Supplement" => 7
+            },
+            "CIDToGIDMap" => {:name, "Identity"}
+          }
+        ]
+      }
+
+      doc = empty_doc()
+      assert {:ok, decoder, _doc2} = Font.build_decoder(font_dict, doc)
+      assert is_function(decoder, 1)
+
+      {text, unresolved} = decoder.(<<0, 1>>)
+      assert text == " "
+      assert unresolved == []
+    end
+
+    test "non-CID font dict (WinAnsiEncoding) still uses simple 1-byte path (R-CID12)" do
+      font_dict = %{"Encoding" => {:name, "WinAnsiEncoding"}}
+      doc = empty_doc()
+      assert {:ok, decoder, _doc2} = Font.build_decoder(font_dict, doc)
+
+      # Simple 1-byte decoder: 'H' = 0x48
+      {text, _unresolved} = decoder.(<<0x48>>)
+      assert text == "H"
+    end
+
+    test "Type0 with non-Identity encoding (UniJIS-UTF16-H) returns some result (S-CID10)" do
+      font_dict = %{
+        "Subtype" => {:name, "Type0"},
+        "Encoding" => {:name, "UniJIS-UTF16-H"},
+        "DescendantFonts" => [
+          %{
+            "Subtype" => {:name, "CIDFontType2"},
+            "CIDSystemInfo" => %{
+              "Registry" => "Adobe",
+              "Ordering" => "Japan1",
+              "Supplement" => 7
+            },
+            "CIDToGIDMap" => {:name, "Identity"}
+          }
+        ]
+      }
+
+      doc = empty_doc()
+      # Non-Identity CMaps are out of scope; result is either a FFFD decoder or simple path
+      assert {:ok, decoder, _doc2} = Font.build_decoder(font_dict, doc)
+      assert is_function(decoder, 1)
+
+      {text, _unresolved} = decoder.(<<0, 1>>)
+      assert is_binary(text)
     end
   end
 end

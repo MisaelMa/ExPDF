@@ -261,7 +261,8 @@ defmodule Pdf do
   Draw a rectangle from coordinates x,y (lower left corner) for a given width and height.
   """
   @spec rectangle(Document.t(), coords, dimension) :: Document.t()
-  def rectangle(document, coords, dimensions), do: Document.rectangle(document, coords, dimensions)
+  def rectangle(document, coords, dimensions),
+    do: Document.rectangle(document, coords, dimensions)
 
   @doc """
   Draw a line between 2 points.
@@ -461,7 +462,8 @@ defmodule Pdf do
       pdf |> Pdf.text_at({300, 730}, "BILL TO", :label)
       pdf |> Pdf.text_at({300, 730}, "BILL TO", kerning: true)
   """
-  def text_at(document, coords, text, style_or_opts) when is_map(style_or_opts) or is_atom(style_or_opts) do
+  def text_at(document, coords, text, style_or_opts)
+      when is_map(style_or_opts) or is_atom(style_or_opts) do
     style = document |> resolve_style(style_or_opts) |> Pdf.Style.new()
 
     document
@@ -504,7 +506,8 @@ defmodule Pdf do
   When choosing `:bold` or `:italic`, make sure that your current font supports these or an error will occur.
   If using an external font, you have to `add_font/2` all variants you want to use.
   """
-  @spec text_wrap(Document.t(), coords(), dimension(), binary | list) :: {Document.t(), :complete | term()}
+  @spec text_wrap(Document.t(), coords(), dimension(), binary | list) ::
+          {Document.t(), :complete | term()}
   def text_wrap(document, coords, dimensions, text) do
     text_wrap(document, coords, dimensions, text, [])
   end
@@ -517,7 +520,8 @@ defmodule Pdf do
   `:align` | :left , :center , :right | :left
   `:kerning` | `boolean` | false
   """
-  @spec text_wrap(Document.t(), coords(), dimension(), binary | list, keyword) :: {Document.t(), :complete | term()}
+  @spec text_wrap(Document.t(), coords(), dimension(), binary | list, keyword) ::
+          {Document.t(), :complete | term()}
   def text_wrap(document, coords, dimensions, text, opts) do
     Document.text_wrap(document, coords, dimensions, text, opts)
   end
@@ -864,9 +868,10 @@ defmodule Pdf do
 
     # Info text
     if info do
-      info_text = "margins: T=#{margin.top} R=#{margin.right} B=#{margin.bottom} L=#{margin.left} | " <>
-        "page: #{page_size.width}x#{page_size.height} | " <>
-        "content: #{content.width}x#{round(cy1 - cy0)} | cursor_y: #{round(cur)}"
+      info_text =
+        "margins: T=#{margin.top} R=#{margin.right} B=#{margin.bottom} L=#{margin.left} | " <>
+          "page: #{page_size.width}x#{page_size.height} | " <>
+          "content: #{content.width}x#{round(cy1 - cy0)} | cursor_y: #{round(cur)}"
 
       document
       |> save_state()
@@ -914,6 +919,7 @@ defmodule Pdf do
   defp draw_debug_lines_in_rect(document, grid, step, color, lw, {rx0, ry0}, {rx1, ry1}) do
     w = rx1 - rx0
     h = ry1 - ry0
+
     if w <= 0 or h <= 0 do
       document
     else

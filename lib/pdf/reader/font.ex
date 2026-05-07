@@ -5,8 +5,23 @@ defmodule Pdf.Reader.Font do
   A "decoder" is a closure `(binary -> {String.t(), [{non_neg_integer(), binary()}]})`
   that maps raw font-code bytes to UTF-8 text plus a list of unresolved sentinels.
 
+  ## Simple fonts (Type1, TrueType, etc.)
+
   Cascade per byte (delegates to `Pdf.Reader.Encoding.resolve_byte/3`):
   ToUnicode CMap → /Differences + AGL → base encoding → U+FFFD + sentinel.
+
+  ## Composite fonts (Type0/Identity-H/V)
+
+  When `/Encoding` is `Identity-H` or `Identity-V`, the font is dispatched to
+  `Pdf.Reader.CID.Decoder.build/2`. The CID decoder consumes bytes in 2-byte
+  big-endian chunks and resolves via:
+  ToUnicode CMap → Adobe registry table (Japan1/CNS1/Korea1/GB1) → U+FFFD.
+
+  Non-Identity predefined CMaps (`UniJIS-UTF16-H`, `GBK-EUC-H`, etc.) are
+  also supported when bundled in `priv/cmap/` — the decoder dispatches to
+  `Pdf.Reader.CID.Decoder.build_predefined/2` which uses
+  `Pdf.Reader.CID.PredefinedCMap` for byte→CID lookup followed by the
+  same Adobe registry → Unicode resolution as Identity-H/V.
 
   ## Cache
 
@@ -15,13 +30,30 @@ defmodule Pdf.Reader.Font do
   with shared font resources. Inline font dicts (plain maps, no ref) are NOT
   cached.
 
+  ## Recovery mode (R-2)
+
+  When `doc.recover_mode` is `true` and a font dict fails to resolve or build,
+  `build_decoders_for_resources/2` installs a fallback U+FFFD identity decoder
+  for that font instead of returning `{:error, _}`. The fallback emits
+  `<<0xFFFD::utf8>>` per input byte, which guarantees `String.valid?/1` is
+  `true` on the resulting text. A `{:font_skipped, page_n, font_name, reason}`
+  event is logged to `doc.recovery_log` for each failed font. Fonts that build
+  successfully are NOT affected.
+
+  Spec: PDF 1.7 § 9.6 (font dictionaries), § 9.10 (text content extraction).
+
   ## Spec references
   - PDF 1.7 § 9.6 — Type 1 Fonts:
     https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf
   - PDF 1.7 § 9.6.5, § 9.6.5.1 — Character Encoding, /Differences arrays
+  - PDF 1.7 § 9.7 — Composite Fonts (Type0, CIDFonts, CMaps)
+  - PDF 1.7 § 9.7.4 — CIDFonts
+  - PDF 1.7 § 9.7.5 — Predefined CMaps (Identity-H, Identity-V)
   - PDF 1.7 § 9.10.3 — ToUnicode CMaps
   """
 
+  alias Pdf.Reader.CID
+  alias Pdf.Reader.CID.PredefinedCMap
   alias Pdf.Reader.{CMap, Document, Encoding, Filter, ObjectResolver}
   alias Pdf.Reader.Encoding.Differences
 
@@ -67,23 +99,61 @@ defmodule Pdf.Reader.Font do
   Walks `resources["Font"]` (a map of font name → font dict or ref) and calls
   `build_decoder/2` for each entry. Returns a map keyed by font name.
 
-  Returns `{:ok, %{font_name => decoder_fn}, updated_doc}`.
+  In strict mode (`doc.recover_mode == false`): returns `{:ok, decoders, [], doc}`
+  on success, or `{:error, reason}` on first font build failure (unchanged).
+
+  In recovery mode (`doc.recover_mode == true`): on per-font build failure,
+  installs a per-byte U+FFFD fallback decoder for that font name and appends
+  `{font_name, reason}` to the returned `font_failures` list. The page is NOT
+  aborted. The caller is responsible for converting failures to
+  `{:font_skipped, page_n, font_name, reason}` events and logging them.
+
+  Returns `{:ok, %{font_name => decoder_fn}, [{font_name, reason}], updated_doc}`.
+
+  ## Spec references
+  - PDF 1.7 § 9.6 — Font dictionaries
+  - PDF 1.7 § 9.10 — Extraction of text content
   """
   @spec build_decoders_for_resources(map(), Document.t()) ::
-          {:ok, %{binary() => decoder_fn()}, Document.t()} | {:error, term()}
+          {:ok, %{binary() => decoder_fn()}, [{binary(), term()}], Document.t()}
+          | {:error, term()}
   def build_decoders_for_resources(resources, doc) do
     font_map = Map.get(resources, "Font", %{}) |> normalize_font_map()
 
-    Enum.reduce_while(font_map, {:ok, %{}, doc}, fn {name, font_ref_or_dict},
-                                                    {:ok, acc, acc_doc} ->
-      case build_decoder(font_ref_or_dict, acc_doc) do
-        {:ok, decoder, doc2} ->
-          {:cont, {:ok, Map.put(acc, name, decoder), doc2}}
+    if doc.recover_mode do
+      # R-2: lenient path — per-font try/rescue; install fallback decoder on failure.
+      Enum.reduce(font_map, {:ok, %{}, [], doc}, fn {name, font_ref_or_dict},
+                                                    {:ok, acc_decoders, acc_failures,
+                                                     acc_doc} ->
+        case build_decoder(font_ref_or_dict, acc_doc) do
+          {:ok, decoder, doc2} ->
+            {:ok, Map.put(acc_decoders, name, decoder), acc_failures, doc2}
 
-        {:error, _reason} = err ->
-          {:halt, err}
+          {:error, reason} ->
+            # Install per-byte U+FFFD fallback decoder (String.valid?/1 guaranteed true).
+            fallback = fn bytes -> {String.duplicate("�", byte_size(bytes)), []} end
+            {:ok, Map.put(acc_decoders, name, fallback), [{name, reason} | acc_failures], acc_doc}
+        end
+      end)
+    else
+      # Strict path — halt on first font build failure (unchanged behavior).
+      result =
+        Enum.reduce_while(font_map, {:ok, %{}, doc}, fn {name, font_ref_or_dict},
+                                                        {:ok, acc, acc_doc} ->
+          case build_decoder(font_ref_or_dict, acc_doc) do
+            {:ok, decoder, doc2} ->
+              {:cont, {:ok, Map.put(acc, name, decoder), doc2}}
+
+            {:error, _reason} = err ->
+              {:halt, err}
+          end
+        end)
+
+      case result do
+        {:ok, decoders, doc2} -> {:ok, decoders, [], doc2}
+        {:error, _} = err -> err
       end
-    end)
+    end
   end
 
   # ---------------------------------------------------------------------------
@@ -97,6 +167,54 @@ defmodule Pdf.Reader.Font do
   # Core decoder construction from a resolved font dict.
   @spec build_decoder_internal(map(), Document.t()) :: {decoder_fn(), Document.t()}
   defp build_decoder_internal(font_dict, doc) do
+    case cid_font_type(font_dict) do
+      :identity ->
+        # Identity-H/V path: fixed 2-byte CID loop (existing path — R-CID1, R-CID2).
+        {:ok, decoder, doc2} = CID.Decoder.build(font_dict, doc)
+        {decoder, doc2}
+
+      {:predefined, _name} ->
+        # Predefined CMap path: variable-length tokenization via codespace (R-PCM1).
+        case CID.Decoder.build_predefined(font_dict, doc) do
+          {:ok, decoder, doc2} ->
+            {decoder, doc2}
+
+          {:error, {:not_bundled, _}} ->
+            # Should not happen since cid_font_type/1 already checked bundled?,
+            # but handle gracefully.
+            build_simple_decoder(font_dict, doc)
+
+          {:error, _} ->
+            build_simple_decoder(font_dict, doc)
+        end
+
+      :not_cid ->
+        build_simple_decoder(font_dict, doc)
+    end
+  end
+
+  # Detect the CID font type:
+  # - :identity — Type0 with Identity-H or Identity-V
+  # - {:predefined, name} — Type0 with a bundled predefined CMap name (R-PCM15, D2)
+  # - :not_cid — anything else
+  defp cid_font_type(font_dict) do
+    case Map.get(font_dict, "Encoding") do
+      {:name, "Identity-H"} ->
+        :identity
+
+      {:name, "Identity-V"} ->
+        :identity
+
+      {:name, name} when is_binary(name) ->
+        if PredefinedCMap.bundled?(name), do: {:predefined, name}, else: :not_cid
+
+      _ ->
+        :not_cid
+    end
+  end
+
+  # Simple (1-byte) font decoder — existing path, unchanged.
+  defp build_simple_decoder(font_dict, doc) do
     # Step 1: Resolve ToUnicode CMap (if any).
     {cmap, doc2} = resolve_cmap(font_dict, doc)
 

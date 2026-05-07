@@ -83,7 +83,16 @@ defmodule Pdf.StyledTable do
     r = opts.border_radius
 
     # 1) Draw row backgrounds (clipped to rounded rect when border_radius > 0)
-    document = draw_clipped_backgrounds(document, rows, cols, {table_x, table_y}, {total_width, total_height}, r, opts)
+    document =
+      draw_clipped_backgrounds(
+        document,
+        rows,
+        cols,
+        {table_x, table_y},
+        {total_width, total_height},
+        r,
+        opts
+      )
 
     # 2) Draw row borders + text (not clipped)
     {document, _y} =
@@ -113,7 +122,16 @@ defmodule Pdf.StyledTable do
     r = opts.border_radius
 
     # 1) Clipped backgrounds
-    page = draw_clipped_backgrounds_page(page, rows, cols, {x, y}, {total_width, total_height}, r, opts)
+    page =
+      draw_clipped_backgrounds_page(
+        page,
+        rows,
+        cols,
+        {x, y},
+        {total_width, total_height},
+        r,
+        opts
+      )
 
     # 2) Row borders + text
     {page, _y} =
@@ -135,6 +153,7 @@ defmodule Pdf.StyledTable do
     Enum.map(0..(num_cols - 1), fn i ->
       col_def = Enum.at(col_defs, i, %{})
       width = Map.get(col_def, :width)
+
       %{
         index: i,
         width: width,
@@ -152,6 +171,7 @@ defmodule Pdf.StyledTable do
 
     Enum.map(0..(num_cols - 1), fn i ->
       col_def = Enum.at(col_defs, i, %{})
+
       %{
         index: i,
         width: Map.get(col_def, :width, total / num_cols),
@@ -169,6 +189,7 @@ defmodule Pdf.StyledTable do
 
     if flex_count > 0 do
       flex_width = remaining / flex_count
+
       Enum.map(cols, fn c ->
         if c.width == nil, do: %{c | width: flex_width}, else: c
       end)
@@ -187,11 +208,12 @@ defmodule Pdf.StyledTable do
     data
     |> Enum.with_index()
     |> Enum.map(fn {cells, idx} ->
-      row_type = cond do
-        has_header and idx == 0 -> :header
-        has_footer and idx == total - 1 -> :footer
-        true -> :body
-      end
+      row_type =
+        cond do
+          has_header and idx == 0 -> :header
+          has_footer and idx == total - 1 -> :footer
+          true -> :body
+        end
 
       body_idx = if has_header, do: idx - 1, else: idx
       is_alt = rem(body_idx, 2) == 1
@@ -213,9 +235,11 @@ defmodule Pdf.StyledTable do
 
   defp row_style_for(:header, _is_alt, opts), do: opts.header || %{}
   defp row_style_for(:footer, _is_alt, opts), do: Map.merge(opts.row, opts.footer || %{})
+
   defp row_style_for(:body, true, opts) do
     if opts.alt_row, do: Map.merge(opts.row, opts.alt_row), else: opts.row
   end
+
   defp row_style_for(:body, false, opts), do: opts.row
 
   # ── Drawing (Document level) ───────────────────────────────────────
@@ -253,7 +277,9 @@ defmodule Pdf.StyledTable do
 
           doc =
             case Map.get(row.style, :background) do
-              nil -> doc
+              nil ->
+                doc
+
               bg ->
                 doc
                 |> Pdf.save_state()
@@ -304,9 +330,11 @@ defmodule Pdf.StyledTable do
 
     # Row bottom border
     border_bottom = Map.get(row.style, :border_bottom, 0)
+
     document =
       if border_bottom > 0 do
         bc = Map.get(row.style, :border_color, Map.get(opts, :border_color, :black))
+
         document
         |> Pdf.save_state()
         |> Pdf.set_stroke_color(bc)
@@ -332,7 +360,22 @@ defmodule Pdf.StyledTable do
       Enum.reduce(cols, {document, table_x}, fn col, {doc, cx} ->
         cell_text = Enum.at(row.cells, col.index, "")
         {_pt, pr, _pb, pl} = row.padding
-        text_x = cell_text_x(cx, pl, pr, col.width, col.align, cell_text, font, font_size, bold, italic, doc)
+
+        text_x =
+          cell_text_x(
+            cx,
+            pl,
+            pr,
+            col.width,
+            col.align,
+            cell_text,
+            font,
+            font_size,
+            bold,
+            italic,
+            doc
+          )
+
         text_y = y - pt - font_size
 
         doc = Pdf.text_at(doc, {text_x, text_y}, cell_text)
@@ -403,7 +446,9 @@ defmodule Pdf.StyledTable do
 
           pg =
             case Map.get(row.style, :background) do
-              nil -> pg
+              nil ->
+                pg
+
               bg ->
                 pg
                 |> Page.save_state()
@@ -445,9 +490,11 @@ defmodule Pdf.StyledTable do
     row_y = y - row_h
 
     border_bottom = Map.get(row.style, :border_bottom, 0)
+
     page =
       if border_bottom > 0 do
         bc = Map.get(row.style, :border_color, Map.get(opts, :border_color, :black))
+
         page
         |> Page.save_state()
         |> Page.set_stroke_color(bc)

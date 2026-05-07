@@ -169,7 +169,12 @@ defmodule Pdf.Page do
           id = map_size(page.ext_g_states) + 1
           gs_name = n("GS#{id}")
           gs_dict = GraphicsState.new(opts)
-          page = %{page | ext_g_states: Map.put(page.ext_g_states, gs_key, %{name: gs_name, dict: gs_dict})}
+
+          page = %{
+            page
+            | ext_g_states: Map.put(page.ext_g_states, gs_key, %{name: gs_name, dict: gs_dict})
+          }
+
           {gs_name, page}
 
         %{name: gs_name} ->
