@@ -407,8 +407,9 @@ defmodule Pdf.Reader do
 
   - `:y_tolerance` (default `2.0`) — PDF point tolerance to collapse
     text runs onto the same line.
-  - `:gap_factor` (default `1.0` em) — token-split threshold inside
-    a line. Forwarded to `read_lines/2`.
+  - `:gap_factor` (default `1.15`) — token-split threshold as a
+    multiplier on the per-line median inter-glyph gap. Forwarded to
+    `read_lines/2`.
 
   ## Image opts
 
@@ -750,11 +751,13 @@ defmodule Pdf.Reader do
   - `:y_tolerance` (default `2.0`) — runs whose Y differs by less than
     this many points collapse onto the same line. PDFs often jitter
     by fractional points within a line.
-  - `:gap_factor` (default `1.0`) — split into a new token when the
-    horizontal gap between two consecutive runs exceeds
-    `font_size × gap_factor`. Lower factor = more splits. The default
-    of 1 em separates tokens at visible whitespace (typical inter-glyph
-    advance is ~0.5 em, so 1 em reliably catches real spaces).
+  - `:gap_factor` (default `1.15`) — split into a new token when the
+    horizontal gap between two consecutive runs exceeds the **median**
+    inter-glyph gap on that line, multiplied by `gap_factor`. Using the
+    median makes detection robust across fonts and sizes: monospace 4pt
+    advances split at ~4.6pt, 6pt advances split at ~6.9pt, etc.
+    Lower factor = more splits. Falls back to `font_size × gap_factor`
+    when a line has fewer than two runs (no gap to measure).
 
   Returns `{:ok, [Line.t()], doc}`. Lines are ordered by page ascending,
   then by Y descending (top-to-bottom in PDF user space).
@@ -955,7 +958,7 @@ defmodule Pdf.Reader do
   @spec lines_from_runs([Pdf.Reader.TextRun.t()], keyword()) :: [Pdf.Reader.Line.t()]
   def lines_from_runs(runs, opts \\ []) when is_list(runs) do
     y_tol = Keyword.get(opts, :y_tolerance, 2.0)
-    gap_factor = Keyword.get(opts, :gap_factor, 1.0)
+    gap_factor = Keyword.get(opts, :gap_factor, 1.15)
 
     runs
     |> Enum.reject(&(&1.text == ""))
@@ -1012,16 +1015,23 @@ defmodule Pdf.Reader do
     }
   end
 
-  # Split a sorted-by-X list of runs into tokens, separating wherever
-  # the gap to the next run exceeds `prev.size * gap_factor`.
+  # Split a sorted-by-X list of runs into tokens. Threshold is computed
+  # per-line as `median(gaps) * gap_factor`, falling back to
+  # `font_size * gap_factor` when there are fewer than two runs (no
+  # gaps to sample). Median-based detection makes word-break detection
+  # robust across font sizes and per-glyph advance variations — a
+  # monospace 4pt-advance line splits at ~4.6pt (catching subtle word
+  # boundaries) while a 12pt-advance line tolerates wider intra-token
+  # gaps.
   defp tokenize_runs([], _factor), do: []
 
   defp tokenize_runs([first | _] = runs, factor) do
+    threshold = compute_split_threshold(runs, factor)
+
     runs
     |> Enum.chunk_while(
       [first],
       fn run, [prev | _] = acc ->
-        threshold = max(prev.size, 1.0) * factor
         gap = run.x - prev.x
 
         cond do
@@ -1039,6 +1049,32 @@ defmodule Pdf.Reader do
       fn acc -> {:cont, Enum.reverse(acc), []} end
     )
     |> Enum.map(&run_chunk_to_token/1)
+  end
+
+  # Per-line threshold: 75th percentile of positive gaps × factor. The
+  # 75th percentile captures the "max typical intra-word advance" — wider
+  # than the median (so variable-width fonts where some glyphs are
+  # naturally larger don't trigger splits) but tighter than the max (so
+  # real word-break gaps still register). Falls back to font_size for
+  # lines with too few gaps to sample meaningfully.
+  defp compute_split_threshold(runs, factor) do
+    gaps =
+      runs
+      |> Enum.chunk_every(2, 1, :discard)
+      |> Enum.map(fn [a, b] -> b.x - a.x end)
+      |> Enum.filter(&(&1 > 0))
+
+    cond do
+      length(gaps) < 3 ->
+        size = (List.first(runs) || %{size: 8.0}).size
+        max(size, 1.0) * factor
+
+      true ->
+        sorted = Enum.sort(gaps)
+        p75_idx = min(trunc(length(sorted) * 0.75), length(sorted) - 1)
+        p75 = Enum.at(sorted, p75_idx)
+        max(p75, 0.5) * factor
+    end
   end
 
   defp run_chunk_to_token([first | _] = chunk) do
