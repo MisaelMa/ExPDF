@@ -462,6 +462,166 @@ defmodule Pdf.Reader do
   end
 
   @doc """
+  Returns the actionable elements (link-like shapes) of the document.
+
+  Combines two sources:
+
+  - **Annotations** of subtype `/Link` (PDF 1.7 § 12.5.6.5) — real
+    clickable regions placed by the document author. Each becomes a
+    `%Pdf.Reader.Shape{source: :annotation}`.
+  - **Inferred shapes** — URL and email patterns appearing as plain
+    text in `read_lines/2` output. Common in government forms that
+    print `http://...` or `email@domain` without making them clickable.
+    Each becomes `%Pdf.Reader.Shape{source: :inferred}`.
+
+  Returns `{:ok, shapes, doc}`. Shapes are sorted by `:page` ascending,
+  then by `:y` descending (top-to-bottom) when a rect is available.
+
+  ## Spec references
+
+  - PDF 1.7 § 12.5.6.5 — Link Annotations
+  - PDF 1.7 § 12.6.4   — Action types (URI, GoTo, Launch, Named)
+  - RFC 3986 § 3        — URI Generic Syntax
+  - RFC 5321 § 4.1.2    — Mailbox/Domain syntax (mailto)
+  """
+  @spec read_shapes(Document.t()) ::
+          {:ok, [Pdf.Reader.Shape.t()], Document.t()} | {:error, reason()}
+  def read_shapes(%Document{} = doc) do
+    with {:ok, anns, doc2} <- read_annotations(doc),
+         {:ok, lines, doc3} <- read_lines(doc2) do
+      annotation_shapes = Enum.flat_map(anns, &annotation_to_shape/1)
+      inferred_shapes = shapes_from_lines(lines)
+
+      shapes =
+        (annotation_shapes ++ inferred_shapes)
+        |> Enum.sort_by(fn s ->
+          {s.page, -shape_y(s)}
+        end)
+
+      {:ok, shapes, doc3}
+    end
+  end
+
+  @doc """
+  Bang variant of `read_shapes/1`. Raises `Pdf.Reader.Error` on failure.
+  """
+  @spec read_shapes!(Document.t()) :: [Pdf.Reader.Shape.t()]
+  def read_shapes!(doc) do
+    case read_shapes(doc) do
+      {:ok, shapes, _doc} -> shapes
+      {:error, reason} -> raise Pdf.Reader.Error, reason
+    end
+  end
+
+  @doc """
+  Pure helper: scans a list of `Line` structs for URL and email patterns
+  and emits the inferred shapes. Exposed for callers that already have
+  a lines list and want the inference layer alone (no annotations).
+  """
+  @spec shapes_from_lines([Pdf.Reader.Line.t()]) :: [Pdf.Reader.Shape.t()]
+  def shapes_from_lines(lines) when is_list(lines) do
+    Enum.flat_map(lines, &infer_shapes_in_line/1)
+  end
+
+  # URI / email regexes, simplified per RFC 3986 § 3 (URI Generic Syntax)
+  # and RFC 5321 § 4.1.2 (Mailbox). Match a tight subset that excludes
+  # trailing punctuation that almost certainly isn't part of the URI.
+  @url_regex ~r|https?://[A-Za-z0-9\-._~:/?#\[\]@!$&'()*+,;=%]+|u
+  @www_regex ~r|www\.[A-Za-z0-9\-._~:/?#\[\]@!$&'()*+,;=%]+|u
+  @email_regex ~r|[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}|u
+
+  defp infer_shapes_in_line(%Pdf.Reader.Line{} = line) do
+    Enum.flat_map(line.tokens, fn token -> infer_shapes_in_token(token, line) end)
+  end
+
+  defp infer_shapes_in_token(%{text: text} = token, line) do
+    email = Regex.run(@email_regex, text)
+    url_https = Regex.run(@url_regex, text)
+    url_www = Regex.run(@www_regex, text)
+
+    cond do
+      email != nil ->
+        [build_inferred_shape(:email, hd(email), token, line)]
+
+      url_https != nil ->
+        [build_inferred_shape(:uri, hd(url_https) |> trim_trailing_punct(), token, line)]
+
+      url_www != nil ->
+        [build_inferred_shape(:uri, hd(url_www) |> trim_trailing_punct(), token, line)]
+
+      true ->
+        []
+    end
+  end
+
+  defp build_inferred_shape(type, target, token, line) do
+    %Pdf.Reader.Shape{
+      type: type,
+      page: line.page,
+      rect: {token.x, line.y, token.x + token.width, line.y},
+      target: target,
+      text: target,
+      source: :inferred
+    }
+  end
+
+  # URLs commonly appear as the last word in a sentence: "see http://x.com."
+  # Strip trailing punctuation that is unlikely to be part of the URI.
+  defp trim_trailing_punct(uri) do
+    String.trim_trailing(uri, ".")
+    |> String.trim_trailing(",")
+    |> String.trim_trailing(";")
+    |> String.trim_trailing(":")
+    |> String.trim_trailing(")")
+    |> String.trim_trailing("]")
+  end
+
+  # Convert a /Link annotation to one or more shapes.
+  # PDF 1.7 § 12.5.6.5: a Link annotation may carry a URI action (`:url`),
+  # a GoTo destination (`:dest_page`), or other action types we don't
+  # currently model. We surface what we have.
+  defp annotation_to_shape(%Pdf.Reader.Annotation{type: :link} = ann) do
+    cond do
+      ann.url != nil and is_binary(ann.url) ->
+        type = if String.contains?(ann.url, "@") and not String.contains?(ann.url, "://"),
+                 do: :email,
+                 else: :uri
+
+        [
+          %Pdf.Reader.Shape{
+            type: type,
+            page: ann.page || 1,
+            rect: ann.rect,
+            target: ann.url,
+            text: ann.contents,
+            source: :annotation
+          }
+        ]
+
+      ann.dest_page != nil ->
+        [
+          %Pdf.Reader.Shape{
+            type: :goto,
+            page: ann.page || 1,
+            rect: ann.rect,
+            target: %{page: ann.dest_page},
+            text: ann.contents,
+            source: :annotation
+          }
+        ]
+
+      true ->
+        []
+    end
+  end
+
+  defp annotation_to_shape(_), do: []
+
+  # Y for sorting — top of rect (highest y in PDF user-space) when present.
+  defp shape_y(%Pdf.Reader.Shape{rect: nil}), do: 0.0
+  defp shape_y(%Pdf.Reader.Shape{rect: {_x1, y1, _x2, y2}}), do: max(y1, y2) * 1.0
+
+  @doc """
   Pure helper: groups a flat `TextRun` list into `Line` structs.
 
   Exposed publicly so callers who already have a runs list (from

@@ -143,12 +143,55 @@ defmodule Pdf.Reader.CsfTest do
       {:ok, doc} = Pdf.Reader.open(@csf_path)
       {:ok, lines, _} = Pdf.Reader.read_lines(doc)
 
+      IO.inspect(lines, label: "Multi-token line for distinct X positions test")
+
       multi_token = Enum.find(lines, &(length(&1.tokens) >= 2))
 
       assert multi_token != nil
 
       xs = Enum.map(multi_token.tokens, & &1.x)
       assert xs == Enum.uniq(xs)
+    end
+  end
+
+  describe "real-world CSF — shape extraction (URLs and emails)" do
+    test "read_shapes/1 returns inferred URL and email shapes from page 2" do
+      {:ok, doc} = Pdf.Reader.open(@csf_path)
+      {:ok, shapes, _doc} = Pdf.Reader.read_shapes(doc)
+
+      # The CSF prints these as plain text (no link annotations) — they should
+      # appear as inferred shapes.
+      targets = Enum.map(shapes, & &1.target)
+
+      assert "http://sat.gob.mx" in targets
+      assert "denuncias@sat.gob.mx" in targets
+
+      # Every shape from this CSF is inferred (no annotations in this PDF).
+      assert Enum.all?(shapes, &(&1.source == :inferred))
+    end
+
+    test "shape types are correctly classified (uri vs email)" do
+      {:ok, doc} = Pdf.Reader.open(@csf_path)
+      {:ok, shapes, _} = Pdf.Reader.read_shapes(doc)
+
+      uri_shape = Enum.find(shapes, &(&1.target == "http://sat.gob.mx"))
+      assert uri_shape.type == :uri
+
+      email_shape = Enum.find(shapes, &(&1.target == "denuncias@sat.gob.mx"))
+      assert email_shape.type == :email
+    end
+
+    test "every inferred shape carries a positional rect on the right page" do
+      {:ok, doc} = Pdf.Reader.open(@csf_path)
+      {:ok, shapes, _} = Pdf.Reader.read_shapes(doc)
+
+      Enum.each(shapes, fn shape ->
+        assert shape.page in 1..2
+        assert {x1, y1, x2, y2} = shape.rect
+        assert is_number(x1) and is_number(y1)
+        assert is_number(x2) and is_number(y2)
+        assert x2 >= x1
+      end)
     end
   end
 end
