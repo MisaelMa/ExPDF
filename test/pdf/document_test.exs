@@ -30,6 +30,27 @@ defmodule Pdf.DocumentTest do
         |> Document.put_info(title: "Test Title", producers: "Test Producer")
       end
     end
+
+    test "title is preserved after a page mutation (set_font)" do
+      # Regression: set_font calls sync_page which replaces document.objects with
+      # page.objects — losing any put_info changes made after page creation.
+      document =
+        Document.new()
+        |> Document.put_info(title: "My Title")
+        |> Document.set_font("Helvetica", 12, [])
+
+      assert get_info(document)["Title"] == "My Title"
+    end
+
+    test "title is preserved after text_at" do
+      document =
+        Document.new()
+        |> Document.put_info(title: "Round-trip Title")
+        |> Document.set_font("Helvetica", 12, [])
+        |> Document.text_at({100, 720}, "Hello", [])
+
+      assert get_info(document)["Title"] == "Round-trip Title"
+    end
   end
 
   defp get_info(document) do

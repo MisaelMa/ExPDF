@@ -24,7 +24,7 @@ defmodule Pdf.Mixfile do
   defp elixirc_paths(_), do: ["lib"]
 
   def application do
-    [extra_applications: [:logger]]
+    [extra_applications: [:logger, :xmerl, :crypto]]
   end
 
   defp deps do

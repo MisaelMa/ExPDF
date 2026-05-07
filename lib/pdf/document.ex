@@ -47,7 +47,15 @@ defmodule Pdf.Document do
       )
 
     margin = parse_margin(Keyword.get(opts, :margin, 0))
-    document = %__MODULE__{objects: collection, fonts: fonts, info: info, opts: opts, margin: margin}
+
+    document = %__MODULE__{
+      objects: collection,
+      fonts: fonts,
+      info: info,
+      opts: opts,
+      margin: margin
+    }
+
     add_page(document, opts)
   end
 
@@ -96,7 +104,20 @@ defmodule Pdf.Document do
       end)
 
     objects = ObjectCollection.update_object(document.objects, document.info, info)
-    %{document | objects: objects}
+
+    # Also propagate into the current page's objects copy so that subsequent
+    # page mutations (set_font, text_at, …) which call sync_page/2 — and
+    # replace document.objects with page.objects — do not lose the info update.
+    current =
+      case document.current do
+        nil ->
+          nil
+
+        page ->
+          %{page | objects: ObjectCollection.update_object(page.objects, document.info, info)}
+      end
+
+    %{document | objects: objects, current: current}
   end
 
   @info_map
@@ -149,7 +170,13 @@ defmodule Pdf.Document do
   end)
 
   defp sync_page(document, page) do
-    %{document | current: page, fonts: page.fonts, objects: page.objects, ext_g_states: Map.merge(document.ext_g_states, page.ext_g_states)}
+    %{
+      document
+      | current: page,
+        fonts: page.fonts,
+        objects: page.objects,
+        ext_g_states: Map.merge(document.ext_g_states, page.ext_g_states)
+    }
   end
 
   def text_at(document, xy, text), do: text_at(document, xy, text, [])
@@ -196,6 +223,7 @@ defmodule Pdf.Document do
       end
 
     page = %{page | objects: document.objects}
+
     %{
       document
       | current: Page.add_image(page, {x, y}, image_ref, opts),
@@ -216,8 +244,13 @@ defmodule Pdf.Document do
     %{document | fonts: fonts, objects: objects, current: page}
   end
 
-  def add_page(%__MODULE__{current: nil, fonts: fonts, objects: objects, opts: doc_opts} = document, opts) do
-    new_page = Page.new(Keyword.merge(Keyword.merge(doc_opts, opts), fonts: fonts, objects: objects))
+  def add_page(
+        %__MODULE__{current: nil, fonts: fonts, objects: objects, opts: doc_opts} = document,
+        opts
+      ) do
+    new_page =
+      Page.new(Keyword.merge(Keyword.merge(doc_opts, opts), fonts: fonts, objects: objects))
+
     document = %{document | current: new_page}
     document = apply_margin_cursor(document)
     apply_templates(document, [:background, :watermark, :header])
@@ -286,7 +319,9 @@ defmodule Pdf.Document do
 
     {master_page, objects} = ObjectCollection.create_object(objects, page_collection)
     {page_objects, objects} = pages_to_objects(document, objects, pages, master_page)
-    {_master_page, objects} = ObjectCollection.call(objects, master_page, :put, ["Kids", Array.new(page_objects)])
+
+    {_master_page, objects} =
+      ObjectCollection.call(objects, master_page, :put, ["Kids", Array.new(page_objects)])
 
     {catalogue, objects} =
       ObjectCollection.create_object(
@@ -370,6 +405,7 @@ defmodule Pdf.Document do
 
   def content_area(%__MODULE__{margin: margin} = document) do
     %{width: pw, height: ph} = size(document)
+
     %{
       x: margin.left,
       y: ph - margin.top,
