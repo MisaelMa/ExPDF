@@ -1069,7 +1069,16 @@ defmodule Pdf.Reader do
           run == prev and acc == [first] ->
             {:cont, acc}
 
+          # Forward jump bigger than the per-line p75 threshold: word break.
           gap > threshold ->
+            {:cont, Enum.reverse(acc), [run]}
+
+          # Backward jump > 1pt: the producer is overlapping a label with a
+          # value (common in label/value layouts where the writer emits
+          # "Territorial:" then jumps slightly back to start "SOLIDARIDAD"
+          # underneath the colon). Always treat as a token boundary —
+          # typographic kerning is at most ~0.4pt for 8pt fonts.
+          gap < -1.0 ->
             {:cont, Enum.reverse(acc), [run]}
 
           true ->

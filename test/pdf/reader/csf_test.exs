@@ -89,6 +89,72 @@ defmodule Pdf.Reader.CsfTest do
         assert is_binary(run.text)
       end)
     end
+
+    test "per-glyph X advances per character (Standard-14 width fallback)" do
+      # Regression: PDFs using Standard 14 Type 1 fonts (Helvetica, Times-Roman,
+      # …) have no embedded /Widths. The original code returned 0 width per
+      # glyph from `widths_fn`, so `advance_tm` advanced Tm by 0 and EVERY
+      # glyph in a TJ array shared the same starting X — collapsing the
+      # column-table row "1 Asalariado 100 29/06/2015" into 4 distinct X
+      # positions instead of 24. Spec: PDF 1.7 § 9.6.2.2 expects readers
+      # to use bundled AFM metrics for the Standard 14; we approximate
+      # with a 500-unit average glyph width.
+      {:ok, doc} = Pdf.Reader.open(@csf_path)
+      {:ok, runs, _} = Pdf.Reader.read_text_with_positions(doc)
+
+      # Find the activity row "1 Asalariado 100 29/06/2015" on page 2.
+      asal_runs =
+        runs
+        |> Enum.filter(&(&1.page == 2 and abs(&1.y - 628.4) < 1.0))
+
+      assert length(asal_runs) > 20, "Expected the Asalariado activity row to have >20 runs"
+
+      distinct_x =
+        asal_runs
+        |> Enum.map(&Float.round(&1.x, 1))
+        |> Enum.uniq()
+        |> length()
+
+      # Pre-fix: 4 distinct X (one per column, glyphs collapsed).
+      # Post-fix: ~one distinct X per glyph thanks to the 500-unit advance.
+      assert distinct_x >= length(asal_runs) - 2,
+             "Expected ~one distinct X per glyph, got #{distinct_x} for #{length(asal_runs)} runs"
+    end
+
+    test "embedded image data_uri is a valid base64 payload with the right MIME" do
+      # Regression: every image in result.pages.lines must carry a
+      # browser-loadable :data_uri (RFC 2397). For :png_like raw pixels
+      # we re-encode into a real PNG (PNG 1.2 § 5: signature + IHDR +
+      # IDAT + IEND); for :jpeg we passthrough the original bytes.
+      {:ok, doc} = Pdf.Reader.open(@csf_path)
+      {:ok, %Pdf.Reader.Result{pages: pages}, _} = Pdf.Reader.read(doc)
+
+      image_tokens =
+        pages
+        |> Enum.flat_map(& &1.lines)
+        |> Enum.flat_map(& &1.tokens)
+        |> Enum.filter(&(&1.kind == :image))
+
+      assert length(image_tokens) > 0
+
+      Enum.each(image_tokens, fn t ->
+        assert is_binary(t.shape.meta.data_uri)
+
+        case t.shape.meta.encoded_format do
+          :jpeg ->
+            assert "data:image/jpeg;base64," <> b64 = t.shape.meta.data_uri
+            assert {:ok, jpeg} = Base.decode64(b64)
+            # JPEG starts with FF D8 (SOI marker)
+            assert <<0xFF, 0xD8, _rest::binary>> = jpeg
+
+          :png ->
+            assert "data:image/png;base64," <> b64 = t.shape.meta.data_uri
+            assert {:ok, png} = Base.decode64(b64)
+            # PNG signature: 89 50 4E 47 0D 0A 1A 0A (PNG 1.2 § 5.2)
+            assert <<137, 80, 78, 71, 13, 10, 26, 10, _rest::binary>> = png
+        end
+      end)
+    end
   end
 
   describe "real-world CSF — line reconstruction" do
@@ -120,9 +186,9 @@ defmodule Pdf.Reader.CsfTest do
       texts = pages |> Enum.flat_map(& &1.lines) |> Enum.map(& &1.text)
       joined = Enum.join(texts, " ")
 
-      # Properly ordered text that should appear:
-      assert String.contains?(joined, "Territorial:SOLIDARIDAD") or
-               String.contains?(joined, "Territorial: SOLIDARIDAD")
+      # Properly ordered text WITH a token boundary (the backward X-jump
+      # marks an overlap which is always a token break — see tokenize_runs).
+      assert String.contains?(joined, "Territorial: SOLIDARIDAD")
 
       # Buggy interleaved versions that must NOT appear:
       refute String.contains?(joined, "TerritorialS:OLIDARIDA")
