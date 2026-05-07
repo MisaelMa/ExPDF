@@ -1001,7 +1001,7 @@ defmodule Pdf.Reader do
   end
 
   defp build_line(page, line_runs, gap_factor) do
-    sorted = Enum.sort_by(line_runs, & &1.x)
+    sorted = sort_by_x_with_parser_tiebreaker(line_runs)
     tokens = tokenize_runs(sorted, gap_factor)
     text = tokens |> Enum.map(& &1.text) |> Enum.join(" ")
     first = List.first(sorted)
@@ -1013,6 +1013,36 @@ defmodule Pdf.Reader do
       text: text,
       tokens: tokens
     }
+  end
+
+  # Sort runs by X but preserve parser-emit order when X positions are
+  # close (within ~0.75 em). This handles PDFs that emit text with small
+  # backward jumps — common in label/value layouts where the producer
+  # writes the label, then jumps slightly back to overlap the value.
+  # Pure X-sort would scramble the chars (e.g. "Territorial:" + "S" with
+  # `S.x < :.x` produced "TerritorialS:OLIDARIDAD" instead of
+  # "Territorial:SOLIDARIDAD"). Using a bin size proportional to the
+  # font size keeps column-aligned tables intact (column gaps are
+  # always >> 1 em apart so they fall in different bins) while
+  # collapsing close-X cluster jitter to parser order.
+  defp sort_by_x_with_parser_tiebreaker(runs) do
+    bin_size = bin_size_for_runs(runs)
+
+    runs
+    |> Enum.with_index()
+    |> Enum.sort_by(fn {r, idx} -> {trunc(r.x / bin_size), idx} end)
+    |> Enum.map(&elem(&1, 0))
+  end
+
+  defp bin_size_for_runs([]), do: 8.0
+
+  defp bin_size_for_runs(runs) do
+    size =
+      runs
+      |> Enum.map(& &1.size)
+      |> Enum.max(fn -> 8.0 end)
+
+    max(size * 0.75, 1.0)
   end
 
   # Split a sorted-by-X list of runs into tokens. Threshold is computed

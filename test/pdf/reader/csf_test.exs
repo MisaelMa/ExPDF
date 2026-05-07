@@ -109,6 +109,46 @@ defmodule Pdf.Reader.CsfTest do
       end)
     end
 
+    test "tokens that overlap in X (label/value) preserve parser-emit order" do
+      # Regression: the SAT CSF emits "Territorial:" then jumps slightly
+      # backward in X to write "SOLIDARIDAD" overlapping the colon. Pure
+      # X-sort scrambled the chars producing "TerritorialS:OLIDARIDAD".
+      # The fix uses a parser-order tiebreaker for runs in the same X-bin.
+      {:ok, doc} = Pdf.Reader.open(@csf_path)
+      {:ok, %Pdf.Reader.Result{pages: pages}, _} = Pdf.Reader.read(doc)
+
+      texts = pages |> Enum.flat_map(& &1.lines) |> Enum.map(& &1.text)
+      joined = Enum.join(texts, " ")
+
+      # Properly ordered text that should appear:
+      assert String.contains?(joined, "Territorial:SOLIDARIDAD") or
+               String.contains?(joined, "Territorial: SOLIDARIDAD")
+
+      # Buggy interleaved versions that must NOT appear:
+      refute String.contains?(joined, "TerritorialS:OLIDARIDA")
+      refute String.contains?(joined, "S:OLIDARIDA")
+    end
+
+    test "tokenizer splits real word boundaries on tight per-glyph fonts" do
+      # Regression: CSF renders at 8pt with ~4pt glyph advance. The old
+      # fixed `font_size × gap_factor` threshold (8pt) failed to detect
+      # word breaks like "de"→"la"→"Entidad" (gaps 4-7pt), gluing tokens
+      # into "delaEntidadFederativa". The p75-gap dynamic threshold fixes
+      # this without breaking tightly-set identifiers like "XAXX010101000".
+      {:ok, doc} = Pdf.Reader.open(@csf_path)
+      {:ok, %Pdf.Reader.Result{pages: pages}, _} = Pdf.Reader.read(doc)
+
+      texts = pages |> Enum.flat_map(& &1.lines) |> Enum.map(& &1.text)
+      joined = Enum.join(texts, " ")
+
+      # Word boundaries that must split:
+      assert String.contains?(joined, "de la Entidad Federativa")
+
+      # Tight identifiers that must STAY GLUED:
+      assert Enum.any?(texts, &String.contains?(&1, "XAXX010101000"))
+      refute String.contains?(joined, "X A X X 010101000")
+    end
+
     test "RFC, idCIF and CURP appear as detectable line content" do
       {:ok, doc} = Pdf.Reader.open(@csf_path)
       {:ok, lines, _} = Pdf.Reader.read_lines(doc)
