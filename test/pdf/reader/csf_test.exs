@@ -141,12 +141,11 @@ defmodule Pdf.Reader.CsfTest do
 
     test "tokens within a line have distinct X positions" do
       {:ok, doc} = Pdf.Reader.open(@csf_path)
-      {:ok, lines, _} = Pdf.Reader.read_lines(doc)
+      {:ok, result, _} = Pdf.Reader.read(doc)
+      IO.inspect(result, label: "Full extraction result", pretty: true, limit: :infinity)
 
-      IO.inspect(lines, label: "Multi-token line for distinct X positions test")
-
-      multi_token = Enum.find(lines, &(length(&1.tokens) >= 2))
-
+      all_lines = Enum.flat_map(result.pages, & &1.lines)
+      multi_token = Enum.find(all_lines, &(length(&1.tokens) >= 2))
       assert multi_token != nil
 
       xs = Enum.map(multi_token.tokens, & &1.x)

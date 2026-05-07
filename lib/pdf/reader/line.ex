@@ -27,10 +27,14 @@ defmodule Pdf.Reader.Line do
   - PDF 1.7 § 9.4.4 — Text-showing operators (Tj, TJ, ', ")
   """
 
+  @type token_kind :: :text | :link | :email | :button | :form_field | :table_cell | atom()
+
   @type token :: %{
-          x: float(),
-          text: String.t(),
-          width: float()
+          required(:x) => float(),
+          required(:text) => String.t(),
+          required(:width) => float(),
+          optional(:kind) => token_kind(),
+          optional(:shape) => Pdf.Reader.Shape.t() | nil
         }
 
   @type t :: %__MODULE__{

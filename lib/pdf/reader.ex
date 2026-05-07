@@ -384,6 +384,328 @@ defmodule Pdf.Reader do
   end
 
   @doc """
+  Unified entry point — returns the entire extracted PDF in one struct.
+
+  Default shape is `%Pdf.Reader.Result{}` carrying:
+
+  - `:meta` — document-level metadata (title, author, subject,
+    creator, producer, dates, page_count, PDF version, encryption flag,
+    recovery_log, plus the raw Info+XMP map). PDF 1.7 § 14.3.
+  - `:pages` — `[%Pdf.Reader.Result.Page{number, meta, lines}]`. Each
+    page's `:lines` includes text lines AND embedded images as
+    synthetic lines, sorted top-to-bottom. Each line's tokens carry
+    `:kind` (`:text | :link | :email | :image`) and `:shape`.
+
+  ## Convenience shapes
+
+  Pass `:shape` if you only want one slice without building the full struct:
+
+  - `:text` → `[String.t()]` (plain text per page)
+  - `:shapes` → `[%Pdf.Reader.Shape{}]` (links/emails/images flat)
+
+  ## Line tokenisation opts
+
+  - `:y_tolerance` (default `2.0`) — PDF point tolerance to collapse
+    text runs onto the same line.
+  - `:gap_factor` (default `1.0` em) — token-split threshold inside
+    a line. Forwarded to `read_lines/2`.
+
+  ## Image opts
+
+  - `:image_bytes` (default `false`) — when `true`, image tokens carry
+    the raw decoded `:bytes` in `meta` alongside the always-present
+    `:data_uri`. Off by default to keep the result lightweight; turn
+    on if the caller needs the binary (e.g. to write images to disk
+    or run a QR decoder).
+
+  ## Spec references
+
+  - PDF 1.7 § 7.7.3      — Page Tree
+  - PDF 1.7 § 8.9        — Images (XObject /Subtype /Image)
+  - PDF 1.7 § 9.4        — Text objects
+  - PDF 1.7 § 12.5.6.5   — Link Annotations
+  - PDF 1.7 § 12.6.4     — Action types (URI, GoTo, Launch, Named)
+  - PDF 1.7 § 14.3       — Document Information Dictionary + XMP
+  """
+  @spec read(Document.t(), keyword()) ::
+          {:ok, term(), Document.t()} | {:error, reason()}
+  def read(%Document{} = doc, opts \\ []) do
+    case Keyword.get(opts, :shape, :document) do
+      :document -> read_full_document(doc, opts)
+      :text -> read_text(doc, opts)
+      :shapes -> read_shapes(doc)
+      other -> {:error, {:unknown_shape, other}}
+    end
+  end
+
+  @doc """
+  Bang variant of `read/2`. Raises `Pdf.Reader.Error` on failure.
+  """
+  @spec read!(Document.t(), keyword()) :: term()
+  def read!(doc, opts \\ []) do
+    case read(doc, opts) do
+      {:ok, value, _doc} -> value
+      {:error, reason} -> raise Pdf.Reader.Error, reason
+    end
+  end
+
+  # Default shape — assembles the full %Pdf.Reader.Result{} from
+  # text lines + shapes + images + Info/XMP metadata, partitioned by page.
+  defp read_full_document(doc, opts) do
+    with {:ok, info, doc1} <- read_metadata(doc),
+         {:ok, shapes, doc2} <- read_shapes(doc1),
+         {:ok, lines, doc3} <- read_lines(doc2, opts),
+         {:ok, images, doc4} <- read_images(doc3),
+         {:ok, page_count} <- page_count(doc4) do
+      include_bytes = Keyword.get(opts, :image_bytes, false)
+      enriched_text_lines = attach_shapes_to_tokens(lines, shapes)
+      image_lines = Enum.map(images, &image_to_synthetic_line(&1, include_bytes))
+
+      all_lines =
+        (enriched_text_lines ++ image_lines)
+        |> Enum.sort_by(fn line -> {line.page, -line.y} end)
+
+      pages = build_result_pages(all_lines, page_count)
+      meta = build_result_meta(doc4, info, page_count)
+
+      {:ok, %Pdf.Reader.Result{meta: meta, pages: pages}, doc4}
+    end
+  end
+
+  # Group lines by their :page field; emit one Result.Page per page index
+  # in the document, even when a page has no extractable lines.
+  defp build_result_pages(lines, page_count) do
+    by_page = Enum.group_by(lines, & &1.page)
+
+    for page_num <- 1..page_count do
+      page_lines = Map.get(by_page, page_num, [])
+
+      %Pdf.Reader.Result.Page{
+        number: page_num,
+        meta: %{},
+        lines: page_lines
+      }
+    end
+  end
+
+  # Document-level metadata: normalise the standard Info-dict keys
+  # (PDF 1.7 § 14.3.3) to atom keys, keep the raw map for vendor extras,
+  # and add reader-derived fields (page_count, version, encrypted, log).
+  defp build_result_meta(%Document{} = doc, info, page_count) do
+    %{
+      title: Map.get(info, "Title"),
+      author: Map.get(info, "Author"),
+      subject: Map.get(info, "Subject"),
+      keywords: Map.get(info, "Keywords"),
+      creator: Map.get(info, "Creator"),
+      producer: Map.get(info, "Producer"),
+      creation_date: Map.get(info, "CreationDate"),
+      mod_date: Map.get(info, "ModDate"),
+      page_count: page_count,
+      version: doc.version,
+      encrypted: doc.encryption != nil,
+      recovery_log: recovery_log(doc),
+      raw: info
+    }
+  end
+
+  # Converts a raster image into a one-token synthetic line so the unified
+  # `read/2` output surfaces it inline at its position. The token's
+  # `:shape` carries format, dimensions, and a ready-to-use `:data_uri`
+  # (RFC 2397) so callers can drop it into `<img src="...">` without
+  # further work. The raw `:bytes` are only attached when the caller
+  # passes `image_bytes: true` to `read/2` — by default the result is
+  # kept lightweight.
+  #
+  # JPEG passthrough is straightforward (bytes are a complete JFIF file).
+  # `:png_like` bytes are decompressed pixel data — we wrap them in a real
+  # PNG container (PNG 1.2 § 5: signature + IHDR + IDAT + IEND, with
+  # filter byte 0 prepended to each scanline and zlib-compressed) so the
+  # data_uri is browser-loadable. Color type is inferred from
+  # `byte_size / (width × height)`: 1=gray, 2=gray+alpha, 3=RGB, 4=RGBA.
+  defp image_to_synthetic_line(%Pdf.Reader.Image{} = img, include_bytes) do
+    rect = {img.x, img.y, img.x + img.render_width, img.y + img.render_height}
+    {data_uri, encoded_format} = build_data_uri(img)
+
+    base_meta = %{
+      format: img.kind,
+      encoded_format: encoded_format,
+      width: img.width,
+      height: img.height,
+      render_width: img.render_width,
+      render_height: img.render_height,
+      byte_size: byte_size(img.bytes),
+      data_uri: data_uri
+    }
+
+    meta = if include_bytes, do: Map.put(base_meta, :bytes, img.bytes), else: base_meta
+
+    shape = %Pdf.Reader.Shape{
+      type: :image,
+      page: img.page,
+      rect: rect,
+      target: img.ref,
+      text: nil,
+      source: :embedded,
+      meta: meta
+    }
+
+    token = %{
+      x: img.x,
+      text: "",
+      width: img.render_width,
+      kind: :image,
+      shape: shape
+    }
+
+    %Pdf.Reader.Line{
+      page: img.page,
+      y: img.y,
+      x: img.x,
+      text: "",
+      tokens: [token]
+    }
+  end
+
+  # JPEG → passthrough; png_like → wrap pixels in a real PNG.
+  # Returns {data_uri, encoded_format} where encoded_format is the MIME
+  # subtype that the data_uri actually carries.
+  defp build_data_uri(%Pdf.Reader.Image{kind: :jpeg, bytes: bytes}) do
+    {"data:image/jpeg;base64," <> Base.encode64(bytes), :jpeg}
+  end
+
+  defp build_data_uri(%Pdf.Reader.Image{kind: :png_like} = img) do
+    case encode_png(img) do
+      {:ok, png} -> {"data:image/png;base64," <> Base.encode64(png), :png}
+      :error -> {nil, nil}
+    end
+  end
+
+  defp build_data_uri(_), do: {nil, nil}
+
+  # PNG signature (PNG 1.2 § 5.2)
+  @png_signature <<137, 80, 78, 71, 13, 10, 26, 10>>
+
+  defp encode_png(%Pdf.Reader.Image{bytes: pixels, width: w, height: h}) when w > 0 and h > 0 do
+    width = trunc(w)
+    height = trunc(h)
+    total = byte_size(pixels)
+
+    case rem(total, width * height) do
+      0 ->
+        channels = div(total, width * height)
+        color_type = png_color_type(channels)
+
+        if color_type != nil do
+          ihdr =
+            <<width::32, height::32, 8::8, color_type::8, 0::8, 0::8, 0::8>>
+
+          row_size = width * channels
+          filtered = prepend_filter_bytes(pixels, row_size)
+          idat = :zlib.compress(filtered)
+
+          {:ok,
+           @png_signature <>
+             png_chunk("IHDR", ihdr) <>
+             png_chunk("IDAT", idat) <>
+             png_chunk("IEND", "")}
+        else
+          :error
+        end
+
+      _ ->
+        :error
+    end
+  end
+
+  defp encode_png(_), do: :error
+
+  defp png_color_type(1), do: 0
+  defp png_color_type(2), do: 4
+  defp png_color_type(3), do: 2
+  defp png_color_type(4), do: 6
+  defp png_color_type(_), do: nil
+
+  # Each scanline gets a filter byte (0x00 = None per PNG 1.2 § 9) prepended.
+  defp prepend_filter_bytes(pixels, row_size) do
+    for <<row::binary-size(row_size) <- pixels>>, into: <<>>, do: <<0::8, row::binary>>
+  end
+
+  # PNG chunk: length(4) + type(4) + data + CRC32(4) over type+data.
+  defp png_chunk(type, data) when is_binary(type) and is_binary(data) do
+    crc = :erlang.crc32(type <> data)
+    <<byte_size(data)::32, type::binary, data::binary, crc::32>>
+  end
+
+  @doc """
+  Pure helper: enriches each token in a `Line` list with `:kind` and
+  `:shape`. Tokens without an overlapping shape get `kind: :text` and
+  `shape: nil`. Tokens overlapping a shape get the shape attached and
+  `:kind` derived from `shape.type`:
+
+  - `:uri | :goto | :launch | :named` → `:link`
+  - `:email` → `:email`
+
+  A shape "contains" a token when:
+  - The shape and the line are on the same page.
+  - The shape's X range overlaps the token's X range.
+  - The shape's Y is within ±2 points of the line's Y.
+
+  Spec references:
+  - PDF 1.7 § 12.5.6.5 — Link Annotations (rect semantics)
+  - PDF 1.7 § 12.6.4   — Action types (URI/GoTo/Launch/Named)
+  """
+  @spec attach_shapes_to_tokens([Pdf.Reader.Line.t()], [Pdf.Reader.Shape.t()]) ::
+          [Pdf.Reader.Line.t()]
+  def attach_shapes_to_tokens(lines, shapes) when is_list(lines) and is_list(shapes) do
+    shapes_by_page = Enum.group_by(shapes, & &1.page)
+
+    Enum.map(lines, fn %Pdf.Reader.Line{} = line ->
+      page_shapes = Map.get(shapes_by_page, line.page, [])
+
+      new_tokens =
+        Enum.map(line.tokens, fn token ->
+          shape = find_overlapping_shape(token, line, page_shapes)
+
+          token
+          |> Map.put(:shape, shape)
+          |> Map.put(:kind, kind_from_shape(shape))
+        end)
+
+      %{line | tokens: new_tokens}
+    end)
+  end
+
+  # Kind derived from shape.type, mapping action-like types to :link.
+  defp kind_from_shape(nil), do: :text
+  defp kind_from_shape(%Pdf.Reader.Shape{type: :email}), do: :email
+  defp kind_from_shape(%Pdf.Reader.Shape{type: type}) when type in [:uri, :goto, :launch, :named],
+    do: :link
+
+  defp kind_from_shape(_), do: :text
+
+  defp find_overlapping_shape(token, %Pdf.Reader.Line{y: line_y}, shapes) do
+    token_x_start = token.x
+    token_x_end = token.x + Map.get(token, :width, 0.0)
+
+    Enum.find(shapes, fn shape ->
+      case shape.rect do
+        nil ->
+          false
+
+        {sx1, sy1, sx2, sy2} ->
+          x_lo = min(sx1, sx2)
+          x_hi = max(sx1, sx2)
+          y_lo = min(sy1, sy2) - 2.0
+          y_hi = max(sy1, sy2) + 2.0
+
+          line_y >= y_lo and line_y <= y_hi and
+            token_x_end >= x_lo and token_x_start <= x_hi
+      end
+    end)
+  end
+
+  @doc """
   Returns text runs with absolute positions for all pages.
 
   Walks each page, decodes its content stream(s), and returns a flat list of
