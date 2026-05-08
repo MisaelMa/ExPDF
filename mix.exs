@@ -1,7 +1,7 @@
 defmodule ExPdf.Mixfile do
   use Mix.Project
 
-  @version "1.0.1"
+  @version "1.0.2"
   @github_url "https://github.com/MisaelMa/ExPDF"
   @upstream_url "https://github.com/andrewtimberlake/elixir-pdf"
 
@@ -62,7 +62,12 @@ defmodule ExPdf.Mixfile do
       maintainers: ["Misael Sánchez"],
       contributors: ["Andrew Timberlake (original elixir-pdf)", "Misael Sánchez"],
       licenses: ["MIT"],
-      files: ~w(lib mix.exs README* CHANGELOG* LICENSE* fonts priv),
+      files:
+        ~w(lib mix.exs README* CHANGELOG* LICENSE* fonts) ++
+          ~w(priv/cmap priv/wordlists) ++
+          ~w(priv/glyphlist.txt priv/standard_encoding.txt priv/mac_roman.txt) ++
+          ~w(priv/adobe-cns1-cid2unicode.txt priv/adobe-gb1-cid2unicode.txt) ++
+          ~w(priv/adobe-japan1-cid2unicode.txt priv/adobe-korea1-cid2unicode.txt),
       links: %{
         "GitHub" => @github_url,
         "Forked from" => @upstream_url,
@@ -97,7 +102,8 @@ defmodule ExPdf.Mixfile do
           Pdf.Reader.Image,
           Pdf.Reader.Annotation,
           Pdf.Reader.Outline,
-          Pdf.Reader.FormField
+          Pdf.Reader.FormField,
+          Pdf.Reader.Wordlist
         ],
         Writer: [
           Pdf,

@@ -5,6 +5,62 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.1.0 — 2026-05-07
+
+### Added
+
+- **Dictionary-based word split** — `Pdf.Reader.read/2` accepts a
+  `:dictionary` opt that, when set, recovers word boundaries the PDF
+  producer collapsed (e.g. `iniciode` → `inicio de`,
+  `Fechadeúltimocambiodeestado` → `Fecha de último cambio de
+  estado`). Accepts:
+  - `:es` — bundled 50k Spanish frequency list (`priv/wordlists/
+    spanish.txt`, MIT-licensed, ~428 KB on disk). Sourced from
+    [hermitdave/FrequencyWords](https://github.com/hermitdave/FrequencyWords)
+    (OpenSubtitles 2018 corpus).
+  - `%MapSet{}` — caller-supplied wordlist of lowercase strings.
+  - `nil` (default) — disabled.
+
+  Algorithm runs four ordered post-passes after the initial gap-based
+  tokenization:
+
+  1. **Label-colon split**: `Postal:77710` → `Postal:` + `77710`.
+  2. **Letter↔digit boundary**: `1Asalariado` → `1` + `Asalariado`.
+     Mexican RFC/CURP shapes (`XAXX010101000`,
+     `MACA961017HQRRHM06`), base64 hashes, and tokens > 30 chars
+     are exempted.
+  3. **CamelCase split**: `delMunicipio` → `del Municipio`,
+     `OriginalSello` → `Original Sello`. Acronyms (tail all-caps),
+     URLs, and tokens with digits/`+`/`/`/`=` are exempted.
+  4. **Dictionary partition** (only when `:dictionary` set): full
+     decomposition into dict words. Validity rules: every piece must
+     be ≥ 4 chars OR in a tight closed list of 16 Spanish
+     articles/prepositions; partition needs at least one ≥ 4-char
+     anchor (or be entirely connector pairs like `dela` → `de la`,
+     `finde` → `fin de`). Conservative on purpose — over-splitting
+     produces visible garbage; under-splitting just leaves the
+     concatenation intact for the caller.
+
+  Skip rules: ALL-UPPERCASE tokens (proper names, acronyms) are never
+  dict-split; tokens that ARE themselves valid dict words are never
+  shredded; URLs and emails are exempted from every pass.
+
+  Conservative split: only fires when both halves are dictionary words
+  AND the whole token is not itself a dictionary word — so legitimate
+  words like `personales`, `desea`, `desde`, `queja` stay intact. URLs,
+  emails, and base64 hashes are exempted.
+
+- **`Pdf.Reader.Wordlist`** — module exposing the bundled wordlist
+  (`spanish/0`), a resolver (`resolve/1`), and case-insensitive
+  membership check (`member?/2`). Wordlists are loaded at compile
+  time via `@external_resource` so there is no runtime IO cost.
+
+### Renamed (since 1.0.1)
+
+- None — additive feature only.
+
+---
+
 ## 1.0.1 — 2026-05-07 (fork: ExPDF)
 
 First release of `ex_pdf` on Hex. Fork of

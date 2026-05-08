@@ -419,6 +419,19 @@ defmodule Pdf.Reader do
     on if the caller needs the binary (e.g. to write images to disk
     or run a QR decoder).
 
+  ## Dictionary split
+
+  - `:dictionary` (default `nil`) — when set, runs an additional
+    post-pass that splits glued lowercase tokens at boundaries where
+    BOTH halves are valid dictionary words (e.g. `"iniciode"` →
+    `"inicio"` + `"de"`). Accepts:
+    - `:es` — bundled 10k Spanish wordlist
+      (`Pdf.Reader.Wordlist.spanish/0`, MIT-licensed)
+    - `%MapSet{}` — caller-supplied wordlist of lowercase strings
+    - `nil` — disabled
+
+    URLs/emails and tokens with digits or special chars are exempted.
+
   ## Spec references
 
   - PDF 1.7 § 7.7.3      — Page Tree
@@ -959,6 +972,7 @@ defmodule Pdf.Reader do
   def lines_from_runs(runs, opts \\ []) when is_list(runs) do
     y_tol = Keyword.get(opts, :y_tolerance, 2.0)
     gap_factor = Keyword.get(opts, :gap_factor, 1.5)
+    dictionary = Pdf.Reader.Wordlist.resolve(Keyword.get(opts, :dictionary, nil))
 
     runs
     |> Enum.reject(&(&1.text == ""))
@@ -967,7 +981,7 @@ defmodule Pdf.Reader do
     |> Enum.flat_map(fn {page, page_runs} ->
       page_runs
       |> bucket_by_y(y_tol)
-      |> Enum.map(&build_line(page, &1, gap_factor))
+      |> Enum.map(&build_line(page, &1, gap_factor, dictionary))
     end)
   end
 
@@ -1000,9 +1014,15 @@ defmodule Pdf.Reader do
     |> Enum.map(&Enum.reverse/1)
   end
 
-  defp build_line(page, line_runs, gap_factor) do
+  defp build_line(page, line_runs, gap_factor, dictionary) do
     sorted = sort_by_x_with_parser_tiebreaker(line_runs)
-    tokens = sorted |> tokenize_runs(gap_factor) |> expand_label_colons()
+
+    tokens =
+      sorted
+      |> tokenize_runs(gap_factor)
+      |> expand_label_colons()
+      |> expand_with_dictionary(dictionary)
+
     text = tokens |> Enum.map(& &1.text) |> Enum.join(" ")
     first = List.first(sorted)
 
@@ -1162,7 +1182,67 @@ defmodule Pdf.Reader do
   defp expand_label_colons(tokens) do
     tokens
     |> Enum.flat_map(&split_label_colon/1)
+    |> Enum.flat_map(&split_letter_digit/1)
     |> Enum.flat_map(&split_camel_case/1)
+  end
+
+  # Split tokens at letter↔digit boundaries: "1Asalariado" → "1" +
+  # "Asalariado". Protect identifiers, base64 hashes, and URLs from
+  # over-splitting:
+  #
+  # - `looks_like_id?` keeps Mexican RFC/CURP shapes intact
+  #   ("XAXX010101000", "MACA961017HQRRHM06").
+  # - Tokens with `/`, `+`, `=` are base64 / URI fragments — skip.
+  # - Tokens longer than 30 chars without separators are almost
+  #   always opaque IDs.
+  defp split_letter_digit(%{text: text} = token) do
+    cond do
+      uri_like?(text) -> [token]
+      String.match?(text, ~r/[\/+=]/) -> [token]
+      looks_like_id?(text) -> [token]
+      String.match?(text, ~r/^\d+$/) -> [token]
+      String.match?(text, ~r/^[A-Za-zÀ-ÿà-ÿ]+$/u) -> [token]
+      true -> do_split_letter_digit(token)
+    end
+  end
+
+  defp do_split_letter_digit(token) do
+    parts =
+      Regex.split(
+        ~r/(?<=[A-Za-zÀ-ÿà-ÿ])(?=\d)|(?<=\d)(?=[A-Za-zÀ-ÿà-ÿ])/u,
+        token.text
+      )
+
+    if length(parts) <= 1, do: [token], else: parts_to_tokens(token, parts)
+  end
+
+  # Mexican RFC/CURP shapes and similar opaque alphanumeric IDs:
+  # 3-5 uppercase letters + 6 digits + 0-10 mixed alphanumeric.
+  defp looks_like_id?(text) do
+    String.match?(text, ~r/^[A-Z]{3,5}\d{6}[A-Z0-9]{0,10}$/)
+  end
+
+  # Split a single token's text into N tokens by character-count
+  # proportion, preserving X by accumulating widths along the way.
+  defp parts_to_tokens(token, parts) do
+    total_chars = max(String.length(token.text), 1)
+
+    {tokens_rev, _x_offset} =
+      Enum.reduce(parts, {[], 0.0}, fn part, {acc, x_offset} ->
+        chars = String.length(part)
+        width = token.width * chars / total_chars
+
+        new_token =
+          Map.merge(token, %{
+            text: part,
+            x: token.x + x_offset,
+            width: width
+          })
+
+        {[new_token | acc], x_offset + width}
+      end)
+
+    Enum.reverse(tokens_rev)
   end
 
   defp split_label_colon(%{text: text} = token) do
@@ -1222,6 +1302,195 @@ defmodule Pdf.Reader do
       String.contains?(text, "@") or
       String.starts_with?(text, "www.") or
       String.starts_with?(text, "http")
+  end
+
+  # Dictionary-based split: when both halves of a glued lowercase token
+  # match a dictionary entry, treat that as a word boundary. Recursive
+  # on the tail to catch 3+ word concatenations ("tieneconsecuencias",
+  # "esoeslomismo" → "tiene"+"consecuencias", "eso"+"es"+"lo"+"mismo").
+  # Skipped for tokens with digits, slashes, special chars, or under 4
+  # chars — those are almost always identifiers, dates, or already-correct.
+  defp expand_with_dictionary(tokens, nil), do: tokens
+
+  defp expand_with_dictionary(tokens, dict) do
+    Enum.flat_map(tokens, &dictionary_split(&1, dict))
+  end
+
+  defp dictionary_split(%{text: text} = token, dict) do
+    cond do
+      uri_like?(text) ->
+        [token]
+
+      # Skip ALL-UPPERCASE tokens (proper names, acronyms, all-caps
+      # words). Case-folding to dict can produce nonsense splits like
+      # "CONSTANCIA" → "CON" + "STAN" + "CIA" because random short
+      # all-caps subsequences happen to be in subtitle-derived
+      # frequency lists. Real users want proper names left alone.
+      not String.match?(text, ~r/[a-zà-ÿ]/u) ->
+        [token]
+
+      true ->
+        case Regex.run(~r/^([A-ZÀ-Ýa-zà-ÿ]{4,})(.*)$/u, text) do
+          [_full, letters, suffix] ->
+            cond do
+              # CRITICAL: if the prefix alone is already a valid word
+              # (case-insensitive), leave the token intact — without
+              # this guard the greedy split would shred "personales"
+              # → "persona" + "les", "desde" → "des" + "de", "queja"
+              # → "que" + "ja", "Fecha" → "fec" + "ha", etc.
+              Pdf.Reader.Wordlist.member?(letters, dict) ->
+                [token]
+
+              true ->
+                case partition_into_dict_words(letters, dict) do
+                  [_single] ->
+                    [token]
+
+                  words when length(words) >= 2 ->
+                    if valid_partition?(words) do
+                      # Reattach trailing punctuation to the LAST word so
+                      # "elpadrón:" → "el" + "padrón:".
+                      [last_word | mid_words_rev] = Enum.reverse(words)
+                      final_words = Enum.reverse([last_word <> suffix | mid_words_rev])
+
+                      parts_to_tokens(token, final_words)
+                    else
+                      [token]
+                    end
+
+                  :none ->
+                    [token]
+                end
+            end
+
+          _ ->
+            [token]
+        end
+    end
+  end
+
+  # Full-partition: returns a list of words such that `text == join(words)`
+  # AND every word is in `dict`. Returns `:none` when no such partition
+  # exists. This is far more conservative than 2-way recursive split —
+  # only fires when the ENTIRE token cleanly decomposes into known
+  # words. Prefers FEWER, longer words (iterates head from len down to 2).
+  defp partition_into_dict_words(text, dict) do
+    text_lc = String.downcase(text)
+
+    case partition_lc_lengths(text_lc, dict) do
+      nil ->
+        :none
+
+      lengths ->
+        # Map lengths back to original-case slices (preserves capital
+        # initial like "Fecha" + "de" + "último" + ...).
+        {words_rev, _} =
+          Enum.reduce(lengths, {[], 0}, fn n, {acc, offset} ->
+            word = String.slice(text, offset, n)
+            {[word | acc], offset + n}
+          end)
+
+        Enum.reverse(words_rev)
+    end
+  end
+
+  # Tight closed list of Spanish articles/prepositions/pronouns allowed
+  # as short pieces in a partition. Anything else of length 2-3 chars
+  # is rejected — frequency dictionaries are full of meaningful but
+  # spurious 2-3 char entries (`dee`, `sta`, `do`, `des`, `tad`, `aj`,
+  # `us`, `lo`) that produce nonsense partitions of valid words like
+  # "Sueldos" → "Su"+"el"+"dos", "denuncia" → "den"+"un"+"cia",
+  # "Estatus" → "Esta"+"tus", "Localidad" → "Lo"+"calidad",
+  # "deestado" → "dee"+"sta"+"do" instead of "de"+"estado".
+  @short_connectors MapSet.new(
+                      ~w(de el la en del las los una con por sus fin mes año día)
+                    )
+
+  # 1-character Spanish words allowed as partition pieces. Without these,
+  # tokens like "Tributariosy" can never split because "y" is a single
+  # character and the partition's minimum length would otherwise be 2.
+  @one_char_connectors MapSet.new(~w(y o a e u))
+
+  defp partition_lc_lengths(text, dict) do
+    case enumerate_partitions(text, dict) do
+      [] ->
+        nil
+
+      partitions ->
+        # Pick the "best" partition. Sort key minimises (in order):
+        # 1. Number of 1-char pieces ("dela" → ["de","la"] beats
+        #    ["del","a"] because "a" is a 1-char piece).
+        # 2. Total piece count (fewer pieces = longer words on
+        #    average).
+        # Both ties are uncommon for short tokens.
+        Enum.min_by(partitions, fn lengths ->
+          ones = Enum.count(lengths, &(&1 == 1))
+          {ones, length(lengths)}
+        end)
+    end
+  end
+
+  # Enumerate ALL valid lengths-lists [n1, n2, ...] such that
+  # text == join(slices) and every slice is dict-accepted. Tokens are
+  # short (≤ 30 chars typical) so the exponential worst case is bounded.
+  defp enumerate_partitions("", _dict), do: [[]]
+
+  defp enumerate_partitions(text, dict) do
+    len = String.length(text)
+
+    Enum.flat_map(len..1//-1, fn i ->
+      head = String.slice(text, 0, i)
+
+      if piece_acceptable?(head) and Pdf.Reader.Wordlist.member?(head, dict) do
+        rest = String.slice(text, i, len - i)
+
+        enumerate_partitions(rest, dict)
+        |> Enum.map(fn tail -> [i | tail] end)
+      else
+        []
+      end
+    end)
+  end
+
+  defp piece_acceptable?(word) do
+    case String.length(word) do
+      n when n >= 4 -> true
+      1 -> MapSet.member?(@one_char_connectors, String.downcase(word))
+      _ -> MapSet.member?(@short_connectors, String.downcase(word))
+    end
+  end
+
+  # A partition is valid iff:
+  # 1. Every piece is either ≥ 4 characters OR in `@short_connectors`.
+  # 2. AT LEAST ONE piece is ≥ 4 characters (the anchor), UNLESS
+  #    every piece is in the connector list — that lets glued
+  #    function-word pairs like "finde" → "fin de", "dela" → "de la"
+  #    split cleanly without dragging in spurious word boundaries.
+  defp valid_partition?(words) do
+    all_connectors_or_long = Enum.all?(words, &piece_acceptable?/1)
+
+    has_anchor = Enum.any?(words, &(String.length(&1) >= 4))
+
+    all_short =
+      Enum.all?(words, fn w ->
+        len = String.length(w)
+        len <= 3 and piece_acceptable?(w)
+      end)
+
+    # Reject partitions whose first piece is a capitalized 2-3 char
+    # token. In Spanish, capitalized multi-syllable nouns rarely begin
+    # with a connector — splitting them produces false positives like
+    # "Demarcación" → "De" + "marcación" or "Delante" → "De" + "lante".
+    # Pure-lowercase tokens or longer-anchored capitalized tokens
+    # ("Fechadeúltimo..." → "Fecha"+...) are unaffected.
+    first_capital_short =
+      case List.first(words) do
+        nil -> false
+        first -> String.length(first) <= 3 and first =~ ~r/^[A-ZÀ-Ý]/u
+      end
+
+    all_connectors_or_long and (has_anchor or all_short) and
+      not first_capital_short
   end
 
   @doc """

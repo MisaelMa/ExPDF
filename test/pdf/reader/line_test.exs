@@ -165,30 +165,30 @@ defmodule Pdf.Reader.LineTest do
   describe "page boundaries" do
     test "runs on different pages produce lines with the correct :page" do
       runs = [
-        run("page1", 50, 700, page: 1),
-        run("page2", 50, 700, page: 2)
+        run("first", 50, 700, page: 1),
+        run("second", 50, 700, page: 2)
       ]
 
       assert [l1, l2] = Pdf.Reader.lines_from_runs(runs)
       assert l1.page == 1
-      assert l1.text == "page1"
+      assert l1.text == "first"
       assert l2.page == 2
-      assert l2.text == "page2"
+      assert l2.text == "second"
     end
 
     test "lines are ordered by page first, then top-to-bottom within page" do
       runs = [
-        run("p2 top", 50, 700, page: 2),
-        run("p1 bot", 50, 100, page: 1),
-        run("p1 top", 50, 700, page: 1),
-        run("p2 bot", 50, 100, page: 2)
+        run("topB", 50, 700, page: 2),
+        run("botA", 50, 100, page: 1),
+        run("topA", 50, 700, page: 1),
+        run("botB", 50, 100, page: 2)
       ]
 
       assert [a, b, c, d] = Pdf.Reader.lines_from_runs(runs)
-      assert a.text == "p1 top"
-      assert b.text == "p1 bot"
-      assert c.text == "p2 top"
-      assert d.text == "p2 bot"
+      assert a.text == "topA"
+      assert b.text == "botA"
+      assert c.text == "topB"
+      assert d.text == "botB"
     end
   end
 

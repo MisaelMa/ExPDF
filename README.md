@@ -101,6 +101,38 @@ The reader can recover from corrupted xref tables (linear scan), missing
 truncated streams. Fatal errors (`:not_a_pdf`, encryption-without-password)
 remain hard errors.
 
+### Dictionary-based word split
+
+Some PDFs emit consecutive words with no whitespace glyph and no case
+transition (e.g. `iniciode` instead of `inicio de`). With a wordlist
+the reader can recover those boundaries:
+
+```elixir
+# Bundled top-10k Spanish frequency list (MIT, ~80KB)
+{:ok, result, _} = Pdf.Reader.read(doc, dictionary: :es)
+
+# Or a custom wordlist
+my_words = MapSet.new(File.stream!("my_dict.txt") |> Enum.map(&String.trim/1))
+{:ok, result, _} = Pdf.Reader.read(doc, dictionary: my_words)
+
+# Combine the bundled dict with project-specific terms
+my_dict =
+  Pdf.Reader.Wordlist.spanish()
+  |> MapSet.union(MapSet.new(["padrón", "fiscales", "tributarios"]))
+
+{:ok, result, _} = Pdf.Reader.read(doc, dictionary: my_dict)
+```
+
+The split is conservative: a token is split only when (a) BOTH halves
+are dictionary words AND (b) the whole token is NOT itself a dictionary
+word — so `personales`, `desea`, `desde`, `queja` stay intact. URLs,
+emails, identifiers, and base64 hashes are exempted.
+
+The bundled `:es` wordlist is the 50,000-word Spanish frequency list
+from [hermitdave/FrequencyWords](https://github.com/hermitdave/FrequencyWords)
+(MIT License, © Hermit Dave), derived from the OpenSubtitles 2018
+corpus. About 428 KB on disk; loaded into a `MapSet` at compile time.
+
 ### Encryption
 
 ```elixir
