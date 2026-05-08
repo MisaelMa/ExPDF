@@ -464,13 +464,19 @@ defmodule Pdf.Reader do
   end
 
   # Default shape — assembles the full %Pdf.Reader.Result{} from
-  # text lines + shapes + images + Info/XMP metadata, partitioned by page.
+  # text lines + shapes + images + Info/XMP metadata, partitioned by
+  # page. Lines and page_count are required (the document is unusable
+  # without them). Metadata, shapes, and images are best-effort — if
+  # the PDF was hand-edited or has corrupt streams we still return
+  # a valid Result with empty lists for the broken layer instead of
+  # failing the whole extraction.
   defp read_full_document(doc, opts) do
-    with {:ok, info, doc1} <- read_metadata(doc),
-         {:ok, shapes, doc2} <- read_shapes(doc1),
-         {:ok, lines, doc3} <- read_lines(doc2, opts),
-         {:ok, images, doc4} <- read_images(doc3),
-         {:ok, page_count} <- page_count(doc4) do
+    with {:ok, lines, doc1} <- read_lines(doc, opts),
+         {:ok, page_count} <- page_count(doc1) do
+      {info, doc2} = safe_read(doc1, &read_metadata/1, %{})
+      {shapes, doc3} = safe_read(doc2, &read_shapes/1, [])
+      {images, doc4} = safe_read(doc3, &read_images/1, [])
+
       include_bytes = Keyword.get(opts, :image_bytes, false)
       enriched_text_lines = attach_shapes_to_tokens(lines, shapes)
       image_lines = Enum.map(images, &image_to_synthetic_line(&1, include_bytes))
@@ -483,6 +489,15 @@ defmodule Pdf.Reader do
       meta = build_result_meta(doc4, info, page_count)
 
       {:ok, %Pdf.Reader.Result{meta: meta, pages: pages}, doc4}
+    end
+  end
+
+  # Run an optional read step. If it fails, return the default value
+  # and pass the doc through unchanged so subsequent steps still try.
+  defp safe_read(doc, fun, default) do
+    case fun.(doc) do
+      {:ok, value, new_doc} -> {value, new_doc}
+      {:error, _} -> {default, doc}
     end
   end
 

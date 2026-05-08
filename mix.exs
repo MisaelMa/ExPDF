@@ -1,7 +1,7 @@
 defmodule ExPdf.Mixfile do
   use Mix.Project
 
-  @version "1.0.2"
+  @version "1.0.3"
   @github_url "https://github.com/MisaelMa/ExPDF"
   @upstream_url "https://github.com/andrewtimberlake/elixir-pdf"
 
