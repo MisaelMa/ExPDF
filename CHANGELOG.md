@@ -5,19 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 1.1.0 — 2026-05-07
+## 1.1.0 — 2026-05-08
 
 ### Added
 
 - **Dictionary-based word split** — `Pdf.Reader.read/2` accepts a
   `:dictionary` opt that, when set, recovers word boundaries the PDF
   producer collapsed (e.g. `iniciode` → `inicio de`,
-  `Fechadeúltimocambiodeestado` → `Fecha de último cambio de
-  estado`). Accepts:
-  - `:es` — bundled 50k Spanish frequency list (`priv/wordlists/
-    spanish.txt`, MIT-licensed, ~428 KB on disk). Sourced from
-    [hermitdave/FrequencyWords](https://github.com/hermitdave/FrequencyWords)
-    (OpenSubtitles 2018 corpus).
+  `Fechadeúltimocambiodeestado` → `Fecha de último cambio de estado`,
+  `Lacorrupcióntieneconsecuencias` → `La corrupción tiene
+  consecuencias`). Accepts:
+  - `:es` — bundled Spanish dictionary built from TWO sources merged
+    at compile time:
+    1. `priv/wordlists/spanish.txt` — 50,000 most-frequent Spanish
+       words from [hermitdave/FrequencyWords](https://github.com/hermitdave/FrequencyWords)
+       (MIT License, OpenSubtitles 2018).
+    2. `priv/wordlists/spanish_mx_extras.txt` — ~700 Mexican
+       tax/legal/government terms curated for this project (MIT).
+       Examples: `padrón`, `tributarios`, `federativa`, `asimilados`,
+       `lineamientos`, `contribuyente`, `recaudación`, `gravable`,
+       `deducible`, `denúnciala`, `corresponda`, `inmediatamente`,
+       `posteriormente`, etc.
+    Plus a small blacklist (`dela`, `pal`) for slang merges that
+    would prevent correct partitioning. Final size: ~50,500 unique
+    entries.
   - `%MapSet{}` — caller-supplied wordlist of lowercase strings.
   - `nil` (default) — disabled.
 

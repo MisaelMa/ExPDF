@@ -7,13 +7,15 @@ defmodule Pdf.Reader.WordlistTest do
   alias Pdf.Reader.Wordlist
 
   describe "spanish/0" do
-    test "returns a MapSet of ~50k lowercase strings" do
+    test "returns a MapSet of ~50k+ lowercase strings (50k base + Mexican extras)" do
       ms = Wordlist.spanish()
       assert is_struct(ms, MapSet)
-      # Source: hermitdave/FrequencyWords es_50k.txt (MIT, derived
-      # from OpenSubtitles 2018).
-      assert MapSet.size(ms) >= 45_000
-      assert MapSet.size(ms) <= 51_000
+      # Sources:
+      # - hermitdave/FrequencyWords es_50k.txt (MIT, OpenSubtitles 2018)
+      # - priv/wordlists/spanish_mx_extras.txt (this project, Mexican
+      #   tax/legal vocabulary not present in subtitle corpora)
+      assert MapSet.size(ms) >= 49_000
+      assert MapSet.size(ms) <= 60_000
     end
 
     test "contains common Spanish words used in CSF text" do

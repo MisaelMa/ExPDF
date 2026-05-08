@@ -1023,7 +1023,7 @@ defmodule Pdf.Reader do
       |> expand_label_colons()
       |> expand_with_dictionary(dictionary)
 
-    text = tokens |> Enum.map(& &1.text) |> Enum.join(" ")
+    text = render_line_text(tokens)
     first = List.first(sorted)
 
     %Pdf.Reader.Line{
@@ -1033,6 +1033,29 @@ defmodule Pdf.Reader do
       text: text,
       tokens: tokens
     }
+  end
+
+  # Join tokens into a single string. The simple `Enum.join(" ")` would
+  # produce "personales ,puede" (extra space before comma) when the
+  # dict-split recursion separates punctuation. Skip the leading space
+  # when the next token starts with punctuation, and the trailing space
+  # when the previous token ends with an opening bracket / quote.
+  defp render_line_text([]), do: ""
+
+  defp render_line_text([first | rest]) do
+    Enum.reduce(rest, first.text, fn token, acc ->
+      cond do
+        acc == "" -> token.text
+        token.text == "" -> acc
+        no_space_before?(token.text) -> acc <> token.text
+        String.ends_with?(acc, ["¡", "¿", "(", "[", "\""]) -> acc <> token.text
+        true -> acc <> " " <> token.text
+      end
+    end)
+  end
+
+  defp no_space_before?(text) do
+    String.starts_with?(text, [",", ".", ";", ":", "!", "?", ")", "]", "}"])
   end
 
   # Sort runs by X but preserve parser-emit order when X positions are
@@ -1132,12 +1155,21 @@ defmodule Pdf.Reader do
   defp whitespace_run?(%{text: text}), do: String.trim(text) == ""
   defp whitespace_run?(_), do: false
 
-  # Per-line threshold: 75th percentile of positive gaps × factor. The
-  # 75th percentile captures the "max typical intra-word advance" — wider
-  # than the median (so variable-width fonts where some glyphs are
-  # naturally larger don't trigger splits) but tighter than the max (so
-  # real word-break gaps still register). Falls back to font_size for
-  # lines with too few gaps to sample meaningfully.
+  # Per-line threshold computation. Two regimes depending on whether
+  # the producer emits text per-glyph (one run per char, like csf.pdf
+  # → 2079 runs) or per-word/per-Tj (each run holds a complete word
+  # or phrase, like csf2.pdf → 335 runs):
+  #
+  # 1. **Per-word layout** (avg run length ≥ 3 chars): each run is
+  #    already a logical token — adjacent runs are different words by
+  #    definition. Use a tiny threshold (1pt) so every visible gap
+  #    splits. The token boundaries are the run boundaries.
+  #
+  # 2. **Per-glyph layout** (avg < 3 chars): chars come one-by-one and
+  #    we need the gap distribution to detect word boundaries within
+  #    a stream of glyphs. Use the 75th-percentile heuristic. Outliers
+  #    (column gaps) are clamped via `Enum.min/2` so they don't
+  #    inflate the threshold above what works for word-level gaps.
   defp compute_split_threshold(runs, factor) do
     gaps =
       runs
@@ -1150,12 +1182,26 @@ defmodule Pdf.Reader do
         size = (List.first(runs) || %{size: 8.0}).size
         max(size, 1.0) * factor
 
+      per_word_layout?(runs) ->
+        # Each run is already a word — split at every visible gap.
+        1.0
+
       true ->
+        size = (List.first(runs) || %{size: 8.0}).size
         sorted = Enum.sort(gaps)
         p75_idx = min(trunc(length(sorted) * 0.75), length(sorted) - 1)
         p75 = Enum.at(sorted, p75_idx)
-        max(p75, 0.5) * factor
+
+        # Clamp p75 to ≤ font_size × 3 so column-gap outliers can't
+        # inflate the threshold above word-break range.
+        clamped_p75 = min(p75, size * 3.0)
+        max(clamped_p75, 0.5) * factor
     end
+  end
+
+  defp per_word_layout?(runs) do
+    total_chars = runs |> Enum.map(&String.length(&1.text)) |> Enum.sum()
+    total_chars / length(runs) >= 3.0
   end
 
   defp run_chunk_to_token([first | _] = chunk) do
@@ -1321,6 +1367,16 @@ defmodule Pdf.Reader do
       uri_like?(text) ->
         [token]
 
+      # base64 / armored content — leave intact. We use `+` and `=` as
+      # the marker (slash `/` alone appears in legitimate Spanish like
+      # "y/o" so we DO want those tokens processed).
+      String.match?(text, ~r/[+=]/) ->
+        [token]
+
+      # Lots of slashes → likely path or base64; leave alone.
+      slash_count(text) > 2 ->
+        [token]
+
       # Skip ALL-UPPERCASE tokens (proper names, acronyms, all-caps
       # words). Case-folding to dict can produce nonsense splits like
       # "CONSTANCIA" → "CON" + "STAN" + "CIA" because random short
@@ -1330,43 +1386,116 @@ defmodule Pdf.Reader do
         [token]
 
       true ->
-        case Regex.run(~r/^([A-ZÀ-Ýa-zà-ÿ]{4,})(.*)$/u, text) do
-          [_full, letters, suffix] ->
-            cond do
-              # CRITICAL: if the prefix alone is already a valid word
-              # (case-insensitive), leave the token intact — without
-              # this guard the greedy split would shred "personales"
-              # → "persona" + "les", "desde" → "des" + "de", "queja"
-              # → "que" + "ja", "Fecha" → "fec" + "ha", etc.
-              Pdf.Reader.Wordlist.member?(letters, dict) ->
-                [token]
-
-              true ->
-                case partition_into_dict_words(letters, dict) do
-                  [_single] ->
-                    [token]
-
-                  words when length(words) >= 2 ->
-                    if valid_partition?(words) do
-                      # Reattach trailing punctuation to the LAST word so
-                      # "elpadrón:" → "el" + "padrón:".
-                      [last_word | mid_words_rev] = Enum.reverse(words)
-                      final_words = Enum.reverse([last_word <> suffix | mid_words_rev])
-
-                      parts_to_tokens(token, final_words)
-                    else
-                      [token]
-                    end
-
-                  :none ->
-                    [token]
-                end
-            end
+        # Capture optional leading punctuation (`"`, `¡`, `,`, etc.),
+        # the run of letters (≥ 4), and any trailing punctuation. The
+        # prefix sticks to the first word of the partition; the suffix
+        # is recursively dict-split if it still contains letters (so
+        # tokens like `¡denúnciala!Siconoces...` and `personales,puedeacudir...`
+        # process both halves around the embedded punctuation).
+        case Regex.run(~r/^([^A-ZÀ-Ýa-zà-ÿ]*)([A-ZÀ-Ýa-zà-ÿ]{4,})(.*)$/u, text) do
+          [_full, prefix, letters, suffix] ->
+            do_dictionary_split(token, prefix, letters, suffix, dict)
 
           _ ->
             [token]
         end
     end
+  end
+
+  defp do_dictionary_split(token, prefix, letters, suffix, dict) do
+    cond do
+      # CRITICAL: if the prefix alone is already a valid word
+      # (case-insensitive), leave the leading word intact. Without
+      # this guard the greedy split would shred "personales" →
+      # "persona" + "les", "desde" → "des" + "de", "queja" → "que" +
+      # "ja", "Fecha" → "fec" + "ha", etc. Then RECURSE on the suffix
+      # so trailing content is still processed (e.g. for tokens like
+      # `personales,puedeacudiracualquier...` we keep `personales`
+      # whole AND split the post-comma chunk).
+      Pdf.Reader.Wordlist.member?(letters, dict) ->
+        emit_with_recursive_suffix(token, prefix <> letters, suffix, dict)
+
+      true ->
+        case partition_into_dict_words(letters, dict) do
+          [_single] ->
+            emit_with_recursive_suffix(token, prefix <> letters, suffix, dict)
+
+          words when length(words) >= 2 ->
+            if valid_partition?(words) do
+              [first | rest] = words
+
+              {head_words, last_letter_word} =
+                case Enum.reverse(rest) do
+                  [last | mid_rev] -> {[prefix <> first | Enum.reverse(mid_rev)], last}
+                end
+
+              # Last partition word + suffix forms a sub-token that
+              # may itself contain more dict-splittable letters.
+              tail_tokens = recurse_split_tail(token, last_letter_word, suffix, dict)
+
+              parts_to_tokens(token, head_words ++ tail_tokens)
+            else
+              emit_with_recursive_suffix(token, prefix <> letters, suffix, dict)
+            end
+
+          :none ->
+            emit_with_recursive_suffix(token, prefix <> letters, suffix, dict)
+        end
+    end
+  end
+
+  # Emit `head` as one piece, then re-process `suffix` as a fresh
+  # dict_split call. If the suffix has no further letter runs the
+  # recursion bottoms out and we just attach it back to head.
+  defp emit_with_recursive_suffix(token, head, suffix, dict) do
+    if has_letter_run?(suffix) do
+      tail_token = %{token | text: suffix, x: shift_x(token, head)}
+      tail_pieces = dictionary_split(tail_token, dict)
+      [%{token | text: head} | tail_pieces]
+    else
+      [%{token | text: head <> suffix}]
+    end
+  end
+
+  # When a partition succeeds, the LAST partition piece + suffix may
+  # still need further splitting (e.g. for "...,puedeacudir..." after
+  # we kept "...," with the previous piece). We return a list of
+  # strings that `parts_to_tokens` will turn back into tokens.
+  defp recurse_split_tail(_token, last_letter_word, suffix, dict) do
+    if has_letter_run?(suffix) do
+      tail_text = last_letter_word <> suffix
+
+      case Regex.run(~r/^([^A-ZÀ-Ýa-zà-ÿ]*)([A-ZÀ-Ýa-zà-ÿ]{4,})(.*)$/u, suffix) do
+        [_full, _p2, _l2, _s2] ->
+          # Run a recursive dict_split on the suffix-only sub-token
+          # by piggybacking on the existing function.
+          sub_token = %{text: suffix, x: 0.0, width: 0.0}
+
+          sub_pieces =
+            sub_token
+            |> dictionary_split(dict)
+            |> Enum.map(& &1.text)
+
+          [last_letter_word | sub_pieces]
+
+        _ ->
+          [tail_text]
+      end
+    else
+      [last_letter_word <> suffix]
+    end
+  end
+
+  defp has_letter_run?(text), do: Regex.match?(~r/[A-ZÀ-Ýa-zà-ÿ]{4,}/u, text)
+
+  defp shift_x(token, head_text) do
+    total = max(String.length(token.text), 1)
+    head_chars = String.length(head_text)
+    token.x + token.width * head_chars / total
+  end
+
+  defp slash_count(text) do
+    text |> String.graphemes() |> Enum.count(&(&1 == "/"))
   end
 
   # Full-partition: returns a list of words such that `text == join(words)`
@@ -1403,7 +1532,7 @@ defmodule Pdf.Reader do
   # "Estatus" → "Esta"+"tus", "Localidad" → "Lo"+"calidad",
   # "deestado" → "dee"+"sta"+"do" instead of "de"+"estado".
   @short_connectors MapSet.new(
-                      ~w(de el la en del las los una con por sus fin mes año día)
+                      ~w(de el la en si son del las los una uno con por sus que fin mes año día)
                     )
 
   # 1-character Spanish words allowed as partition pieces. Without these,
@@ -1417,16 +1546,33 @@ defmodule Pdf.Reader do
         nil
 
       partitions ->
-        # Pick the "best" partition. Sort key minimises (in order):
-        # 1. Number of 1-char pieces ("dela" → ["de","la"] beats
-        #    ["del","a"] because "a" is a 1-char piece).
-        # 2. Total piece count (fewer pieces = longer words on
-        #    average).
-        # Both ties are uncommon for short tokens.
-        Enum.min_by(partitions, fn lengths ->
-          ones = Enum.count(lengths, &(&1 == 1))
-          {ones, length(lengths)}
-        end)
+        text_len = String.length(text)
+        Enum.min_by(partitions, fn lengths -> partition_score(lengths, text_len) end)
+    end
+  end
+
+  # Score a candidate partition for the "best" pick. Lower is better.
+  # Behaviour depends on the original token length:
+  #
+  # - **Short tokens (< 15 chars)** — prefer FEWER 1-char pieces, then
+  #   FEWER pieces overall. This rule fixes "dela" → "de"+"la"
+  #   instead of "del"+"a".
+  #
+  # - **Long tokens (≥ 15 chars)** — prefer the LONGEST first piece
+  #   (more dictionary coverage at the front), then FEWER 1-char
+  #   pieces, then FEWER pieces overall. This fixes
+  #   "conferidasalaautoridadfiscal" → "conferidas a la autoridad
+  #   fiscal" (5 pieces, first=10) instead of "conferida sala
+  #   autoridad fiscal" (4 pieces, first=9, but semantically wrong —
+  #   "sala" means "room" and isn't the right segmentation).
+  defp partition_score(lengths, total_length) do
+    ones = Enum.count(lengths, &(&1 == 1))
+    first = List.first(lengths) || 0
+
+    if total_length >= 15 do
+      {-first, ones, length(lengths)}
+    else
+      {ones, -first, length(lengths)}
     end
   end
 
@@ -1477,20 +1623,22 @@ defmodule Pdf.Reader do
         len <= 3 and piece_acceptable?(w)
       end)
 
-    # Reject partitions whose first piece is a capitalized 2-3 char
-    # token. In Spanish, capitalized multi-syllable nouns rarely begin
-    # with a connector — splitting them produces false positives like
-    # "Demarcación" → "De" + "marcación" or "Delante" → "De" + "lante".
-    # Pure-lowercase tokens or longer-anchored capitalized tokens
-    # ("Fechadeúltimo..." → "Fecha"+...) are unaffected.
-    first_capital_short =
-      case List.first(words) do
-        nil -> false
-        first -> String.length(first) <= 3 and first =~ ~r/^[A-ZÀ-Ý]/u
-      end
+    # Reject ONLY 2-piece partitions whose first piece is a capitalized
+    # 2-3 char token. In Spanish, capitalized 2-piece concatenations
+    # almost never begin with a short connector — splitting them
+    # produces false positives like "Demarcación" → "De" + "marcación"
+    # or "Delante" → "De" + "lante". For 3+ piece partitions the
+    # multi-word context disambiguates ("Lacorrupcióntieneconsecuencias"
+    # → "La"+"corrupción"+"tiene"+"consecuencias" is the right call).
+    first_capital_short_two_piece =
+      length(words) == 2 and
+        case List.first(words) do
+          nil -> false
+          first -> String.length(first) <= 3 and first =~ ~r/^[A-ZÀ-Ý]/u
+        end
 
     all_connectors_or_long and (has_anchor or all_short) and
-      not first_capital_short
+      not first_capital_short_two_piece
   end
 
   @doc """

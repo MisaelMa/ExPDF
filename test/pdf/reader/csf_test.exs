@@ -201,10 +201,11 @@ defmodule Pdf.Reader.CsfTest do
       # word breaks like "de"→"la"→"Entidad" (gaps 4-7pt), gluing tokens
       # into "delaEntidadFederativa". The p75-gap dynamic threshold fixes
       # this without breaking tightly-set identifiers like "XAXX010101000".
-      csf_path2 = Path.join([__DIR__, "..", "..", "..", "priv", "pdf", "csf.pdf"])
+      csf_path2 = Path.join([__DIR__, "..", "..", "..", "priv", "pdf", "csf2.pdf"])
 
       {:ok, doc} = Pdf.Reader.open(csf_path2)
       {:ok, %Pdf.Reader.Result{pages: pages}, _} = Pdf.Reader.read(doc, dictionary: :es)
+      IO.inspect(pages, label: "Pages with dictionary: :es", pretty: true, limit: :infinity)
       texts = pages |> Enum.flat_map(& &1.lines) |> Enum.map(& &1.text)
 
       joined = Enum.join(texts, " ")

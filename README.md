@@ -128,10 +128,45 @@ are dictionary words AND (b) the whole token is NOT itself a dictionary
 word — so `personales`, `desea`, `desde`, `queja` stay intact. URLs,
 emails, identifiers, and base64 hashes are exempted.
 
-The bundled `:es` wordlist is the 50,000-word Spanish frequency list
-from [hermitdave/FrequencyWords](https://github.com/hermitdave/FrequencyWords)
-(MIT License, © Hermit Dave), derived from the OpenSubtitles 2018
-corpus. About 428 KB on disk; loaded into a `MapSet` at compile time.
+The bundled `:es` dictionary is built from two wordlists merged at
+compile time:
+
+1. **`priv/wordlists/spanish.txt`** — 50,000 entries (~428 KB) from
+   [hermitdave/FrequencyWords](https://github.com/hermitdave/FrequencyWords)
+   (MIT License, © Hermit Dave), derived from OpenSubtitles 2018.
+   Covers conversational, technical, and legal Spanish.
+2. **`priv/wordlists/spanish_mx_extras.txt`** — ~700 Mexican
+   tax/legal/government terms curated for this project (MIT). Includes
+   `padrón`, `tributarios`, `federativa`, `asimilados`, `lineamientos`,
+   `contribuyente`, `recaudación`, etc. — terms missing from the
+   subtitle-derived corpus.
+
+A small blacklist (`dela`, `pal`) removes slang merges that would
+prevent correct splitting (e.g. "de la" → "dela" then back to
+"de la"). Final size: ~50,500 unique entries loaded into a `MapSet`
+at compile time.
+
+### Tokenization rules
+
+The dict-split applies four passes (in order):
+
+1. **Label-colon split**: `Postal:77710` → `Postal:` + `77710` (URLs/emails exempted).
+2. **Letter↔digit boundary**: `1Asalariado` → `1` + `Asalariado` (RFC/CURP shapes and base64 exempted).
+3. **CamelCase split**: `delMunicipio` → `del Municipio` (acronyms and digits exempted).
+4. **Dictionary partition** (when `:dictionary` set): full decomposition
+   into dict words. Validity rules:
+   - Every piece is ≥ 4 chars OR in the closed connector list
+     (`de el la en si son del las los una uno con por sus que fin
+     mes año día`) plus 1-char connectors (`y o a e u`).
+   - At least one piece must be ≥ 4 chars (anchor) — unless every
+     piece is a short connector (catches `dela` → `de`+`la`).
+   - 2-piece partitions starting with a capitalized 2-3 char piece
+     are rejected (avoids `Demarcación` → `De`+`marcación`).
+
+When multiple valid partitions exist, the algorithm picks the one
+with the longest first piece for long tokens (≥ 15 chars) or the
+fewest 1-char pieces for short tokens. Recursion processes embedded
+punctuation: `¡denúnciala!Si...` → `¡denúnciala!` + `Si conoces ...`.
 
 ### Encryption
 

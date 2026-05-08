@@ -25,7 +25,9 @@ SOFTWARE.
 
 ## Bundled third-party data
 
-### Spanish wordlist (`priv/wordlists/spanish.txt`)
+### Spanish wordlists (`priv/wordlists/`)
+
+#### `spanish.txt` — 50k base list
 
 The 50,000-word Spanish frequency list at
 `priv/wordlists/spanish.txt` is the `2018/es/es_50k.txt` file from
@@ -33,6 +35,15 @@ The 50,000-word Spanish frequency list at
 (MIT License, © Hermit Dave), with the per-line frequency column
 removed so only the lowercase word survives. The frequencies are
 themselves derived from the OpenSubtitles 2018 corpus.
+
+#### `spanish_mx_extras.txt` — Mexican legal/fiscal vocabulary
+
+Project-specific supplementary wordlist (~700 entries) curated for
+Mexican tax-document extraction. Contains SAT terminology, common
+labour/employment terms, document/process vocabulary, adverbs and
+verb conjugations not present in the subtitle-derived 50k list.
+
+Released under the project's MIT License.
 
 ```
 The MIT License (MIT)
