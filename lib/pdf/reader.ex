@@ -958,7 +958,7 @@ defmodule Pdf.Reader do
   @spec lines_from_runs([Pdf.Reader.TextRun.t()], keyword()) :: [Pdf.Reader.Line.t()]
   def lines_from_runs(runs, opts \\ []) when is_list(runs) do
     y_tol = Keyword.get(opts, :y_tolerance, 2.0)
-    gap_factor = Keyword.get(opts, :gap_factor, 1.15)
+    gap_factor = Keyword.get(opts, :gap_factor, 1.5)
 
     runs
     |> Enum.reject(&(&1.text == ""))
@@ -1002,7 +1002,7 @@ defmodule Pdf.Reader do
 
   defp build_line(page, line_runs, gap_factor) do
     sorted = sort_by_x_with_parser_tiebreaker(line_runs)
-    tokens = tokenize_runs(sorted, gap_factor)
+    tokens = sorted |> tokenize_runs(gap_factor) |> expand_label_colons()
     text = tokens |> Enum.map(& &1.text) |> Enum.join(" ")
     first = List.first(sorted)
 
@@ -1055,40 +1055,62 @@ defmodule Pdf.Reader do
   # gaps.
   defp tokenize_runs([], _factor), do: []
 
-  defp tokenize_runs([first | _] = runs, factor) do
-    threshold = compute_split_threshold(runs, factor)
+  defp tokenize_runs(runs, factor) do
+    # Threshold computed from NON-whitespace gaps only — whitespace chars
+    # produce systematically smaller gaps that would skew the percentile.
+    non_space = Enum.reject(runs, &whitespace_run?/1)
+    threshold = compute_split_threshold(non_space, factor)
 
     runs
     |> Enum.chunk_while(
-      [first],
-      fn run, [prev | _] = acc ->
-        gap = run.x - prev.x
-
+      [],
+      fn run, acc ->
         cond do
-          # Same run as seed (chunk_while feeds the seed back on the first call)
-          run == prev and acc == [first] ->
-            {:cont, acc}
+          # Whitespace-only runs (text == " ", "\t", etc.) are authoritative
+          # token boundaries — when the producer emits a literal space
+          # character we trust it absolutely, regardless of gap math.
+          # Drop the whitespace run itself; the boundary is its mere
+          # presence. This handles "OMAR ALEXIS JUAN PEREZ" where the
+          # PDF emits actual " " glyphs between words.
+          whitespace_run?(run) ->
+            if acc == [], do: {:cont, []}, else: {:cont, Enum.reverse(acc), []}
 
-          # Forward jump bigger than the per-line p75 threshold: word break.
-          gap > threshold ->
-            {:cont, Enum.reverse(acc), [run]}
-
-          # Backward jump > 1pt: the producer is overlapping a label with a
-          # value (common in label/value layouts where the writer emits
-          # "Territorial:" then jumps slightly back to start "SOLIDARIDAD"
-          # underneath the colon). Always treat as a token boundary —
-          # typographic kerning is at most ~0.4pt for 8pt fonts.
-          gap < -1.0 ->
-            {:cont, Enum.reverse(acc), [run]}
+          acc == [] ->
+            {:cont, [run]}
 
           true ->
-            {:cont, [run | acc]}
+            [prev | _] = acc
+            gap = run.x - prev.x
+
+            cond do
+              # Forward jump bigger than the per-line p75 threshold: word break.
+              gap > threshold ->
+                {:cont, Enum.reverse(acc), [run]}
+
+              # Backward jump > 1pt: the producer is overlapping a label
+              # with a value (common in label/value layouts where the
+              # writer emits "Territorial:" then jumps slightly back to
+              # start "SOLIDARIDAD" underneath the colon). Always treat
+              # as a token boundary — typographic kerning is at most
+              # ~0.4pt for 8pt fonts.
+              gap < -1.0 ->
+                {:cont, Enum.reverse(acc), [run]}
+
+              true ->
+                {:cont, [run | acc]}
+            end
         end
       end,
-      fn acc -> {:cont, Enum.reverse(acc), []} end
+      fn
+        [] -> {:cont, []}
+        acc -> {:cont, Enum.reverse(acc), []}
+      end
     )
     |> Enum.map(&run_chunk_to_token/1)
   end
+
+  defp whitespace_run?(%{text: text}), do: String.trim(text) == ""
+  defp whitespace_run?(_), do: false
 
   # Per-line threshold: 75th percentile of positive gaps × factor. The
   # 75th percentile captures the "max typical intra-word advance" — wider
@@ -1122,6 +1144,84 @@ defmodule Pdf.Reader do
     width = max(last.x - first.x, 0.0)
 
     %{x: first.x, text: text, width: width}
+  end
+
+  # Post-process tokens to recover word boundaries that the PDF producer
+  # collapsed by emitting glyphs with no intervening space character. Two
+  # passes, both opt-out for URIs/emails so we don't shred URLs:
+  #
+  # 1. Label-colon split: "Postal:77710" → "Postal:" + "77710". Common in
+  #    forms where label and value share a single TJ chunk.
+  # 2. CamelCase split: "delMunicipio" → "del" + "Municipio",
+  #    "OriginalSello" → "Original" + "Sello". A lowercase-followed-by-
+  #    uppercase transition is almost always a glued word boundary in
+  #    Spanish/English content.
+  #
+  # Token X positions are split proportionally to character count so the
+  # downstream layout stays roughly correct.
+  defp expand_label_colons(tokens) do
+    tokens
+    |> Enum.flat_map(&split_label_colon/1)
+    |> Enum.flat_map(&split_camel_case/1)
+  end
+
+  defp split_label_colon(%{text: text} = token) do
+    if uri_like?(text) do
+      [token]
+    else
+      case Regex.run(~r/^(.+:)([^\s:].+)$/, text) do
+        [_full, label, value] -> split_token_at(token, label, value)
+        _ -> [token]
+      end
+    end
+  end
+
+  defp split_camel_case(%{text: text} = token) do
+    cond do
+      uri_like?(text) ->
+        [token]
+
+      # Tokens that mix letters with digits or non-word chars are
+      # almost always identifiers, hashes, or base64 payloads — leave
+      # intact (e.g. "Y/RPVo/IWtn5M..." digital signatures).
+      String.match?(text, ~r/[0-9\/+=]/) ->
+        [token]
+
+      true ->
+        # Split at the FIRST lowercase→Uppercase transition where the
+        # tail is a word (Cap + lowercase), not an acronym (Cap+Cap).
+        # This keeps "delMunicipio" → "del Municipio" but leaves
+        # "idCIF" alone (CIF is an acronym).
+        case Regex.run(~r/^(.*?[a-zà-ÿ])([A-ZÀ-Ý][a-zà-ÿ].*)$/u, text) do
+          [_full, head, tail] ->
+            [first | rest] = split_token_at(token, head, tail)
+            [first | Enum.flat_map(rest, &split_camel_case/1)]
+
+          _ ->
+            [token]
+        end
+    end
+  end
+
+  # Generic token split helper: split a token's text at a boundary,
+  # apportioning width proportionally to character count.
+  defp split_token_at(token, head_text, tail_text) do
+    head_chars = String.length(head_text)
+    total_chars = max(String.length(token.text), 1)
+    head_width = token.width * head_chars / total_chars
+    tail_width = token.width - head_width
+
+    [
+      Map.merge(token, %{text: head_text, width: head_width}),
+      Map.merge(token, %{text: tail_text, x: token.x + head_width, width: tail_width})
+    ]
+  end
+
+  defp uri_like?(text) do
+    String.contains?(text, "://") or
+      String.contains?(text, "@") or
+      String.starts_with?(text, "www.") or
+      String.starts_with?(text, "http")
   end
 
   @doc """

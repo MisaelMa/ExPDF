@@ -203,9 +203,10 @@ defmodule Pdf.Reader.CsfTest do
       # this without breaking tightly-set identifiers like "XAXX010101000".
       {:ok, doc} = Pdf.Reader.open(@csf_path)
       {:ok, %Pdf.Reader.Result{pages: pages}, _} = Pdf.Reader.read(doc)
-
       texts = pages |> Enum.flat_map(& &1.lines) |> Enum.map(& &1.text)
+
       joined = Enum.join(texts, " ")
+      IO.inspect(joined, label: "Pages with lines and tokens", pretty: true, limit: :infinity)
 
       # Word boundaries that must split:
       assert String.contains?(joined, "de la Entidad Federativa")
@@ -213,6 +214,69 @@ defmodule Pdf.Reader.CsfTest do
       # Tight identifiers that must STAY GLUED:
       assert Enum.any?(texts, &String.contains?(&1, "XAXX010101000"))
       refute String.contains?(joined, "X A X X 010101000")
+    end
+
+    test "literal space char is treated as authoritative token boundary" do
+      # Regression: capital-text lines like "OMAR ALEXIS JUAN PEREZ" got
+      # over-split into "OM AR ALEXIS JU A N PEREZ" because intra-word
+      # gaps in capital sequences (5-6pt) crossed the gap threshold.
+      # Fix: a literal " " glyph emitted by the producer is an explicit
+      # boundary; gap math is bypassed when whitespace is present.
+      {:ok, doc} = Pdf.Reader.open(@csf_path)
+      {:ok, %Pdf.Reader.Result{pages: pages}, _} = Pdf.Reader.read(doc)
+
+      joined = pages |> Enum.flat_map(& &1.lines) |> Enum.map(& &1.text) |> Enum.join(" ")
+
+      assert String.contains?(joined, "OMAR ALEXIS JUAN PEREZ")
+      assert String.contains?(joined, "CONSTANCIA DE SITUACIÓN FISCAL")
+      refute String.contains?(joined, "OM AR")
+      refute String.contains?(joined, "JU A N")
+      refute String.contains?(joined, "CO NSTANCIA")
+      refute String.contains?(joined, "SITUACIÓ N")
+    end
+
+    test "label:value tokens split at colon (Postal:77710 → Postal: 77710)" do
+      # Regression: when no space follows a label colon, "Postal:77710"
+      # comes glued. Post-process expands at the colon, except for
+      # URL/email tokens whose colons belong to the address.
+      {:ok, doc} = Pdf.Reader.open(@csf_path)
+      {:ok, %Pdf.Reader.Result{pages: pages}, _} = Pdf.Reader.read(doc)
+
+      joined = pages |> Enum.flat_map(& &1.lines) |> Enum.map(& &1.text) |> Enum.join(" ")
+
+      assert String.contains?(joined, "Postal: 77710")
+      assert String.contains?(joined, "Vialidad: AVENIDA")
+      assert String.contains?(joined, "Exterior: 345")
+      assert String.contains?(joined, "Calle: 66")
+      # URL must NOT be split at its colon:
+      assert String.contains?(joined, "http://sat.gob.mx")
+      refute String.contains?(joined, "http: //")
+    end
+
+    test "camelCase tokens split at lowercase→Capital boundaries" do
+      # Regression: "delMunicipio", "OriginalSello", "SelloDigital" come
+      # glued. CamelCase post-process splits them while preserving
+      # acronyms (idCIF stays — CIF is all-caps), digits/slashes (base64
+      # hashes stay intact), and URLs.
+      {:ok, doc} = Pdf.Reader.open(@csf_path)
+      {:ok, %Pdf.Reader.Result{pages: pages}, _} = Pdf.Reader.read(doc)
+
+      joined = pages |> Enum.flat_map(& &1.lines) |> Enum.map(& &1.text) |> Enum.join(" ")
+
+      # camelCase splits that must happen:
+      assert String.contains?(joined, "Nombre del Municipio")
+      assert String.contains?(joined, "Nombre de la Colonia")
+      assert String.contains?(joined, "Nombre de la Localidad")
+      assert String.contains?(joined, "Nombre de la Entidad")
+      assert String.contains?(joined, "Cadena Original Sello:")
+      assert String.contains?(joined, "Sello Digital:")
+
+      # Acronyms must NOT be split (tail is all-caps):
+      assert String.contains?(joined, "idCIF:")
+      refute String.contains?(joined, "id CIF:")
+
+      # Base64 hash must stay intact (token contains digits/slashes):
+      assert String.contains?(joined, "Y/RPVo/IWtn5M/87FmtcHLnxPmj9Cbo")
     end
 
     test "RFC, idCIF and CURP appear as detectable line content" do
