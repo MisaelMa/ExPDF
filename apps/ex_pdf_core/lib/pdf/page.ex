@@ -355,8 +355,8 @@ defmodule Pdf.Page do
             color = Keyword.get(opts, :color, page.fill_color)
 
             height = Enum.max([leading, font_size])
-            ascender = font_ref.module.ascender * font_size / 1000
-            descender = -(font_ref.module.descender * font_size / 1000)
+            ascender = (font_ref.module.ascender || 750) * font_size / 1000
+            descender = -((font_ref.module.descender || -250) * font_size / 1000)
             cap_height = (font_ref.module.cap_height || 0) * font_size / 1000
             x_height = (font_ref.module.x_height || 0) * font_size / 1000
             line_gap = (font_size - (ascender + descender)) / 2

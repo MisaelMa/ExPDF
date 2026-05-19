@@ -51,10 +51,10 @@ defmodule Pdf.DevServer.Examples.Api.FontShowcase do
       |> Pdf.text_at({50, y - 28}, "Symbol:")
       |> Pdf.set_font("Symbol", 14)
       |> Pdf.set_fill_color(dark)
-      |> Pdf.text_at({110, y - 28}, "abcdefghijklmnop ABGDEZH  +-×÷=≠≤≥")
+      |> Pdf.text_at({110, y - 28}, "abgdezhqiklmnxoprstufcyw ABGDEZHQ")
       |> Pdf.set_font("Helvetica", 8)
       |> Pdf.set_fill_color(gray)
-      |> Pdf.text_at({50, y - 44}, "Greek letters, math operators, arrows, and other scientific symbols")
+      |> Pdf.text_at({50, y - 44}, "Greek letters mapped from ASCII: a=alpha, b=beta, g=gamma, d=delta ...")
 
     # ZapfDingbats
     doc =
@@ -69,10 +69,10 @@ defmodule Pdf.DevServer.Examples.Api.FontShowcase do
       |> Pdf.text_at({50, y - 78}, "ZapfDingbats:")
       |> Pdf.set_font("ZapfDingbats", 14)
       |> Pdf.set_fill_color(dark)
-      |> Pdf.text_at({140, y - 78}, "✁✂✃✄☎✆✇✈✉☛☞✌✍✎✏✐✑✒")
+      |> Pdf.text_at({140, y - 78}, "#$%&()*+,-./0123456789")
       |> Pdf.set_font("Helvetica", 8)
       |> Pdf.set_fill_color(gray)
-      |> Pdf.text_at({50, y - 94}, "Decorative symbols: scissors, phones, envelopes, hands, pencils, stars")
+      |> Pdf.text_at({50, y - 94}, "Decorative symbols via ASCII codes: scissors, stars, crosses, circles")
 
     # ── Font Sizes Comparison ──
     y2 = 130

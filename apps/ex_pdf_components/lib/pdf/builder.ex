@@ -111,7 +111,79 @@ defmodule Pdf.Builder do
     Pdf.on_page(doc, name, func)
   end
 
-  # ── Component renderers (box, row, column) — must come first ────
+  # ── Cursor-based component renderers ─────────────────────────────
+  # When position is :cursor, resolve from document cursor + content_area.
+  # Width :full resolves to content_area.width.
+  # Cursor advances by element height after rendering.
+
+  defp render_element(%{box: :cursor, size: {w, h}} = el, doc) do
+    {x, y, width} = resolve_cursor(doc, w)
+    children = Map.get(el, :children, [])
+    style = Map.drop(el, [:box, :size, :children])
+
+    doc =
+      Pdf.Component.Box.render(doc, {x, y}, {width, h}, style, fn doc, area ->
+        render_children(doc, children, area)
+      end)
+
+    Pdf.move_down(doc, h)
+  end
+
+  defp render_element(%{row: :cursor, size: {w, h}} = el, doc) do
+    {x, y, width} = resolve_cursor(doc, w)
+    children = Map.get(el, :children, [])
+    gap = Map.get(el, :gap, 0)
+
+    columns =
+      Enum.map(children, fn {weight, child_elements} ->
+        {weight, fn doc, area ->
+          render_children(doc, child_elements, area)
+        end}
+      end)
+
+    doc = Pdf.Component.Row.render(doc, {x, y}, {width, h}, columns, gap: gap)
+    Pdf.move_down(doc, h)
+  end
+
+  defp render_element(%{column: :cursor, size: {w, h}} = el, doc) do
+    {x, y, width} = resolve_cursor(doc, w)
+    children = Map.get(el, :children, [])
+    gap = Map.get(el, :gap, 0)
+
+    rows =
+      Enum.map(children, fn {height, child_elements} ->
+        {height, fn doc, area ->
+          render_children(doc, child_elements, area)
+        end}
+      end)
+
+    doc = Pdf.Component.Column.render(doc, {x, y}, {width, h}, rows, gap: gap)
+    Pdf.move_down(doc, h)
+  end
+
+  defp render_element(%{rect: :cursor, size: {w, h}} = el, doc) do
+    {x, cursor_y, width} = resolve_cursor(doc, w)
+    # rect uses bottom-left in PDF coords; cursor_y is the top
+    y = cursor_y - h
+    el = el |> Map.put(:rect, {x, y}) |> Map.put(:size, {width, h})
+    doc = render_element(el, doc)
+    Pdf.move_down(doc, h)
+  end
+
+  defp render_element(%{card: :cursor, size: {w, h}} = el, doc) do
+    {x, y, width} = resolve_cursor(doc, w)
+    children = Map.get(el, :children, [])
+    style = Map.drop(el, [:card, :size, :children])
+
+    doc =
+      Pdf.Component.Card.render(doc, {x, y}, {width, h}, style, fn doc, area ->
+        render_children(doc, children, area)
+      end)
+
+    Pdf.move_down(doc, h)
+  end
+
+  # ── Absolute component renderers (box, row, column) ────────────
   # These patterns also contain keys like :background, :size, etc.
   # so they must match before the simpler map-based element renderers.
 
@@ -188,6 +260,11 @@ defmodule Pdf.Builder do
     Pdf.Component.Card.render(doc, {x, y}, {w, h}, style, fn doc, area ->
       render_children(doc, children, area)
     end)
+  end
+
+  defp render_element(%{key_value: {x, y}, pairs: pairs} = el, doc) do
+    style = Map.drop(el, [:key_value, :pairs])
+    Pdf.Component.KeyValue.render(doc, {x, y}, style, pairs)
   end
 
   defp render_element(%{text: string} = el, doc) do
@@ -273,6 +350,25 @@ defmodule Pdf.Builder do
     |> Pdf.restore_state()
   end
 
+  # Horizontal line at cursor — offset version (relative x offsets within content area)
+  defp render_element(%{line: :cursor} = el, doc) do
+    stroke = Map.get(el, :stroke, {0.82, 0.82, 0.82})
+    lw = Map.get(el, :line_width, 0.5)
+    area = Pdf.content_area(doc)
+    pos = Pdf.cursor_xy(doc)
+    x1 = area.x + Map.get(el, :indent_left, 0)
+    x2 = area.x + area.width - Map.get(el, :indent_right, 0)
+
+    doc
+    |> Pdf.save_state()
+    |> Pdf.set_stroke_color(stroke)
+    |> Pdf.set_line_width(lw)
+    |> Pdf.line({x1, pos.y}, {x2, pos.y})
+    |> Pdf.stroke()
+    |> Pdf.restore_state()
+    |> Pdf.move_down(lw + 2)
+  end
+
   # ── Tuple-based element renderers ────────────────────────────────
 
   defp render_element({:text, string}, doc) do
@@ -344,6 +440,119 @@ defmodule Pdf.Builder do
     Pdf.set_font(doc, name, size, opts)
   end
 
+  defp render_element({:list, items, style}, doc) do
+    pos = Pdf.cursor_xy(doc)
+    Pdf.Component.List.render(doc, {pos.x, pos.y}, style, items)
+  end
+
+  defp render_element({:list, items}, doc) do
+    pos = Pdf.cursor_xy(doc)
+    Pdf.Component.List.render(doc, {pos.x, pos.y}, %{}, items)
+  end
+
+  defp render_element({:blockquote, text, style}, doc) do
+    pos = Pdf.cursor_xy(doc)
+    Pdf.Component.Blockquote.render(doc, {pos.x, pos.y}, style, text)
+  end
+
+  defp render_element({:blockquote, text}, doc) do
+    pos = Pdf.cursor_xy(doc)
+    Pdf.Component.Blockquote.render(doc, {pos.x, pos.y}, %{}, text)
+  end
+
+  defp render_element({:code_block, code, style}, doc) do
+    pos = Pdf.cursor_xy(doc)
+    Pdf.Component.CodeBlock.render(doc, {pos.x, pos.y}, style, code)
+  end
+
+  defp render_element({:code_block, code}, doc) do
+    pos = Pdf.cursor_xy(doc)
+    Pdf.Component.CodeBlock.render(doc, {pos.x, pos.y}, %{}, code)
+  end
+
+  defp render_element({:signature, style}, doc) do
+    pos = Pdf.cursor_xy(doc)
+    Pdf.Component.Signature.render(doc, {pos.x, pos.y}, style)
+  end
+
+  defp render_element({:stat_card, style}, doc) do
+    pos = Pdf.cursor_xy(doc)
+    Pdf.Component.StatCard.render(doc, {pos.x, pos.y}, style)
+  end
+
+  defp render_element({:alert, style}, doc) do
+    pos = Pdf.cursor_xy(doc)
+    Pdf.Component.Alert.render(doc, {pos.x, pos.y}, style)
+  end
+
+  defp render_element({:key_value, pairs, style}, doc) do
+    pos = Pdf.cursor_xy(doc)
+    Pdf.Component.KeyValue.render(doc, {pos.x, pos.y}, style, pairs)
+  end
+
+  defp render_element({:key_value, pairs}, doc) do
+    pos = Pdf.cursor_xy(doc)
+    Pdf.Component.KeyValue.render(doc, {pos.x, pos.y}, %{}, pairs)
+  end
+
+  defp render_element({:timeline, events, style}, doc) do
+    pos = Pdf.cursor_xy(doc)
+    Pdf.Component.Timeline.render(doc, {pos.x, pos.y}, style, events)
+  end
+
+  defp render_element({:timeline, events}, doc) do
+    pos = Pdf.cursor_xy(doc)
+    Pdf.Component.Timeline.render(doc, {pos.x, pos.y}, %{}, events)
+  end
+
+  defp render_element({:step_indicator, steps, style}, doc) do
+    pos = Pdf.cursor_xy(doc)
+    Pdf.Component.StepIndicator.render(doc, {pos.x, pos.y}, style, steps)
+  end
+
+  defp render_element({:step_indicator, steps}, doc) do
+    pos = Pdf.cursor_xy(doc)
+    Pdf.Component.StepIndicator.render(doc, {pos.x, pos.y}, %{}, steps)
+  end
+
+  defp render_element({:rating, style}, doc) do
+    pos = Pdf.cursor_xy(doc)
+    Pdf.Component.Rating.render(doc, {pos.x, pos.y}, style)
+  end
+
+  defp render_element({:metric, style}, doc) do
+    pos = Pdf.cursor_xy(doc)
+    Pdf.Component.Metric.render(doc, {pos.x, pos.y}, style)
+  end
+
+  defp render_element({:toc, entries, style}, doc) do
+    pos = Pdf.cursor_xy(doc)
+    Pdf.Component.TOC.render(doc, {pos.x, pos.y}, style, entries)
+  end
+
+  defp render_element({:toc, entries}, doc) do
+    pos = Pdf.cursor_xy(doc)
+    Pdf.Component.TOC.render(doc, {pos.x, pos.y}, %{}, entries)
+  end
+
+  defp render_element({:footnote, notes, style}, doc) do
+    pos = Pdf.cursor_xy(doc)
+    Pdf.Component.Footnote.render(doc, {pos.x, pos.y}, style, notes)
+  end
+
+  defp render_element({:footnote, notes}, doc) do
+    pos = Pdf.cursor_xy(doc)
+    Pdf.Component.Footnote.render(doc, {pos.x, pos.y}, %{}, notes)
+  end
+
+  defp render_element({:paginator, style}, doc) do
+    Pdf.Component.Paginator.apply(doc, style)
+  end
+
+  defp render_element({:paginator}, doc) do
+    Pdf.Component.Paginator.apply(doc)
+  end
+
   # ── Child positioning helpers ──────────────────────────────────────
 
   defp render_children(doc, children, area) do
@@ -390,6 +599,10 @@ defmodule Pdf.Builder do
     %{child | chip: {cx + area.x, cy + area.y}}
   end
 
+  defp offset_child(%{key_value: {kx, ky}} = child, area) do
+    %{child | key_value: {kx + area.x, ky + area.y}}
+  end
+
   defp offset_child(%{progress: {px, py}} = child, area) do
     %{child | progress: {px + area.x, py + area.y}}
   end
@@ -423,4 +636,16 @@ defmodule Pdf.Builder do
   end
 
   defp resolve_child_size(child, _area), do: child
+
+  # ── Cursor position resolution ─────────────────────────────────
+
+  defp resolve_cursor(doc, width) do
+    area = Pdf.content_area(doc)
+    pos = Pdf.cursor_xy(doc)
+    w = resolve_width(width, area.width)
+    {area.x, pos.y, w}
+  end
+
+  defp resolve_width(:full, area_width), do: area_width
+  defp resolve_width(w, _area_width) when is_number(w), do: w
 end

@@ -209,8 +209,53 @@ defmodule Pdf.Document do
     add_or_create_image(document, {x, y}, md5, {:binary, image_data}, opts)
   end
 
+  def add_image(document, {x, y}, "http" <> _ = url, opts) do
+    case fetch_url_image(url) do
+      {:ok, data} ->
+        add_image(document, {x, y}, {:binary, data}, opts)
+
+      {:error, reason} ->
+        require Logger
+        Logger.warning("Failed to fetch image from URL: #{inspect(reason)}")
+        document
+    end
+  end
+
   def add_image(document, {x, y}, image_path, opts) do
     add_or_create_image(document, {x, y}, image_path, image_path, opts)
+  end
+
+  defp fetch_url_image(url) do
+    require Logger
+    ensure_http_started()
+    url_charlist = String.to_charlist(url)
+    headers = [{~c"user-agent", ~c"ExPDF/2.0"}]
+
+    http_opts = [
+      ssl: [verify: :verify_none],
+      timeout: 15_000,
+      autoredirect: true
+    ]
+
+    case :httpc.request(:get, {url_charlist, headers}, http_opts, body_format: :binary) do
+      {:ok, {{_, 200, _}, resp_headers, body}} ->
+        ct = :proplists.get_value(~c"content-type", resp_headers, ~c"unknown")
+        Logger.info("Image fetched: #{byte_size(body)} bytes, content-type: #{ct}")
+        {:ok, body}
+
+      {:ok, {{_, status, reason}, _, _}} ->
+        Logger.warning("Image fetch HTTP #{status}: #{reason}")
+        {:error, {:http_status, status}}
+
+      {:error, reason} ->
+        Logger.warning("Image fetch error: #{inspect(reason)}")
+        {:error, reason}
+    end
+  end
+
+  defp ensure_http_started do
+    :inets.start()
+    Application.ensure_all_started(:ssl)
   end
 
   defp add_or_create_image(%__MODULE__{current: page} = document, {x, y}, image_key, image, opts) do

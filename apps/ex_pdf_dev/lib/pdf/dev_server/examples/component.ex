@@ -2,6 +2,14 @@ defmodule Pdf.DevServer.Examples.Component do
   @moduledoc false
   alias Pdf.Component.{Avatar, Badge, Card, Chip, Divider, Progress}
 
+  alias Pdf.DevServer.Examples.Component.{
+    ListDemo, BlockquoteDemo, CodeBlockDemo,
+    SignatureDemo, StatCardDemo, AlertDemo,
+    KeyValueDemo, TimelineDemo, StepIndicatorDemo,
+    RatingDemo, MetricDemo, TOCDemo, FootnoteDemo,
+    PaginatorDemo
+  }
+
   def list do
     [
       {"box_demo", "Box Component", "Box with padding, border, border_radius, background", &box_demo/0},
@@ -13,7 +21,21 @@ defmodule Pdf.DevServer.Examples.Component do
       {"badge_demo", "Badge Component", "Dot, circle, and pill badges", &badge_demo/0},
       {"chip_demo", "Chip Component", "Filled and outlined tag labels", &chip_demo/0},
       {"progress_demo", "Progress Component", "Horizontal progress bars", &progress_demo/0},
-      {"card_demo", "Card Component", "Card containers with header, elevation", &card_demo/0}
+      {"card_demo", "Card Component", "Card containers with header, elevation", &card_demo/0},
+      {"list_demo", "List Component", "Bulleted and numbered lists with nesting", &ListDemo.render/0},
+      {"blockquote_demo", "Blockquote Component", "Indented text with left accent bar", &BlockquoteDemo.render/0},
+      {"code_block_demo", "CodeBlock Component", "Monospaced code with line numbers", &CodeBlockDemo.render/0},
+      {"signature_demo", "Signature Component", "Signature lines with name, title, date", &SignatureDemo.render/0},
+      {"stat_card_demo", "StatCard Component", "Dashboard KPI cards with trend", &StatCardDemo.render/0},
+      {"alert_demo", "Alert Component", "Info/success/warning/error notification boxes", &AlertDemo.render/0},
+      {"key_value_demo", "KeyValue Component", "Aligned label-value pairs", &KeyValueDemo.render/0},
+      {"timeline_demo", "Timeline Component", "Vertical timeline with events", &TimelineDemo.render/0},
+      {"step_indicator_demo", "StepIndicator Component", "Numbered steps with progress line", &StepIndicatorDemo.render/0},
+      {"rating_demo", "Rating Component", "Star/score rating display", &RatingDemo.render/0},
+      {"metric_demo", "Metric Component", "Before/after comparison with delta", &MetricDemo.render/0},
+      {"toc_demo", "TOC Component", "Table of contents with dot leaders", &TOCDemo.render/0},
+      {"footnote_demo", "Footnote Component", "Numbered footnotes with separator", &FootnoteDemo.render/0},
+      {"paginator_demo", "Paginator Component", "Automatic page numbering in footer", &PaginatorDemo.render/0}
     ]
   end
 

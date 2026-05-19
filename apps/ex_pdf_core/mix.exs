@@ -24,7 +24,7 @@ defmodule ExPdfCore.MixProject do
   defp elixirc_paths(_), do: ["lib"]
 
   def application do
-    [extra_applications: [:logger, :crypto]]
+    [extra_applications: [:logger, :crypto, :inets, :ssl]]
   end
 
   defp deps do
