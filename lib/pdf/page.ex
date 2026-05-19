@@ -79,6 +79,15 @@ defmodule Pdf.Page do
     push(page, [line_join(style), "j"])
   end
 
+  def set_dash(page, [], 0) do
+    push(page, ["[] 0 d"])
+  end
+
+  def set_dash(page, dash_array, phase) when is_list(dash_array) do
+    arr = "[" <> Enum.join(dash_array, " ") <> "]"
+    push(page, ["#{arr} #{phase} d"])
+  end
+
   defp line_join(:miter), do: 0
   defp line_join(:round), do: 1
   defp line_join(:bevel), do: 2

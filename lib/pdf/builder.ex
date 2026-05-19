@@ -111,7 +111,84 @@ defmodule Pdf.Builder do
     Pdf.on_page(doc, name, func)
   end
 
+  # ── Component renderers (box, row, column) — must come first ────
+  # These patterns also contain keys like :background, :size, etc.
+  # so they must match before the simpler map-based element renderers.
+
+  defp render_element(%{box: {x, y}, size: {w, h}} = el, doc) do
+    children = Map.get(el, :children, [])
+    style = Map.drop(el, [:box, :size, :children])
+
+    Pdf.Component.Box.render(doc, {x, y}, {w, h}, style, fn doc, area ->
+      render_children(doc, children, area)
+    end)
+  end
+
+  defp render_element(%{row: {x, y}, size: {w, h}} = el, doc) do
+    children = Map.get(el, :children, [])
+    gap = Map.get(el, :gap, 0)
+
+    columns =
+      Enum.map(children, fn {weight, child_elements} ->
+        {weight, fn doc, area ->
+          render_children(doc, child_elements, area)
+        end}
+      end)
+
+    Pdf.Component.Row.render(doc, {x, y}, {w, h}, columns, gap: gap)
+  end
+
+  defp render_element(%{column: {x, y}, size: {w, _h}} = el, doc) do
+    children = Map.get(el, :children, [])
+    gap = Map.get(el, :gap, 0)
+    h = elem(Map.get(el, :size), 1)
+
+    rows =
+      Enum.map(children, fn {height, child_elements} ->
+        {height, fn doc, area ->
+          render_children(doc, child_elements, area)
+        end}
+      end)
+
+    Pdf.Component.Column.render(doc, {x, y}, {w, h}, rows, gap: gap)
+  end
+
   # ── Map-based element renderers ─────────────────────────────────
+
+  defp render_element(%{avatar: {x, y}} = el, doc) do
+    style = Map.drop(el, [:avatar])
+    Pdf.Component.Avatar.render(doc, {x, y}, style)
+  end
+
+  defp render_element(%{divider: {x, y}} = el, doc) do
+    style = Map.drop(el, [:divider])
+    Pdf.Component.Divider.render(doc, {x, y}, style)
+  end
+
+  defp render_element(%{badge: {x, y}} = el, doc) do
+    style = Map.drop(el, [:badge])
+    Pdf.Component.Badge.render(doc, {x, y}, style)
+  end
+
+  defp render_element(%{chip: {x, y}} = el, doc) do
+    style = Map.drop(el, [:chip])
+    {doc, _width} = Pdf.Component.Chip.render(doc, {x, y}, style)
+    doc
+  end
+
+  defp render_element(%{progress: {x, y}} = el, doc) do
+    style = Map.drop(el, [:progress])
+    Pdf.Component.Progress.render(doc, {x, y}, style)
+  end
+
+  defp render_element(%{card: {x, y}, size: {w, h}} = el, doc) do
+    children = Map.get(el, :children, [])
+    style = Map.drop(el, [:card, :size, :children])
+
+    Pdf.Component.Card.render(doc, {x, y}, {w, h}, style, fn doc, area ->
+      render_children(doc, children, area)
+    end)
+  end
 
   defp render_element(%{text: string} = el, doc) do
     style = Map.drop(el, [:text])
@@ -155,20 +232,27 @@ defmodule Pdf.Builder do
     fill = Map.get(el, :fill)
     stroke = Map.get(el, :stroke)
     lw = Map.get(el, :line_width, 0.5)
+    r = Map.get(el, :border_radius, 0)
 
     doc = Pdf.save_state(doc)
     doc = Pdf.set_line_width(doc, lw)
 
+    draw_rect = if r > 0 do
+      &Pdf.rounded_rectangle(&1, {x, y}, {w, h}, r)
+    else
+      &Pdf.rectangle(&1, {x, y}, {w, h})
+    end
+
     doc =
       if fill do
-        doc |> Pdf.set_fill_color(fill) |> Pdf.rectangle({x, y}, {w, h}) |> Pdf.fill()
+        doc |> Pdf.set_fill_color(fill) |> draw_rect.() |> Pdf.fill()
       else
         doc
       end
 
     doc =
       if stroke do
-        doc |> Pdf.set_stroke_color(stroke) |> Pdf.rectangle({x, y}, {w, h}) |> Pdf.stroke()
+        doc |> Pdf.set_stroke_color(stroke) |> draw_rect.() |> Pdf.stroke()
       else
         doc
       end
@@ -189,7 +273,7 @@ defmodule Pdf.Builder do
     |> Pdf.restore_state()
   end
 
-  # ── Element renderers ──────────────────────────────────────────────
+  # ── Tuple-based element renderers ────────────────────────────────
 
   defp render_element({:text, string}, doc) do
     Pdf.text(doc, string)
@@ -259,4 +343,84 @@ defmodule Pdf.Builder do
   defp render_element({:set_font, name, size, opts}, doc) do
     Pdf.set_font(doc, name, size, opts)
   end
+
+  # ── Child positioning helpers ──────────────────────────────────────
+
+  defp render_children(doc, children, area) do
+    children
+    |> List.flatten()
+    |> Enum.reduce(doc, fn child, doc ->
+      child
+      |> offset_child(area)
+      |> render_element(doc)
+    end)
+  end
+
+  defp offset_child(%{position: :absolute} = child, _area) do
+    Map.delete(child, :position)
+  end
+
+  defp offset_child(%{text: _} = child, area) do
+    x = Map.get(child, :x, 0) + area.x
+    y = Map.get(child, :y, 0) + area.y
+    Map.merge(child, %{x: x, y: y})
+  end
+
+  defp offset_child(%{rect: {rx, ry}, size: _} = child, area) do
+    %{child | rect: {rx + area.x, ry + area.y}}
+  end
+
+  defp offset_child(%{line_from: {x1, y1}, line_to: {x2, y2}} = child, area) do
+    %{child | line_from: {x1 + area.x, y1 + area.y}, line_to: {x2 + area.x, y2 + area.y}}
+  end
+
+  defp offset_child(%{avatar: {ax, ay}} = child, area) do
+    %{child | avatar: {ax + area.x, ay + area.y}}
+  end
+
+  defp offset_child(%{divider: {dx, dy}} = child, area) do
+    %{child | divider: {dx + area.x, dy + area.y}}
+  end
+
+  defp offset_child(%{badge: {bx, by}} = child, area) do
+    %{child | badge: {bx + area.x, by + area.y}}
+  end
+
+  defp offset_child(%{chip: {cx, cy}} = child, area) do
+    %{child | chip: {cx + area.x, cy + area.y}}
+  end
+
+  defp offset_child(%{progress: {px, py}} = child, area) do
+    %{child | progress: {px + area.x, py + area.y}}
+  end
+
+  defp offset_child(%{card: {cx, cy}} = child, area) do
+    child = %{child | card: {cx + area.x, cy + area.y}}
+    resolve_child_size(child, area)
+  end
+
+  defp offset_child(%{box: {bx, by}} = child, area) do
+    child = %{child | box: {bx + area.x, by + area.y}}
+    resolve_child_size(child, area)
+  end
+
+  defp offset_child(%{row: {rx, ry}} = child, area) do
+    child = %{child | row: {rx + area.x, ry + area.y}}
+    resolve_child_size(child, area)
+  end
+
+  defp offset_child(%{column: {cx, cy}} = child, area) do
+    child = %{child | column: {cx + area.x, cy + area.y}}
+    resolve_child_size(child, area)
+  end
+
+  defp offset_child(child, _area), do: child
+
+  # ── Relative size resolution ─────────────────────────────────────
+
+  defp resolve_child_size(%{size: size} = child, area) do
+    %{child | size: Pdf.Dimension.resolve_size(size, area)}
+  end
+
+  defp resolve_child_size(child, _area), do: child
 end

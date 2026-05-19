@@ -149,6 +149,235 @@ defmodule Pdf.BuilderTest do
     end
   end
 
+  describe "map-based box component" do
+    test "renders box with children" do
+      template = [
+        %{box: {50, 700}, size: {200, 100}, border: 1, children: [
+          %{text: "Inside box", x: 5, y: -14}
+        ]}
+      ]
+
+      doc = Builder.render(template, %{compress: false})
+      output = export(doc.current)
+      assert output =~ "Inside box"
+      assert output =~ "re"
+      assert output =~ "S"
+    end
+
+    test "children use relative positioning by default" do
+      template = [
+        %{box: {100, 500}, size: {200, 100}, padding: 10, children: [
+          %{text: "Relative", x: 0, y: -14}
+        ]}
+      ]
+
+      # Should compile and render without error
+      doc = Builder.render(template, %{compress: false})
+      output = export(doc.current)
+      assert output =~ "Relative"
+    end
+
+    test "children with position: :absolute use page coordinates" do
+      template = [
+        %{box: {100, 500}, size: {200, 100}, padding: 10, children: [
+          %{text: "Absolute", x: 300, y: 800, position: :absolute}
+        ]}
+      ]
+
+      doc = Builder.render(template, %{compress: false})
+      output = export(doc.current)
+      assert output =~ "Absolute"
+    end
+
+    test "box with background and border_radius" do
+      template = [
+        %{box: {50, 700}, size: {200, 100}, background: {0.9, 0.9, 1.0}, border_radius: 10, children: [
+          %{text: "Rounded", x: 5, y: -14}
+        ]}
+      ]
+
+      doc = Builder.render(template, %{compress: false})
+      output = export(doc.current)
+      assert output =~ "0.9 0.9 1.0 rg"
+      assert output =~ "c"
+      assert output =~ "Rounded"
+    end
+
+    test "nested boxes" do
+      template = [
+        %{box: {50, 700}, size: {300, 200}, padding: 10, children: [
+          %{box: {0, 0}, size: {100, 50}, border: 1, children: [
+            %{text: "Nested", x: 5, y: -14}
+          ]}
+        ]}
+      ]
+
+      doc = Builder.render(template, %{compress: false})
+      output = export(doc.current)
+      assert output =~ "Nested"
+    end
+  end
+
+  describe "map-based row component" do
+    test "renders row with children" do
+      template = [
+        %{row: {50, 700}, size: {400, 80}, children: [
+          {1, [%{text: "Col 1", x: 5, y: -14}]},
+          {1, [%{text: "Col 2", x: 5, y: -14}]}
+        ]}
+      ]
+
+      doc = Builder.render(template, %{compress: false})
+      output = export(doc.current)
+      assert output =~ "Col 1"
+      assert output =~ "Col 2"
+    end
+
+    test "row with gap" do
+      template = [
+        %{row: {50, 700}, size: {400, 80}, gap: 10, children: [
+          {1, [%{text: "Left", x: 0, y: -14}]},
+          {1, [%{text: "Right", x: 0, y: -14}]}
+        ]}
+      ]
+
+      doc = Builder.render(template, %{compress: false})
+      output = export(doc.current)
+      assert output =~ "Left"
+      assert output =~ "Right"
+    end
+  end
+
+  describe "map-based column component" do
+    test "renders column with children" do
+      template = [
+        %{column: {50, 700}, size: {300, 200}, children: [
+          {50, [%{text: "Row 1", x: 5, y: -14}]},
+          {50, [%{text: "Row 2", x: 5, y: -14}]}
+        ]}
+      ]
+
+      doc = Builder.render(template, %{compress: false})
+      output = export(doc.current)
+      assert output =~ "Row 1"
+      assert output =~ "Row 2"
+    end
+
+    test "column with gap" do
+      template = [
+        %{column: {50, 700}, size: {300, 200}, gap: 10, children: [
+          {40, [%{text: "First", x: 0, y: -14}]},
+          {40, [%{text: "Second", x: 0, y: -14}]}
+        ]}
+      ]
+
+      doc = Builder.render(template, %{compress: false})
+      output = export(doc.current)
+      assert output =~ "First"
+      assert output =~ "Second"
+    end
+  end
+
+  describe "relative sizing" do
+    test "box with size: {:full, N} takes parent width" do
+      template = [
+        %{box: {50, 700}, size: {300, 200}, padding: 10, children: [
+          %{box: {0, 0}, size: {:full, 50}, border: 1, children: [
+            %{text: "Full width child", x: 5, y: -14}
+          ]}
+        ]}
+      ]
+
+      doc = Builder.render(template, %{compress: false})
+      output = export(doc.current)
+      assert output =~ "Full width child"
+    end
+
+    test "box with percentage width" do
+      template = [
+        %{box: {50, 700}, size: {400, 200}, padding: 0, children: [
+          %{box: {0, 0}, size: {"50%", 50}, border: 1, children: [
+            %{text: "Half width", x: 5, y: -14}
+          ]}
+        ]}
+      ]
+
+      doc = Builder.render(template, %{compress: false})
+      output = export(doc.current)
+      assert output =~ "Half width"
+    end
+
+    test "box with percentage height" do
+      template = [
+        %{box: {50, 700}, size: {300, 200}, padding: 0, children: [
+          %{box: {0, 0}, size: {100, "50%"}, border: 1, children: [
+            %{text: "Half height", x: 5, y: -14}
+          ]}
+        ]}
+      ]
+
+      doc = Builder.render(template, %{compress: false})
+      output = export(doc.current)
+      assert output =~ "Half height"
+    end
+
+    test "box with {:full, :full} takes both dimensions from parent" do
+      template = [
+        %{box: {50, 700}, size: {300, 200}, padding: 10, children: [
+          %{box: {0, 0}, size: {:full, :full}, background: {0.9, 0.9, 1.0}, children: [
+            %{text: "Fills parent", x: 5, y: -14}
+          ]}
+        ]}
+      ]
+
+      doc = Builder.render(template, %{compress: false})
+      output = export(doc.current)
+      assert output =~ "Fills parent"
+    end
+
+    test "box with {\"100%\", \"100%\"} is equivalent to {:full, :full}" do
+      template = [
+        %{box: {50, 700}, size: {300, 200}, padding: 0, children: [
+          %{box: {0, 0}, size: {"100%", "100%"}, border: 1, children: [
+            %{text: "Full pct", x: 5, y: -14}
+          ]}
+        ]}
+      ]
+
+      doc = Builder.render(template, %{compress: false})
+      output = export(doc.current)
+      assert output =~ "Full pct"
+    end
+
+    test "nested boxes with relative sizing" do
+      template = [
+        %{box: {50, 700}, size: {400, 300}, padding: 10, children: [
+          %{box: {0, 0}, size: {:full, 100}, padding: 5, border: 1, children: [
+            %{box: {0, 0}, size: {"50%", :full}, background: {1.0, 0.9, 0.9}, children: [
+              %{text: "Deep nested", x: 5, y: -14}
+            ]}
+          ]}
+        ]}
+      ]
+
+      doc = Builder.render(template, %{compress: false})
+      output = export(doc.current)
+      assert output =~ "Deep nested"
+    end
+
+    test "top-level box ignores relative sizing (no parent)" do
+      template = [
+        %{box: {50, 700}, size: {300, 200}, border: 1, children: [
+          %{text: "Top level", x: 5, y: -14}
+        ]}
+      ]
+
+      doc = Builder.render(template, %{compress: false})
+      output = export(doc.current)
+      assert output =~ "Top level"
+    end
+  end
+
   describe "render_into/2" do
     test "renders elements into existing document" do
       doc =

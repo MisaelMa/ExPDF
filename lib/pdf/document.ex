@@ -132,6 +132,7 @@ defmodule Pdf.Document do
     {:set_line_width, quote(do: [width])},
     {:set_line_cap, quote(do: [style])},
     {:set_line_join, quote(do: [style])},
+    {:set_dash, quote(do: [dash_array, phase])},
     {:rectangle, quote(do: [{x, y}, {w, h}])},
     {:line, quote(do: [{x, y}, {x2, y2}])},
     {:move_to, quote(do: [{x, y}])},

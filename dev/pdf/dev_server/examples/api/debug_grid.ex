@@ -1,0 +1,56 @@
+defmodule Pdf.DevServer.Examples.Api.DebugGrid do
+  @moduledoc false
+
+  def render do
+    Pdf.new(size: :a4, margin: %{top: 60, bottom: 50, left: 50, right: 50})
+    |> Pdf.set_font("Helvetica", 12)
+    # Page 1: area: :content (default)
+    |> Pdf.debug_grid(%{grid: :both, spacing: 10, area: :content})
+    |> Pdf.text("Page 1 — area: :content (default)", %{font_size: 20, bold: true, color: :navy})
+    |> Pdf.spacer(8)
+    |> Pdf.text("Grid only inside the margins. Red border = margin boundary.")
+    |> Pdf.spacer(5)
+    |> Pdf.text("Blue line = cursor Y position.")
+    |> Pdf.spacer(15)
+    |> Pdf.text("Options:", %{bold: true})
+    |> Pdf.spacer(5)
+    |> Pdf.text("  grid:   :both | :horizontal | :vertical", %{font: "Courier", font_size: 10})
+    |> Pdf.text("  area:   :content | :page | :margins", %{font: "Courier", font_size: 10})
+    |> Pdf.text("  spacing: 10  (distancia entre lineas en points)", %{font: "Courier", font_size: 10})
+    |> Pdf.text("  color:  {0.85, 0.85, 0.85}", %{font: "Courier", font_size: 10})
+    |> Pdf.text("  labels: true | false", %{font: "Courier", font_size: 10})
+    |> Pdf.text("  info:   true | false", %{font: "Courier", font_size: 10})
+    |> Pdf.spacer(15)
+    |> Pdf.horizontal_line(%{stroke_color: :navy})
+    |> Pdf.spacer(5)
+    |> Pdf.text("Builder: debug: true  or  debug: %{area: :page, spacing: 20}", %{font: "Courier", font_size: 9, color: :gray})
+    # Page 2: area: :page
+    |> Pdf.page_break()
+    |> Pdf.debug_grid(%{grid: :both, spacing: 10, area: :page})
+    |> Pdf.text("Page 2 — area: :page", %{font_size: 20, bold: true, color: :navy})
+    |> Pdf.spacer(8)
+    |> Pdf.text("Grid covers the entire page (0,0 to page edge).")
+    |> Pdf.spacer(5)
+    |> Pdf.text("Useful to see absolute coordinates and margin zones.")
+    # Page 3: area: :margins
+    |> Pdf.page_break()
+    |> Pdf.debug_grid(%{grid: :both, spacing: 20, area: :margins, color: {1.0, 0.85, 0.85}})
+    |> Pdf.text("Page 3 — area: :margins", %{font_size: 20, bold: true, color: :navy})
+    |> Pdf.spacer(8)
+    |> Pdf.text("Grid only in the margin zones (outside content area).")
+    |> Pdf.spacer(5)
+    |> Pdf.text("Content area stays clean — helpful to debug header/footer space.")
+    # Page 4: horizontal only
+    |> Pdf.page_break()
+    |> Pdf.debug_grid(%{grid: :horizontal, spacing: 5, area: :content})
+    |> Pdf.text("Page 4 — grid: :horizontal, step: 5", %{font_size: 20, bold: true, color: :navy})
+    |> Pdf.spacer(8)
+    |> Pdf.text("Only horizontal lines, every 20pt. Great for checking vertical alignment.")
+    # Page 5: vertical only
+    |> Pdf.page_break()
+    |> Pdf.debug_grid(%{grid: :vertical, spacing: 20, area: :content})
+    |> Pdf.text("Page 5 — grid: :vertical, step: 20", %{font_size: 20, bold: true, color: :navy})
+    |> Pdf.spacer(8)
+    |> Pdf.text("Only vertical lines. Great for checking column alignment.")
+  end
+end

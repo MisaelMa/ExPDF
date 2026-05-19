@@ -258,6 +258,16 @@ defmodule Pdf do
   def set_line_join(document, style), do: Document.set_line_join(document, style)
 
   @doc """
+  Set the dash pattern for stroking operations.
+
+  - `set_dash(doc, [3, 3], 0)` — dashed line (3 on, 3 off)
+  - `set_dash(doc, [6, 2], 0)` — long dash
+  - `set_dash(doc, [], 0)` — reset to solid
+  """
+  def set_dash(document, dash_array, phase \\ 0),
+    do: Document.set_dash(document, dash_array, phase)
+
+  @doc """
   Draw a rectangle from coordinates x,y (lower left corner) for a given width and height.
   """
   @spec rectangle(Document.t(), coords, dimension) :: Document.t()
@@ -711,6 +721,7 @@ defmodule Pdf do
   end
 
   def resolve_style(_document, style_attrs) when is_map(style_attrs), do: style_attrs
+  def resolve_style(_document, opts) when is_list(opts), do: Map.new(opts)
   def resolve_style(_document, nil), do: %{}
 
   @doc """
@@ -732,6 +743,78 @@ defmodule Pdf do
   """
   def clip(document) do
     Document.clip(document)
+  end
+
+  # ── Components ───────────────────────────────────────────────────
+
+  @doc """
+  Render a box container at `{x, y}` with size `{w, h}`.
+
+  Supports padding, margin, border, border_radius, and background.
+  The callback receives `(doc, %{x, y, width, height})` with the inner area.
+
+  Size supports relative dimensions:
+  - `:full` — 100% of the document's content area
+  - `"50%"` — percentage of the content area
+  - `number` — absolute points (default)
+
+  ## Example
+
+      doc
+      |> Pdf.box({50, 700}, {:full, 200}, %{padding: 10, border: 1}, fn doc, area ->
+        Pdf.text_at(doc, {area.x + 5, area.y - 14}, "Inside the box")
+      end)
+  """
+  def box(document, pos, size, style \\ %{}, callback) do
+    size = maybe_resolve_size(document, size)
+    Pdf.Component.Box.render(document, pos, size, style, callback)
+  end
+
+  @doc """
+  Distribute content horizontally in columns by weight.
+
+  `columns` is a list of `{weight, callback}` tuples.
+  Size supports relative dimensions (`:full`, `"50%"`).
+
+  ## Example
+
+      doc
+      |> Pdf.row({50, 700}, {:full, 80}, [
+        {1, fn doc, area -> Pdf.text_at(doc, {area.x, area.y - 14}, "Left") end},
+        {2, fn doc, area -> Pdf.text_at(doc, {area.x, area.y - 14}, "Center") end}
+      ], gap: 10)
+  """
+  def row(document, pos, size, columns, opts \\ []) do
+    size = maybe_resolve_size(document, size)
+    Pdf.Component.Row.render(document, pos, size, columns, opts)
+  end
+
+  @doc """
+  Stack content vertically with fixed heights.
+
+  `rows` is a list of `{height, callback}` tuples.
+  Size supports relative dimensions (`:full`, `"50%"`).
+
+  ## Example
+
+      doc
+      |> Pdf.column({50, 700}, {:full, 400}, [
+        {50, fn doc, area -> Pdf.text_at(doc, {area.x, area.y - 14}, "Row 1") end},
+        {80, fn doc, area -> Pdf.text_at(doc, {area.x, area.y - 14}, "Row 2") end}
+      ], gap: 5)
+  """
+  def column(document, pos, size, rows, opts \\ []) do
+    size = maybe_resolve_size(document, size)
+    Pdf.Component.Column.render(document, pos, size, rows, opts)
+  end
+
+  defp maybe_resolve_size(document, {w, h} = size) do
+    if Pdf.Dimension.needs_resolution?(size) do
+      area = content_area(document)
+      Pdf.Dimension.resolve_size({w, h}, area)
+    else
+      size
+    end
   end
 
   # ── Debug ────────────────────────────────────────────────────────

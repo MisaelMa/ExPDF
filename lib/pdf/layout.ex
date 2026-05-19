@@ -21,6 +21,7 @@ defmodule Pdf.Layout do
       end)
   """
   def box(page, {x, y}, {w, h}, opts \\ [], callback) do
+    {w, h} = maybe_resolve_size({w, h}, opts)
     style = parse_style(opts)
     {mt, mr, mb, ml} = style.margin
     {pt, pr, pb, pl} = style.padding
@@ -68,6 +69,7 @@ defmodule Pdf.Layout do
       ])
   """
   def row(page, {x, y}, {w, h}, columns, opts \\ []) do
+    {w, h} = maybe_resolve_size({w, h}, opts)
     style = parse_style(opts)
     {_mt, _mr, _mb, _ml} = style.margin
     gap = Keyword.get(opts, :gap, 0)
@@ -99,7 +101,8 @@ defmodule Pdf.Layout do
         {20, fn page, area -> Page.text_at(page, {area.x, area.y - 12}, "Row 2") end}
       ])
   """
-  def column(page, {x, y}, {w, _h}, rows, opts \\ []) do
+  def column(page, {x, y}, {w, h}, rows, opts \\ []) do
+    {w, _h} = maybe_resolve_size({w, h}, opts)
     gap = Keyword.get(opts, :gap, 0)
 
     {page, _y} =
@@ -109,6 +112,13 @@ defmodule Pdf.Layout do
       end)
 
     page
+  end
+
+  defp maybe_resolve_size(size, opts) do
+    case Keyword.get(opts, :parent) do
+      %{width: _, height: _} = parent -> Pdf.Dimension.resolve_size(size, parent)
+      _ -> size
+    end
   end
 
   defp parse_style(opts) do
