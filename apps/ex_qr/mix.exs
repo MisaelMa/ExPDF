@@ -15,8 +15,10 @@ defmodule ExQr.MixProject do
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       deps: deps(),
+      docs: docs(),
       package: package(),
-      description: "Pure Elixir QR code encoding — versions 1-20, EC levels L/M/Q/H. No external dependencies."
+      description: "Pure Elixir QR code encoding — versions 1-20, EC levels L/M/Q/H. No external dependencies.",
+      releaser: [publish: true]
     ]
   end
 
@@ -28,7 +30,18 @@ defmodule ExQr.MixProject do
   end
 
   defp deps do
-    []
+    [
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
+    ]
+  end
+
+  defp docs do
+    [
+      main: "readme",
+      extras: ["README.md"],
+      source_url: @github_url,
+      source_ref: "v#{@version}"
+    ]
   end
 
   defp package do

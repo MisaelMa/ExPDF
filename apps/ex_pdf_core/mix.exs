@@ -1,7 +1,7 @@
 defmodule ExPdfCore.MixProject do
   use Mix.Project
 
-  @version "2.0.0"
+  @version "1.0.0"
   @github_url "https://github.com/MisaelMa/ExPDF"
 
   def project do
@@ -15,8 +15,10 @@ defmodule ExPdfCore.MixProject do
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       deps: deps(),
+      docs: docs(),
       package: package(),
-      description: "Core PDF writer engine — document, page, export, fonts, layout primitives."
+      description: "Core PDF writer engine — document, page, export, fonts, layout primitives.",
+      releaser: [publish: true]
     ]
   end
 
@@ -28,14 +30,25 @@ defmodule ExPdfCore.MixProject do
   end
 
   defp deps do
-    []
+    [
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
+    ]
+  end
+
+  defp docs do
+    [
+      main: "readme",
+      extras: ["README.md"],
+      source_url: @github_url,
+      source_ref: "v#{@version}"
+    ]
   end
 
   defp package do
     [
       maintainers: ["Misael Sánchez"],
       licenses: ["MIT"],
-      files: ~w(lib mix.exs fonts),
+      files: ~w(lib mix.exs fonts README.md),
       links: %{"GitHub" => @github_url}
     ]
   end

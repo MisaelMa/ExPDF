@@ -1,7 +1,7 @@
 defmodule ExPdfComponents.MixProject do
   use Mix.Project
 
-  @version "2.0.0"
+  @version "1.0.0"
   @github_url "https://github.com/MisaelMa/ExPDF"
 
   def project do
@@ -15,8 +15,10 @@ defmodule ExPdfComponents.MixProject do
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       deps: deps(),
+      docs: docs(),
       package: package(),
-      description: "Reusable PDF components — Avatar, Badge, Card, Chip, Divider, Progress, Builder, StyledTable."
+      description: "Reusable PDF components — Avatar, Badge, Card, Chip, Divider, Progress, Builder, StyledTable.",
+      releaser: [publish: true]
     ]
   end
 
@@ -31,7 +33,17 @@ defmodule ExPdfComponents.MixProject do
     [
       {:ex_pdf_core, in_umbrella: true},
       {:ex_barcode, in_umbrella: true},
-      {:ex_qr, in_umbrella: true}
+      {:ex_qr, in_umbrella: true},
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
+    ]
+  end
+
+  defp docs do
+    [
+      main: "readme",
+      extras: ["README.md"],
+      source_url: @github_url,
+      source_ref: "v#{@version}"
     ]
   end
 
@@ -39,7 +51,7 @@ defmodule ExPdfComponents.MixProject do
     [
       maintainers: ["Misael Sánchez"],
       licenses: ["MIT"],
-      files: ~w(lib mix.exs),
+      files: ~w(lib mix.exs README.md),
       links: %{"GitHub" => @github_url}
     ]
   end

@@ -1,7 +1,7 @@
 defmodule ExPdfRead.MixProject do
   use Mix.Project
 
-  @version "2.0.0"
+  @version "1.0.0"
   @github_url "https://github.com/MisaelMa/ExPDF"
 
   def project do
@@ -14,8 +14,10 @@ defmodule ExPdfRead.MixProject do
       lockfile: "../../mix.lock",
       elixir: "~> 1.14",
       deps: deps(),
+      docs: docs(),
       package: package(),
-      description: "PDF reader — text extraction, layout, links, images, metadata, encryption, AcroForm."
+      description: "PDF reader — text extraction, layout, links, images, metadata, encryption, AcroForm.",
+      releaser: [publish: true]
     ]
   end
 
@@ -25,7 +27,17 @@ defmodule ExPdfRead.MixProject do
 
   defp deps do
     [
-      {:ex_pdf_core, in_umbrella: true}
+      {:ex_pdf_core, in_umbrella: true},
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
+    ]
+  end
+
+  defp docs do
+    [
+      main: "readme",
+      extras: ["README.md"],
+      source_url: @github_url,
+      source_ref: "v#{@version}"
     ]
   end
 
@@ -33,7 +45,7 @@ defmodule ExPdfRead.MixProject do
     [
       maintainers: ["Misael Sánchez"],
       licenses: ["MIT"],
-      files: ~w(lib priv mix.exs),
+      files: ~w(lib priv mix.exs README.md),
       links: %{"GitHub" => @github_url}
     ]
   end

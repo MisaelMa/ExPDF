@@ -1,0 +1,3807 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.2">
+    <meta name="project" content="ex_pdf_core v1.0.0">
+
+
+    <title>Pdf — ex_pdf_core v1.0.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
+
+    <script defer src="dist/sidebar_items-73931FEE.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-Y2MUTVIN.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+ex_pdf_core
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.0.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of ex_pdf_core</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Pdf</span> 
+      <small class="app-vsn" translate="no">(ex_pdf_core v1.0.0)</small>
+
+    </h1>
+
+<a href="Pdf.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>The missing PDF library for Elixir.</p><h2 id="module-usage" class="section-heading"><a href="#module-usage" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Usage</span></h2><pre><code class="makeup elixir" translate="no"><span class="nc">Pdf</span><span class="o">.</span><span class="n">build</span><span class="p" data-group-id="2726343684-1">(</span><span class="p" data-group-id="2726343684-2">[</span><span class="ss">size</span><span class="p">:</span><span class="w"> </span><span class="ss">:a4</span><span class="p">,</span><span class="w"> </span><span class="ss">compress</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="2726343684-2">]</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="2726343684-3">fn</span><span class="w"> </span><span class="n">pdf</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+  </span><span class="n">pdf</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">set_info</span><span class="p" data-group-id="2726343684-4">(</span><span class="ss">title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Demo PDF&quot;</span><span class="p" data-group-id="2726343684-4">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p" data-group-id="2726343684-5">(</span><span class="s">&quot;Helvetica&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="2726343684-5">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="2726343684-6">(</span><span class="p" data-group-id="2726343684-7">{</span><span class="mi">200</span><span class="p">,</span><span class="mi">200</span><span class="p" data-group-id="2726343684-7">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Welcome to Pdf&quot;</span><span class="p" data-group-id="2726343684-6">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">write_to</span><span class="p" data-group-id="2726343684-8">(</span><span class="s">&quot;test.pdf&quot;</span><span class="p" data-group-id="2726343684-8">)</span><span class="w">
+</span><span class="k" data-group-id="2726343684-3">end</span><span class="p" data-group-id="2726343684-1">)</span></code></pre><h2 id="module-page-sizes" class="section-heading"><a href="#module-page-sizes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Page sizes</span></h2><p>The available page sizes are:</p><ul><li><code class="inline">:a0</code> - <code class="inline">:a9</code></li><li><code class="inline">:b0</code> - <code class="inline">:b9</code></li><li><code class="inline">:c5e</code></li><li><code class="inline">:comm10e</code></li><li><code class="inline">:dle</code></li><li><code class="inline">:executive</code></li><li><code class="inline">:folio</code></li><li><code class="inline">:ledger</code></li><li><code class="inline">:legal</code></li><li><code class="inline">:letter</code></li><li><code class="inline">:tabloid</code></li><li>a custom size <code class="inline">[width, height]</code> in Pdf points.</li></ul><p>or you can also specify a tuple <code class="inline">{size, :landscape}</code>.</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h2>
+<div class="summary-types summary">
+  <h3>
+    <a href="#types">Types</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:cap_style/0" data-no-tooltip="" translate="no">cap_style()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>A code specifying the shape of the endpoints for an open path that is stroked.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:cmyk/0" data-no-tooltip="" translate="no">cmyk()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Specify a color by it's CMYK make-up.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:color_name/0" data-no-tooltip="" translate="no">color_name()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Use one of the colors in the <a href="Pdf.Color.html"><code class="inline">Pdf.Color</code></a> module.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:coords/0" data-no-tooltip="" translate="no">coords()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Most functions take a coordinates tuple, <code class="inline">{x, y}</code>.
+In Pdf these start from the bottom-left of the page.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:dimension/0" data-no-tooltip="" translate="no">dimension()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Width and height expressed in Pdf points</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:height/0" data-no-tooltip="" translate="no">height()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The height in points</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:join_style/0" data-no-tooltip="" translate="no">join_style()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The line join style shall specify the shape to be used at the corners of paths that are stroked.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:rgb/0" data-no-tooltip="" translate="no">rgb()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Specify a color by it's RGB make-up.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:width/0" data-no-tooltip="" translate="no">width()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The width in points</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:x/0" data-no-tooltip="" translate="no">x()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The x-coordinate</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:y/0" data-no-tooltip="" translate="no">y()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The y-coordinate</p></div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h3>
+    <a href="#functions">Functions</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#add_font/2" data-no-tooltip="" translate="no">add_font(document, path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Add a font to the list of available fonts.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#add_image/3" data-no-tooltip="" translate="no">add_image(document, coords, image_path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Add an images (PNG, or JPEG only) at the given coordinates.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#add_image/4" data-no-tooltip="" translate="no">add_image(document, coords, image_path, opts)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Add an images (PNG, or JPEG only) at the given coordinates.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#add_page/2" data-no-tooltip="" translate="no">add_page(document, size)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Add a new page to the Pdf with the given page size.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#autoprint/1" data-no-tooltip="" translate="no">autoprint(document)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Adds an autoprint action to the Pdf.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#background/2" data-no-tooltip="" translate="no">background(document, style_or_name \\ %{})</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Fill the current page background with a color.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#box/5" data-no-tooltip="" translate="no">box(document, pos, size, style \\ %{}, callback)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Render a box container at <code class="inline">{x, y}</code> with size <code class="inline">{w, h}</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#build/2" data-no-tooltip="" translate="no">build(opts \\ [], func)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Builds a PDF document.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#cleanup/1" data-no-tooltip="" translate="no">cleanup(document)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>No-op. Kept for backwards compatibility.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#clip/1" data-no-tooltip="" translate="no">clip(document)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Set the current path as a clipping boundary.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#close_path/1" data-no-tooltip="" translate="no">close_path(document)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Close the current path by drawing a straight line back to the starting point.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#cm/1" data-no-tooltip="" translate="no">cm(x)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Convert the given value from cm to Pdf points</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#column/5" data-no-tooltip="" translate="no">column(document, pos, size, rows, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Stack content vertically with fixed heights.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#content_area/1" data-no-tooltip="" translate="no">content_area(document)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the content area <code class="inline">%{x, y, width, height}</code> based on margins.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#cursor/1" data-no-tooltip="" translate="no">cursor(document)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets the current cursor Y position (vertical).</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#cursor_xy/1" data-no-tooltip="" translate="no">cursor_xy(document)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets the current cursor position as <code class="inline">%{x: x, y: y}</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#curve_to/4" data-no-tooltip="" translate="no">curve_to(document, cp1, cp2, end_point)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Draw a Bézier curve from the current point through control points to the end point.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#debug_grid/2" data-no-tooltip="" translate="no">debug_grid(document, opts \\ %{})</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Draw a debug grid overlay on the current page.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#delete/1" data-no-tooltip="" translate="no">delete(document)</a>
+
+          <span class="deprecated" title="Use cleanup/1 instead">deprecated</span>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#export/1" data-no-tooltip="" translate="no">export(document)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Export the Pdf to a binary representation.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#fill/1" data-no-tooltip="" translate="no">fill(document)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Fill the current drawing with the previously set color.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#fill_and_stroke/1" data-no-tooltip="" translate="no">fill_and_stroke(document)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Fill and stroke the current path.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#horizontal_line/2" data-no-tooltip="" translate="no">horizontal_line(document, style_or_name \\ %{})</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Draw a horizontal line at the current cursor position across the content width.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#inches/1" data-no-tooltip="" translate="no">inches(x)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Convert the given value from inches to Pdf points</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#line/3" data-no-tooltip="" translate="no">line(document, coords, coords_to)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Draw a line between 2 points.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#line_append/2" data-no-tooltip="" translate="no">line_append(document, coords)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Draw a line from the last position to the given coordinates.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#mm/1" data-no-tooltip="" translate="no">mm(x)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Convert the given value from mm to Pdf points</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#move_down/2" data-no-tooltip="" translate="no">move_down(document, amount)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Move the cursor <code class="inline">amount</code> points down.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#move_right/2" data-no-tooltip="" translate="no">move_right(document, amount)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Move the cursor <code class="inline">amount</code> points to the right.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#move_to/2" data-no-tooltip="" translate="no">move_to(document, coords)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Move the cursor to the given coordinates.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#new/1" data-no-tooltip="" translate="no">new(opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Create a new Pdf document.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#on_page/3" data-no-tooltip="" translate="no">on_page(document, name, func)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Register a page template that runs on every new page.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#open/2" data-no-tooltip="" translate="no">open(opts \\ [], func)</a>
+
+          <span class="deprecated" title="Use build/2 instead">deprecated</span>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#page_break/2" data-no-tooltip="" translate="no">page_break(document, size \\ nil)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Insert a page break. Executes footer template on the current page
+and header/watermark templates on the new page.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#page_number/1" data-no-tooltip="" translate="no">page_number(document)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the current page number.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#picas/1" data-no-tooltip="" translate="no">picas(x)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Convert the given value from picas to Pdf points</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#pixels_to_points/2" data-no-tooltip="" translate="no">pixels_to_points(pixels, dpi \\ 300)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Convert the given value from pixels to Pdf points</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#points/1" data-no-tooltip="" translate="no">points(x)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The unit of measurement in a Pdf are points, where <em>1 point = 1/72 inch</em>.
+This means that a standard A4 page, 8.27 inch, translates to 595 points.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#rectangle/3" data-no-tooltip="" translate="no">rectangle(document, coords, dimensions)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Draw a rectangle from coordinates x,y (lower left corner) for a given width and height.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#register_style/3" data-no-tooltip="" translate="no">register_style(document, name, style_attrs)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Register a named style that can be referenced by atom in text/3, horizontal_line/2, etc.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#register_styles/2" data-no-tooltip="" translate="no">register_styles(document, styles)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Register multiple named styles at once from a map.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#reset_x/1" data-no-tooltip="" translate="no">reset_x(document)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Reset the cursor X position to 0.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#restore_state/1" data-no-tooltip="" translate="no">restore_state(document)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Restore a previously saved graphics state.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#rotate/2" data-no-tooltip="" translate="no">rotate(document, angle)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Rotate the coordinate system by the given angle in degrees.
+Must be used within <code class="inline">save_state/restore_state</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#rounded_rectangle/4" data-no-tooltip="" translate="no">rounded_rectangle(document, xy, wh, r)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Draw a rounded rectangle.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#row/5" data-no-tooltip="" translate="no">row(document, pos, size, columns, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Distribute content horizontally in columns by weight.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#save_state/1" data-no-tooltip="" translate="no">save_state(document)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Save the current graphics state. Use with <a href="#restore_state/1"><code class="inline">restore_state/1</code></a> to isolate
+transformations like rotation, translation, scaling, and opacity changes.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#scale/2" data-no-tooltip="" translate="no">scale(document, factors)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Scale the coordinate system by {sx, sy}.
+Must be used within <code class="inline">save_state/restore_state</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#set_author/2" data-no-tooltip="" translate="no">set_author(document, author)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets the author in the PDF information section.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#set_creator/2" data-no-tooltip="" translate="no">set_creator(document, creator)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets the creator in the PDF information section.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#set_cursor/2" data-no-tooltip="" translate="no">set_cursor(document, y)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Set the cursor Y position.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#set_cursor_x/2" data-no-tooltip="" translate="no">set_cursor_x(document, x)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Set the cursor X position.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#set_dash/3" data-no-tooltip="" translate="no">set_dash(document, dash_array, phase \\ 0)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Set the dash pattern for stroking operations.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#set_fill_color/2" data-no-tooltip="" translate="no">set_fill_color(document, color)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Set the color to use when filling.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#set_fill_opacity/2" data-no-tooltip="" translate="no">set_fill_opacity(document, opacity)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Set the fill opacity (0.0 fully transparent, 1.0 fully opaque).</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#set_font/3" data-no-tooltip="" translate="no">set_font(document, font_name, opts)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets the font that will be used for all text from here on.
+You can either specify the font size, or a list of options</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#set_font_size/2" data-no-tooltip="" translate="no">set_font_size(document, size)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets the font size.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#set_info/2" data-no-tooltip="" translate="no">set_info(document, info_list)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Set multiple keys in the PDF information section.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#set_keywords/2" data-no-tooltip="" translate="no">set_keywords(document, keywords)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets the keywords in the PDF information section.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#set_line_cap/2" data-no-tooltip="" translate="no">set_line_cap(document, style)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The line endings to draw, see <a href="#t:cap_style/0"><code class="inline">cap_style/0</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#set_line_join/2" data-no-tooltip="" translate="no">set_line_join(document, style)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The join style to use where lines meet, see <a href="#t:join_style/0"><code class="inline">join_style/0</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#set_line_width/2" data-no-tooltip="" translate="no">set_line_width(document, width)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The width to use when drawing lines.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#set_opacity/2" data-no-tooltip="" translate="no">set_opacity(document, opacity)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Set both fill and stroke opacity (0.0 fully transparent, 1.0 fully opaque).</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#set_producer/2" data-no-tooltip="" translate="no">set_producer(document, producer)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets the producer in the PDF information section.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#set_stroke_color/2" data-no-tooltip="" translate="no">set_stroke_color(document, color)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Set the color to use when drawing lines.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#set_stroke_opacity/2" data-no-tooltip="" translate="no">set_stroke_opacity(document, opacity)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Set the stroke opacity (0.0 fully transparent, 1.0 fully opaque).</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#set_subject/2" data-no-tooltip="" translate="no">set_subject(document, subject)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets the subject in the PDF information section.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#set_text_leading/2" data-no-tooltip="" translate="no">set_text_leading(document, leading)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Leading is a typography term that describes the distance between each line of text. The name comes from a time when typesetting was done by hand and pieces of lead were used to separate the lines.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#set_title/2" data-no-tooltip="" translate="no">set_title(document, title)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sets the title in the PDF information section.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#size/1" data-no-tooltip="" translate="no">size(document)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a <code class="inline">{width, height}</code> for the current page.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#spacer/2" data-no-tooltip="" translate="no">spacer(document, amount)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Add vertical space by moving the cursor down.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#stroke/1" data-no-tooltip="" translate="no">stroke(document)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Perform all the previous graphic commands.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#table/5" data-no-tooltip="" translate="no">table(document, coords, dimensions, data, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Add a table in the document at the given coordinates.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#table!/5" data-no-tooltip="" translate="no">table!(document, coords, dimensions, data, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Add a table in the document at the given coordinates.
+Raises an exception if the table does not fit the dimensions.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#text/3" data-no-tooltip="" translate="no">text(document, string, style_or_name \\ %{})</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Write styled text at the current cursor position with auto-wrapping.
+Moves the cursor down after writing.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#text_at/3" data-no-tooltip="" translate="no">text_at(document, coords, text)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Writes the text at the given coordinates.
+The coordinates are the bottom left of the text.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#text_at/4" data-no-tooltip="" translate="no">text_at(document, coords, text, style_or_opts)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Writes the text at the given coordinates.
+The coordinates are the bottom left of the text.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#text_lines/4" data-no-tooltip="" translate="no">text_lines(document, coords, lines, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>This function draws a number of text lines starting at the given coordinates.
+The list can overrun the page, no errors or wrapping will occur.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#text_wrap/4" data-no-tooltip="" translate="no">text_wrap(document, coords, dimensions, text)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Writes the text wrapped within the confines of the given dimensions.
+The <code class="inline">{x,y}</code> is the top-left of corner of the box, for this reason it is not wise to try to match it up with <code class="inline">text_at</code> on the same line.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#text_wrap/5" data-no-tooltip="" translate="no">text_wrap(document, coords, dimensions, text, opts)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>This function has the same options as <a href="#text_wrap/4"><code class="inline">text_wrap/4</code></a>, but also supports additional options that will be applied to the complete text.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#text_wrap!/4" data-no-tooltip="" translate="no">text_wrap!(document, coords, dimensions, text)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>This function has the same options as <a href="#text_wrap/4"><code class="inline">text_wrap/4</code></a>, but if the text is too large for the box, a <a href="https://hexdocs.pm/elixir/RuntimeError.html"><code class="inline">RuntimeError</code></a> will be raised.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#text_wrap!/5" data-no-tooltip="" translate="no">text_wrap!(document, coords, dimensions, text, opts)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>This function has the same options as <a href="#text_wrap/5"><code class="inline">text_wrap/5</code></a>, but if the text is too large for the box, a <a href="https://hexdocs.pm/elixir/RuntimeError.html"><code class="inline">RuntimeError</code></a> will be raised.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#transform/2" data-no-tooltip="" translate="no">transform(document, matrix)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Apply an arbitrary transformation matrix {a, b, c, d, e, f}.
+Must be used within <code class="inline">save_state/restore_state</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#translate/2" data-no-tooltip="" translate="no">translate(document, coords)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Translate (move) the coordinate origin by {tx, ty}.
+Must be used within <code class="inline">save_state/restore_state</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#watermark/3" data-no-tooltip="" translate="no">watermark(document, text, style_or_name \\ %{})</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Add a text watermark to the current page with rotation and opacity.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#write_to/2" data-no-tooltip="" translate="no">write_to(document, path)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Write the PDF to the given path</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h2>
+
+    <div class="types-list">
+<section class="detail" id="t:cap_style/0">
+
+  <div class="detail-header">
+    <a href="#t:cap_style/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">cap_style()</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L80" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> cap_style() :: :butt | :round | :projecting_square | :square | <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>()</pre>
+
+      </div>
+
+<p>A code specifying the shape of the endpoints for an open path that is stroked.</p><ul><li><p>:butt (default)</p><p>The stroke shall be squared of at the endpoint of the path.</p></li><li><p>:round</p><p>A small semicircular arc with a diameter equal to the line width shall be drawn around the endpoint and shall be filled in.</p></li><li><p>:square | :projecting_square</p><p>The stroke shall continue beyond the endpoint of the path for a distance equal to half the line width and shall be squared of.</p></li></ul>
+  </section>
+</section>
+<section class="detail" id="t:cmyk/0">
+
+  <div class="detail-header">
+    <a href="#t:cmyk/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">cmyk()</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L64" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> cmyk() :: {<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>()}</pre>
+
+      </div>
+
+<p>Specify a color by it's CMYK make-up.</p>
+  </section>
+</section>
+<section class="detail" id="t:color_name/0">
+
+  <div class="detail-header">
+    <a href="#t:color_name/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">color_name()</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L56" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> color_name() :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>()</pre>
+
+      </div>
+
+<p>Use one of the colors in the <a href="Pdf.Color.html"><code class="inline">Pdf.Color</code></a> module.</p>
+  </section>
+</section>
+<section class="detail" id="t:coords/0">
+
+  <div class="detail-header">
+    <a href="#t:coords/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">coords()</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L42" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> coords() :: {<a href="#t:x/0">x</a>(), <a href="#t:y/0">y</a>()}</pre>
+
+      </div>
+
+<p>Most functions take a coordinates tuple, <code class="inline">{x, y}</code>.
+In Pdf these start from the bottom-left of the page.</p>
+  </section>
+</section>
+<section class="detail" id="t:dimension/0">
+
+  <div class="detail-header">
+    <a href="#t:dimension/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">dimension()</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L44" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> dimension() :: {<a href="#t:width/0">width</a>(), <a href="#t:height/0">height</a>()}</pre>
+
+      </div>
+
+<p>Width and height expressed in Pdf points</p>
+  </section>
+</section>
+<section class="detail" id="t:height/0">
+
+  <div class="detail-header">
+    <a href="#t:height/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">height()</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L52" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> height() :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>()</pre>
+
+      </div>
+
+<p>The height in points</p>
+  </section>
+</section>
+<section class="detail" id="t:join_style/0">
+
+  <div class="detail-header">
+    <a href="#t:join_style/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">join_style()</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L96" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> join_style() :: :miter | :round | :bevel | <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>()</pre>
+
+      </div>
+
+<p>The line join style shall specify the shape to be used at the corners of paths that are stroked.</p><ul><li><p>:miter</p><p>The outer edges of the strokes for the two segments shall be extended until they meet at an angle. If the segments meet at too sharp an angle (as defined in section 8.4.3.5 of the PDF specs), a bevel join shall be used instead.</p></li><li><p>:round</p><p>An arc of a circle with a diameter equal to the line width shall be drawn around the point where the two segments meet, connecting the outer edges of the strokes for the two segments.  This pieslice-shae figure shall be filled in, producing a rounded corner.</p></li><li><p>:bevel</p><p>The two segments shall be finished with butt caps (see <a href="#t:cap_style/0"><code class="inline">cap_style/0</code></a>) and the resulting notch beyond the ends of the segments shall be filled with a triangle.</p></li></ul>
+  </section>
+</section>
+<section class="detail" id="t:rgb/0">
+
+  <div class="detail-header">
+    <a href="#t:rgb/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">rgb()</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L60" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> rgb() :: {<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">byte</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">byte</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">byte</a>()}</pre>
+
+      </div>
+
+<p>Specify a color by it's RGB make-up.</p>
+  </section>
+</section>
+<section class="detail" id="t:width/0">
+
+  <div class="detail-header">
+    <a href="#t:width/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">width()</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L50" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> width() :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>()</pre>
+
+      </div>
+
+<p>The width in points</p>
+  </section>
+</section>
+<section class="detail" id="t:x/0">
+
+  <div class="detail-header">
+    <a href="#t:x/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">x()</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L46" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> x() :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>()</pre>
+
+      </div>
+
+<p>The x-coordinate</p>
+  </section>
+</section>
+<section class="detail" id="t:y/0">
+
+  <div class="detail-header">
+    <a href="#t:y/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">y()</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L48" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> y() :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>()</pre>
+
+      </div>
+
+<p>The y-coordinate</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h2>
+
+    <div class="functions-list">
+<section class="detail" id="add_font/2">
+
+  <div class="detail-header">
+    <a href="#add_font/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">add_font(document, path)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L427" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Add a font to the list of available fonts.</p><p>Currently only <em>Type 1</em> AFM/PFB fonts are supported.</p><pre><code class="makeup elixir" translate="no"><span class="w">
+</span><span class="n">fonts_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Application</span><span class="o">.</span><span class="n">app_dir</span><span class="p" data-group-id="2180317397-1">(</span><span class="ss">:my_app</span><span class="p" data-group-id="2180317397-1">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Path</span><span class="o">.</span><span class="n">join</span><span class="p" data-group-id="2180317397-2">(</span><span class="s">&quot;priv&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;fonts&quot;</span><span class="p" data-group-id="2180317397-2">)</span><span class="w">
+
+</span><span class="n">pdf</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">add_font</span><span class="p" data-group-id="2180317397-3">(</span><span class="nc">Path</span><span class="o">.</span><span class="n">join</span><span class="p" data-group-id="2180317397-4">(</span><span class="n">fonts_dir</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;DejavuSans.afm&quot;</span><span class="p" data-group-id="2180317397-4">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">add_font</span><span class="p" data-group-id="2180317397-5">(</span><span class="nc">Path</span><span class="o">.</span><span class="n">join</span><span class="p" data-group-id="2180317397-6">(</span><span class="n">fonts_dir</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;DejavuSans-Bold.afm&quot;</span><span class="p" data-group-id="2180317397-6">)</span></code></pre><p>The font can then be set with <a href="#set_font/3"><code class="inline">set_font/3</code></a>.</p><p>You have to <a href="#add_font/2"><code class="inline">add_font/2</code></a> all variants you want to use, bold, italic, ...</p>
+  </section>
+</section>
+<section class="detail" id="add_image/3">
+
+  <div class="detail-header">
+    <a href="#add_image/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">add_image(document, coords, image_path)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L588" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Add an images (PNG, or JPEG only) at the given coordinates.</p>
+  </section>
+</section>
+<section class="detail" id="add_image/4">
+
+  <div class="detail-header">
+    <a href="#add_image/4" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">add_image(document, coords, image_path, opts)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L595" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Add an images (PNG, or JPEG only) at the given coordinates.</p><p>You can specify a <code class="inline">:width</code> and <code class="inline">:height</code> in the options, the image will then be scaled.</p>
+  </section>
+</section>
+<section class="detail" id="add_page/2">
+
+  <div class="detail-header">
+    <a href="#add_page/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">add_page(document, size)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L208" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Add a new page to the Pdf with the given page size.</p>
+  </section>
+</section>
+<section class="detail" id="autoprint/1">
+
+  <div class="detail-header">
+    <a href="#autoprint/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">autoprint(document)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L217" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Adds an autoprint action to the Pdf.</p><p>This is can be useful for generating a PDF that will automatically open the print dialog in a browser</p>
+  </section>
+</section>
+<section class="detail" id="background/2">
+
+    <span id="background/1"></span>
+
+  <div class="detail-header">
+    <a href="#background/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">background(document, style_or_name \\ %{})</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L1175" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Fill the current page background with a color.</p><h2 id="background/2-example" class="section-heading"><a href="#background/2-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">background</span><span class="p" data-group-id="8564260215-1">(</span><span class="p" data-group-id="8564260215-2">%{</span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8564260215-3">{</span><span class="mf">0.95</span><span class="p">,</span><span class="w"> </span><span class="mf">0.95</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p" data-group-id="8564260215-3">}</span><span class="p" data-group-id="8564260215-2">}</span><span class="p" data-group-id="8564260215-1">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="box/5">
+
+    <span id="box/4"></span>
+
+  <div class="detail-header">
+    <a href="#box/5" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">box(document, pos, size, style \\ %{}, callback)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L788" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Render a box container at <code class="inline">{x, y}</code> with size <code class="inline">{w, h}</code>.</p><p>Supports padding, margin, border, border_radius, and background.
+The callback receives <code class="inline">(doc, %{x, y, width, height})</code> with the inner area.</p><p>Size supports relative dimensions:</p><ul><li><code class="inline">:full</code> — 100% of the document's content area</li><li><code class="inline">&quot;50%&quot;</code> — percentage of the content area</li><li><code class="inline">number</code> — absolute points (default)</li></ul><h2 id="box/5-example" class="section-heading"><a href="#box/5-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">doc</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">box</span><span class="p" data-group-id="9624584607-1">(</span><span class="p" data-group-id="9624584607-2">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="9624584607-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9624584607-3">{</span><span class="ss">:full</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p" data-group-id="9624584607-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9624584607-4">%{</span><span class="ss">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="ss">border</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="9624584607-4">}</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="9624584607-5">fn</span><span class="w"> </span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+  </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="9624584607-6">(</span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9624584607-7">{</span><span class="n">area</span><span class="o">.</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="o">.</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">14</span><span class="p" data-group-id="9624584607-7">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Inside the box&quot;</span><span class="p" data-group-id="9624584607-6">)</span><span class="w">
+</span><span class="k" data-group-id="9624584607-5">end</span><span class="p" data-group-id="9624584607-1">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="build/2">
+
+    <span id="build/1"></span>
+
+  <div class="detail-header">
+    <a href="#build/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">build(opts \\ [], func)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L131" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Builds a PDF document.</p><pre><code class="makeup elixir" translate="no"><span class="nc">Pdf</span><span class="o">.</span><span class="n">build</span><span class="p" data-group-id="7063254261-1">(</span><span class="p" data-group-id="7063254261-2">[</span><span class="ss">size</span><span class="p">:</span><span class="w"> </span><span class="ss">:a3</span><span class="p" data-group-id="7063254261-2">]</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="7063254261-3">fn</span><span class="w"> </span><span class="n">pdf</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+  </span><span class="n">pdf</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p" data-group-id="7063254261-4">(</span><span class="s">&quot;Helvetica&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p" data-group-id="7063254261-4">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="7063254261-5">(</span><span class="p" data-group-id="7063254261-6">{</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="7063254261-6">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Open&quot;</span><span class="p" data-group-id="7063254261-5">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">write_to</span><span class="p" data-group-id="7063254261-7">(</span><span class="s">&quot;test.pdf&quot;</span><span class="p" data-group-id="7063254261-7">)</span><span class="w">
+</span><span class="k" data-group-id="7063254261-3">end</span><span class="p" data-group-id="7063254261-1">)</span></code></pre><p>is equivalent to</p><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="1743725057-1">(</span><span class="ss">size</span><span class="p">:</span><span class="w"> </span><span class="ss">:a3</span><span class="p" data-group-id="1743725057-1">)</span><span class="w">
+</span><span class="n">pdf</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p" data-group-id="1743725057-2">(</span><span class="s">&quot;Helvetica&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p" data-group-id="1743725057-2">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="1743725057-3">(</span><span class="p" data-group-id="1743725057-4">{</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="1743725057-4">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Open&quot;</span><span class="p" data-group-id="1743725057-3">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">write_to</span><span class="p" data-group-id="1743725057-5">(</span><span class="s">&quot;test.pdf&quot;</span><span class="p" data-group-id="1743725057-5">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="cleanup/1">
+
+  <div class="detail-header">
+    <a href="#cleanup/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">cleanup(document)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L144" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>No-op. Kept for backwards compatibility.</p>
+  </section>
+</section>
+<section class="detail" id="clip/1">
+
+  <div class="detail-header">
+    <a href="#clip/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">clip(document)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L764" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Set the current path as a clipping boundary.</p>
+  </section>
+</section>
+<section class="detail" id="close_path/1">
+
+  <div class="detail-header">
+    <a href="#close_path/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">close_path(document)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L759" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> close_path(Pdf.Document.t()) :: Pdf.Document.t()</pre>
+
+      </div>
+
+<p>Close the current path by drawing a straight line back to the starting point.</p>
+  </section>
+</section>
+<section class="detail" id="cm/1">
+
+  <div class="detail-header">
+    <a href="#cm/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">cm(x)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L165" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> cm(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>()</pre>
+
+      </div>
+
+<p>Convert the given value from cm to Pdf points</p>
+  </section>
+</section>
+<section class="detail" id="column/5">
+
+    <span id="column/4"></span>
+
+  <div class="detail-header">
+    <a href="#column/5" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">column(document, pos, size, rows, opts \\ [])</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L826" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Stack content vertically with fixed heights.</p><p><code class="inline">rows</code> is a list of <code class="inline">{height, callback}</code> tuples.
+Size supports relative dimensions (<code class="inline">:full</code>, <code class="inline">&quot;50%&quot;</code>).</p><h2 id="column/5-example" class="section-heading"><a href="#column/5-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">doc</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">column</span><span class="p" data-group-id="4957401372-1">(</span><span class="p" data-group-id="4957401372-2">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="4957401372-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4957401372-3">{</span><span class="ss">:full</span><span class="p">,</span><span class="w"> </span><span class="mi">400</span><span class="p" data-group-id="4957401372-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4957401372-4">[</span><span class="w">
+  </span><span class="p" data-group-id="4957401372-5">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="4957401372-6">fn</span><span class="w"> </span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="4957401372-7">(</span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4957401372-8">{</span><span class="n">area</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="o">.</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">14</span><span class="p" data-group-id="4957401372-8">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Row 1&quot;</span><span class="p" data-group-id="4957401372-7">)</span><span class="w"> </span><span class="k" data-group-id="4957401372-6">end</span><span class="p" data-group-id="4957401372-5">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="4957401372-9">{</span><span class="mi">80</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="4957401372-10">fn</span><span class="w"> </span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="4957401372-11">(</span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4957401372-12">{</span><span class="n">area</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="o">.</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">14</span><span class="p" data-group-id="4957401372-12">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Row 2&quot;</span><span class="p" data-group-id="4957401372-11">)</span><span class="w"> </span><span class="k" data-group-id="4957401372-10">end</span><span class="p" data-group-id="4957401372-9">}</span><span class="w">
+</span><span class="p" data-group-id="4957401372-4">]</span><span class="p">,</span><span class="w"> </span><span class="ss">gap</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p" data-group-id="4957401372-1">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="content_area/1">
+
+  <div class="detail-header">
+    <a href="#content_area/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">content_area(document)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L620" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Returns the content area <code class="inline">%{x, y, width, height}</code> based on margins.</p>
+  </section>
+</section>
+<section class="detail" id="cursor/1">
+
+  <div class="detail-header">
+    <a href="#cursor/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">cursor(document)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L635" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> cursor(Pdf.Document.t()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>()</pre>
+
+      </div>
+
+<p>Gets the current cursor Y position (vertical).</p>
+  </section>
+</section>
+<section class="detail" id="cursor_xy/1">
+
+  <div class="detail-header">
+    <a href="#cursor_xy/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">cursor_xy(document)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L643" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> cursor_xy(Pdf.Document.t()) :: %{x: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>(), y: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>()}</pre>
+
+      </div>
+
+<p>Gets the current cursor position as <code class="inline">%{x: x, y: y}</code>.</p>
+  </section>
+</section>
+<section class="detail" id="curve_to/4">
+
+  <div class="detail-header">
+    <a href="#curve_to/4" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">curve_to(document, cp1, cp2, end_point)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L752" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> curve_to(Pdf.Document.t(), <a href="#t:coords/0">coords</a>(), <a href="#t:coords/0">coords</a>(), <a href="#t:coords/0">coords</a>()) :: Pdf.Document.t()</pre>
+
+      </div>
+
+<p>Draw a Bézier curve from the current point through control points to the end point.</p><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">move_to</span><span class="p" data-group-id="9817504358-1">(</span><span class="p" data-group-id="9817504358-2">{</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="9817504358-2">}</span><span class="p" data-group-id="9817504358-1">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">curve_to</span><span class="p" data-group-id="9817504358-3">(</span><span class="p" data-group-id="9817504358-4">{</span><span class="mi">120</span><span class="p">,</span><span class="w"> </span><span class="mi">150</span><span class="p" data-group-id="9817504358-4">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9817504358-5">{</span><span class="mi">180</span><span class="p">,</span><span class="w"> </span><span class="mi">150</span><span class="p" data-group-id="9817504358-5">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9817504358-6">{</span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="9817504358-6">}</span><span class="p" data-group-id="9817504358-3">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">stroke</span><span class="p" data-group-id="9817504358-7">(</span><span class="p" data-group-id="9817504358-7">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="debug_grid/2">
+
+    <span id="debug_grid/1"></span>
+
+  <div class="detail-header">
+    <a href="#debug_grid/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">debug_grid(document, opts \\ %{})</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L868" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Draw a debug grid overlay on the current page.</p><h2 id="debug_grid/2-options" class="section-heading"><a href="#debug_grid/2-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Options</span></h2><ul><li><code class="inline">:grid</code> — <code class="inline">:horizontal</code>, <code class="inline">:vertical</code>, or <code class="inline">:both</code> (default <code class="inline">:both</code>)</li><li><code class="inline">:area</code> — where to draw the grid:<ul><li><code class="inline">:content</code> — inside margins only (default)</li><li><code class="inline">:page</code> — entire page (0,0 to page width/height)</li><li><code class="inline">:margins</code> — only in the margin zones (outside content area)</li></ul></li><li><code class="inline">:spacing</code> — distance between grid lines in points (default <code class="inline">10</code>)</li><li><code class="inline">:color</code> — grid line color (default <code class="inline">{0.85, 0.85, 0.85}</code>)</li><li><code class="inline">:line_width</code> — grid line width (default <code class="inline">0.25</code>)</li><li><code class="inline">:labels</code> — show coordinate labels (default <code class="inline">true</code>)</li><li><code class="inline">:label_every</code> — show a coordinate label every N points (default <code class="inline">50</code>)</li><li><code class="inline">:info</code> — show page/margin info text (default <code class="inline">true</code>)</li><li><code class="inline">:margin_border</code> — draw the margin boundary rectangle (default <code class="inline">true</code>)</li><li><code class="inline">:cursor_line</code> — draw cursor Y position line (default <code class="inline">true</code>)</li></ul><h2 id="debug_grid/2-examples" class="section-heading"><a href="#debug_grid/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">debug_grid</span><span class="p" data-group-id="7901084129-1">(</span><span class="p" data-group-id="7901084129-1">)</span><span class="w">
+</span><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">debug_grid</span><span class="p" data-group-id="7901084129-2">(</span><span class="p" data-group-id="7901084129-3">%{</span><span class="ss">grid</span><span class="p">:</span><span class="w"> </span><span class="ss">:horizontal</span><span class="p">,</span><span class="w"> </span><span class="ss">area</span><span class="p">:</span><span class="w"> </span><span class="ss">:page</span><span class="p" data-group-id="7901084129-3">}</span><span class="p" data-group-id="7901084129-2">)</span><span class="w">
+</span><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">debug_grid</span><span class="p" data-group-id="7901084129-4">(</span><span class="p" data-group-id="7901084129-5">%{</span><span class="ss">grid</span><span class="p">:</span><span class="w"> </span><span class="ss">:vertical</span><span class="p">,</span><span class="w"> </span><span class="ss">area</span><span class="p">:</span><span class="w"> </span><span class="ss">:content</span><span class="p">,</span><span class="w"> </span><span class="ss">spacing</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="7901084129-5">}</span><span class="p" data-group-id="7901084129-4">)</span><span class="w">
+</span><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">debug_grid</span><span class="p" data-group-id="7901084129-6">(</span><span class="p" data-group-id="7901084129-7">%{</span><span class="ss">area</span><span class="p">:</span><span class="w"> </span><span class="ss">:margins</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7901084129-8">{</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.9</span><span class="p">,</span><span class="w"> </span><span class="mf">0.9</span><span class="p" data-group-id="7901084129-8">}</span><span class="p" data-group-id="7901084129-7">}</span><span class="p" data-group-id="7901084129-6">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="delete/1">
+
+  <div class="detail-header">
+    <a href="#delete/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">delete(document)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L147" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+    <div class="deprecated">
+      This function is deprecated. Use cleanup/1 instead.
+    </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="export/1">
+
+  <div class="detail-header">
+    <a href="#export/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">export(document)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L201" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Export the Pdf to a binary representation.</p><p>This is can be used in eg Phoenix to send a PDF to the browser.</p><pre><code class="makeup elixir" translate="no"><span class="w">  </span><span class="n">report</span><span class="w"> </span><span class="o">=</span><span class="w">
+    </span><span class="n">pdf</span><span class="w">
+    </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">...</span><span class="w">
+    </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">export</span><span class="p" data-group-id="9961960000-1">(</span><span class="p" data-group-id="9961960000-1">)</span><span class="w">
+
+ </span><span class="n">conn</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">put_resp_content_type</span><span class="p" data-group-id="9961960000-2">(</span><span class="s">&quot;application/pdf&quot;</span><span class="p" data-group-id="9961960000-2">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">put_resp_header</span><span class="p" data-group-id="9961960000-3">(</span><span class="w">
+    </span><span class="s">&quot;content-disposition&quot;</span><span class="p">,</span><span class="w">
+    </span><span class="s">&quot;attachment; filename=&quot;</span><span class="n">document</span><span class="o">.</span><span class="n">pdf</span><span class="s">&quot;&quot;</span><span class="w">
+  </span><span class="p" data-group-id="9961960000-3">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">send_resp</span><span class="p" data-group-id="9961960000-4">(</span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="n">report</span><span class="p" data-group-id="9961960000-4">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="fill/1">
+
+  <div class="detail-header">
+    <a href="#fill/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">fill(document)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L310" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> fill(Pdf.Document.t()) :: Pdf.Document.t()</pre>
+
+      </div>
+
+<p>Fill the current drawing with the previously set color.</p>
+  </section>
+</section>
+<section class="detail" id="fill_and_stroke/1">
+
+  <div class="detail-header">
+    <a href="#fill_and_stroke/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">fill_and_stroke(document)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L737" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Fill and stroke the current path.</p>
+  </section>
+</section>
+<section class="detail" id="horizontal_line/2">
+
+    <span id="horizontal_line/1"></span>
+
+  <div class="detail-header">
+    <a href="#horizontal_line/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">horizontal_line(document, style_or_name \\ %{})</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L1106" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Draw a horizontal line at the current cursor position across the content width.</p><h2 id="horizontal_line/2-example" class="section-heading"><a href="#horizontal_line/2-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">horizontal_line</span><span class="p" data-group-id="8911682107-1">(</span><span class="p" data-group-id="8911682107-1">)</span><span class="w">
+</span><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">horizontal_line</span><span class="p" data-group-id="8911682107-2">(</span><span class="p" data-group-id="8911682107-3">%{</span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:gray</span><span class="p">,</span><span class="w"> </span><span class="ss">line_width</span><span class="p">:</span><span class="w"> </span><span class="mf">0.5</span><span class="p" data-group-id="8911682107-3">}</span><span class="p" data-group-id="8911682107-2">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="inches/1">
+
+  <div class="detail-header">
+    <a href="#inches/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">inches(x)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L161" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> inches(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>()</pre>
+
+      </div>
+
+<p>Convert the given value from inches to Pdf points</p>
+  </section>
+</section>
+<section class="detail" id="line/3">
+
+  <div class="detail-header">
+    <a href="#line/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">line(document, coords, coords_to)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L281" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> line(Pdf.Document.t(), <a href="#t:coords/0">coords</a>(), <a href="#t:coords/0">coords</a>()) :: Pdf.Document.t()</pre>
+
+      </div>
+
+<p>Draw a line between 2 points.</p>
+  </section>
+</section>
+<section class="detail" id="line_append/2">
+
+  <div class="detail-header">
+    <a href="#line_append/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">line_append(document, coords)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L298" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> line_append(Pdf.Document.t(), <a href="#t:coords/0">coords</a>()) :: Pdf.Document.t()</pre>
+
+      </div>
+
+<p>Draw a line from the last position to the given coordinates.</p><pre><code class="makeup elixir" translate="no"><span class="w">  </span><span class="n">pdf</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">move_to</span><span class="p" data-group-id="3896216382-1">(</span><span class="p" data-group-id="3896216382-2">{</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="3896216382-2">}</span><span class="p" data-group-id="3896216382-1">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">line_append</span><span class="p" data-group-id="3896216382-3">(</span><span class="p" data-group-id="3896216382-4">{</span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p" data-group-id="3896216382-4">}</span><span class="p" data-group-id="3896216382-3">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="mm/1">
+
+  <div class="detail-header">
+    <a href="#mm/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">mm(x)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L169" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> mm(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>()</pre>
+
+      </div>
+
+<p>Convert the given value from mm to Pdf points</p>
+  </section>
+</section>
+<section class="detail" id="move_down/2">
+
+  <div class="detail-header">
+    <a href="#move_down/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">move_down(document, amount)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L667" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> move_down(Pdf.Document.t(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>()) :: Pdf.Document.t()</pre>
+
+      </div>
+
+<p>Move the cursor <code class="inline">amount</code> points down.</p>
+  </section>
+</section>
+<section class="detail" id="move_right/2">
+
+  <div class="detail-header">
+    <a href="#move_right/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">move_right(document, amount)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L675" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> move_right(Pdf.Document.t(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>()) :: Pdf.Document.t()</pre>
+
+      </div>
+
+<p>Move the cursor <code class="inline">amount</code> points to the right.</p>
+  </section>
+</section>
+<section class="detail" id="move_to/2">
+
+  <div class="detail-header">
+    <a href="#move_to/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">move_to(document, coords)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L287" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> move_to(Pdf.Document.t(), <a href="#t:coords/0">coords</a>()) :: Pdf.Document.t()</pre>
+
+      </div>
+
+<p>Move the cursor to the given coordinates.</p>
+  </section>
+</section>
+<section class="detail" id="new/1">
+
+    <span id="new/0"></span>
+
+  <div class="detail-header">
+    <a href="#new/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">new(opts \\ [])</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L109" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> new(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()) :: Pdf.Document.t()</pre>
+
+      </div>
+
+<p>Create a new Pdf document.</p><p>The following options can be given:</p><table><tbody><tr><td style="text-align: left;">:size</td><td style="text-align: left;">Page size, defaults to <code class="inline">:a4</code></td></tr><tr><td style="text-align: left;">:compress</td><td style="text-align: left;">Compress the Pdf, default: <code class="inline">true</code></td></tr></tbody></table><p>There is no standard font selected when creating a new PDF, so set one with <a href="#set_font/3"><code class="inline">set_font/3</code></a> before adding text.</p>
+  </section>
+</section>
+<section class="detail" id="on_page/3">
+
+  <div class="detail-header">
+    <a href="#on_page/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">on_page(document, name, func)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L613" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Register a page template that runs on every new page.</p><p>Supported template names: <code class="inline">:header</code>, <code class="inline">:footer</code>, <code class="inline">:watermark</code>, <code class="inline">:background</code>.</p><p>The function receives <code class="inline">(document, page_info)</code> where <code class="inline">page_info</code> is <code class="inline">%{number: n}</code>.</p><h2 id="on_page/3-example" class="section-heading"><a href="#on_page/3-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">on_page</span><span class="p" data-group-id="6702419277-1">(</span><span class="ss">:header</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="6702419277-2">fn</span><span class="w"> </span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="c">_info</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+  </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="6702419277-3">(</span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6702419277-4">{</span><span class="mi">40</span><span class="p">,</span><span class="w"> </span><span class="mi">820</span><span class="p" data-group-id="6702419277-4">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;My Header&quot;</span><span class="p" data-group-id="6702419277-3">)</span><span class="w">
+</span><span class="k" data-group-id="6702419277-2">end</span><span class="p" data-group-id="6702419277-1">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="open/2">
+
+    <span id="open/1"></span>
+
+  <div class="detail-header">
+    <a href="#open/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">open(opts \\ [], func)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L137" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+    <div class="deprecated">
+      This function is deprecated. Use build/2 instead.
+    </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="page_break/2">
+
+    <span id="page_break/1"></span>
+
+  <div class="detail-header">
+    <a href="#page_break/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">page_break(document, size \\ nil)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L1139" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Insert a page break. Executes footer template on the current page
+and header/watermark templates on the new page.</p><h2 id="page_break/2-example" class="section-heading"><a href="#page_break/2-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">page_break</span><span class="p" data-group-id="0931491406-1">(</span><span class="p" data-group-id="0931491406-1">)</span><span class="w">
+</span><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">page_break</span><span class="p" data-group-id="0931491406-2">(</span><span class="ss">:letter</span><span class="p" data-group-id="0931491406-2">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="page_number/1">
+
+  <div class="detail-header">
+    <a href="#page_number/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">page_number(document)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L222" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Returns the current page number.</p>
+  </section>
+</section>
+<section class="detail" id="picas/1">
+
+  <div class="detail-header">
+    <a href="#picas/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">picas(x)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L157" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> picas(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>()</pre>
+
+      </div>
+
+<p>Convert the given value from picas to Pdf points</p>
+  </section>
+</section>
+<section class="detail" id="pixels_to_points/2">
+
+    <span id="pixels_to_points/1"></span>
+
+  <div class="detail-header">
+    <a href="#pixels_to_points/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">pixels_to_points(pixels, dpi \\ 300)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L173" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> pixels_to_points(pixels :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>(), dpi :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>()</pre>
+
+      </div>
+
+<p>Convert the given value from pixels to Pdf points</p>
+  </section>
+</section>
+<section class="detail" id="points/1">
+
+  <div class="detail-header">
+    <a href="#points/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">points(x)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L153" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>The unit of measurement in a Pdf are points, where <em>1 point = 1/72 inch</em>.
+This means that a standard A4 page, 8.27 inch, translates to 595 points.</p>
+  </section>
+</section>
+<section class="detail" id="rectangle/3">
+
+  <div class="detail-header">
+    <a href="#rectangle/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">rectangle(document, coords, dimensions)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L274" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> rectangle(Pdf.Document.t(), <a href="#t:coords/0">coords</a>(), <a href="#t:dimension/0">dimension</a>()) :: Pdf.Document.t()</pre>
+
+      </div>
+
+<p>Draw a rectangle from coordinates x,y (lower left corner) for a given width and height.</p>
+  </section>
+</section>
+<section class="detail" id="register_style/3">
+
+  <div class="detail-header">
+    <a href="#register_style/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">register_style(document, name, style_attrs)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L699" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Register a named style that can be referenced by atom in text/3, horizontal_line/2, etc.</p><h2 id="register_style/3-example" class="section-heading"><a href="#register_style/3-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">register_style</span><span class="p" data-group-id="2871243630-1">(</span><span class="ss">:heading</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2871243630-2">%{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">24</span><span class="p">,</span><span class="w"> </span><span class="ss">bold</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:navy</span><span class="p" data-group-id="2871243630-2">}</span><span class="p" data-group-id="2871243630-1">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">register_style</span><span class="p" data-group-id="2871243630-3">(</span><span class="ss">:body</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2871243630-4">%{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:black</span><span class="p" data-group-id="2871243630-4">}</span><span class="p" data-group-id="2871243630-3">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">register_style</span><span class="p" data-group-id="2871243630-5">(</span><span class="ss">:accent</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2871243630-6">%{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:green</span><span class="p" data-group-id="2871243630-6">}</span><span class="p" data-group-id="2871243630-5">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text</span><span class="p" data-group-id="2871243630-7">(</span><span class="s">&quot;My Title&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">:heading</span><span class="p" data-group-id="2871243630-7">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text</span><span class="p" data-group-id="2871243630-8">(</span><span class="s">&quot;Body text&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">:body</span><span class="p" data-group-id="2871243630-8">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="register_styles/2">
+
+  <div class="detail-header">
+    <a href="#register_styles/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">register_styles(document, styles)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L714" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Register multiple named styles at once from a map.</p><h2 id="register_styles/2-example" class="section-heading"><a href="#register_styles/2-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="nc">Pdf</span><span class="o">.</span><span class="n">register_styles</span><span class="p" data-group-id="1397890911-1">(</span><span class="n">pdf</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1397890911-2">%{</span><span class="w">
+  </span><span class="ss">heading</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1397890911-3">%{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">24</span><span class="p">,</span><span class="w"> </span><span class="ss">bold</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:navy</span><span class="p" data-group-id="1397890911-3">}</span><span class="p">,</span><span class="w">
+  </span><span class="ss">body</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1397890911-4">%{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p" data-group-id="1397890911-4">}</span><span class="p">,</span><span class="w">
+  </span><span class="ss">footer</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1397890911-5">%{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:gray</span><span class="p" data-group-id="1397890911-5">}</span><span class="w">
+</span><span class="p" data-group-id="1397890911-2">}</span><span class="p" data-group-id="1397890911-1">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="reset_x/1">
+
+  <div class="detail-header">
+    <a href="#reset_x/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">reset_x(document)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L683" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> reset_x(Pdf.Document.t()) :: Pdf.Document.t()</pre>
+
+      </div>
+
+<p>Reset the cursor X position to 0.</p>
+  </section>
+</section>
+<section class="detail" id="restore_state/1">
+
+  <div class="detail-header">
+    <a href="#restore_state/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">restore_state(document)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L371" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> restore_state(Pdf.Document.t()) :: Pdf.Document.t()</pre>
+
+      </div>
+
+<p>Restore a previously saved graphics state.</p>
+  </section>
+</section>
+<section class="detail" id="rotate/2">
+
+  <div class="detail-header">
+    <a href="#rotate/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">rotate(document, angle)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L335" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> rotate(Pdf.Document.t(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>()) :: Pdf.Document.t()</pre>
+
+      </div>
+
+<p>Rotate the coordinate system by the given angle in degrees.
+Must be used within <code class="inline">save_state/restore_state</code>.</p>
+  </section>
+</section>
+<section class="detail" id="rounded_rectangle/4">
+
+  <div class="detail-header">
+    <a href="#rounded_rectangle/4" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">rounded_rectangle(document, xy, wh, r)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L730" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Draw a rounded rectangle.</p>
+  </section>
+</section>
+<section class="detail" id="row/5">
+
+    <span id="row/4"></span>
+
+  <div class="detail-header">
+    <a href="#row/5" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">row(document, pos, size, columns, opts \\ [])</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L807" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Distribute content horizontally in columns by weight.</p><p><code class="inline">columns</code> is a list of <code class="inline">{weight, callback}</code> tuples.
+Size supports relative dimensions (<code class="inline">:full</code>, <code class="inline">&quot;50%&quot;</code>).</p><h2 id="row/5-example" class="section-heading"><a href="#row/5-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">doc</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">row</span><span class="p" data-group-id="7362261265-1">(</span><span class="p" data-group-id="7362261265-2">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="7362261265-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7362261265-3">{</span><span class="ss">:full</span><span class="p">,</span><span class="w"> </span><span class="mi">80</span><span class="p" data-group-id="7362261265-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7362261265-4">[</span><span class="w">
+  </span><span class="p" data-group-id="7362261265-5">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="7362261265-6">fn</span><span class="w"> </span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="7362261265-7">(</span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7362261265-8">{</span><span class="n">area</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="o">.</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">14</span><span class="p" data-group-id="7362261265-8">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Left&quot;</span><span class="p" data-group-id="7362261265-7">)</span><span class="w"> </span><span class="k" data-group-id="7362261265-6">end</span><span class="p" data-group-id="7362261265-5">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="7362261265-9">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="7362261265-10">fn</span><span class="w"> </span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="7362261265-11">(</span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7362261265-12">{</span><span class="n">area</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="o">.</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">14</span><span class="p" data-group-id="7362261265-12">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Center&quot;</span><span class="p" data-group-id="7362261265-11">)</span><span class="w"> </span><span class="k" data-group-id="7362261265-10">end</span><span class="p" data-group-id="7362261265-9">}</span><span class="w">
+</span><span class="p" data-group-id="7362261265-4">]</span><span class="p">,</span><span class="w"> </span><span class="ss">gap</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="7362261265-1">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="save_state/1">
+
+  <div class="detail-header">
+    <a href="#save_state/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">save_state(document)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L363" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> save_state(Pdf.Document.t()) :: Pdf.Document.t()</pre>
+
+      </div>
+
+<p>Save the current graphics state. Use with <a href="#restore_state/1"><code class="inline">restore_state/1</code></a> to isolate
+transformations like rotation, translation, scaling, and opacity changes.</p>
+  </section>
+</section>
+<section class="detail" id="scale/2">
+
+  <div class="detail-header">
+    <a href="#scale/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">scale(document, factors)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L349" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> scale(
+  Pdf.Document.t(),
+  {<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>()}
+) :: Pdf.Document.t()</pre>
+
+      </div>
+
+<p>Scale the coordinate system by {sx, sy}.
+Must be used within <code class="inline">save_state/restore_state</code>.</p>
+  </section>
+</section>
+<section class="detail" id="set_author/2">
+
+  <div class="detail-header">
+    <a href="#set_author/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">set_author(document, author)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L1196" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Sets the author in the PDF information section.</p>
+  </section>
+</section>
+<section class="detail" id="set_creator/2">
+
+  <div class="detail-header">
+    <a href="#set_creator/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">set_creator(document, creator)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L1201" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Sets the creator in the PDF information section.</p>
+  </section>
+</section>
+<section class="detail" id="set_cursor/2">
+
+  <div class="detail-header">
+    <a href="#set_cursor/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">set_cursor(document, y)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L651" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> set_cursor(Pdf.Document.t(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>()) :: Pdf.Document.t()</pre>
+
+      </div>
+
+<p>Set the cursor Y position.</p>
+  </section>
+</section>
+<section class="detail" id="set_cursor_x/2">
+
+  <div class="detail-header">
+    <a href="#set_cursor_x/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">set_cursor_x(document, x)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L659" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> set_cursor_x(Pdf.Document.t(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>()) :: Pdf.Document.t()</pre>
+
+      </div>
+
+<p>Set the cursor X position.</p>
+  </section>
+</section>
+<section class="detail" id="set_dash/3">
+
+    <span id="set_dash/2"></span>
+
+  <div class="detail-header">
+    <a href="#set_dash/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">set_dash(document, dash_array, phase \\ 0)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L267" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Set the dash pattern for stroking operations.</p><ul><li><code class="inline">set_dash(doc, [3, 3], 0)</code> — dashed line (3 on, 3 off)</li><li><code class="inline">set_dash(doc, [6, 2], 0)</code> — long dash</li><li><code class="inline">set_dash(doc, [], 0)</code> — reset to solid</li></ul>
+  </section>
+</section>
+<section class="detail" id="set_fill_color/2">
+
+  <div class="detail-header">
+    <a href="#set_fill_color/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">set_fill_color(document, color)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L232" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> set_fill_color(Pdf.Document.t(), <a href="#t:color_name/0">color_name</a>() | <a href="#t:rgb/0">rgb</a>() | <a href="#t:cmyk/0">cmyk</a>()) ::
+  Pdf.Document.t()</pre>
+
+      </div>
+
+<p>Set the color to use when filling.</p><p>This takes either a <a href="Pdf.Color.html#color/1"><code class="inline">Pdf.Color.color/1</code></a> atom, an RGB tuple or a CMYK tuple.</p>
+  </section>
+</section>
+<section class="detail" id="set_fill_opacity/2">
+
+  <div class="detail-header">
+    <a href="#set_fill_opacity/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">set_fill_opacity(document, opacity)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L316" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> set_fill_opacity(Pdf.Document.t(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>()) :: Pdf.Document.t()</pre>
+
+      </div>
+
+<p>Set the fill opacity (0.0 fully transparent, 1.0 fully opaque).</p>
+  </section>
+</section>
+<section class="detail" id="set_font/3">
+
+  <div class="detail-header">
+    <a href="#set_font/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">set_font(document, font_name, opts)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L386" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> set_font(Pdf.Document.t(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>() | <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">list</a>()) :: Pdf.Document.t()</pre>
+
+      </div>
+
+<p>Sets the font that will be used for all text from here on.
+You can either specify the font size, or a list of options:</p><table><thead><tr><th style="text-align: left;">Option</th><th style="text-align: left;">Value</th><th style="text-align: left;">Default</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">:size</code></td><td style="text-align: left;">integer</td><td style="text-align: left;">10</td></tr><tr><td style="text-align: left;"><code class="inline">:bold</code></td><td style="text-align: left;">boolean</td><td style="text-align: left;">false</td></tr><tr><td style="text-align: left;"><code class="inline">:italic</code></td><td style="text-align: left;">boolean</td><td style="text-align: left;">false</td></tr></tbody></table>
+  </section>
+</section>
+<section class="detail" id="set_font_size/2">
+
+  <div class="detail-header">
+    <a href="#set_font_size/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">set_font_size(document, size)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L405" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Sets the font size.</p><p>The font has to have been previously set!</p>
+  </section>
+</section>
+<section class="detail" id="set_info/2">
+
+  <div class="detail-header">
+    <a href="#set_info/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">set_info(document, info_list)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L1239" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> set_info(Pdf.Document.t(), info_list()) :: Pdf.Document.t()</pre>
+
+      </div>
+
+<p>Set multiple keys in the PDF information section.</p><p>Valid keys</p><ul><li><code class="inline">:author</code></li><li><code class="inline">:created</code></li><li><code class="inline">:creator</code></li><li><code class="inline">:keywords</code></li><li><code class="inline">:modified</code></li><li><code class="inline">:producer</code></li><li><code class="inline">:subject</code></li><li><code class="inline">:title</code></li></ul>
+  </section>
+</section>
+<section class="detail" id="set_keywords/2">
+
+  <div class="detail-header">
+    <a href="#set_keywords/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">set_keywords(document, keywords)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L1206" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Sets the keywords in the PDF information section.</p>
+  </section>
+</section>
+<section class="detail" id="set_line_cap/2">
+
+  <div class="detail-header">
+    <a href="#set_line_cap/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">set_line_cap(document, style)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L252" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> set_line_cap(Pdf.Document.t(), <a href="#t:cap_style/0">cap_style</a>()) :: Pdf.Document.t()</pre>
+
+      </div>
+
+<p>The line endings to draw, see <a href="#t:cap_style/0"><code class="inline">cap_style/0</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="set_line_join/2">
+
+  <div class="detail-header">
+    <a href="#set_line_join/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">set_line_join(document, style)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L258" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> set_line_join(Pdf.Document.t(), <a href="#t:join_style/0">join_style</a>()) :: Pdf.Document.t()</pre>
+
+      </div>
+
+<p>The join style to use where lines meet, see <a href="#t:join_style/0"><code class="inline">join_style/0</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="set_line_width/2">
+
+  <div class="detail-header">
+    <a href="#set_line_width/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">set_line_width(document, width)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L246" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> set_line_width(Pdf.Document.t(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>()) :: Pdf.Document.t()</pre>
+
+      </div>
+
+<p>The width to use when drawing lines.</p>
+  </section>
+</section>
+<section class="detail" id="set_opacity/2">
+
+  <div class="detail-header">
+    <a href="#set_opacity/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">set_opacity(document, opacity)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L328" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> set_opacity(Pdf.Document.t(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>()) :: Pdf.Document.t()</pre>
+
+      </div>
+
+<p>Set both fill and stroke opacity (0.0 fully transparent, 1.0 fully opaque).</p>
+  </section>
+</section>
+<section class="detail" id="set_producer/2">
+
+  <div class="detail-header">
+    <a href="#set_producer/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">set_producer(document, producer)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L1211" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Sets the producer in the PDF information section.</p>
+  </section>
+</section>
+<section class="detail" id="set_stroke_color/2">
+
+  <div class="detail-header">
+    <a href="#set_stroke_color/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">set_stroke_color(document, color)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L240" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> set_stroke_color(Pdf.Document.t(), <a href="#t:color_name/0">color_name</a>() | <a href="#t:rgb/0">rgb</a>() | <a href="#t:cmyk/0">cmyk</a>()) ::
+  Pdf.Document.t()</pre>
+
+      </div>
+
+<p>Set the color to use when drawing lines.</p><p>This takes either a <a href="Pdf.Color.html#color/1"><code class="inline">Pdf.Color.color/1</code></a> atom, an RGB tuple or a CMYK tuple.</p>
+  </section>
+</section>
+<section class="detail" id="set_stroke_opacity/2">
+
+  <div class="detail-header">
+    <a href="#set_stroke_opacity/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">set_stroke_opacity(document, opacity)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L322" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> set_stroke_opacity(Pdf.Document.t(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>()) :: Pdf.Document.t()</pre>
+
+      </div>
+
+<p>Set the stroke opacity (0.0 fully transparent, 1.0 fully opaque).</p>
+  </section>
+</section>
+<section class="detail" id="set_subject/2">
+
+  <div class="detail-header">
+    <a href="#set_subject/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">set_subject(document, subject)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L1216" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Sets the subject in the PDF information section.</p>
+  </section>
+</section>
+<section class="detail" id="set_text_leading/2">
+
+  <div class="detail-header">
+    <a href="#set_text_leading/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">set_text_leading(document, leading)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L436" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Leading is a typography term that describes the distance between each line of text. The name comes from a time when typesetting was done by hand and pieces of lead were used to separate the lines.</p><p>Today, leading is often used synonymously with &quot;line height&quot; or &quot;line spacing.&quot;</p>
+  </section>
+</section>
+<section class="detail" id="set_title/2">
+
+  <div class="detail-header">
+    <a href="#set_title/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">set_title(document, title)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L1221" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Sets the title in the PDF information section.</p>
+  </section>
+</section>
+<section class="detail" id="size/1">
+
+  <div class="detail-header">
+    <a href="#size/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">size(document)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L627" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Returns a <code class="inline">{width, height}</code> for the current page.</p>
+  </section>
+</section>
+<section class="detail" id="spacer/2">
+
+  <div class="detail-header">
+    <a href="#spacer/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">spacer(document, amount)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L1126" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Add vertical space by moving the cursor down.</p><h2 id="spacer/2-example" class="section-heading"><a href="#spacer/2-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">spacer</span><span class="p" data-group-id="1012493185-1">(</span><span class="mi">20</span><span class="p" data-group-id="1012493185-1">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="stroke/1">
+
+  <div class="detail-header">
+    <a href="#stroke/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">stroke(document)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L304" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> stroke(Pdf.Document.t()) :: Pdf.Document.t()</pre>
+
+      </div>
+
+<p>Perform all the previous graphic commands.</p>
+  </section>
+</section>
+<section class="detail" id="table/5">
+
+    <span id="table/4"></span>
+
+  <div class="detail-header">
+    <a href="#table/5" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">table(document, coords, dimensions, data, opts \\ [])</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L571" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Add a table in the document at the given coordinates.</p><p>See <a href="tables.html">Tables</a> for more information on how to use tables.</p>
+  </section>
+</section>
+<section class="detail" id="table!/5">
+
+    <span id="table!/4"></span>
+
+  <div class="detail-header">
+    <a href="#table!/5" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">table!(document, coords, dimensions, data, opts \\ [])</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L581" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Add a table in the document at the given coordinates.
+Raises an exception if the table does not fit the dimensions.</p><p>See <a href="tables.html">Tables</a> for more information on how to use tables.</p>
+  </section>
+</section>
+<section class="detail" id="text/3">
+
+    <span id="text/2"></span>
+
+  <div class="detail-header">
+    <a href="#text/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">text(document, string, style_or_name \\ %{})</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L1070" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Write styled text at the current cursor position with auto-wrapping.
+Moves the cursor down after writing.</p><h2 id="text/3-example" class="section-heading"><a href="#text/3-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text</span><span class="p" data-group-id="4624842282-1">(</span><span class="s">&quot;Hello world&quot;</span><span class="p" data-group-id="4624842282-1">)</span><span class="w">
+</span><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text</span><span class="p" data-group-id="4624842282-2">(</span><span class="s">&quot;Bold red&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4624842282-3">%{</span><span class="ss">bold</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:red</span><span class="p">,</span><span class="w"> </span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="p" data-group-id="4624842282-3">}</span><span class="p" data-group-id="4624842282-2">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="text_at/3">
+
+  <div class="detail-header">
+    <a href="#text_at/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">text_at(document, coords, text)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L461" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Writes the text at the given coordinates.
+The coordinates are the bottom left of the text.</p><p>The <em>text</em> can be either a binary or a list of binaries or annotated binaries.
+All text will be drawn on the same line, no wrapping will occur, it may overrun the page.</p><p>When given a list, you can supply a mix of binaries and annotated binaries.
+An annotated binary is a tuple <code class="inline">{binary, options}</code>, with the options being:</p><table><thead><tr><th style="text-align: left;">Option</th><th style="text-align: left;">Value</th><th style="text-align: left;">Default</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">:font_size</code></td><td style="text-align: left;">integer</td><td style="text-align: left;">current</td></tr><tr><td style="text-align: left;"><code class="inline">:bold</code></td><td style="text-align: left;">boolean</td><td style="text-align: left;">false</td></tr><tr><td style="text-align: left;"><code class="inline">:italic</code></td><td style="text-align: left;">boolean</td><td style="text-align: left;">false</td></tr><tr><td style="text-align: left;"><code class="inline">:leading</code></td><td style="text-align: left;">integer</td><td style="text-align: left;">current</td></tr><tr><td style="text-align: left;"><code class="inline">:color</code></td><td style="text-align: left;">:atom</td><td style="text-align: left;">current</td></tr></tbody></table><p>When setting <code class="inline">bold: true</code> or <code class="inline">italic: true</code>, make sure that your current font supports these or an error will occur.
+If using an external font, you have to <a href="#add_font/2"><code class="inline">add_font/2</code></a> all variants you want to use.</p>
+  </section>
+</section>
+<section class="detail" id="text_at/4">
+
+  <div class="detail-header">
+    <a href="#text_at/4" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">text_at(document, coords, text, style_or_opts)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L475" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Writes the text at the given coordinates.
+The coordinates are the bottom left of the text.</p><p>Accepts either a keyword list of options or a style map/atom:</p><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="6873715296-1">(</span><span class="p" data-group-id="6873715296-2">{</span><span class="mi">300</span><span class="p">,</span><span class="w"> </span><span class="mi">730</span><span class="p" data-group-id="6873715296-2">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;BILL TO&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6873715296-3">%{</span><span class="ss">bold</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:gray</span><span class="p" data-group-id="6873715296-3">}</span><span class="p" data-group-id="6873715296-1">)</span><span class="w">
+</span><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="6873715296-4">(</span><span class="p" data-group-id="6873715296-5">{</span><span class="mi">300</span><span class="p">,</span><span class="w"> </span><span class="mi">730</span><span class="p" data-group-id="6873715296-5">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;BILL TO&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">:label</span><span class="p" data-group-id="6873715296-4">)</span><span class="w">
+</span><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="6873715296-6">(</span><span class="p" data-group-id="6873715296-7">{</span><span class="mi">300</span><span class="p">,</span><span class="w"> </span><span class="mi">730</span><span class="p" data-group-id="6873715296-7">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;BILL TO&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">kerning</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="6873715296-6">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="text_lines/4">
+
+    <span id="text_lines/3"></span>
+
+  <div class="detail-header">
+    <a href="#text_lines/4" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">text_lines(document, coords, lines, opts \\ [])</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L562" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> text_lines(Pdf.Document.t(), <a href="#t:coords/0">coords</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">list</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()) :: Pdf.Document.t()</pre>
+
+      </div>
+
+<p>This function draws a number of text lines starting at the given coordinates.
+The list can overrun the page, no errors or wrapping will occur.</p><p>Kerning can be set, see <a href="#text_at/4"><code class="inline">text_at/4</code></a> for more information.</p>
+  </section>
+</section>
+<section class="detail" id="text_wrap/4">
+
+  <div class="detail-header">
+    <a href="#text_wrap/4" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">text_wrap(document, coords, dimensions, text)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L521" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> text_wrap(Pdf.Document.t(), <a href="#t:coords/0">coords</a>(), <a href="#t:dimension/0">dimension</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>() | <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">list</a>()) ::
+  {Pdf.Document.t(), :complete | <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>()}</pre>
+
+      </div>
+
+<p>Writes the text wrapped within the confines of the given dimensions.
+The <code class="inline">{x,y}</code> is the top-left of corner of the box, for this reason it is not wise to try to match it up with <code class="inline">text_at</code> on the same line.</p><p>The y-coordinate can also be set to <code class="inline">:cursor</code>.</p><p>The text will break at whitespace, such as, space, soft-hyphen, hyphen, cr, lf,  tab, ...</p><p>If the text is too large for the box, it may overrun its boundaries, but only horizontally.</p><p>This function will return a tuple <code class="inline">{pid, :complete}</code> if all text was rendered, or <code class="inline">{pid, remaining}</code> if not.
+It can subsequently be called with the <em>remaining</em> data, after eg starting a new page, until <code class="inline">{pid, :complete}</code>.</p><p>The <em>text</em> can be either a binary or a list of binaries or annotated binaries.
+The <code class="inline">:kerning</code> option if set will apply to all rendered text.</p><p>When given a list, you can supply a mix of binaries and annotated binaries.
+An annotated binary is a tuple <code class="inline">{binary, options}</code>, with the options being:</p><table><thead><tr><th style="text-align: left;">Option</th><th style="text-align: left;">Value</th><th style="text-align: left;">Default</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">:font_size</code></td><td style="text-align: left;">integer</td><td style="text-align: left;">current</td></tr><tr><td style="text-align: left;"><code class="inline">:bold</code></td><td style="text-align: left;">boolean</td><td style="text-align: left;">false</td></tr><tr><td style="text-align: left;"><code class="inline">:italic</code></td><td style="text-align: left;">boolean</td><td style="text-align: left;">false</td></tr><tr><td style="text-align: left;"><code class="inline">:leading</code></td><td style="text-align: left;">integer</td><td style="text-align: left;">current</td></tr><tr><td style="text-align: left;"><code class="inline">:color</code></td><td style="text-align: left;">:atom</td><td style="text-align: left;">current</td></tr></tbody></table><p>When choosing <code class="inline">:bold</code> or <code class="inline">:italic</code>, make sure that your current font supports these or an error will occur.
+If using an external font, you have to <a href="#add_font/2"><code class="inline">add_font/2</code></a> all variants you want to use.</p>
+  </section>
+</section>
+<section class="detail" id="text_wrap/5">
+
+  <div class="detail-header">
+    <a href="#text_wrap/5" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">text_wrap(document, coords, dimensions, text, opts)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L535" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> text_wrap(Pdf.Document.t(), <a href="#t:coords/0">coords</a>(), <a href="#t:dimension/0">dimension</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>() | <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">list</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()) ::
+  {Pdf.Document.t(), :complete | <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>()}</pre>
+
+      </div>
+
+<p>This function has the same options as <a href="#text_wrap/4"><code class="inline">text_wrap/4</code></a>, but also supports additional options that will be applied to the complete text.</p><table><thead><tr><th style="text-align: left;">Option</th><th style="text-align: left;">Value</th><th style="text-align: left;">Default</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">:align</code></td><td style="text-align: left;">:left , :center , :right</td><td style="text-align: left;">:left</td></tr><tr><td style="text-align: left;"><code class="inline">:kerning</code></td><td style="text-align: left;"><code class="inline">boolean</code></td><td style="text-align: left;">false</td></tr></tbody></table>
+  </section>
+</section>
+<section class="detail" id="text_wrap!/4">
+
+  <div class="detail-header">
+    <a href="#text_wrap!/4" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">text_wrap!(document, coords, dimensions, text)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L543" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> text_wrap!(Pdf.Document.t(), <a href="#t:coords/0">coords</a>(), <a href="#t:dimension/0">dimension</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>() | <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">list</a>()) ::
+  Pdf.Document.t()</pre>
+
+      </div>
+
+<p>This function has the same options as <a href="#text_wrap/4"><code class="inline">text_wrap/4</code></a>, but if the text is too large for the box, a <a href="https://hexdocs.pm/elixir/RuntimeError.html"><code class="inline">RuntimeError</code></a> will be raised.</p>
+  </section>
+</section>
+<section class="detail" id="text_wrap!/5">
+
+  <div class="detail-header">
+    <a href="#text_wrap!/5" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">text_wrap!(document, coords, dimensions, text, opts)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L551" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> text_wrap!(
+  Pdf.Document.t(),
+  <a href="#t:coords/0">coords</a>(),
+  <a href="#t:dimension/0">dimension</a>(),
+  <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>() | <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">list</a>(),
+  <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()
+) ::
+  Pdf.Document.t()</pre>
+
+      </div>
+
+<p>This function has the same options as <a href="#text_wrap/5"><code class="inline">text_wrap/5</code></a>, but if the text is too large for the box, a <a href="https://hexdocs.pm/elixir/RuntimeError.html"><code class="inline">RuntimeError</code></a> will be raised.</p>
+  </section>
+</section>
+<section class="detail" id="transform/2">
+
+  <div class="detail-header">
+    <a href="#transform/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">transform(document, matrix)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L356" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> transform(
+  Pdf.Document.t(),
+  {<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>()}
+) ::
+  Pdf.Document.t()</pre>
+
+      </div>
+
+<p>Apply an arbitrary transformation matrix {a, b, c, d, e, f}.
+Must be used within <code class="inline">save_state/restore_state</code>.</p>
+  </section>
+</section>
+<section class="detail" id="translate/2">
+
+  <div class="detail-header">
+    <a href="#translate/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">translate(document, coords)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L342" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> translate(
+  Pdf.Document.t(),
+  {<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>()}
+) :: Pdf.Document.t()</pre>
+
+      </div>
+
+<p>Translate (move) the coordinate origin by {tx, ty}.
+Must be used within <code class="inline">save_state/restore_state</code>.</p>
+  </section>
+</section>
+<section class="detail" id="watermark/3">
+
+    <span id="watermark/2"></span>
+
+  <div class="detail-header">
+    <a href="#watermark/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">watermark(document, text, style_or_name \\ %{})</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L1151" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Add a text watermark to the current page with rotation and opacity.</p><h2 id="watermark/3-example" class="section-heading"><a href="#watermark/3-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">watermark</span><span class="p" data-group-id="1754173182-1">(</span><span class="s">&quot;DRAFT&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1754173182-2">%{</span><span class="ss">opacity</span><span class="p">:</span><span class="w"> </span><span class="mf">0.1</span><span class="p">,</span><span class="w"> </span><span class="ss">rotate</span><span class="p">:</span><span class="w"> </span><span class="mi">45</span><span class="p">,</span><span class="w"> </span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:gray</span><span class="p" data-group-id="1754173182-2">}</span><span class="p" data-group-id="1754173182-1">)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="write_to/2">
+
+  <div class="detail-header">
+    <a href="#write_to/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">write_to(document, path)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf.ex#L176" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Write the PDF to the given path</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+
+        <p>
+
+            <span class="line">
+              <a href="https://hex.pm/packages/ex_pdf_core/1.0.0">Hex Package</a>
+
+              <a href="https://preview.hex.pm/preview/ex_pdf_core/1.0.0">Hex Preview</a>
+
+            </span>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
+
+
+              <a href="ex_pdf_core.epub">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.2) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

@@ -1,7 +1,7 @@
 defmodule ExPdf.MixProject do
   use Mix.Project
 
-  @version "2.0.0"
+  @version "1.0.4"
   @github_url "https://github.com/MisaelMa/ExPDF"
 
   def project do
@@ -18,7 +18,8 @@ defmodule ExPdf.MixProject do
       package: package(),
       description:
         "Native Elixir PDF reader and writer. Meta-package that includes " <>
-          "ex_pdf_core, ex_pdf_components, and ex_pdf_read."
+          "ex_pdf_core, ex_pdf_components, and ex_pdf_read.",
+      releaser: [publish: true]
     ]
   end
 
