@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.2">
+    <meta name="project" content="ex_pdf v1.0.5">
+
+
+    <title>Overview — ex_pdf v1.0.5</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/ex_pdf/readme.html" />
+
+    <script defer src="dist/sidebar_items-E35AC3DA.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-Y2MUTVIN.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+ex_pdf
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.0.5
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of ex_pdf</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>ExPDF</h1>
+
+
+
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.5/../../README.md#L1" title="View Source" class="icon-action" rel="help nofollow">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+<p><a href="https://hex.pm/packages/ex_pdf"><img src="https://img.shields.io/hexpm/v/ex_pdf.svg" alt="Hex.pm"/></a>
+<a href="https://hexdocs.pm/ex_pdf"><img src="https://img.shields.io/badge/docs-hexdocs-blue" alt="Documentation"/></a>
+<a href="license.html"><img src="https://img.shields.io/hexpm/l/ex_pdf.svg" alt="License"/></a></p><p>Native Elixir PDF <strong>reader</strong> and <strong>writer</strong> — writes PDFs from declarative
+page descriptions and reads PDFs (text with positions, layout, links,
+images, metadata, encryption, AcroForm fields, outlines, annotations)
+using the Erlang/OTP standard library only. <strong>No Hex runtime
+dependencies, no system tools.</strong></p><h2 id="origin" class="section-heading"><a href="#origin" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Origin</span></h2><p>ExPDF is a fork of <a rel="nofollow" href="https://github.com/andrewtimberlake/elixir-pdf"><code class="inline">andrewtimberlake/elixir-pdf</code></a>
+(Hex package <code class="inline">:pdf</code>, ©Andrew Timberlake, MIT). The original library is
+a writer-only PDF generator. This fork keeps the full writer API
+unchanged and <strong>adds a native PDF reader</strong> plus several quality-of-life
+improvements. See <code class="inline">CHANGELOG.md</code> for the complete list. Original
+authorship is preserved in the contributors list.</p><h2 id="installation" class="section-heading"><a href="#installation" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Installation</span></h2><p>Add <code class="inline">ex_pdf</code> to your <code class="inline">mix.exs</code>:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">deps</span><span class="w"> </span><span class="k" data-group-id="2437811092-1">do</span><span class="w">
+  </span><span class="p" data-group-id="2437811092-2">[</span><span class="w">
+    </span><span class="p" data-group-id="2437811092-3">{</span><span class="ss">:ex_pdf</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;~&gt; 1.0&quot;</span><span class="p" data-group-id="2437811092-3">}</span><span class="w">
+  </span><span class="p" data-group-id="2437811092-2">]</span><span class="w">
+</span><span class="k" data-group-id="2437811092-1">end</span></code></pre><h2 id="reading-pdfs" class="section-heading"><a href="#reading-pdfs" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Reading PDFs</span></h2><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="2775183964-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">doc</span><span class="p" data-group-id="2775183964-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">open</span><span class="p" data-group-id="2775183964-2">(</span><span class="s">&quot;invoice.pdf&quot;</span><span class="p" data-group-id="2775183964-2">)</span><span class="w">
+</span><span class="p" data-group-id="2775183964-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2775183964-4">%</span><span class="nc" data-group-id="2775183964-4">Pdf.Reader.Result</span><span class="p" data-group-id="2775183964-4">{</span><span class="p" data-group-id="2775183964-4">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">result</span><span class="p">,</span><span class="w"> </span><span class="c">_doc</span><span class="p" data-group-id="2775183964-3">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">read</span><span class="p" data-group-id="2775183964-5">(</span><span class="n">doc</span><span class="p" data-group-id="2775183964-5">)</span><span class="w">
+
+</span><span class="c1"># Document-level metadata (PDF 1.7 § 14.3)</span><span class="w">
+</span><span class="n">result</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">title</span><span class="w">           </span><span class="c1"># &quot;Invoice 042&quot;</span><span class="w">
+</span><span class="n">result</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">author</span><span class="w">          </span><span class="c1"># &quot;Acme Corp&quot;</span><span class="w">
+</span><span class="n">result</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">producer</span><span class="w">        </span><span class="c1"># &quot;LibreOffice 7.5&quot;</span><span class="w">
+</span><span class="n">result</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">page_count</span><span class="w">      </span><span class="c1"># 3</span><span class="w">
+</span><span class="n">result</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">version</span><span class="w">         </span><span class="c1"># &quot;1.7&quot;</span><span class="w">
+</span><span class="n">result</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">encrypted</span><span class="w">       </span><span class="c1"># false</span><span class="w">
+</span><span class="n">result</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">recovery_log</span><span class="w">    </span><span class="c1"># []</span><span class="w">
+</span><span class="n">result</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">raw</span><span class="w">             </span><span class="c1"># full Info-dict + XMP merge</span><span class="w">
+
+</span><span class="c1"># Per-page lines with kind-tagged tokens</span><span class="w">
+</span><span class="k">for</span><span class="w"> </span><span class="n">page</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">result</span><span class="o">.</span><span class="n">pages</span><span class="w"> </span><span class="k" data-group-id="2775183964-6">do</span><span class="w">
+  </span><span class="k">for</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">page</span><span class="o">.</span><span class="n">lines</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">line</span><span class="o">.</span><span class="n">tokens</span><span class="w"> </span><span class="k" data-group-id="2775183964-7">do</span><span class="w">
+    </span><span class="k">case</span><span class="w"> </span><span class="n">token</span><span class="o">.</span><span class="n">kind</span><span class="w"> </span><span class="k" data-group-id="2775183964-8">do</span><span class="w">
+      </span><span class="ss">:text</span><span class="w">  </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="2775183964-9">(</span><span class="n">token</span><span class="o">.</span><span class="n">text</span><span class="p" data-group-id="2775183964-9">)</span><span class="w">
+      </span><span class="ss">:link</span><span class="w">  </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="2775183964-10">(</span><span class="s">&quot;LINK → </span><span class="si" data-group-id="2775183964-11">#{</span><span class="n">token</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">target</span><span class="si" data-group-id="2775183964-11">}</span><span class="s">&quot;</span><span class="p" data-group-id="2775183964-10">)</span><span class="w">
+      </span><span class="ss">:email</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="2775183964-12">(</span><span class="s">&quot;EMAIL → </span><span class="si" data-group-id="2775183964-13">#{</span><span class="n">token</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">target</span><span class="si" data-group-id="2775183964-13">}</span><span class="s">&quot;</span><span class="p" data-group-id="2775183964-12">)</span><span class="w">
+      </span><span class="ss">:image</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p" data-group-id="2775183964-14">(</span><span class="s">&quot;IMG </span><span class="si" data-group-id="2775183964-15">#{</span><span class="n">inspect</span><span class="p" data-group-id="2775183964-16">(</span><span class="n">token</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">rect</span><span class="p" data-group-id="2775183964-16">)</span><span class="si" data-group-id="2775183964-15">}</span><span class="s">&quot;</span><span class="p" data-group-id="2775183964-14">)</span><span class="w">
+    </span><span class="k" data-group-id="2775183964-8">end</span><span class="w">
+  </span><span class="k" data-group-id="2775183964-7">end</span><span class="w">
+</span><span class="k" data-group-id="2775183964-6">end</span></code></pre><h3 id="convenience-shapes" class="section-heading"><a href="#convenience-shapes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Convenience shapes</span></h3><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="2680928837-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">pages</span><span class="p">,</span><span class="w"> </span><span class="bp">_</span><span class="p" data-group-id="2680928837-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">read</span><span class="p" data-group-id="2680928837-2">(</span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="ss">shape</span><span class="p">:</span><span class="w"> </span><span class="ss">:text</span><span class="p" data-group-id="2680928837-2">)</span><span class="w">    </span><span class="c1"># [String.t()] per page</span><span class="w">
+</span><span class="p" data-group-id="2680928837-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">shapes</span><span class="p">,</span><span class="w"> </span><span class="bp">_</span><span class="p" data-group-id="2680928837-3">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">read</span><span class="p" data-group-id="2680928837-4">(</span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="ss">shape</span><span class="p">:</span><span class="w"> </span><span class="ss">:shapes</span><span class="p" data-group-id="2680928837-4">)</span><span class="w"> </span><span class="c1"># [%Shape{}] flat</span></code></pre><h3 id="token-enrichment" class="section-heading"><a href="#token-enrichment" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Token enrichment</span></h3><p>Every token in <code class="inline">result.pages[*].lines[*].tokens</code> carries:</p><table><thead><tr><th style="text-align: left;">Field</th><th style="text-align: left;">Type</th><th style="text-align: left;">Description</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">:x</code></td><td style="text-align: left;"><code class="inline">float</code></td><td style="text-align: left;">Absolute X in PDF user space</td></tr><tr><td style="text-align: left;"><code class="inline">:text</code></td><td style="text-align: left;"><code class="inline">String.t()</code></td><td style="text-align: left;">Token text</td></tr><tr><td style="text-align: left;"><code class="inline">:width</code></td><td style="text-align: left;"><code class="inline">float</code></td><td style="text-align: left;">Render width</td></tr><tr><td style="text-align: left;"><code class="inline">:kind</code></td><td style="text-align: left;"><code class="inline">:text | :link | :email | :image</code></td><td style="text-align: left;">Discriminator</td></tr><tr><td style="text-align: left;"><code class="inline">:shape</code></td><td style="text-align: left;"><code class="inline">%Pdf.Reader.Shape{} | nil</code></td><td style="text-align: left;">Type-specific payload</td></tr></tbody></table><p>Link/email tokens get a populated <code class="inline">:shape</code> whose <code class="inline">:target</code> carries the
+URI/email. Image tokens get a <code class="inline">:shape</code> with <code class="inline">meta.data_uri</code> (a
+<code class="inline">data:image/png;base64,…</code> or <code class="inline">data:image/jpeg;base64,…</code> string ready
+for HTML embedding) and <code class="inline">meta.format</code>, <code class="inline">meta.width</code>, <code class="inline">meta.height</code>,
+<code class="inline">meta.byte_size</code>. The raw <code class="inline">:bytes</code> are off by default — pass
+<code class="inline">image_bytes: true</code> to include them.</p><h3 id="error-recovery" class="section-heading"><a href="#error-recovery" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Error recovery</span></h3><pre><code class="makeup elixir" translate="no"><span class="c1"># Lenient mode for malformed PDFs (PDF 1.7 § 7.5)</span><span class="w">
+</span><span class="p" data-group-id="3540638798-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">doc</span><span class="p" data-group-id="3540638798-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">open</span><span class="p" data-group-id="3540638798-2">(</span><span class="n">broken_bin</span><span class="p">,</span><span class="w"> </span><span class="ss">recover</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="3540638798-2">)</span><span class="w">
+</span><span class="p" data-group-id="3540638798-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="c">_result</span><span class="p">,</span><span class="w"> </span><span class="n">doc</span><span class="p" data-group-id="3540638798-3">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">read</span><span class="p" data-group-id="3540638798-4">(</span><span class="n">doc</span><span class="p" data-group-id="3540638798-4">)</span><span class="w">
+</span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">recovery_log</span><span class="p" data-group-id="3540638798-5">(</span><span class="n">doc</span><span class="p" data-group-id="3540638798-5">)</span><span class="w">
+</span><span class="c1"># =&gt; [{:xref_recovered, 42}, {:page_failed, 3, _reason}, ...]</span></code></pre><p>The reader can recover from corrupted xref tables (linear scan), missing
+<code class="inline">%%EOF</code> markers, broken page-tree links, dangling font refs, and
+truncated streams. Fatal errors (<code class="inline">:not_a_pdf</code>, encryption-without-password)
+remain hard errors.</p><h3 id="dictionary-based-word-split" class="section-heading"><a href="#dictionary-based-word-split" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Dictionary-based word split</span></h3><p>Some PDFs emit consecutive words with no whitespace glyph and no case
+transition (e.g. <code class="inline">iniciode</code> instead of <code class="inline">inicio de</code>). With a wordlist
+the reader can recover those boundaries:</p><pre><code class="makeup elixir" translate="no"><span class="c1"># Bundled top-10k Spanish frequency list (MIT, ~80KB)</span><span class="w">
+</span><span class="p" data-group-id="5704140370-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">,</span><span class="w"> </span><span class="bp">_</span><span class="p" data-group-id="5704140370-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">read</span><span class="p" data-group-id="5704140370-2">(</span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="ss">dictionary</span><span class="p">:</span><span class="w"> </span><span class="ss">:es</span><span class="p" data-group-id="5704140370-2">)</span><span class="w">
+
+</span><span class="c1"># Or a custom wordlist</span><span class="w">
+</span><span class="n">my_words</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">MapSet</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="5704140370-3">(</span><span class="nc">File</span><span class="o">.</span><span class="n">stream!</span><span class="p" data-group-id="5704140370-4">(</span><span class="s">&quot;my_dict.txt&quot;</span><span class="p" data-group-id="5704140370-4">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Enum</span><span class="o">.</span><span class="n">map</span><span class="p" data-group-id="5704140370-5">(</span><span class="o">&amp;</span><span class="nc">String</span><span class="o">.</span><span class="n">trim</span><span class="o">/</span><span class="mi">1</span><span class="p" data-group-id="5704140370-5">)</span><span class="p" data-group-id="5704140370-3">)</span><span class="w">
+</span><span class="p" data-group-id="5704140370-6">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">,</span><span class="w"> </span><span class="bp">_</span><span class="p" data-group-id="5704140370-6">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">read</span><span class="p" data-group-id="5704140370-7">(</span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="ss">dictionary</span><span class="p">:</span><span class="w"> </span><span class="n">my_words</span><span class="p" data-group-id="5704140370-7">)</span><span class="w">
+
+</span><span class="c1"># Combine the bundled dict with project-specific terms</span><span class="w">
+</span><span class="n">my_dict</span><span class="w"> </span><span class="o">=</span><span class="w">
+  </span><span class="nc">Pdf.Reader.Wordlist</span><span class="o">.</span><span class="n">spanish</span><span class="p" data-group-id="5704140370-8">(</span><span class="p" data-group-id="5704140370-8">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">MapSet</span><span class="o">.</span><span class="n">union</span><span class="p" data-group-id="5704140370-9">(</span><span class="nc">MapSet</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="5704140370-10">(</span><span class="p" data-group-id="5704140370-11">[</span><span class="s">&quot;padrón&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;fiscales&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;tributarios&quot;</span><span class="p" data-group-id="5704140370-11">]</span><span class="p" data-group-id="5704140370-10">)</span><span class="p" data-group-id="5704140370-9">)</span><span class="w">
+
+</span><span class="p" data-group-id="5704140370-12">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">,</span><span class="w"> </span><span class="bp">_</span><span class="p" data-group-id="5704140370-12">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">read</span><span class="p" data-group-id="5704140370-13">(</span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="ss">dictionary</span><span class="p">:</span><span class="w"> </span><span class="n">my_dict</span><span class="p" data-group-id="5704140370-13">)</span></code></pre><p>The split is conservative: a token is split only when (a) BOTH halves
+are dictionary words AND (b) the whole token is NOT itself a dictionary
+word — so <code class="inline">personales</code>, <code class="inline">desea</code>, <code class="inline">desde</code>, <code class="inline">queja</code> stay intact. URLs,
+emails, identifiers, and base64 hashes are exempted.</p><p>The bundled <code class="inline">:es</code> dictionary is built from two wordlists merged at
+compile time:</p><ol><li><strong><code class="inline">priv/wordlists/spanish.txt</code></strong> — 50,000 entries (~428 KB) from
+<a rel="nofollow" href="https://github.com/hermitdave/FrequencyWords">hermitdave/FrequencyWords</a>
+(MIT License, © Hermit Dave), derived from OpenSubtitles 2018.
+Covers conversational, technical, and legal Spanish.</li><li><strong><code class="inline">priv/wordlists/spanish_mx_extras.txt</code></strong> — ~700 Mexican
+tax/legal/government terms curated for this project (MIT). Includes
+<code class="inline">padrón</code>, <code class="inline">tributarios</code>, <code class="inline">federativa</code>, <code class="inline">asimilados</code>, <code class="inline">lineamientos</code>,
+<code class="inline">contribuyente</code>, <code class="inline">recaudación</code>, etc. — terms missing from the
+subtitle-derived corpus.</li></ol><p>A small blacklist (<code class="inline">dela</code>, <code class="inline">pal</code>) removes slang merges that would
+prevent correct splitting (e.g. &quot;de la&quot; → &quot;dela&quot; then back to
+&quot;de la&quot;). Final size: ~50,500 unique entries loaded into a <a href="https://hexdocs.pm/elixir/MapSet.html"><code class="inline">MapSet</code></a>
+at compile time.</p><h3 id="tokenization-rules" class="section-heading"><a href="#tokenization-rules" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Tokenization rules</span></h3><p>The dict-split applies four passes (in order):</p><ol><li><strong>Label-colon split</strong>: <code class="inline">Postal:77710</code> → <code class="inline">Postal:</code> + <code class="inline">77710</code> (URLs/emails exempted).</li><li><strong>Letter↔digit boundary</strong>: <code class="inline">1Asalariado</code> → <code class="inline">1</code> + <code class="inline">Asalariado</code> (RFC/CURP shapes and base64 exempted).</li><li><strong>CamelCase split</strong>: <code class="inline">delMunicipio</code> → <code class="inline">del Municipio</code> (acronyms and digits exempted).</li><li><strong>Dictionary partition</strong> (when <code class="inline">:dictionary</code> set): full decomposition
+into dict words. Validity rules:<ul><li>Every piece is ≥ 4 chars OR in the closed connector list
+(<code class="inline">de el la en si son del las los una uno con por sus que fin mes año día</code>) plus 1-char connectors (<code class="inline">y o a e u</code>).</li><li>At least one piece must be ≥ 4 chars (anchor) — unless every
+piece is a short connector (catches <code class="inline">dela</code> → <code class="inline">de</code>+<code class="inline">la</code>).</li><li>2-piece partitions starting with a capitalized 2-3 char piece
+are rejected (avoids <code class="inline">Demarcación</code> → <code class="inline">De</code>+<code class="inline">marcación</code>).</li></ul></li></ol><p>When multiple valid partitions exist, the algorithm picks the one
+with the longest first piece for long tokens (≥ 15 chars) or the
+fewest 1-char pieces for short tokens. Recursion processes embedded
+punctuation: <code class="inline">¡denúnciala!Si...</code> → <code class="inline">¡denúnciala!</code> + <code class="inline">Si conoces ...</code>.</p><h3 id="encryption" class="section-heading"><a href="#encryption" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Encryption</span></h3><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="9810958005-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">doc</span><span class="p" data-group-id="9810958005-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">open</span><span class="p" data-group-id="9810958005-2">(</span><span class="s">&quot;encrypted.pdf&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;secret&quot;</span><span class="p" data-group-id="9810958005-2">)</span></code></pre><p>Standard Security Handler V1/V2/V4 (RC4-40, RC4-128, AES-128) and
+V5/R6 (AES-256) per PDF 1.7 § 7.6 / PDF 2.0 § 7.6. Empty password is
+auto-tried first.</p><h3 id="cid-fonts" class="section-heading"><a href="#cid-fonts" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">CID fonts</span></h3><p>Forty predefined CMaps from the Adobe <code class="inline">cmap-resources</code> collection are
+bundled in <code class="inline">priv/cmap/</code> (Identity-H/V, UniJIS, GB, KSC, GBK, ETen, …).
+Combined with the Adobe Japan1/CNS1/Korea1/GB1 collections, the reader
+decodes the vast majority of multi-byte CID fonts found in real-world
+PDFs. ToUnicode CMaps are parsed for the remainder.</p><h2 id="writing-pdfs" class="section-heading"><a href="#writing-pdfs" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Writing PDFs</span></h2><p>The writer API from the upstream <code class="inline">elixir-pdf</code> is preserved unchanged:</p><pre><code class="makeup elixir" translate="no"><span class="nc">Pdf</span><span class="o">.</span><span class="n">build</span><span class="p" data-group-id="1537438861-1">(</span><span class="p" data-group-id="1537438861-2">[</span><span class="ss">size</span><span class="p">:</span><span class="w"> </span><span class="ss">:a4</span><span class="p">,</span><span class="w"> </span><span class="ss">compress</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="1537438861-2">]</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="1537438861-3">fn</span><span class="w"> </span><span class="n">pdf</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+  </span><span class="n">pdf</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p" data-group-id="1537438861-4">(</span><span class="s">&quot;Helvetica&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p" data-group-id="1537438861-4">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="1537438861-5">(</span><span class="p" data-group-id="1537438861-6">{</span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p" data-group-id="1537438861-6">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Hello, world!&quot;</span><span class="p" data-group-id="1537438861-5">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">add_image</span><span class="p" data-group-id="1537438861-7">(</span><span class="p" data-group-id="1537438861-8">{</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="1537438861-8">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;logo.png&quot;</span><span class="p" data-group-id="1537438861-7">)</span><span class="w">
+</span><span class="k" data-group-id="1537438861-3">end</span><span class="p" data-group-id="1537438861-1">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">export</span><span class="p" data-group-id="1537438861-9">(</span><span class="p" data-group-id="1537438861-9">)</span></code></pre><p>See <a href="extra_doc/Tables.md"><code class="inline">extra_doc/Tables.md</code></a> for the styled-table
+DSL and additional layout helpers.</p><h2 id="specifications-followed" class="section-heading"><a href="#specifications-followed" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Specifications followed</span></h2><p>The reader cites the relevant section in every module's <code class="inline">@moduledoc</code>:</p><ul><li><strong>PDF 1.7 (ISO 32000-1)</strong>: structure (§7), graphics (§8), text (§9),
+fonts (§9.6 / §9.7), images (§8.9), encryption (§7.6), page tree
+(§7.7), annotations (§12.5), outlines (§12.3), forms (§12.7),
+metadata (§14.3).</li><li><strong>PDF 2.0 (ISO 32000-2)</strong>: V5/R6 standard security handler.</li><li><strong>RFC 3986</strong> — URI generic syntax (inferred URLs).</li><li><strong>RFC 5321 § 4.1.2</strong> — SMTP mailbox/domain (inferred emails).</li><li><strong>RFC 2397</strong> — <code class="inline">data:</code> URI scheme (image embedding).</li><li><strong>PNG 1.2</strong> — chunk format for re-encoding decompressed pixel data.</li><li><strong>Adobe Glyph List</strong> — bundled at compile time for encoding cascade.</li></ul><h2 id="documented-gaps" class="section-heading"><a href="#documented-gaps" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Documented gaps</span></h2><p>The reader is intentionally pragmatic. The following items are not
+implemented and surface as best-effort defaults or no-ops:</p><ul><li>Standard 14 hardcoded font metrics — width fallback is 500 units
+(~0.5 em); exact column alignment requires AFM bundling.</li><li>Vertical writing mode (<code class="inline">/W2</code>, <code class="inline">/DW2</code>) — horizontal layout assumed.</li><li>Non-default <code class="inline">/FontMatrix</code> scaling on CIDType2 fonts.</li><li>OCR for scanned PDFs — empty text output for image-only pages.</li><li>CCITTFaxDecode / JBIG2Decode / JPXDecode image filters — surface as
+<code class="inline">{:error, {:unsupported_filter, name}}</code>.</li><li>Encrypted-AND-corrupted PDFs — recovery cannot synthesise <code class="inline">/Encrypt</code>.</li></ul><h2 id="releasing" class="section-heading"><a href="#releasing" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Releasing</span></h2><p>This project uses <a href="https://hexdocs.pm/releaser/0.0.7"><code class="inline">releaser</code></a> for
+version bumping, changelog generation, and Hex publishing.</p><pre><code class="makeup bash" translate="no"><span class="">mix releaser.bump ex_pdf patch     # 1.0.1 → 1.0.2
+</span><span class="">mix releaser.bump ex_pdf minor     # 1.0.1 → 1.1.0
+</span><span class="">mix releaser.bump ex_pdf major     # 1.0.1 → 2.0.0
+</span><span class="">mix releaser.publish               # publish to Hex
+</span></code></pre><h2 id="license" class="section-heading"><a href="#license" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">License</span></h2><p>MIT. See <code class="inline">LICENSE.md</code>. Original code © Andrew Timberlake; reader and
+post-fork additions © Misael Sánchez. Both portions remain MIT.</p>
+
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+      <a href="license.html" class="bottom-actions-button" rel="prev">
+        <span class="subheader">
+          ← Previous Page
+        </span>
+        <span class="title">
+License
+        </span>
+      </a>
+
+  </div>
+  <div class="bottom-actions-item">
+
+  </div>
+</div>
+    <footer class="footer">
+
+        <p>
+
+            <span class="line">
+              <a href="https://hex.pm/packages/ex_pdf/1.0.5">Hex Package</a>
+
+              <a href="https://preview.hex.pm/preview/ex_pdf/1.0.5">Hex Preview</a>
+
+                (<a href="https://preview.hex.pm/preview/ex_pdf/1.0.5/show/../../README.md">current file</a>)
+
+            </span>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.2) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.2">
+    <meta name="project" content="ex_pdf_components v1.0.1">
+
+
+    <title>ExPdfComponents — ex_pdf_components v1.0.1</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
+
+    <script defer src="dist/sidebar_items-E2CE0F11.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-Y2MUTVIN.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+ex_pdf_components
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.0.1
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of ex_pdf_components</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>ExPdfComponents</h1>
+
+<a href="readme.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/README.md#L1" title="View Source" class="icon-action" rel="help nofollow">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+<p><a href="https://hex.pm/packages/ex_pdf_components"><img src="https://img.shields.io/hexpm/v/ex_pdf_components.svg" alt="Hex.pm"/></a>
+<a href="https://hexdocs.pm/ex_pdf_components"><img src="https://img.shields.io/badge/docs-hexdocs-blue" alt="Docs"/></a>
+<a rel="nofollow" href="https://github.com/MisaelMa/ExPDF/blob/main/LICENSE.md"><img src="https://img.shields.io/hexpm/l/ex_pdf_components.svg" alt="License"/></a></p><p>Reusable PDF components and a declarative template builder for Elixir.
+Built on top of <a href="https://hex.pm/packages/ex_pdf_core"><code class="inline">ex_pdf_core</code></a>.</p><p>Part of the <a href="https://hex.pm/packages/ex_pdf">ExPDF</a> umbrella.</p><h2 id="installation" class="section-heading"><a href="#installation" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Installation</span></h2><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">deps</span><span class="w"> </span><span class="k" data-group-id="2200526707-1">do</span><span class="w">
+  </span><span class="p" data-group-id="2200526707-2">[</span><span class="w">
+    </span><span class="p" data-group-id="2200526707-3">{</span><span class="ss">:ex_pdf_components</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;~&gt; 1.0&quot;</span><span class="p" data-group-id="2200526707-3">}</span><span class="w">
+  </span><span class="p" data-group-id="2200526707-2">]</span><span class="w">
+</span><span class="k" data-group-id="2200526707-1">end</span></code></pre><blockquote><p>Most users should depend on <a href="https://hex.pm/packages/ex_pdf"><code class="inline">ex_pdf</code></a>
+instead, which bundles core, components, and the reader.</p></blockquote><h2 id="components" class="section-heading"><a href="#components" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Components</span></h2><table><thead><tr><th style="text-align: left;">Component</th><th style="text-align: left;">Description</th></tr></thead><tbody><tr><td style="text-align: left;"><a href="Pdf.Builder.html"><code class="inline">Pdf.Builder</code></a></td><td style="text-align: left;">Declarative template engine with cursor layout and auto-pagination</td></tr><tr><td style="text-align: left;"><a href="Pdf.StyledTable.html"><code class="inline">Pdf.StyledTable</code></a></td><td style="text-align: left;">Data tables with headers, styles, and column config</td></tr><tr><td style="text-align: left;"><a href="Pdf.Component.Alert.html"><code class="inline">Pdf.Component.Alert</code></a></td><td style="text-align: left;">Alert/notification boxes</td></tr><tr><td style="text-align: left;"><a href="Pdf.Component.Avatar.html"><code class="inline">Pdf.Component.Avatar</code></a></td><td style="text-align: left;">Circular/rounded image avatars</td></tr><tr><td style="text-align: left;"><a href="Pdf.Component.Badge.html"><code class="inline">Pdf.Component.Badge</code></a></td><td style="text-align: left;">Inline text badges</td></tr><tr><td style="text-align: left;"><a href="Pdf.Component.Barcode.html"><code class="inline">Pdf.Component.Barcode</code></a></td><td style="text-align: left;">Code 128 barcodes (via <code class="inline">ex_barcode</code>)</td></tr><tr><td style="text-align: left;"><a href="Pdf.Component.Blockquote.html"><code class="inline">Pdf.Component.Blockquote</code></a></td><td style="text-align: left;">Styled quotation blocks</td></tr><tr><td style="text-align: left;"><a href="Pdf.Component.Card.html"><code class="inline">Pdf.Component.Card</code></a></td><td style="text-align: left;">Container with shadow, border, background</td></tr><tr><td style="text-align: left;"><a href="Pdf.Component.Chart.html"><code class="inline">Pdf.Component.Chart</code></a></td><td style="text-align: left;">Basic chart rendering</td></tr><tr><td style="text-align: left;"><a href="Pdf.Component.Chip.html"><code class="inline">Pdf.Component.Chip</code></a></td><td style="text-align: left;">Tag/chip labels</td></tr><tr><td style="text-align: left;"><a href="Pdf.Component.CodeBlock.html"><code class="inline">Pdf.Component.CodeBlock</code></a></td><td style="text-align: left;">Monospaced code blocks</td></tr><tr><td style="text-align: left;"><a href="Pdf.Component.Divider.html"><code class="inline">Pdf.Component.Divider</code></a></td><td style="text-align: left;">Horizontal rule / separator</td></tr><tr><td style="text-align: left;"><a href="Pdf.Component.Footnote.html"><code class="inline">Pdf.Component.Footnote</code></a></td><td style="text-align: left;">Page footnotes</td></tr><tr><td style="text-align: left;"><a href="Pdf.Component.KeyValue.html"><code class="inline">Pdf.Component.KeyValue</code></a></td><td style="text-align: left;">Label–value pair lists</td></tr><tr><td style="text-align: left;"><a href="Pdf.Component.List.html"><code class="inline">Pdf.Component.List</code></a></td><td style="text-align: left;">Ordered/unordered lists</td></tr><tr><td style="text-align: left;"><a href="Pdf.Component.Metric.html"><code class="inline">Pdf.Component.Metric</code></a></td><td style="text-align: left;">KPI / metric display</td></tr><tr><td style="text-align: left;"><a href="Pdf.Component.PageHeader.html"><code class="inline">Pdf.Component.PageHeader</code></a></td><td style="text-align: left;">Page header with title and subtitle</td></tr><tr><td style="text-align: left;"><a href="Pdf.Component.Paginator.html"><code class="inline">Pdf.Component.Paginator</code></a></td><td style="text-align: left;">Page number footer</td></tr><tr><td style="text-align: left;"><a href="Pdf.Component.Progress.html"><code class="inline">Pdf.Component.Progress</code></a></td><td style="text-align: left;">Progress bar</td></tr><tr><td style="text-align: left;"><a href="Pdf.Component.QrCode.html"><code class="inline">Pdf.Component.QrCode</code></a></td><td style="text-align: left;">QR codes (via <code class="inline">ex_qr</code>)</td></tr><tr><td style="text-align: left;"><a href="Pdf.Component.Rating.html"><code class="inline">Pdf.Component.Rating</code></a></td><td style="text-align: left;">Star ratings</td></tr><tr><td style="text-align: left;"><a href="Pdf.Component.Signature.html"><code class="inline">Pdf.Component.Signature</code></a></td><td style="text-align: left;">Signature block</td></tr><tr><td style="text-align: left;"><a href="Pdf.Component.StatCard.html"><code class="inline">Pdf.Component.StatCard</code></a></td><td style="text-align: left;">Statistics card</td></tr><tr><td style="text-align: left;"><a href="Pdf.Component.StepIndicator.html"><code class="inline">Pdf.Component.StepIndicator</code></a></td><td style="text-align: left;">Step/wizard indicator</td></tr><tr><td style="text-align: left;"><a href="Pdf.Component.Timeline.html"><code class="inline">Pdf.Component.Timeline</code></a></td><td style="text-align: left;">Timeline visualization</td></tr><tr><td style="text-align: left;"><code class="inline">Pdf.Component.Toc</code></td><td style="text-align: left;">Table of contents</td></tr></tbody></table><h2 id="builder-example" class="section-heading"><a href="#builder-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Builder example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">template</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="5040038181-1">[</span><span class="w">
+  </span><span class="p" data-group-id="5040038181-2">%{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="ss">:row</span><span class="p">,</span><span class="w"> </span><span class="ss">props</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5040038181-3">%{</span><span class="w">
+    </span><span class="ss">children</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5040038181-4">[</span><span class="w">
+      </span><span class="p" data-group-id="5040038181-5">{</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5040038181-6">[</span><span class="p" data-group-id="5040038181-7">%{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="ss">:text</span><span class="p">,</span><span class="w"> </span><span class="ss">props</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5040038181-8">%{</span><span class="ss">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Title&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">style</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5040038181-9">%{</span><span class="ss">position</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5040038181-10">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">16</span><span class="p" data-group-id="5040038181-10">}</span><span class="p" data-group-id="5040038181-9">}</span><span class="p" data-group-id="5040038181-8">}</span><span class="p" data-group-id="5040038181-7">}</span><span class="p" data-group-id="5040038181-6">]</span><span class="p" data-group-id="5040038181-5">}</span><span class="p">,</span><span class="w">
+      </span><span class="p" data-group-id="5040038181-11">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5040038181-12">[</span><span class="p" data-group-id="5040038181-13">%{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="ss">:text</span><span class="p">,</span><span class="w"> </span><span class="ss">props</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5040038181-14">%{</span><span class="ss">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Brand&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">style</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5040038181-15">%{</span><span class="ss">position</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5040038181-16">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">16</span><span class="p" data-group-id="5040038181-16">}</span><span class="p" data-group-id="5040038181-15">}</span><span class="p" data-group-id="5040038181-14">}</span><span class="p" data-group-id="5040038181-13">}</span><span class="p" data-group-id="5040038181-12">]</span><span class="p" data-group-id="5040038181-11">}</span><span class="w">
+    </span><span class="p" data-group-id="5040038181-4">]</span><span class="p">,</span><span class="w">
+    </span><span class="ss">style</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5040038181-17">%{</span><span class="ss">position</span><span class="p">:</span><span class="w"> </span><span class="ss">:cursor</span><span class="p">,</span><span class="w"> </span><span class="ss">size</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5040038181-18">{</span><span class="ss">:full</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p" data-group-id="5040038181-18">}</span><span class="p" data-group-id="5040038181-17">}</span><span class="w">
+  </span><span class="p" data-group-id="5040038181-3">}</span><span class="p" data-group-id="5040038181-2">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="5040038181-19">%{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="ss">:spacer</span><span class="p">,</span><span class="w"> </span><span class="ss">props</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5040038181-20">%{</span><span class="ss">amount</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="5040038181-20">}</span><span class="p" data-group-id="5040038181-19">}</span><span class="w">
+</span><span class="p" data-group-id="5040038181-1">]</span><span class="w">
+
+</span><span class="nc">Pdf.Builder</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="5040038181-21">(</span><span class="n">template</span><span class="p">,</span><span class="w"> </span><span class="n">config</span><span class="p" data-group-id="5040038181-21">)</span></code></pre><p>The Builder supports cursor-based layout with automatic pagination — when
+content overflows the page, page breaks are inserted automatically.</p><h2 id="license" class="section-heading"><a href="#license" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">License</span></h2><p>MIT. See <a rel="nofollow" href="https://github.com/MisaelMa/ExPDF/blob/main/LICENSE.md">LICENSE.md</a>.</p>
+
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+  </div>
+  <div class="bottom-actions-item">
+
+  </div>
+</div>
+    <footer class="footer">
+
+        <p>
+
+            <span class="line">
+              <a href="https://hex.pm/packages/ex_pdf_components/1.0.1">Hex Package</a>
+
+              <a href="https://preview.hex.pm/preview/ex_pdf_components/1.0.1">Hex Preview</a>
+
+                (<a href="https://preview.hex.pm/preview/ex_pdf_components/1.0.1/show/README.md">current file</a>)
+
+            </span>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
+
+
+              <a href="ex_pdf_components.epub">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.2) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

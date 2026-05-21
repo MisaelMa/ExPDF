@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.2">
+    <meta name="project" content="ex_pdf_core v1.0.1">
+
+
+    <title>Pdf.Color — ex_pdf_core v1.0.1</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
+
+    <script defer src="dist/sidebar_items-73931FEE.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-Y2MUTVIN.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+ex_pdf_core
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.0.1
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of ex_pdf_core</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Pdf.<wbr />Color</span> 
+      <small class="app-vsn" translate="no">(ex_pdf_core v1.0.1)</small>
+
+    </h1>
+
+<a href="Pdf.Color.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/color.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>A list of predefined colors you can use</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h2>
+<div class="summary-functions summary">
+  <h3>
+    <a href="#functions">Functions</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#color/1" data-no-tooltip="" translate="no">color(color)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>This functions returns the <code class="inline">rgb</code> tuple for the given color.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h2>
+
+    <div class="functions-list">
+<section class="detail" id="color/1">
+
+  <div class="detail-header">
+    <a href="#color/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">color(color)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/color.ex#L156" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> color(<a href="Pdf.html#t:color_name/0">Pdf.color_name</a>()) :: <a href="Pdf.html#t:rgb/0">Pdf.rgb</a>()</pre>
+
+      </div>
+
+<p>This functions returns the <code class="inline">rgb</code> tuple for the given color.</p><li style="color: rgb(255,192,203); margin-right: 6px;">:pink</li><li style="color: rgb(255,182,193); margin-right: 6px;">:light_pink</li><li style="color: rgb(255,105,180); margin-right: 6px;">:hot_pink</li><li style="color: rgb(255,20,147); margin-right: 6px;">:deep_pink</li><li style="color: rgb(219,112,147); margin-right: 6px;">:pale_violet_red</li><li style="color: rgb(199,21,133); margin-right: 6px;">:medium_violet_red</li><li style="color: rgb(255,160,122); margin-right: 6px;">:light_salmon</li><li style="color: rgb(250,128,114); margin-right: 6px;">:salmon</li><li style="color: rgb(233,150,122); margin-right: 6px;">:dark_salmon</li><li style="color: rgb(240,128,128); margin-right: 6px;">:light_coral</li><li style="color: rgb(205,92,92); margin-right: 6px;">:indian_red</li><li style="color: rgb(220,20,60); margin-right: 6px;">:crimson</li><li style="color: rgb(178,34,34); margin-right: 6px;">:firebrick</li><li style="color: rgb(139,0,0); margin-right: 6px;">:dark_red</li><li style="color: rgb(255,0,0); margin-right: 6px;">:red</li><li style="color: rgb(255,69,0); margin-right: 6px;">:orange_red</li><li style="color: rgb(255,99,71); margin-right: 6px;">:tomato</li><li style="color: rgb(255,127,80); margin-right: 6px;">:coral</li><li style="color: rgb(255,140,0); margin-right: 6px;">:dark_orange</li><li style="color: rgb(255,165,0); margin-right: 6px;">:orange</li><li style="color: rgb(255,255,0); margin-right: 6px;">:yellow</li><li style="color: rgb(255,255,224); margin-right: 6px;">:light_yellow</li><li style="color: rgb(255,250,205); margin-right: 6px;">:lemon_chiffon</li><li style="color: rgb(250,250,210); margin-right: 6px;">:light_goldenrod_yellow</li><li style="color: rgb(255,239,213); margin-right: 6px;">:papaya_whip</li><li style="color: rgb(255,228,181); margin-right: 6px;">:moccasin</li><li style="color: rgb(255,218,185); margin-right: 6px;">:peach_puff</li><li style="color: rgb(238,232,170); margin-right: 6px;">:pale_goldenrod</li><li style="color: rgb(240,230,140); margin-right: 6px;">:khaki</li><li style="color: rgb(189,183,107); margin-right: 6px;">:dark_khaki</li><li style="color: rgb(255,215,0); margin-right: 6px;">:gold</li><li style="color: rgb(255,248,220); margin-right: 6px;">:cornsilk</li><li style="color: rgb(255,235,205); margin-right: 6px;">:blanched_almond</li><li style="color: rgb(255,228,196); margin-right: 6px;">:bisque</li><li style="color: rgb(255,222,173); margin-right: 6px;">:navajo_white</li><li style="color: rgb(245,222,179); margin-right: 6px;">:wheat</li><li style="color: rgb(222,184,135); margin-right: 6px;">:burlywood</li><li style="color: rgb(210,180,140); margin-right: 6px;">:tan</li><li style="color: rgb(188,143,143); margin-right: 6px;">:rosy_brown</li><li style="color: rgb(244,164,96); margin-right: 6px;">:sandy_brown</li><li style="color: rgb(218,165,32); margin-right: 6px;">:goldenrod</li><li style="color: rgb(184,134,11); margin-right: 6px;">:dark_goldenrod</li><li style="color: rgb(205,133,63); margin-right: 6px;">:peru</li><li style="color: rgb(210,105,30); margin-right: 6px;">:chocolate</li><li style="color: rgb(139,69,19); margin-right: 6px;">:saddle_brown</li><li style="color: rgb(160,82,45); margin-right: 6px;">:sienna</li><li style="color: rgb(165,42,42); margin-right: 6px;">:brown</li><li style="color: rgb(128,0,0); margin-right: 6px;">:maroon</li><li style="color: rgb(85,107,47); margin-right: 6px;">:dark_olive_green</li><li style="color: rgb(128,128,0); margin-right: 6px;">:olive</li><li style="color: rgb(107,142,35); margin-right: 6px;">:olive_drab</li><li style="color: rgb(154,205,50); margin-right: 6px;">:yellow_green</li><li style="color: rgb(50,205,50); margin-right: 6px;">:lime_green</li><li style="color: rgb(0,255,0); margin-right: 6px;">:lime</li><li style="color: rgb(124,252,0); margin-right: 6px;">:lawn_green</li><li style="color: rgb(127,255,0); margin-right: 6px;">:chartreuse</li><li style="color: rgb(173,255,47); margin-right: 6px;">:green_yellow</li><li style="color: rgb(0,255,127); margin-right: 6px;">:spring_green</li><li style="color: rgb(0,250,154); margin-right: 6px;">:medium_spring_green</li><li style="color: rgb(144,238,144); margin-right: 6px;">:light_green</li><li style="color: rgb(152,251,152); margin-right: 6px;">:pale_green</li><li style="color: rgb(143,188,143); margin-right: 6px;">:dark_sea_green</li><li style="color: rgb(102,205,170); margin-right: 6px;">:medium_aquamarine</li><li style="color: rgb(60,179,113); margin-right: 6px;">:medium_sea_green</li><li style="color: rgb(46,139,87); margin-right: 6px;">:sea_green</li><li style="color: rgb(34,139,34); margin-right: 6px;">:forest_green</li><li style="color: rgb(0,128,0); margin-right: 6px;">:green</li><li style="color: rgb(0,100,0); margin-right: 6px;">:dark_green</li><li style="color: rgb(0,255,255); margin-right: 6px;">:aqua</li><li style="color: rgb(0,255,255); margin-right: 6px;">:cyan</li><li style="color: rgb(224,255,255); margin-right: 6px;">:light_cyan</li><li style="color: rgb(175,238,238); margin-right: 6px;">:pale_turquoise</li><li style="color: rgb(127,255,212); margin-right: 6px;">:aquamarine</li><li style="color: rgb(64,224,208); margin-right: 6px;">:turquoise</li><li style="color: rgb(72,209,204); margin-right: 6px;">:medium_turquoise</li><li style="color: rgb(0,206,209); margin-right: 6px;">:dark_turquoise</li><li style="color: rgb(32,178,170); margin-right: 6px;">:light_sea_green</li><li style="color: rgb(95,158,160); margin-right: 6px;">:cadet_blue</li><li style="color: rgb(0,139,139); margin-right: 6px;">:dark_cyan</li><li style="color: rgb(0,128,128); margin-right: 6px;">:teal</li><li style="color: rgb(176,196,222); margin-right: 6px;">:light_steel_blue</li><li style="color: rgb(176,224,230); margin-right: 6px;">:powder_blue</li><li style="color: rgb(173,216,230); margin-right: 6px;">:light_blue</li><li style="color: rgb(135,206,235); margin-right: 6px;">:sky_blue</li><li style="color: rgb(135,206,250); margin-right: 6px;">:light_sky_blue</li><li style="color: rgb(0,191,255); margin-right: 6px;">:deep_sky_blue</li><li style="color: rgb(30,144,255); margin-right: 6px;">:dodger_blue</li><li style="color: rgb(100,149,237); margin-right: 6px;">:cornflower_blue</li><li style="color: rgb(70,130,180); margin-right: 6px;">:steel_blue</li><li style="color: rgb(65,105,225); margin-right: 6px;">:royal_blue</li><li style="color: rgb(0,0,255); margin-right: 6px;">:blue</li><li style="color: rgb(0,0,205); margin-right: 6px;">:medium_blue</li><li style="color: rgb(0,0,139); margin-right: 6px;">:dark_blue</li><li style="color: rgb(0,0,128); margin-right: 6px;">:navy</li><li style="color: rgb(25,25,112); margin-right: 6px;">:midnight_blue</li><li style="color: rgb(230,230,250); margin-right: 6px;">:lavender</li><li style="color: rgb(216,191,216); margin-right: 6px;">:thistle</li><li style="color: rgb(221,160,221); margin-right: 6px;">:plum</li><li style="color: rgb(238,130,238); margin-right: 6px;">:violet</li><li style="color: rgb(218,112,214); margin-right: 6px;">:orchid</li><li style="color: rgb(255,0,255); margin-right: 6px;">:fuchsia</li><li style="color: rgb(255,0,255); margin-right: 6px;">:magenta</li><li style="color: rgb(186,85,211); margin-right: 6px;">:medium_orchid</li><li style="color: rgb(147,112,219); margin-right: 6px;">:medium_purple</li><li style="color: rgb(138,43,226); margin-right: 6px;">:blue_violet</li><li style="color: rgb(148,0,211); margin-right: 6px;">:dark_violet</li><li style="color: rgb(153,50,204); margin-right: 6px;">:dark_orchid</li><li style="color: rgb(139,0,139); margin-right: 6px;">:dark_magenta</li><li style="color: rgb(128,0,128); margin-right: 6px;">:purple</li><li style="color: rgb(75,0,130); margin-right: 6px;">:indigo</li><li style="color: rgb(72,61,139); margin-right: 6px;">:dark_slate_blue</li><li style="color: rgb(106,90,205); margin-right: 6px;">:slate_blue</li><li style="color: rgb(123,104,238); margin-right: 6px;">:medium_slate_blue</li><li style="color: rgb(255,255,255); margin-right: 6px;">:white</li><li style="color: rgb(255,250,250); margin-right: 6px;">:snow</li><li style="color: rgb(240,255,240); margin-right: 6px;">:honeydew</li><li style="color: rgb(245,255,250); margin-right: 6px;">:mint_cream</li><li style="color: rgb(240,255,255); margin-right: 6px;">:azure</li><li style="color: rgb(240,248,255); margin-right: 6px;">:alice_blue</li><li style="color: rgb(248,248,255); margin-right: 6px;">:ghost_white</li><li style="color: rgb(245,245,245); margin-right: 6px;">:white_smoke</li><li style="color: rgb(255,245,238); margin-right: 6px;">:seashell</li><li style="color: rgb(245,245,220); margin-right: 6px;">:beige</li><li style="color: rgb(253,245,230); margin-right: 6px;">:old_lace</li><li style="color: rgb(255,250,240); margin-right: 6px;">:floral_white</li><li style="color: rgb(255,255,240); margin-right: 6px;">:ivory</li><li style="color: rgb(250,235,215); margin-right: 6px;">:antique_white</li><li style="color: rgb(250,240,230); margin-right: 6px;">:linen</li><li style="color: rgb(255,240,245); margin-right: 6px;">:lavender_blush</li><li style="color: rgb(255,228,225); margin-right: 6px;">:misty_rose</li><li style="color: rgb(220,220,220); margin-right: 6px;">:gainsboro</li><li style="color: rgb(211,211,211); margin-right: 6px;">:light_gray</li><li style="color: rgb(192,192,192); margin-right: 6px;">:silver</li><li style="color: rgb(169,169,169); margin-right: 6px;">:dark_gray</li><li style="color: rgb(128,128,128); margin-right: 6px;">:gray</li><li style="color: rgb(105,105,105); margin-right: 6px;">:dim_gray</li><li style="color: rgb(119,136,153); margin-right: 6px;">:light_slate_gray</li><li style="color: rgb(112,128,144); margin-right: 6px;">:slate_gray</li><li style="color: rgb(47,79,79); margin-right: 6px;">:dark_slate_gray</li><li style="color: rgb(0,0,0); margin-right: 6px;">:black</li>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+
+        <p>
+
+            <span class="line">
+              <a href="https://hex.pm/packages/ex_pdf_core/1.0.1">Hex Package</a>
+
+              <a href="https://preview.hex.pm/preview/ex_pdf_core/1.0.1">Hex Preview</a>
+
+            </span>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
+
+
+              <a href="ex_pdf_core.epub">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.2) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

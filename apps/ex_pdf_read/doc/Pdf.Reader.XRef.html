@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.2">
+    <meta name="project" content="ex_pdf_read v1.0.1">
+
+
+    <title>Pdf.Reader.XRef — ex_pdf_read v1.0.1</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
+
+    <script defer src="dist/sidebar_items-271CC737.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-Y2MUTVIN.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+ex_pdf_read
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.0.1
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of ex_pdf_read</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Pdf.<wbr />Reader.<wbr />XRef</span> 
+      <small class="app-vsn" translate="no">(ex_pdf_read v1.0.1)</small>
+
+    </h1>
+
+<a href="Pdf.Reader.XRef.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/xref.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Facade that dispatches to the appropriate xref reader and follows /Prev chains.</p><h2 id="module-dispatch-logic-pdf-1-7-7-5-8" class="section-heading"><a href="#module-dispatch-logic-pdf-1-7-7-5-8" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Dispatch logic (PDF 1.7 § 7.5.8)</span></h2><p>At a given <code class="inline">startxref</code> offset, peeks at the first non-whitespace bytes:</p><ul><li>Starts with <code class="inline">xref</code> → <strong>classic</strong> xref table (§ 7.5.4). Delegates to
+<a href="Pdf.Reader.XRef.Classic.html"><code class="inline">Pdf.Reader.XRef.Classic</code></a>.</li><li>Starts with digits matching <code class="inline">N G obj</code> → <strong>xref stream</strong> (§ 7.5.8).
+Delegates to <a href="Pdf.Reader.XRef.Stream.html"><code class="inline">Pdf.Reader.XRef.Stream</code></a>.</li></ul><p>Both formats carry <code class="inline">/Prev</code> chain links that reference older xref sections.
+Those are followed recursively, with newer entries overriding older ones.</p><h2 id="module-hybrid-pdfs" class="section-heading"><a href="#module-hybrid-pdfs" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Hybrid PDFs</span></h2><p>Incremental updates may mix classic and stream xrefs in the same /Prev chain.
+<a href="#load/2"><code class="inline">load/2</code></a> handles this transparently by dispatching each chain link independently.</p><h2 id="module-linear-scan-recovery-pdf-1-7-7-5-4-7-5-8" class="section-heading"><a href="#module-linear-scan-recovery-pdf-1-7-7-5-4-7-5-8" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Linear scan recovery (PDF 1.7 § 7.5.4, § 7.5.8)</span></h2><p>When normal xref loading fails (corrupt or missing <code class="inline">%%EOF</code>, bad <code class="inline">startxref</code>
+offset), <a href="#recover/1"><code class="inline">recover/1</code></a> performs a linear scan of the full PDF binary to
+reconstruct the cross-reference table without relying on the <code class="inline">startxref</code>
+pointer or the on-disk xref section.</p><p>Algorithm:</p><ol><li>Use <a href="https://www.erlang.org/doc/apps/stdlib/binary.html#matches/2"><code class="inline">:binary.matches/2</code></a> to find all occurrences of <code class="inline">&quot; obj&quot;</code> in the binary.</li><li>Back-scan each match for a <code class="inline">\n&lt;digits&gt; &lt;digits&gt;</code> prefix — this distinguishes
+real object headers from <code class="inline">obj</code> substrings inside content streams or strings.</li><li>Build a map of <code class="inline">{obj_num, gen_num} =&gt; {:in_use, offset, gen_num}</code> entries.</li><li>On collision (same <code class="inline">obj_num</code>, different <code class="inline">gen_num</code>), keep the highest
+<code class="inline">gen_num</code>; ties are broken by the later (higher) byte offset.</li><li>Synthesise a trailer dict by scanning the binary for the LAST
+<code class="inline">trailer\n&lt;&lt;...&gt;&gt;</code> block. If none is found, scan recovered object entries
+for one containing <code class="inline">/Type /Catalog</code> to derive <code class="inline">/Root</code>.</li><li>Returns <code class="inline">{:ok, entries_map, trailer_struct}</code>.</li></ol><h2 id="module-spec-references" class="section-heading"><a href="#module-spec-references" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Spec references</span></h2><ul><li>PDF 1.7 § 7.5.4 — Cross-reference table</li><li>PDF 1.7 § 7.5.5 — File trailer</li><li>PDF 1.7 § 7.5.8 — Cross-reference streams</li></ul>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h2>
+<div class="summary-types summary">
+  <h3>
+    <a href="#types">Types</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:entries/0" data-no-tooltip="" translate="no">entries()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:entry/0" data-no-tooltip="" translate="no">entry()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h3>
+    <a href="#functions">Functions</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#load/2" data-no-tooltip="" translate="no">load(binary, start_offset)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Loads all xref sections reachable from <code class="inline">start_offset</code> (following <code class="inline">/Prev</code> links)
+and merges them into a single entries map.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#recover/1" data-no-tooltip="" translate="no">recover(binary)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Recovers a cross-reference table from a PDF binary by linear scan, without
+relying on <code class="inline">startxref</code> or any xref section in the file.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h2>
+
+    <div class="types-list">
+<section class="detail" id="t:entries/0">
+
+  <div class="detail-header">
+    <a href="#t:entries/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">entries()</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/xref.ex#L51" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> entries() :: %{required(<a href="Pdf.Reader.Document.html#t:ref/0">Pdf.Reader.Document.ref</a>()) =&gt; <a href="#t:entry/0">entry</a>()}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:entry/0">
+
+  <div class="detail-header">
+    <a href="#t:entry/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">entry()</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/xref.ex#L50" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> entry() :: <a href="Pdf.Reader.Document.html#t:xref_entry/0">Pdf.Reader.Document.xref_entry</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h2>
+
+    <div class="functions-list">
+<section class="detail" id="load/2">
+
+  <div class="detail-header">
+    <a href="#load/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">load(binary, start_offset)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/xref.ex#L63" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> load(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>()) ::
+  {:ok, <a href="#t:entries/0">entries</a>(), <a href="Pdf.Reader.Trailer.html#t:t/0">Pdf.Reader.Trailer.t</a>()} | {:error, <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>()}</pre>
+
+      </div>
+
+<p>Loads all xref sections reachable from <code class="inline">start_offset</code> (following <code class="inline">/Prev</code> links)
+and merges them into a single entries map.</p><p>Newer sections' entries override older ones on conflict (reverse-chain order).</p><p>Returns <code class="inline">{:ok, entries_map, trailer_struct}</code> or <code class="inline">{:error, reason}</code>.</p>
+  </section>
+</section>
+<section class="detail" id="recover/1">
+
+  <div class="detail-header">
+    <a href="#recover/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">recover(binary)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/xref.ex#L93" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> recover(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()) :: {:ok, <a href="#t:entries/0">entries</a>(), <a href="Pdf.Reader.Trailer.html#t:t/0">Pdf.Reader.Trailer.t</a>()}</pre>
+
+      </div>
+
+<p>Recovers a cross-reference table from a PDF binary by linear scan, without
+relying on <code class="inline">startxref</code> or any xref section in the file.</p><h2 id="recover/1-algorithm" class="section-heading"><a href="#recover/1-algorithm" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Algorithm</span></h2><ol><li>Use <a href="https://www.erlang.org/doc/apps/stdlib/binary.html#matches/2"><code class="inline">:binary.matches/2</code></a> to find every <code class="inline">&quot; obj&quot;</code> substring in <code class="inline">binary</code>.</li><li>For each match position, back-scan to validate the <code class="inline">\n&lt;digits&gt; &lt;digits&gt;</code>
+prefix that characterises a real indirect-object header. This rejects false
+positives where <code class="inline">obj</code> appears inside a content stream or string literal.</li><li>Parse <code class="inline">(obj_num, gen_num)</code> from the prefix and compute the byte offset of
+the object (start of <code class="inline">N G obj</code>).</li><li>Deduplicate by <code class="inline">obj_num</code>: when the same number appears more than once keep
+the entry with the highest <code class="inline">gen_num</code>. If <code class="inline">gen_num</code> values tie, the entry
+at the larger byte offset wins (later in the file = more recent revision).</li><li>Synthesise a <code class="inline">%Pdf.Reader.Trailer{}</code> by scanning for the last
+<code class="inline">trailer\n&lt;&lt;...&gt;&gt;</code> block. If none is found, scan recovered entries for an
+object whose dict contains <code class="inline">/Type /Catalog</code> and use its ref as <code class="inline">/Root</code>.</li></ol><p>Returns <code class="inline">{:ok, entries_map, trailer_struct}</code> where <code class="inline">entries_map</code> is keyed by
+<code class="inline">{obj_num, gen_num}</code> tuples.</p><p>PDF 1.7 § 7.5.4 — Cross-reference table
+PDF 1.7 § 7.5.8 — Cross-reference streams</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+
+        <p>
+
+            <span class="line">
+              <a href="https://hex.pm/packages/ex_pdf_read/1.0.1">Hex Package</a>
+
+              <a href="https://preview.hex.pm/preview/ex_pdf_read/1.0.1">Hex Preview</a>
+
+            </span>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
+
+
+              <a href="ex_pdf_read.epub">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.2) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

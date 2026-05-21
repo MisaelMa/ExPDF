@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.2">
+    <meta name="project" content="ex_pdf_read v1.0.1">
+
+
+    <title>Pdf.Reader.Encryption.V1V2 — ex_pdf_read v1.0.1</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
+
+    <script defer src="dist/sidebar_items-271CC737.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-Y2MUTVIN.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+ex_pdf_read
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.0.1
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of ex_pdf_read</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Pdf.<wbr />Reader.<wbr />Encryption.<wbr />V1V2</span> 
+      <small class="app-vsn" translate="no">(ex_pdf_read v1.0.1)</small>
+
+    </h1>
+
+<a href="Pdf.Reader.Encryption.V1V2.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/encryption/v1v2.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Implements PDF Standard Security Handler algorithms for V1 (RC4-40) and
+V2 (RC4-128) — revisions R=2 and R=3/4.</p><h2 id="module-algorithms-implemented" class="section-heading"><a href="#module-algorithms-implemented" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Algorithms implemented</span></h2><table><thead><tr><th style="text-align: left;">Algorithm</th><th style="text-align: left;">Description</th><th style="text-align: left;">Function</th></tr></thead><tbody><tr><td style="text-align: left;">Alg 2</td><td style="text-align: left;">File encryption key derivation (MD5 + optional 50×)</td><td style="text-align: left;"><a href="#derive_file_key/2"><code class="inline">derive_file_key/2</code></a></td></tr><tr><td style="text-align: left;">Alg 4</td><td style="text-align: left;">User password auth for R=2 (RC4 of pad constant)</td><td style="text-align: left;"><a href="#authenticate_user/2"><code class="inline">authenticate_user/2</code></a></td></tr><tr><td style="text-align: left;">Alg 5</td><td style="text-align: left;">User password auth for R≥3 (RC4 with 19-step iterations)</td><td style="text-align: left;"><a href="#authenticate_user/2"><code class="inline">authenticate_user/2</code></a></td></tr><tr><td style="text-align: left;">Alg 7</td><td style="text-align: left;">Owner → user password derivation</td><td style="text-align: left;"><a href="#derive_user_from_owner/2"><code class="inline">derive_user_from_owner/2</code></a></td></tr></tbody></table><p>All public functions perform an RC4 availability check first.  On systems
+where <code class="inline">:rc4</code> is not in <code class="inline">:crypto.supports(:ciphers)</code> (e.g. OpenSSL 3.x with
+FIPS mode), every function returns <code class="inline">{:error, :encrypted_unsupported_handler}</code>
+rather than crashing.</p><h2 id="module-algorithm-2-file-encryption-key-pdf-1-7-7-6-3-3-step-a-h" class="section-heading"><a href="#module-algorithm-2-file-encryption-key-pdf-1-7-7-6-3-3-step-a-h" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Algorithm 2 — File Encryption Key (PDF 1.7 § 7.6.3.3, step a–h)</span></h2><ol><li>Pad the user password to 32 bytes via <code class="inline">PasswordPad.pad/1</code>.</li><li>MD5 streaming: hash(padded_pw ++ /O ++ &lt;&lt;P::little-32&gt;&gt; ++ /ID[0]).</li><li>If R ≥ 4 and <code class="inline">encrypt_metadata == false</code>, append <code class="inline">&lt;&lt;0xFF,0xFF,0xFF,0xFF&gt;&gt;</code>.</li><li>If R ≥ 3, iterate MD5 × 50 on the first <code class="inline">key_len</code> bytes of the digest.</li><li>Truncate to first <code class="inline">key_len = Length / 8</code> bytes (min 5 for V1).</li></ol><h2 id="module-algorithm-4-user-auth-for-r-2" class="section-heading"><a href="#module-algorithm-4-user-auth-for-r-2" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Algorithm 4 — User Auth for R=2</span></h2><ol><li>Derive file key via Algorithm 2.</li><li>RC4-encrypt the 32-byte padding constant with the file key.</li><li>Compare result byte-for-byte with /U (32 bytes).</li></ol><h2 id="module-algorithm-5-user-auth-for-r-3" class="section-heading"><a href="#module-algorithm-5-user-auth-for-r-3" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Algorithm 5 — User Auth for R≥3</span></h2><ol><li>Derive file key via Algorithm 2.</li><li>MD5(padding_constant ++ /ID[0]) → 16 bytes.</li><li>RC4-encrypt those 16 bytes with the file key.</li><li>For i in 1..19: XOR each byte of file_key with i → RC4-encrypt previous result.</li><li>Compare final 16 bytes to the first 16 bytes of /U.</li></ol><h2 id="module-algorithm-7-owner-user-password" class="section-heading"><a href="#module-algorithm-7-owner-user-password" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Algorithm 7 — Owner → User Password</span></h2><ol><li>Pad the owner password to 32 bytes.</li><li>MD5 it; if R ≥ 3, iterate MD5 × 50 on the full 16 bytes.</li><li>Truncate to <code class="inline">key_len</code> bytes → this becomes the RC4 key.</li><li>For R=2: RC4-decrypt /O once.</li><li>For R≥3: 20 iterative RC4 passes in reverse order (i=19 down to 0),
+XORing each key byte with i.</li><li>The result is the padded user password.  Feed it to <a href="#authenticate_user/2"><code class="inline">authenticate_user/2</code></a>.</li></ol><h2 id="module-spec-references" class="section-heading"><a href="#module-spec-references" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Spec references</span></h2><ul><li>PDF 1.7 (ISO 32000-1) § 7.6.3.3 — Algorithms 2, 4, 5, 7:
+<a rel="nofollow" href="https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf">https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf</a></li><li>RFC 1321 (MD5):
+<a rel="nofollow" href="https://www.rfc-editor.org/rfc/rfc1321.html">https://www.rfc-editor.org/rfc/rfc1321.html</a></li><li>Mozilla pdf.js src/core/crypto.js (Apache-2.0 reference implementation):
+<a rel="nofollow" href="https://github.com/mozilla/pdf.js/blob/master/src/core/crypto.js">https://github.com/mozilla/pdf.js/blob/master/src/core/crypto.js</a></li><li>Erlang OTP <code class="inline">:crypto</code> algorithm details:
+<a href="https://www.erlang.org/docs/27/apps/crypto/algorithm_details">https://www.erlang.org/docs/27/apps/crypto/algorithm_details</a></li></ul>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h2>
+<div class="summary-functions summary">
+  <h3>
+    <a href="#functions">Functions</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#authenticate_owner/2" data-no-tooltip="" translate="no">authenticate_owner(password, handler)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Derives the padded user password from the owner password using Algorithm 7,
+then authenticates via <a href="#authenticate_user/2"><code class="inline">authenticate_user/2</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#authenticate_user/2" data-no-tooltip="" translate="no">authenticate_user(password, handler)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Authenticates a user password against the <code class="inline">/U</code> value in the handler.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#decrypt_stream/5" data-no-tooltip="" translate="no">decrypt_stream(bytes, stream_dict, obj_num, gen_num, handler)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Decrypts a stream ciphertext blob using the V1/V2 RC4 algorithm.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#decrypt_string/4" data-no-tooltip="" translate="no">decrypt_string(bytes, obj_num, gen_num, handler)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Decrypts a string ciphertext using the V1/V2 RC4 algorithm.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#derive_file_key/2" data-no-tooltip="" translate="no">derive_file_key(password, handler)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Derives the file encryption key for V1/V2/V4 using Algorithm 2.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#derive_user_from_owner/2" data-no-tooltip="" translate="no">derive_user_from_owner(owner_password, handler)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Derives the padded user password from the owner password using Algorithm 7.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h2>
+
+    <div class="functions-list">
+<section class="detail" id="authenticate_owner/2">
+
+  <div class="detail-header">
+    <a href="#authenticate_owner/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">authenticate_owner(password, handler)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/encryption/v1v2.ex#L213" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> authenticate_owner(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(), <a href="Pdf.Reader.Encryption.StandardHandler.html#t:t/0">Pdf.Reader.Encryption.StandardHandler.t</a>()) ::
+  {:ok, <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()} | :error | {:error, :encrypted_unsupported_handler}</pre>
+
+      </div>
+
+<p>Derives the padded user password from the owner password using Algorithm 7,
+then authenticates via <a href="#authenticate_user/2"><code class="inline">authenticate_user/2</code></a>.</p><h2 id="authenticate_owner/2-returns" class="section-heading"><a href="#authenticate_owner/2-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><ul><li><code class="inline">{:ok, file_key}</code> — owner password authenticated.</li><li><code class="inline">:error</code> — owner password authentication failed.</li><li><code class="inline">{:error, :encrypted_unsupported_handler}</code> — RC4 not available.</li></ul>
+  </section>
+</section>
+<section class="detail" id="authenticate_user/2">
+
+  <div class="detail-header">
+    <a href="#authenticate_user/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">authenticate_user(password, handler)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/encryption/v1v2.ex#L189" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> authenticate_user(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(), <a href="Pdf.Reader.Encryption.StandardHandler.html#t:t/0">Pdf.Reader.Encryption.StandardHandler.t</a>()) ::
+  {:ok, <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()} | :error | {:error, :encrypted_unsupported_handler}</pre>
+
+      </div>
+
+<p>Authenticates a user password against the <code class="inline">/U</code> value in the handler.</p><p>Uses Algorithm 4 for R=2 and Algorithm 5 for R≥3.</p><h2 id="authenticate_user/2-returns" class="section-heading"><a href="#authenticate_user/2-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><ul><li><code class="inline">{:ok, file_key}</code> — password authenticated; <code class="inline">file_key</code> is the derived
+file encryption key (5 bytes for V1, up to 16 bytes for V2/V4).</li><li><code class="inline">:error</code> — authentication failed (wrong password).</li><li><code class="inline">{:error, :encrypted_unsupported_handler}</code> — RC4 not available on this
+runtime (per R-ENC29 / S-ENC14).</li></ul>
+  </section>
+</section>
+<section class="detail" id="decrypt_stream/5">
+
+  <div class="detail-header">
+    <a href="#decrypt_stream/5" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">decrypt_stream(bytes, stream_dict, obj_num, gen_num, handler)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/encryption/v1v2.ex#L94" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> decrypt_stream(
+  <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(),
+  <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(),
+  <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>(),
+  <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>(),
+  <a href="Pdf.Reader.Encryption.StandardHandler.html#t:t/0">Pdf.Reader.Encryption.StandardHandler.t</a>()
+) :: {:ok, <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()} | {:error, :encrypted_unsupported_handler}</pre>
+
+      </div>
+
+<p>Decrypts a stream ciphertext blob using the V1/V2 RC4 algorithm.</p><p>Derives a per-object key from <code class="inline">handler.file_key</code>, <code class="inline">obj_num</code>, and <code class="inline">gen_num</code>
+using <code class="inline">ObjectKey.derive/4</code>, then applies RC4 decryption.</p><h2 id="decrypt_stream/5-parameters" class="section-heading"><a href="#decrypt_stream/5-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">bytes</code> — the raw stream bytes (RC4 ciphertext).</li><li><code class="inline">_stream_dict</code> — the stream dictionary (unused for V1/V2; kept for API symmetry with V4/V5).</li><li><code class="inline">obj_num</code> — the PDF object number.</li><li><code class="inline">gen_num</code> — the PDF generation number.</li><li><code class="inline">handler</code> — a <code class="inline">%StandardHandler{}</code> with <code class="inline">:file_key</code> populated.</li></ul><h2 id="decrypt_stream/5-returns" class="section-heading"><a href="#decrypt_stream/5-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><ul><li><code class="inline">{:ok, plaintext}</code> — successfully decrypted.</li><li><code class="inline">{:error, :encrypted_unsupported_handler}</code> — RC4 not available at runtime.</li></ul><h2 id="decrypt_stream/5-spec-references" class="section-heading"><a href="#decrypt_stream/5-spec-references" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Spec references</span></h2><ul><li>PDF 1.7 (ISO 32000-1) § 7.6.2 — General Encryption Algorithm:
+<a rel="nofollow" href="https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf">https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf</a></li></ul>
+  </section>
+</section>
+<section class="detail" id="decrypt_string/4">
+
+  <div class="detail-header">
+    <a href="#decrypt_string/4" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">decrypt_string(bytes, obj_num, gen_num, handler)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/encryption/v1v2.ex#L126" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> decrypt_string(
+  <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(),
+  <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>(),
+  <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>(),
+  <a href="Pdf.Reader.Encryption.StandardHandler.html#t:t/0">Pdf.Reader.Encryption.StandardHandler.t</a>()
+) :: {:ok, <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()} | {:error, :encrypted_unsupported_handler}</pre>
+
+      </div>
+
+<p>Decrypts a string ciphertext using the V1/V2 RC4 algorithm.</p><p>Derives a per-object key from <code class="inline">handler.file_key</code>, <code class="inline">obj_num</code>, and <code class="inline">gen_num</code>
+using <code class="inline">ObjectKey.derive/4</code>, then applies RC4 decryption.</p><h2 id="decrypt_string/4-parameters" class="section-heading"><a href="#decrypt_string/4-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">bytes</code> — the raw string bytes (RC4 ciphertext).</li><li><code class="inline">obj_num</code> — the PDF object number.</li><li><code class="inline">gen_num</code> — the PDF generation number.</li><li><code class="inline">handler</code> — a <code class="inline">%StandardHandler{}</code> with <code class="inline">:file_key</code> populated.</li></ul><h2 id="decrypt_string/4-returns" class="section-heading"><a href="#decrypt_string/4-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><ul><li><code class="inline">{:ok, plaintext}</code> — successfully decrypted.</li><li><code class="inline">{:error, :encrypted_unsupported_handler}</code> — RC4 not available at runtime.</li></ul><h2 id="decrypt_string/4-spec-references" class="section-heading"><a href="#decrypt_string/4-spec-references" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Spec references</span></h2><ul><li>PDF 1.7 (ISO 32000-1) § 7.6.2 — General Encryption Algorithm:
+<a rel="nofollow" href="https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf">https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf</a></li></ul>
+  </section>
+</section>
+<section class="detail" id="derive_file_key/2">
+
+  <div class="detail-header">
+    <a href="#derive_file_key/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">derive_file_key(password, handler)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/encryption/v1v2.ex#L152" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> derive_file_key(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(), <a href="Pdf.Reader.Encryption.StandardHandler.html#t:t/0">Pdf.Reader.Encryption.StandardHandler.t</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()</pre>
+
+      </div>
+
+<p>Derives the file encryption key for V1/V2/V4 using Algorithm 2.</p><h2 id="derive_file_key/2-parameters" class="section-heading"><a href="#derive_file_key/2-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">password</code> — the plaintext user password (any length; padded/truncated internally).</li><li><code class="inline">handler</code> — a <code class="inline">%StandardHandler{}</code> with <code class="inline">:revision</code>, <code class="inline">:length</code>, <code class="inline">:o</code>, <code class="inline">:p</code>,
+<code class="inline">:id</code>, and <code class="inline">:encrypt_metadata</code> populated.</li></ul><h2 id="derive_file_key/2-returns" class="section-heading"><a href="#derive_file_key/2-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><p>A binary of <code class="inline">handler.length / 8</code> bytes (e.g. 5 bytes for V1/R=2, 16 bytes for
+V2/R=3 with Length=128).</p><p>Does NOT check RC4 availability — the caller (<a href="#authenticate_user/2"><code class="inline">authenticate_user/2</code></a>) guards
+that.  Safe to call from tests or other modules that already checked.</p>
+  </section>
+</section>
+<section class="detail" id="derive_user_from_owner/2">
+
+  <div class="detail-header">
+    <a href="#derive_user_from_owner/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">derive_user_from_owner(owner_password, handler)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/encryption/v1v2.ex#L242" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> derive_user_from_owner(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(), <a href="Pdf.Reader.Encryption.StandardHandler.html#t:t/0">Pdf.Reader.Encryption.StandardHandler.t</a>()) ::
+  {:ok, <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()} | {:error, :encrypted_unsupported_handler}</pre>
+
+      </div>
+
+<p>Derives the padded user password from the owner password using Algorithm 7.</p><h2 id="derive_user_from_owner/2-steps" class="section-heading"><a href="#derive_user_from_owner/2-steps" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Steps</span></h2><ol><li>Pad owner password to 32 bytes.</li><li>MD5; for R≥3, iterate 50 times.</li><li>Truncate to <code class="inline">key_len</code> bytes → RC4 key.</li><li>For R=2: RC4-decrypt /O once.</li><li>For R≥3: 20 iterative passes in reverse order (i=19 down to 0),
+XOR each byte of RC4 key with i before each pass.</li></ol><h2 id="derive_user_from_owner/2-returns" class="section-heading"><a href="#derive_user_from_owner/2-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><ul><li><code class="inline">{:ok, padded_user_password}</code> — a 32-byte binary that is the padded user
+password (as if <code class="inline">PasswordPad.pad(user_password)</code> had been called).</li><li><code class="inline">{:error, :encrypted_unsupported_handler}</code> — RC4 not available.</li></ul>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+
+        <p>
+
+            <span class="line">
+              <a href="https://hex.pm/packages/ex_pdf_read/1.0.1">Hex Package</a>
+
+              <a href="https://preview.hex.pm/preview/ex_pdf_read/1.0.1">Hex Preview</a>
+
+            </span>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
+
+
+              <a href="ex_pdf_read.epub">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.2) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

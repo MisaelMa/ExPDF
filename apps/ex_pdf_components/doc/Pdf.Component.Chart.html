@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.2">
+    <meta name="project" content="ex_pdf_components v1.0.1">
+
+
+    <title>Pdf.Component.Chart — ex_pdf_components v1.0.1</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
+
+    <script defer src="dist/sidebar_items-E2CE0F11.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-Y2MUTVIN.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+ex_pdf_components
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.0.1
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of ex_pdf_components</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Pdf.<wbr />Component.<wbr />Chart</span> 
+      <small class="app-vsn" translate="no">(ex_pdf_components v1.0.1)</small>
+
+    </h1>
+
+<a href="Pdf.Component.Chart.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/chart.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Chart component for PDF documents — renders bar, line, and pie charts.</p><p>All charts are rendered using PDF drawing primitives (rectangles, lines,
+arcs) with no external dependencies.</p><h2 id="module-bar-chart" class="section-heading"><a href="#module-bar-chart" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Bar chart</span></h2><pre><code class="makeup elixir" translate="no"><span class="nc">Pdf.Component.Chart</span><span class="o">.</span><span class="n">bar_chart</span><span class="p" data-group-id="3687605435-1">(</span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3687605435-2">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p" data-group-id="3687605435-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3687605435-3">%{</span><span class="w">
+  </span><span class="ss">width</span><span class="p">:</span><span class="w"> </span><span class="mi">300</span><span class="p">,</span><span class="w"> </span><span class="ss">height</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+  </span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3687605435-4">[</span><span class="w">
+    </span><span class="p" data-group-id="3687605435-5">%{</span><span class="ss">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Q1&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">value</span><span class="p">:</span><span class="w"> </span><span class="mi">120</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3687605435-6">{</span><span class="mf">0.2</span><span class="p">,</span><span class="w"> </span><span class="mf">0.6</span><span class="p">,</span><span class="w"> </span><span class="mf">0.9</span><span class="p" data-group-id="3687605435-6">}</span><span class="p" data-group-id="3687605435-5">}</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="3687605435-7">%{</span><span class="ss">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Q2&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">value</span><span class="p">:</span><span class="w"> </span><span class="mi">180</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3687605435-8">{</span><span class="mf">0.9</span><span class="p">,</span><span class="w"> </span><span class="mf">0.4</span><span class="p">,</span><span class="w"> </span><span class="mf">0.2</span><span class="p" data-group-id="3687605435-8">}</span><span class="p" data-group-id="3687605435-7">}</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="3687605435-9">%{</span><span class="ss">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Q3&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">value</span><span class="p">:</span><span class="w"> </span><span class="mi">95</span><span class="p">,</span><span class="w">  </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3687605435-10">{</span><span class="mf">0.3</span><span class="p">,</span><span class="w"> </span><span class="mf">0.8</span><span class="p">,</span><span class="w"> </span><span class="mf">0.4</span><span class="p" data-group-id="3687605435-10">}</span><span class="p" data-group-id="3687605435-9">}</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="3687605435-11">%{</span><span class="ss">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Q4&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">value</span><span class="p">:</span><span class="w"> </span><span class="mi">210</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3687605435-12">{</span><span class="mf">0.8</span><span class="p">,</span><span class="w"> </span><span class="mf">0.2</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p" data-group-id="3687605435-12">}</span><span class="p" data-group-id="3687605435-11">}</span><span class="w">
+  </span><span class="p" data-group-id="3687605435-4">]</span><span class="p">,</span><span class="w">
+  </span><span class="ss">title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Quarterly Revenue&quot;</span><span class="w">
+</span><span class="p" data-group-id="3687605435-3">}</span><span class="p" data-group-id="3687605435-1">)</span></code></pre><h2 id="module-line-chart" class="section-heading"><a href="#module-line-chart" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Line chart</span></h2><pre><code class="makeup elixir" translate="no"><span class="nc">Pdf.Component.Chart</span><span class="o">.</span><span class="n">line_chart</span><span class="p" data-group-id="3214627972-1">(</span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3214627972-2">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p" data-group-id="3214627972-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3214627972-3">%{</span><span class="w">
+  </span><span class="ss">width</span><span class="p">:</span><span class="w"> </span><span class="mi">300</span><span class="p">,</span><span class="w"> </span><span class="ss">height</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+  </span><span class="ss">series</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3214627972-4">[</span><span class="w">
+    </span><span class="p" data-group-id="3214627972-5">%{</span><span class="ss">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Sales&quot;</span><span class="p">,</span><span class="w">    </span><span class="ss">values</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3214627972-6">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span><span class="w"> </span><span class="mi">18</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="p">,</span><span class="w"> </span><span class="mi">35</span><span class="p" data-group-id="3214627972-6">]</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3214627972-7">{</span><span class="mf">0.2</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.9</span><span class="p" data-group-id="3214627972-7">}</span><span class="p" data-group-id="3214627972-5">}</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="3214627972-8">%{</span><span class="ss">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Expenses&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">values</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3214627972-9">[</span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="mi">22</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="mi">28</span><span class="p" data-group-id="3214627972-9">]</span><span class="p">,</span><span class="w">  </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3214627972-10">{</span><span class="mf">0.9</span><span class="p">,</span><span class="w"> </span><span class="mf">0.3</span><span class="p">,</span><span class="w"> </span><span class="mf">0.3</span><span class="p" data-group-id="3214627972-10">}</span><span class="p" data-group-id="3214627972-8">}</span><span class="w">
+  </span><span class="p" data-group-id="3214627972-4">]</span><span class="p">,</span><span class="w">
+  </span><span class="ss">x_labels</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3214627972-11">[</span><span class="s">&quot;Jan&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Feb&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Mar&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Apr&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;May&quot;</span><span class="p" data-group-id="3214627972-11">]</span><span class="p">,</span><span class="w">
+  </span><span class="ss">title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Monthly Trend&quot;</span><span class="w">
+</span><span class="p" data-group-id="3214627972-3">}</span><span class="p" data-group-id="3214627972-1">)</span></code></pre><h2 id="module-pie-chart" class="section-heading"><a href="#module-pie-chart" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Pie chart</span></h2><pre><code class="makeup elixir" translate="no"><span class="nc">Pdf.Component.Chart</span><span class="o">.</span><span class="n">pie_chart</span><span class="p" data-group-id="9638429021-1">(</span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9638429021-2">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p" data-group-id="9638429021-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9638429021-3">%{</span><span class="w">
+  </span><span class="ss">radius</span><span class="p">:</span><span class="w"> </span><span class="mi">80</span><span class="p">,</span><span class="w">
+  </span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9638429021-4">[</span><span class="w">
+    </span><span class="p" data-group-id="9638429021-5">%{</span><span class="ss">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Mobile&quot;</span><span class="p">,</span><span class="w">  </span><span class="ss">value</span><span class="p">:</span><span class="w"> </span><span class="mi">45</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9638429021-6">{</span><span class="mf">0.2</span><span class="p">,</span><span class="w"> </span><span class="mf">0.6</span><span class="p">,</span><span class="w"> </span><span class="mf">0.9</span><span class="p" data-group-id="9638429021-6">}</span><span class="p" data-group-id="9638429021-5">}</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="9638429021-7">%{</span><span class="ss">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Desktop&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">value</span><span class="p">:</span><span class="w"> </span><span class="mi">35</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9638429021-8">{</span><span class="mf">0.9</span><span class="p">,</span><span class="w"> </span><span class="mf">0.4</span><span class="p">,</span><span class="w"> </span><span class="mf">0.2</span><span class="p" data-group-id="9638429021-8">}</span><span class="p" data-group-id="9638429021-7">}</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="9638429021-9">%{</span><span class="ss">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Tablet&quot;</span><span class="p">,</span><span class="w">  </span><span class="ss">value</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9638429021-10">{</span><span class="mf">0.3</span><span class="p">,</span><span class="w"> </span><span class="mf">0.8</span><span class="p">,</span><span class="w"> </span><span class="mf">0.4</span><span class="p" data-group-id="9638429021-10">}</span><span class="p" data-group-id="9638429021-9">}</span><span class="w">
+  </span><span class="p" data-group-id="9638429021-4">]</span><span class="p">,</span><span class="w">
+  </span><span class="ss">title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Device Distribution&quot;</span><span class="w">
+</span><span class="p" data-group-id="9638429021-3">}</span><span class="p" data-group-id="9638429021-1">)</span></code></pre>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h2>
+<div class="summary-functions summary">
+  <h3>
+    <a href="#functions">Functions</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#bar_chart/3" data-no-tooltip="" translate="no">bar_chart(doc, arg2, style)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Render a vertical bar chart.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#horizontal_bar_chart/3" data-no-tooltip="" translate="no">horizontal_bar_chart(doc, arg2, style)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Render a horizontal bar chart — useful for ranking or comparison data.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#line_chart/3" data-no-tooltip="" translate="no">line_chart(doc, arg2, style)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Render a line chart with one or more series.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#pie_chart/3" data-no-tooltip="" translate="no">pie_chart(doc, arg2, style)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Render a pie chart.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h2>
+
+    <div class="functions-list">
+<section class="detail" id="bar_chart/3">
+
+  <div class="detail-header">
+    <a href="#bar_chart/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">bar_chart(doc, arg2, style)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/chart.ex#L85" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Render a vertical bar chart.</p><p><code class="inline">{x, y}</code> is the top-left corner of the chart area.</p><h2 id="bar_chart/3-style-options" class="section-heading"><a href="#bar_chart/3-style-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Style options</span></h2><ul><li><code class="inline">:data</code> — list of <code class="inline">%{label: str, value: number}</code> (required)</li><li><code class="inline">:width</code> / <code class="inline">:height</code> — chart dimensions (default <code class="inline">300</code> × <code class="inline">200</code>)</li><li><code class="inline">:title</code> — optional title above chart</li><li><code class="inline">:show_values</code> — display value on top of each bar (default <code class="inline">true</code>)</li><li><code class="inline">:show_grid</code> — horizontal grid lines (default <code class="inline">true</code>)</li><li><code class="inline">:grid_lines</code> — number of grid lines (default <code class="inline">5</code>)</li><li><code class="inline">:bar_gap</code> — fraction of bar width used as gap (default <code class="inline">0.3</code>)</li><li><code class="inline">:bar_radius</code> — top corner radius (default <code class="inline">0</code>)</li><li><code class="inline">:colors</code> — list of colors to cycle through</li><li><code class="inline">:axis_color</code> / <code class="inline">:grid_color</code> / <code class="inline">:text_color</code></li></ul>
+  </section>
+</section>
+<section class="detail" id="horizontal_bar_chart/3">
+
+  <div class="detail-header">
+    <a href="#horizontal_bar_chart/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">horizontal_bar_chart(doc, arg2, style)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/chart.ex#L567" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Render a horizontal bar chart — useful for ranking or comparison data.</p><p><code class="inline">{x, y}</code> is the top-left corner.</p><h2 id="horizontal_bar_chart/3-style-options" class="section-heading"><a href="#horizontal_bar_chart/3-style-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Style options</span></h2><p>Same as <a href="#bar_chart/3"><code class="inline">bar_chart/3</code></a> but bars grow left-to-right.</p>
+  </section>
+</section>
+<section class="detail" id="line_chart/3">
+
+  <div class="detail-header">
+    <a href="#line_chart/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">line_chart(doc, arg2, style)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/chart.ex#L232" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Render a line chart with one or more series.</p><p><code class="inline">{x, y}</code> is the top-left corner.</p><h2 id="line_chart/3-style-options" class="section-heading"><a href="#line_chart/3-style-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Style options</span></h2><ul><li><code class="inline">:series</code> — list of <code class="inline">%{label: str, values: [number], color: color}</code> (required)</li><li><code class="inline">:x_labels</code> — labels for the x-axis points</li><li><code class="inline">:width</code> / <code class="inline">:height</code> — chart dimensions (default <code class="inline">300</code> × <code class="inline">200</code>)</li><li><code class="inline">:title</code> — optional title</li><li><code class="inline">:show_dots</code> — render dots at data points (default <code class="inline">true</code>)</li><li><code class="inline">:show_grid</code> — horizontal grid lines (default <code class="inline">true</code>)</li><li><code class="inline">:grid_lines</code> — number of grid lines (default <code class="inline">5</code>)</li><li><code class="inline">:dot_radius</code> — radius of data point dots (default <code class="inline">2.5</code>)</li><li><code class="inline">:line_width</code> — stroke width for lines (default <code class="inline">1.5</code>)</li><li><code class="inline">:show_legend</code> — show legend below chart (default <code class="inline">true</code>)</li></ul>
+  </section>
+</section>
+<section class="detail" id="pie_chart/3">
+
+  <div class="detail-header">
+    <a href="#pie_chart/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">pie_chart(doc, arg2, style)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/chart.ex#L428" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Render a pie chart.</p><p><code class="inline">{x, y}</code> is the center of the pie.</p><h2 id="pie_chart/3-style-options" class="section-heading"><a href="#pie_chart/3-style-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Style options</span></h2><ul><li><code class="inline">:data</code> — list of <code class="inline">%{label: str, value: number}</code> (required)</li><li><code class="inline">:radius</code> — pie radius (default <code class="inline">80</code>)</li><li><code class="inline">:title</code> — optional title above</li><li><code class="inline">:donut</code> — inner radius fraction for donut chart (default <code class="inline">0</code>, set to <code class="inline">0.5</code> for donut)</li><li><code class="inline">:show_labels</code> — draw labels with lines (default <code class="inline">true</code>)</li><li><code class="inline">:show_percentages</code> — show % in labels (default <code class="inline">true</code>)</li><li><code class="inline">:colors</code> — color cycle</li></ul>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+
+        <p>
+
+            <span class="line">
+              <a href="https://hex.pm/packages/ex_pdf_components/1.0.1">Hex Package</a>
+
+              <a href="https://preview.hex.pm/preview/ex_pdf_components/1.0.1">Hex Preview</a>
+
+            </span>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
+
+
+              <a href="ex_pdf_components.epub">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.2) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

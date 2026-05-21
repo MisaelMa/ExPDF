@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.2">
+    <meta name="project" content="ex_pdf v1.0.5">
+
+
+    <title>Changelog — ex_pdf v1.0.5</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
+
+      <link rel="canonical" href="https://hexdocs.pm/ex_pdf/changelog.html" />
+
+    <script defer src="dist/sidebar_items-E35AC3DA.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-Y2MUTVIN.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+ex_pdf
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.0.5
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-extra" id="main" data-type="extras">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of ex_pdf</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>Changelog</h1>
+
+
+
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.5/../../CHANGELOG.md#L1" title="View Source" class="icon-action" rel="help nofollow">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+<p>All notable changes to this project will be documented in this file.</p><p>The format is based on <a rel="nofollow" href="https://keepachangelog.com/en/1.0.0/">Keep a Changelog</a>,
+and this project adheres to <a rel="nofollow" href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p><h2 id="1-1-0-2026-05-08" class="section-heading"><a href="#1-1-0-2026-05-08" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">1.1.0 — 2026-05-08</span></h2><h3 id="added" class="section-heading"><a href="#added" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Added</span></h3><ul><li><p><strong>Dictionary-based word split</strong> — <a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.html#read/2"><code class="inline">Pdf.Reader.read/2</code></a> accepts a
+<code class="inline">:dictionary</code> opt that, when set, recovers word boundaries the PDF
+producer collapsed (e.g. <code class="inline">iniciode</code> → <code class="inline">inicio de</code>,
+<code class="inline">Fechadeúltimocambiodeestado</code> → <code class="inline">Fecha de último cambio de estado</code>,
+<code class="inline">Lacorrupcióntieneconsecuencias</code> → <code class="inline">La corrupción tiene consecuencias</code>). Accepts:</p><ul><li><code class="inline">:es</code> — bundled Spanish dictionary built from TWO sources merged
+at compile time:<ol><li><code class="inline">priv/wordlists/spanish.txt</code> — 50,000 most-frequent Spanish
+words from <a rel="nofollow" href="https://github.com/hermitdave/FrequencyWords">hermitdave/FrequencyWords</a>
+(MIT License, OpenSubtitles 2018).</li><li><code class="inline">priv/wordlists/spanish_mx_extras.txt</code> — ~700 Mexican
+tax/legal/government terms curated for this project (MIT).
+Examples: <code class="inline">padrón</code>, <code class="inline">tributarios</code>, <code class="inline">federativa</code>, <code class="inline">asimilados</code>,
+<code class="inline">lineamientos</code>, <code class="inline">contribuyente</code>, <code class="inline">recaudación</code>, <code class="inline">gravable</code>,
+<code class="inline">deducible</code>, <code class="inline">denúnciala</code>, <code class="inline">corresponda</code>, <code class="inline">inmediatamente</code>,
+<code class="inline">posteriormente</code>, etc.
+Plus a small blacklist (<code class="inline">dela</code>, <code class="inline">pal</code>) for slang merges that
+would prevent correct partitioning. Final size: ~50,500 unique
+entries.</li></ol></li><li><code class="inline">%MapSet{}</code> — caller-supplied wordlist of lowercase strings.</li><li><code class="inline">nil</code> (default) — disabled.</li></ul><p>Algorithm runs four ordered post-passes after the initial gap-based
+tokenization:</p><ol><li><strong>Label-colon split</strong>: <code class="inline">Postal:77710</code> → <code class="inline">Postal:</code> + <code class="inline">77710</code>.</li><li><strong>Letter↔digit boundary</strong>: <code class="inline">1Asalariado</code> → <code class="inline">1</code> + <code class="inline">Asalariado</code>.
+Mexican RFC/CURP shapes (<code class="inline">XAXX010101000</code>,
+<code class="inline">MACA961017HQRRHM06</code>), base64 hashes, and tokens &gt; 30 chars
+are exempted.</li><li><strong>CamelCase split</strong>: <code class="inline">delMunicipio</code> → <code class="inline">del Municipio</code>,
+<code class="inline">OriginalSello</code> → <code class="inline">Original Sello</code>. Acronyms (tail all-caps),
+URLs, and tokens with digits/<code class="inline">+</code>/<code class="inline">/</code>/<code class="inline">=</code> are exempted.</li><li><strong>Dictionary partition</strong> (only when <code class="inline">:dictionary</code> set): full
+decomposition into dict words. Validity rules: every piece must
+be ≥ 4 chars OR in a tight closed list of 16 Spanish
+articles/prepositions; partition needs at least one ≥ 4-char
+anchor (or be entirely connector pairs like <code class="inline">dela</code> → <code class="inline">de la</code>,
+<code class="inline">finde</code> → <code class="inline">fin de</code>). Conservative on purpose — over-splitting
+produces visible garbage; under-splitting just leaves the
+concatenation intact for the caller.</li></ol><p>Skip rules: ALL-UPPERCASE tokens (proper names, acronyms) are never
+dict-split; tokens that ARE themselves valid dict words are never
+shredded; URLs and emails are exempted from every pass.</p><p>Conservative split: only fires when both halves are dictionary words
+AND the whole token is not itself a dictionary word — so legitimate
+words like <code class="inline">personales</code>, <code class="inline">desea</code>, <code class="inline">desde</code>, <code class="inline">queja</code> stay intact. URLs,
+emails, and base64 hashes are exempted.</p></li><li><p><strong><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.Wordlist.html"><code class="inline">Pdf.Reader.Wordlist</code></a></strong> — module exposing the bundled wordlist
+(<code class="inline">spanish/0</code>), a resolver (<code class="inline">resolve/1</code>), and case-insensitive
+membership check (<code class="inline">member?/2</code>). Wordlists are loaded at compile
+time via <code class="inline">@external_resource</code> so there is no runtime IO cost.</p></li></ul><h3 id="renamed-since-1-0-1" class="section-heading"><a href="#renamed-since-1-0-1" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Renamed (since 1.0.1)</span></h3><ul><li>None — additive feature only.</li></ul><hr class="thin"/><h2 id="1-0-1-2026-05-07-fork-expdf" class="section-heading"><a href="#1-0-1-2026-05-07-fork-expdf" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">1.0.1 — 2026-05-07 (fork: ExPDF)</span></h2><p>First release of <code class="inline">ex_pdf</code> on Hex. Fork of
+<a rel="nofollow" href="https://github.com/andrewtimberlake/elixir-pdf"><code class="inline">andrewtimberlake/elixir-pdf</code></a>
+v0.7.2 (Hex package <code class="inline">:pdf</code>, ©Andrew Timberlake, MIT). The writer API is
+preserved unchanged; this release adds a native PDF reader, error
+recovery, AcroForm/outlines/annotations extraction, encryption support,
+and many quality-of-life improvements.</p><h3 id="renamed" class="section-heading"><a href="#renamed" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Renamed</span></h3><ul><li>OTP app and Hex package: <code class="inline">:pdf</code> → <code class="inline">:ex_pdf</code>. Module names are
+unchanged (<a href="https://hexdocs.pm/ex_pdf_core/1.0.1/Pdf.html"><code class="inline">Pdf</code></a>, <a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.html"><code class="inline">Pdf.Reader</code></a>, etc. — the namespace <code class="inline">Pdf.*</code> was kept
+to avoid breaking writer callers).</li><li>Mixfile module: <code class="inline">Pdf.Mixfile</code> → <code class="inline">ExPdf.Mixfile</code>.</li><li>Repo: <code class="inline">andrewtimberlake/elixir-pdf</code> → <code class="inline">MisaelMa/ExPDF</code>.</li><li>All internal <code class="inline">:code.priv_dir(:pdf)</code> and <code class="inline">Application.compile_env(:pdf, …)</code>
+references updated to <code class="inline">:ex_pdf</code> (transparent to library users).</li></ul><h3 id="added-native-pdf-reader" class="section-heading"><a href="#added-native-pdf-reader" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Added — Native PDF reader</span></h3><p>The reader is implemented in pure Elixir + Erlang/OTP stdlib (<code class="inline">:zlib</code>,
+<code class="inline">:crypto</code>, <code class="inline">:binary</code>, <code class="inline">:unicode</code>, <code class="inline">:xmerl</code>). No new Hex runtime deps,
+no system tool deps.</p><h4>Unified entry point</h4><ul><li><strong><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.html#read/2"><code class="inline">Pdf.Reader.read/2</code></a></strong> — one call returns <code class="inline">%Pdf.Reader.Result{meta, pages}</code> carrying document-level metadata + per-page lines with
+<code class="inline">:kind</code>-tagged tokens (<code class="inline">:text | :link | :email | :image</code>). See
+<a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.Result.html"><code class="inline">Pdf.Reader.Result</code></a> and <a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.Line.html"><code class="inline">Pdf.Reader.Line</code></a> for the full shape.</li><li>Convenience shapes: <code class="inline">read(doc, shape: :text)</code> returns <code class="inline">[String.t()]</code>,
+<code class="inline">read(doc, shape: :shapes)</code> returns <code class="inline">[%Pdf.Reader.Shape{}]</code>.</li><li>Image opt: <code class="inline">image_bytes: true</code> includes raw decoded <code class="inline">:bytes</code> in
+shape meta (off by default — <code class="inline">:data_uri</code> is always present).</li></ul><h4>Core extraction primitives</h4><ul><li><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.html#open/2"><code class="inline">Pdf.Reader.open/2</code></a> (with optional <code class="inline">password:</code> and <code class="inline">recover:</code> opts)</li><li><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.html#read_text/1"><code class="inline">Pdf.Reader.read_text/1</code></a> — plain text per page</li><li><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.html#read_text_with_positions/1"><code class="inline">Pdf.Reader.read_text_with_positions/1</code></a> — text runs with absolute X/Y</li><li><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.html#read_lines/2"><code class="inline">Pdf.Reader.read_lines/2</code></a> — logical lines with token tokenisation</li><li><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.html#read_metadata/1"><code class="inline">Pdf.Reader.read_metadata/1</code></a> — Info dict + XMP (PDF 1.7 § 14.3)</li><li><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.html#read_images/1"><code class="inline">Pdf.Reader.read_images/1</code></a> — embedded raster images with positions</li><li><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.html#read_outlines/1"><code class="inline">Pdf.Reader.read_outlines/1</code></a> — bookmark tree</li><li><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.html#read_annotations/1"><code class="inline">Pdf.Reader.read_annotations/1</code></a> — per-page annotations</li><li><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.html#read_acroform/1"><code class="inline">Pdf.Reader.read_acroform/1</code></a> — interactive form fields</li><li><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.html#read_shapes/1"><code class="inline">Pdf.Reader.read_shapes/1</code></a> — link-like elements (annotations + inferred)</li><li><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.html#recovery_log/1"><code class="inline">Pdf.Reader.recovery_log/1</code></a> — recovery event accessor</li><li><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.html#page_count/1"><code class="inline">Pdf.Reader.page_count/1</code></a></li><li>Bang variants for every read function</li></ul><h4>Encryption (PDF 1.7 § 7.6, PDF 2.0 § 7.6)</h4><ul><li>Standard Security Handler V1/V2 (RC4-40, RC4-128)</li><li>V4 with /AESV2 (AES-128) — <code class="inline">crypto:crypto_init_dyn/4</code></li><li>V5/R6 with /AESV3 (AES-256) — full Algorithm 2.A round trip</li><li>Empty-password auto-try, file-key derivation per Algorithms 2/3/5/6/8</li></ul><h4>CID fonts (PDF 1.7 § 9.7)</h4><ul><li>Identity-H/V composite fonts via 2-byte CID tokenisation</li><li>40 predefined CMaps from <code class="inline">adobe-type-tools/cmap-resources</code> bundled in
+<code class="inline">priv/cmap/</code> (UniJIS, GBK, KSC, ETen, Identity, …)</li><li>Adobe Japan1/CNS1/Korea1/GB1 collections bundled in <code class="inline">priv/</code></li><li>PostScript-subset CMap parser with codespace-aware variable-length
+tokenizer</li><li>ToUnicode CMap fallback for glyphs outside predefined ranges</li></ul><h4>Per-glyph widths (PDF 1.7 § 9.4.4, § 9.6.2.1, § 9.7.4.3)</h4><ul><li>Full advance formula <code class="inline">tx = ((w/1000 - Tj_kern) × Tfs + Tc + Tw_space) × Th</code>
+applied per glyph</li><li>Heterogeneous CIDFont <code class="inline">/W</code> parsing (Form A + Form B + interleaved)</li><li>Standard 14 fallback to 500-unit average glyph width when <code class="inline">/Widths</code>
+is absent — restores correct positional advance for Helvetica /
+Times-Roman / Courier PDFs</li></ul><h4>Form XObject recursion (PDF 1.7 § 8.10)</h4><ul><li><code class="inline">Do</code> operator transparent recursion into <code class="inline">/Subtype /Form</code> XObjects</li><li>CTM × Form <code class="inline">/Matrix</code> multiplication, resource merging, cycle
+detection, depth cap (8)</li></ul><h4>AcroForm field extraction (PDF 1.7 § 12.7)</h4><ul><li><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.FormField.html"><code class="inline">Pdf.Reader.FormField</code></a> struct with <code class="inline">/FT</code> inheritance walk</li><li>Text, button, choice, signature field types</li></ul><h4>Outlines and annotations (PDF 1.7 § 12.3, § 12.5)</h4><ul><li><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.Outline.html"><code class="inline">Pdf.Reader.Outline</code></a> tree with destinations resolved</li><li><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.Annotation.html"><code class="inline">Pdf.Reader.Annotation</code></a> struct with subtype detection (link, text,
+highlight, file attachment, …)</li><li>Annotation-source links automatically merge into the unified
+<a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.Shape.html"><code class="inline">Pdf.Reader.Shape</code></a> API</li></ul><h4>Image extraction (PDF 1.7 § 8.9)</h4><ul><li><code class="inline">/Subtype /Image</code> XObjects with absolute positions and CTM-derived
+rendered dimensions</li><li><code class="inline">:jpeg</code> (DCTDecode passthrough) and <code class="inline">:png_like</code> (FlateDecode +
+Predictor) classification</li><li><strong><code class="inline">shape.meta.data_uri</code></strong> — RFC 2397 <code class="inline">data:</code> URI ready for HTML
+embedding. JPEG is passthrough; png_like is re-encoded into a real
+PNG (PNG 1.2 § 5: signature + IHDR + IDAT + IEND with filter byte
+0 + zlib) so the URI is browser-loadable.</li></ul><h4>Shape inference</h4><ul><li><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.Shape.html"><code class="inline">Pdf.Reader.Shape</code></a> struct unifies link annotations and pattern-
+inferred URIs/emails/images.</li><li>URL regex per RFC 3986 § 3, email regex per RFC 5321 § 4.1.2.</li><li>Trailing punctuation (<code class="inline">. , ; : ) ]</code>) stripped from inferred URIs.</li></ul><h4>Error recovery</h4><ul><li>Opt-in <code class="inline">recover: true</code> flag with four orthogonal phases:<ul><li><strong>R-1</strong> Per-page isolation — one bad page does not kill the doc</li><li><strong>R-2</strong> Font lenience — bad font refs fall back to U+FFFD per byte</li><li><strong>R-3</strong> XRef linear scan — <a href="https://www.erlang.org/doc/apps/stdlib/binary.html#matches/2"><code class="inline">:binary.matches/2</code></a> recovers from
+corrupted xref tables; trailer synthesis from last <code class="inline">trailer&lt;&lt;…&gt;&gt;</code>
+block or <code class="inline">/Type /Catalog</code> scan; multi-gen dedup (highest gen wins)</li><li><strong>R-4</strong> Catalog/Pages tree fallback — <code class="inline">/Type /Page</code> xref scan when
+<code class="inline">/Root</code> or <code class="inline">/Pages</code> doesn't resolve</li></ul></li><li>Closed set of recovery event tuples observable via <code class="inline">recovery_log/1</code>:
+<code class="inline">:eof_marker_missing</code>, <code class="inline">:xref_recovered</code>, <code class="inline">:page_tree_recovered</code>,
+<code class="inline">:page_failed</code>, <code class="inline">:font_skipped</code>.</li><li>Fatal errors (<code class="inline">:not_a_pdf</code>, <code class="inline">:encrypted_password_required</code>,
+<code class="inline">:encrypted_wrong_password</code>, <code class="inline">:encrypted_unsupported_handler</code>)
+remain hard errors even under <code class="inline">recover: true</code>.</li></ul><h3 id="added-tooling" class="section-heading"><a href="#added-tooling" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Added — Tooling</span></h3><ul><li><strong><code class="inline">releaser</code> ~&gt; 0.0.7</strong> dev dependency for monorepo-aware version
+bumping, changelog generation, and Hex publishing.</li><li>Hex package metadata: maintainers, contributors (Andrew Timberlake +
+Misael Sánchez), licenses, links (GitHub + upstream + changelog).</li><li>ExDoc <code class="inline">groups_for_modules</code> separating Reader and Writer namespaces.</li><li>Comprehensive README documenting every reader feature with spec
+citations.</li></ul><h3 id="test-suite" class="section-heading"><a href="#test-suite" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Test suite</span></h3><p>1180 tests, 0 failures, 30 excluded as of this release.</p><hr class="thin"/><h2 id="unreleased-pdf-reader-error-recovery" class="section-heading"><a href="#unreleased-pdf-reader-error-recovery" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Unreleased — pdf-reader-error-recovery</span></h2><h3 id="added-1" class="section-heading"><a href="#added-1" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Added</span></h3><ul><li><p><strong><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.html#open/2"><code class="inline">Pdf.Reader.open/2</code></a> <code class="inline">recover: true</code> option</strong> — opts in to error-recovery mode.
+When <code class="inline">recover: false</code> (the default, unchanged), all existing strict behavior is
+preserved. When <code class="inline">recover: true</code>, the reader activates four orthogonal recovery
+phases (R-1..R-4) and logs each recovery action instead of returning
+<code class="inline">{:error, _}</code>.</p></li><li><p><strong><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.html#recovery_log/1"><code class="inline">Pdf.Reader.recovery_log/1</code></a></strong> — public accessor returning the recovery event
+log in chronological (oldest-first) order. An empty list after <code class="inline">open/2</code>
+guarantees that no recovery action occurred. Direct access to
+<code class="inline">doc.recovery_log</code> is discouraged in application code.</p></li><li><p><strong><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.Document.html"><code class="inline">Pdf.Reader.Document</code></a> struct extension</strong> — two new fields with defaults that
+are invisible to code that does not reference them:</p><ul><li><code class="inline">recover_mode :: boolean()</code>, default <code class="inline">false</code></li><li><code class="inline">recovery_log :: [recovery_event()]</code>, default <code class="inline">[]</code></li></ul></li><li><p><strong>PUBLIC API CHANGE — <code class="inline">read_text/1</code> and <code class="inline">read_images/1</code> return shape</strong>.
+Both functions now return <code class="inline">{:ok, list, doc}</code> 3-tuples (doc is the updated
+document carrying the recovery log). The bang variants (<code class="inline">read_text!/2</code>,
+<code class="inline">read_images!/1</code>) are unchanged.</p></li><li><p><strong>R-1 — Per-page isolation</strong>: when <code class="inline">recover: true</code>, a failed page is logged
+as <code class="inline">{:page_failed, page_n, reason}</code> and skipped; remaining pages continue.
+Spec: PDF 1.7 § 7.7.3, § 7.8.</p></li><li><p><strong>R-2 — Font decoder lenience</strong>: when <code class="inline">recover: true</code> and a font dict fails to
+resolve, the decoder for that font is replaced with a per-byte U+FFFD identity
+decoder (<code class="inline">&lt;&lt;0xFFFD::utf8&gt;&gt;</code> per byte). The event <code class="inline">{:font_skipped, page_n, font_name, reason}</code> is logged. <a href="https://hexdocs.pm/elixir/String.html#valid?/1"><code class="inline">String.valid?/1</code></a> is guaranteed true on
+recovery output. Spec: PDF 1.7 § 9.6, § 9.10.</p></li><li><p><strong>R-3 — XRef linear scan</strong>: when <code class="inline">recover: true</code> and normal xref loading fails
+(corrupt <code class="inline">startxref</code> offset, absent <code class="inline">%%EOF</code>), <code class="inline">XRef.recover/1</code> performs a
+<a href="https://www.erlang.org/doc/apps/stdlib/binary.html#matches/2"><code class="inline">:binary.matches/2</code></a> scan to reconstruct the cross-reference table. A
+<code class="inline">{:xref_recovered, n_objects}</code> event is logged. When <code class="inline">%%EOF</code> is absent, an
+additional <code class="inline">{:eof_marker_missing, :linear_scan_used}</code> event is prepended.
+Spec: PDF 1.7 § 7.5.4, § 7.5.5, § 7.5.8.</p></li><li><p><strong>R-4 — Catalog / Pages tree fallback</strong>: when <code class="inline">recover: true</code> and <code class="inline">/Root</code> or
+<code class="inline">/Pages</code> cannot be resolved, the reader scans the recovered xref entries for
+objects with <code class="inline">/Type /Page</code> and (<code class="inline">/Contents</code> OR <code class="inline">/Parent</code>). A
+<code class="inline">{:page_tree_recovered, n_pages}</code> event is logged. Form XObjects (which also
+carry <code class="inline">/Type /Page</code> sometimes) are correctly excluded by the filter.
+Spec: PDF 1.7 § 7.7.2, § 7.7.3.</p></li></ul><h3 id="closed-set-of-recovery-event-tuples" class="section-heading"><a href="#closed-set-of-recovery-event-tuples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Closed set of recovery event tuples</span></h3><table><thead><tr><th style="text-align: left;">Tuple</th><th style="text-align: left;">Meaning</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">{:xref_recovered, n}</code></td><td style="text-align: left;">Linear scan recovered <code class="inline">n</code> object entries</td></tr><tr><td style="text-align: left;"><code class="inline">{:eof_marker_missing, :linear_scan_used}</code></td><td style="text-align: left;"><code class="inline">%%EOF</code> absent; linear scan was invoked</td></tr><tr><td style="text-align: left;"><code class="inline">{:page_failed, page_n, reason}</code></td><td style="text-align: left;">Page <code class="inline">page_n</code> skipped; <code class="inline">reason</code> is an atom or term</td></tr><tr><td style="text-align: left;"><code class="inline">{:font_skipped, page_n, font_name, reason}</code></td><td style="text-align: left;">Font replaced with U+FFFD fallback</td></tr><tr><td style="text-align: left;"><code class="inline">{:page_tree_recovered, n_pages}</code></td><td style="text-align: left;">Catalog/Pages fallback found <code class="inline">n_pages</code> page objects</td></tr></tbody></table><p>No other tuple shapes are appended.</p><h3 id="known-gaps-recovery" class="section-heading"><a href="#known-gaps-recovery" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Known gaps (recovery)</span></h3><ul><li><strong>Encrypted AND corrupted PDFs</strong> — when a PDF is both encrypted and has a
+corrupt xref/catalog, the synthetic trailer built by the linear scan does not
+include <code class="inline">/Encrypt</code>. Decryption cannot proceed; these PDFs are non-decryptable
+even with <code class="inline">recover: true</code>.</li><li><strong>Catalog-fallback page order</strong> — when R-4 triggers, the page list is in
+xref-insertion order, NOT document order. The <code class="inline">{:page_tree_recovered, n}</code>
+event signals this known limitation to callers.</li><li><strong>R-4 probe cost</strong> — with <code class="inline">recover: true</code>, <code class="inline">do_open/2</code> runs a full page-tree
+walk immediately after xref load (to surface <code class="inline">{:page_tree_recovered, n}</code> on
+the doc returned from <code class="inline">open/2</code>). This is O(pages) and measurable on large
+documents. It is opt-in by design.</li></ul><h3 id="internal" class="section-heading"><a href="#internal" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Internal</span></h3><ul><li>Test suite: 1128 tests, 0 failures, 29 excluded (was 1125 before this change).</li><li>New test file: <code class="inline">test/pdf/reader/recovery_test.exs</code> (65 tests: 16 RED, 11 GREEN,
+integration, smoke, and stress).</li><li>Strict TDD throughout (red → green → refactor per task).</li><li>Spec-driven via SDD (<code class="inline">sdd/pdf-reader-error-recovery/*</code> artifacts in engram).</li></ul><hr class="thin"/><h2 id="unreleased-pdf-reader-per-glyph-widths" class="section-heading"><a href="#unreleased-pdf-reader-per-glyph-widths" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Unreleased — pdf-reader-per-glyph-widths</span></h2><h3 id="added-2" class="section-heading"><a href="#added-2" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Added</span></h3><ul><li><strong>Per-glyph width support</strong> (<a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.Font.Widths.html"><code class="inline">Pdf.Reader.Font.Widths</code></a>): text-matrix advance
+now uses the full PDF 1.7 § 9.4.4 formula — <code class="inline">tx = ((w/1000) * Tfs + Tc + Tw_if_space) * Th</code> —
+rather than a uniform 1-em approximation. Glyph widths are loaded from:<ul><li><code class="inline">/Widths</code>, <code class="inline">/FirstChar</code>, <code class="inline">/LastChar</code> for simple fonts (Type1, TrueType) — § 9.6.2.1</li><li><code class="inline">/W</code> Form A/B arrays and <code class="inline">/DW</code> fallback for CIDFonts (Type0) — § 9.7.4.3</li></ul></li><li><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.Font.Widths.html"><code class="inline">Pdf.Reader.Font.Widths</code></a> — new module with closures of type
+<code class="inline">(binary() -&gt; [non_neg_integer()])</code>, one per font, built alongside the existing
+decoder map in <code class="inline">extract_page_runs/3</code> and threaded through Form XObject recursion.</li><li><code class="inline">GraphicsState.widths_fn</code> — new field (default <code class="inline">nil</code>) storing the active font's
+width closure. Set by the <code class="inline">Tf</code> operator alongside <code class="inline">decoder</code>. (§ 9.4.4)</li><li><code class="inline">Tc</code>, <code class="inline">Tw</code>, <code class="inline">Tz</code>, <code class="inline">TL</code> text-state operators now correctly update <code class="inline">GraphicsState</code>.
+Previously their operands were silently dropped.</li><li>TJ kerning shift now applies horizontal scaling (<code class="inline">Th</code>):
+<code class="inline">shift = -(n/1000) * Tfs * Th</code> (previously <code class="inline">Th</code> was omitted).</li></ul><h3 id="changed" class="section-heading"><a href="#changed" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Changed</span></h3><ul><li><code class="inline">GraphicsState.horizontal_scaling</code> default changed from <code class="inline">1.0</code> to <code class="inline">100.0</code>
+(the PDF spec unit is a percentage; <code class="inline">Th = horizontal_scaling / 100</code>).
+Existing code that reads this field directly and expects the percentage
+form is unaffected; callers that divided by 100 already will need to adjust.</li></ul><h3 id="documented-gaps-not-in-scope" class="section-heading"><a href="#documented-gaps-not-in-scope" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Documented gaps (not in scope)</span></h3><ul><li>Vertical writing widths (<code class="inline">/W2</code>, <code class="inline">/DW2</code>) — § 9.7.4.4</li><li>Standard-14 hardcoded AFM metrics — § 9.6.2.2 (fonts without embedded <code class="inline">/Widths</code>
+currently produce zero-width advance; Tc/Tw still apply correctly)</li><li>Non-default <code class="inline">/FontMatrix</code> scaling on CIDType2 fonts — § 9.7.4.3</li></ul><h3 id="internal-1" class="section-heading"><a href="#internal-1" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Internal</span></h3><ul><li>Test suite: 1107 tests, 0 failures, 27 excluded (was 1095 before this change).</li><li>New file: <code class="inline">lib/pdf/reader/font/widths.ex</code></li><li>New test file: <code class="inline">test/pdf/reader/font/widths_test.exs</code> (25 tests)</li></ul><h2 id="unreleased-housekeeping-dialyzer-warnings" class="section-heading"><a href="#unreleased-housekeeping-dialyzer-warnings" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Unreleased — housekeeping-dialyzer-warnings</span></h2><h3 id="internal-2" class="section-heading"><a href="#internal-2" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Internal</span></h3><ul><li>Removed 9 dead-code clauses flagged by Dialyzer &quot;pattern can never match the type&quot;.
+All defensive <code class="inline">{:error, _}</code> arms in bang-wrappers and downstream pattern dispatches
+where the upstream success<em>typing was <code class="inline">{:ok, ...}</code>-only. No behavior change.
+Specifically: <code class="inline">read_metadata!/1</code> error branch; <code class="inline">extract_doc_id/1</code> `{:hex_string, </em>}<code class="inline">and</code><code class="inline">patterns;</code>resolve<em>page_resources/4<code class="inline">dead</code>{n,g}<code class="inline">and</code>nil<code class="inline">key branches plus unreachable</code>{:error, </em>}<code class="inline">cache arm;</code>do<em>resolve_page_resources/4<code class="inline">dead</code>{n,g}<code class="inline">and</code>nil<code class="inline">parent_key branches;</code>font.ex<code class="inline"></code>{:error, </em>}<code class="inline">arm for</code>CID.Decoder.build/2<code class="inline">;</code>decoder.ex<code class="inline"></code>parse<em>registry(nil)<code class="inline">clause. Defensive</code>_error<code class="inline">/</code></em><code class="inline">fallbacks in</code>outlines.ex<code class="inline">and</code>annotations.ex<code class="inline">that guard against future widening of</code>Destination.resolve/3` return type were intentionally
+kept and annotated with comments.</li></ul><h2 id="unreleased-pdf-reader-cid-fonts-tier3" class="section-heading"><a href="#unreleased-pdf-reader-cid-fonts-tier3" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Unreleased — pdf-reader-cid-fonts-tier3</span></h2><h3 id="added-3" class="section-heading"><a href="#added-3" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Added</span></h3><ul><li>10 Tier 3 predefined CMaps bundled in <code class="inline">priv/cmap/</code>:<ul><li>Adobe-Japan1: <code class="inline">EUC-H</code>, <code class="inline">EUC-V</code></li><li>Adobe-CNS1: <code class="inline">B5-H</code>, <code class="inline">B5-V</code>, <code class="inline">ETenms-B5-H</code>, <code class="inline">ETenms-B5-V</code></li><li>Adobe-GB1: <code class="inline">GB-H</code>, <code class="inline">GB-V</code></li><li>Adobe-Korea1: <code class="inline">KSCms-UHC-HW-H</code>, <code class="inline">KSCms-UHC-HW-V</code></li><li>Source: <code class="inline">adobe-type-tools/cmap-resources</code> (Apache-2.0)</li></ul></li><li><code class="inline">Pdf.Reader.CID.PredefinedCMap.@bundled</code> set extended from 30 to 40 names.</li></ul><h3 id="internal-3" class="section-heading"><a href="#internal-3" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Internal</span></h3><ul><li>Test suite: 1063 tests, 3 pre-existing failures (encryption), 0 new failures.</li><li>Bundle size: +51.9 KB additional <code class="inline">priv/cmap/</code> data.</li></ul><h2 id="unreleased-housekeeping-mix-format" class="section-heading"><a href="#unreleased-housekeeping-mix-format" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Unreleased — housekeeping-mix-format</span></h2><h3 id="internal-4" class="section-heading"><a href="#internal-4" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Internal</span></h3><ul><li>Auto-formatted 12 pre-existing files via <a href="https://hexdocs.pm/mix/Mix.Tasks.Format.html"><code class="inline">mix format</code></a> to satisfy <code class="inline">--check-formatted</code>.
+Affected files: <code class="inline">lib/pdf.ex</code>, <code class="inline">lib/pdf/builder.ex</code>, <code class="inline">lib/pdf/fonts.ex</code>, <code class="inline">lib/pdf/images/png.ex</code>,
+<code class="inline">lib/pdf/layout.ex</code>, <code class="inline">lib/pdf/page.ex</code>, <code class="inline">lib/pdf/styled_table.ex</code>,
+<code class="inline">test/pdf/builder_test.exs</code>, <code class="inline">test/pdf/fonts_test.exs</code>, <code class="inline">test/pdf/layout_test.exs</code>,
+<code class="inline">test/pdf/page_templates_test.exs</code>, <code class="inline">test/pdf/styled_table_test.exs</code>. No behavior change.</li></ul><h2 id="unreleased-pdf-reader-annotations-outlines" class="section-heading"><a href="#unreleased-pdf-reader-annotations-outlines" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Unreleased — pdf-reader-annotations-outlines</span></h2><h3 id="added-4" class="section-heading"><a href="#added-4" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Added</span></h3><ul><li><strong>Document outlines (bookmarks)</strong> — <a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.html#read_outlines/1"><code class="inline">Pdf.Reader.read_outlines/1</code></a> returns
+<code class="inline">[%Pdf.Reader.Outline{title, level, dest_page, children}]</code> walking
+catalog <code class="inline">/Outlines</code> linked list with cycle detection (visited MapSet)
+and depth cap 32.</li><li><strong>Annotations</strong> — <a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.html#read_annotations/1"><code class="inline">Pdf.Reader.read_annotations/1</code></a> returns
+<code class="inline">[%Pdf.Reader.Annotation{type, page, rect, contents, ...}]</code> for the
+10 in-scope subtypes: Link, Text, Highlight, Underline, StrikeOut,
+Squiggly, Square, Circle, FreeText, FileAttachment. Other subtypes
+surface as <code class="inline">:type :unknown</code> with raw fields preserved in
+<code class="inline">:kind_specific</code>.</li><li><strong><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.Destination.html"><code class="inline">Pdf.Reader.Destination</code></a></strong> — resolves all 4 <code class="inline">/Dest</code> variants
+(direct array, named string, <code class="inline">/A /S /GoTo /D &lt;array&gt;</code>, <code class="inline">/A /S /GoTo /D &lt;name&gt;</code>).
+Name-tree walker handles depth-20 + cycle detection.</li><li><strong><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.Utils.html"><code class="inline">Pdf.Reader.Utils</code></a></strong> — extracted shared <code class="inline">decode_pdf_string/1</code> (UTF-16BE BOM<ul><li>hex string aware) and <code class="inline">parse_rect/1</code>. <a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.html"><code class="inline">Pdf.Reader</code></a> and
+<a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.AcroForm.html"><code class="inline">Pdf.Reader.AcroForm</code></a> migrated to use Utils; private duplicates removed.</li></ul></li><li><strong>Page index cache</strong> — <code class="inline">:page_ref_index</code> cached once per <code class="inline">read_*</code> call
+via <code class="inline">Destination.ensure_page_index/1</code>. Avoids O(n) page-ref lookups
+per annotation/outline.</li></ul><h3 id="out-of-scope" class="section-heading"><a href="#out-of-scope" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Out of scope</span></h3><ul><li>Annotation appearance streams.</li><li>Markup popup hierarchies.</li><li>Sound/movie/screen/redact/3D annotations.</li><li>AcroForm widget annotations (covered by separate <code class="inline">pdf-reader-acroform-extraction</code>).</li></ul><h3 id="internal-5" class="section-heading"><a href="#internal-5" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Internal</span></h3><ul><li>1053+ tests, 0 failures.</li><li>Strict TDD throughout.</li><li>Spec-driven via SDD (<code class="inline">sdd/pdf-reader-annotations-outlines/*</code> artifacts in engram).</li></ul><hr class="thin"/><h2 id="unreleased-pdf-reader-cid-fonts-cmap-resources" class="section-heading"><a href="#unreleased-pdf-reader-cid-fonts-cmap-resources" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Unreleased — pdf-reader-cid-fonts-cmap-resources</span></h2><h3 id="added-5" class="section-heading"><a href="#added-5" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Added</span></h3><ul><li><p><strong>30 Adobe predefined CMaps bundled in <code class="inline">priv/cmap/</code></strong> (Tier 1 + Tier 2):</p><ul><li>Tier 1 (16 files): <code class="inline">UniJIS-UTF16-H/V</code>, <code class="inline">UniJIS-UCS2-H/V</code>, <code class="inline">UniCNS-UTF16-H/V</code>,
+<code class="inline">UniCNS-UCS2-H/V</code>, <code class="inline">UniGB-UTF16-H/V</code>, <code class="inline">UniGB-UCS2-H/V</code>, <code class="inline">UniKS-UTF16-H/V</code>,
+<code class="inline">UniKS-UCS2-H/V</code></li><li>Tier 2 (14 files): <code class="inline">GBK-EUC-H/V</code>, <code class="inline">GBKp-EUC-H/V</code>, <code class="inline">GBK2K-H/V</code>, <code class="inline">ETen-B5-H/V</code>,
+<code class="inline">KSCms-UHC-H/V</code>, <code class="inline">90ms-RKSJ-H/V</code>, <code class="inline">90msp-RKSJ-H/V</code></li><li>Source: <code class="inline">adobe-type-tools/cmap-resources</code> (Apache-2.0)</li></ul></li><li><p><strong><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.CID.CMapParser.html"><code class="inline">Pdf.Reader.CID.CMapParser</code></a></strong> — minimal PostScript subset parser
+(<code class="inline">codespacerange</code>, <code class="inline">cidchar</code>, <code class="inline">cidrange</code>, <code class="inline">notdefchar</code>, <code class="inline">notdefrange</code>, <code class="inline">usecmap</code>).
+Silently skips all other PS content. Returns <code class="inline">{:ok, cmap_fields} | {:error, reason}</code>.
+Never raises on malformed input.</p></li><li><p><strong><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.CID.Codespace.html#tokenize/2"><code class="inline">Pdf.Reader.CID.Codespace.tokenize/2</code></a></strong> — variable-length 1–4 byte
+codespace-aware tokenizer per PDF 1.7 § 9.7.6 shortest-match rule.
+Bytes outside all codespace ranges are silently dropped one-at-a-time.</p></li><li><p><strong><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.CID.PredefinedCMap.html"><code class="inline">Pdf.Reader.CID.PredefinedCMap</code></a></strong> — lazy loader with <code class="inline">Document.cache</code>
+keyed <code class="inline">{:predefined_cmap, name}</code> and <code class="inline">usecmap</code> chain support (cycle
+detection via visited MapSet; missing/non-bundled parents fall back to
+empty CMap per discovery #182).</p></li><li><p><strong><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.CID.Decoder.html#build_predefined/2"><code class="inline">Pdf.Reader.CID.Decoder.build_predefined/2</code></a></strong> — new dispatch branch
+resolves bytes → CID via codespace + CMap → Unicode via existing Adobe
+collection table. Resolution cascade: ToUnicode CMap → predefined CMap
+→ Adobe registry → U+FFFD with sentinel.</p></li><li><p><strong><code class="inline">Pdf.Reader.Font.cid_font_type/1</code></strong> — extends the former <code class="inline">cid_font?/1</code>
+predicate to recognise bundled predefined CMap names; dispatch returns
+<code class="inline">:identity | {:predefined, name} | :not_cid</code>.</p></li></ul><h3 id="known-limitations" class="section-heading"><a href="#known-limitations" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Known Limitations</span></h3><ul><li><strong>Tier 3 CMaps not bundled</strong> — <code class="inline">EUC</code>, <code class="inline">B5</code>, <code class="inline">GB</code>, <code class="inline">ETenms-B5</code>, <code class="inline">KSCms-UHC-HW</code>
+and similar encodings were deferred. Shipped in <code class="inline">pdf-reader-cid-fonts-tier3</code>.</li><li><strong>Adobe-{Japan1,CNS1,Korea1,GB1}-UCS2 abstract parent files do not exist</strong>
+in <code class="inline">adobe-type-tools/cmap-resources</code>. The <code class="inline">usecmap</code> operator falls back to
+empty parent CMap if the named parent is not bundled — child's mappings still
+work standalone. Real-world <code class="inline">usecmap</code> chains are exercised via -V → -H pairs
+(e.g. <code class="inline">UniJIS-UTF16-V usecmap UniJIS-UTF16-H</code>).</li></ul><h3 id="internal-6" class="section-heading"><a href="#internal-6" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Internal</span></h3><ul><li>Test suite: 909 tests, 0 failures (was 890 before this change's tests).</li><li>Strict TDD throughout (red → green → refactor per task pair).</li><li>Spec-driven via SDD (<code class="inline">sdd/pdf-reader-cid-fonts-cmap-resources/*</code>).</li></ul><hr class="thin"/><h2 id="unreleased-pdf-reader-cid-fonts" class="section-heading"><a href="#unreleased-pdf-reader-cid-fonts" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Unreleased — pdf-reader-cid-fonts</span></h2><h3 id="added-6" class="section-heading"><a href="#added-6" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Added</span></h3><ul><li><p><strong>CID composite font support</strong> — Type0 fonts with <code class="inline">/Encoding /Identity-H</code> or
+<code class="inline">/Identity-V</code> are now dispatched to a new CID decoder path in
+<code class="inline">Pdf.Reader.Font.build_decoder_internal/2</code>. Text extraction from standard
+CJK PDFs (Japanese, Chinese Traditional/Simplified, Korean) now returns
+correct Unicode instead of <code class="inline">U+FFFD</code>.</p></li><li><p><strong>Four Adobe collection modules</strong> — compile-time CID → Unicode tables bundled
+as <code class="inline">@external_resource</code> pattern-match clauses (O(1) BEAM dispatch):</p><ul><li><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.CID.AdobeJapan1.html"><code class="inline">Pdf.Reader.CID.AdobeJapan1</code></a> — ~9 600 entries (UniJIS-UCS2 column)</li><li><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.CID.AdobeCNS1.html"><code class="inline">Pdf.Reader.CID.AdobeCNS1</code></a> — ~18 300 entries (UniCNS-UCS2 column)</li><li><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.CID.AdobeKorea1.html"><code class="inline">Pdf.Reader.CID.AdobeKorea1</code></a> — ~17 100 entries (UniKS-UCS2 column)</li><li><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.CID.AdobeGB1.html"><code class="inline">Pdf.Reader.CID.AdobeGB1</code></a> — ~28 700 entries (UniGB-UCS2 column)</li></ul><p>Source data: <code class="inline">adobe-type-tools/cmap-resources</code> repository.
+Blob SHAs committed:</p><ul><li><code class="inline">Adobe-Japan1-7/cid2code.txt</code> → <code class="inline">4aead36837da</code></li><li><code class="inline">Adobe-CNS1-7/cid2code.txt</code>   → <code class="inline">13ebdcb98e07</code></li><li><code class="inline">Adobe-Korea1-2/cid2code.txt</code> → <code class="inline">0b5db6b5f5c3</code></li><li><code class="inline">Adobe-GB1-6/cid2code.txt</code>    → <code class="inline">c94c7bf8c943</code></li><li>Repository HEAD at time of normalization: <code class="inline">f5cf3bca7fdf</code></li></ul></li><li><p><strong><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.CID.CIDToGIDMap.html"><code class="inline">Pdf.Reader.CID.CIDToGIDMap</code></a></strong> — parses <code class="inline">/CIDToGIDMap</code> entries
+(<code class="inline">/Identity</code>, FlateDecode-decoded binary stream, or indirect ref). Stored for
+future glyph-rendering work; not used in the Unicode cascade.</p></li><li><p><strong><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.CID.Decoder.html"><code class="inline">Pdf.Reader.CID.Decoder</code></a></strong> — resolves per-CID Unicode via cascade:
+ToUnicode CMap → Adobe registry table → <code class="inline">U+FFFD</code> with sentinel
+<code class="inline">{idx, &quot;cid:0xHHHH&quot;}</code>.</p></li><li><p><strong><code class="inline">mix.exs</code> <code class="inline">package.files</code></strong> — <code class="inline">&quot;priv&quot;</code> added so that <code class="inline">@external_resource</code>
+paths in the Adobe collection modules resolve correctly at Hex compile time.</p></li></ul><h3 id="known-limitations-1" class="section-heading"><a href="#known-limitations-1" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Known limitations</span></h3><ul><li><strong>Non-Identity predefined CMaps not decoded</strong> — fonts with
+<code class="inline">/Encoding /UniJIS-UTF16-H</code>, <code class="inline">/GBK-EUC-H</code>, etc. fall through to the
+simple-font path and emit <code class="inline">U+FFFD</code> with sentinels. Full support planned for
+future change <code class="inline">pdf-reader-cid-fonts-cmap-resources</code>.</li><li><strong>Vertical writing mode</strong> — Identity-V is dispatched to the same decoder as
+Identity-H. No positional adjustments for vertical layout.</li></ul><h2 id="unreleased-pdf-reader-acroform-extraction" class="section-heading"><a href="#unreleased-pdf-reader-acroform-extraction" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Unreleased — pdf-reader-acroform-extraction</span></h2><h3 id="added-7" class="section-heading"><a href="#added-7" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Added</span></h3><ul><li><strong><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.html#read_acroform/1"><code class="inline">Pdf.Reader.read_acroform/1</code></a> and <code class="inline">read_acroform!/1</code></strong> — extract interactive
+AcroForm form fields from a PDF document. Returns a flat list of
+<code class="inline">%Pdf.Reader.FormField{}</code> structs with decoded names, types, values, flags,
+and rectangles. Absent <code class="inline">/AcroForm</code> returns <code class="inline">{:ok, [], doc}</code> — never an error.</li><li><strong><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.FormField.html"><code class="inline">Pdf.Reader.FormField</code></a></strong> struct — carries <code class="inline">:name</code> (fully-qualified dot-path),
+<code class="inline">:partial_name</code>, <code class="inline">:type</code> (<code class="inline">:text | :button | :choice | :signature | :unknown</code>),
+<code class="inline">:value</code> (type-specific decoded value), <code class="inline">:default</code>, <code class="inline">:tooltip</code>, <code class="inline">:flags</code>
+(<code class="inline">%{atom =&gt; boolean}</code> decoded from <code class="inline">/Ff</code> bitmask), <code class="inline">:rect</code>.</li><li><strong><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.AcroForm.html"><code class="inline">Pdf.Reader.AcroForm</code></a></strong> walker module — depth-first leaf-only walker with
+cycle detection (<a href="https://hexdocs.pm/elixir/MapSet.html"><code class="inline">MapSet</code></a> of <code class="inline">{n, g}</code> xref keys), depth cap (<code class="inline">@max_field_depth 8</code>),
+<code class="inline">/FT</code> inheritance, hierarchical naming, and widget-only annotation filtering.</li></ul><h2 id="unreleased-pdf-reader-resource-inheritance-multilevel" class="section-heading"><a href="#unreleased-pdf-reader-resource-inheritance-multilevel" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Unreleased — pdf-reader-resource-inheritance-multilevel</span></h2><h3 id="fixed" class="section-heading"><a href="#fixed" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Fixed</span></h3><ul><li><strong>Cyclic /Parent infinite loop</strong> — <code class="inline">resolve_page_resources/4</code> now carries a
+<code class="inline">visited</code> <a href="https://hexdocs.pm/elixir/MapSet.html"><code class="inline">MapSet</code></a> of <code class="inline">{obj_num, gen_num}</code> xref refs during each <code class="inline">/Parent</code>-chain
+walk. If a ref is encountered a second time (direct self-ref or transitive cycle),
+the walk is silently terminated and <code class="inline">%{}</code> is returned. Prevents corrupt PDFs from
+hanging the reader indefinitely.</li></ul><h3 id="added-8" class="section-heading"><a href="#added-8" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Added</span></h3><ul><li><strong>Per-leaf-page resource cache</strong> — resolved <code class="inline">/Resources</code> maps are now stored in
+<code class="inline">doc.cache</code> under <code class="inline">{:page_resources, {n, g}}</code> keyed by the leaf page's xref ref.
+Subsequent calls for the same page (e.g. a second <code class="inline">read_text/1</code> call on an open
+doc) skip the <code class="inline">/Parent</code>-chain walk entirely and return the cached value.</li></ul><h3 id="note" class="section-heading"><a href="#note" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Note</span></h3><ul><li><strong>Moduledoc clarified</strong> — removed the stale &quot;Known limitations&quot; entry that stated
+resource inheritance was limited to one level of parent-chain walk. The full
+recursive walk has been in place since Phase 1.1; only the documentation was wrong.
+Added PDF 1.7 § 7.7.3 and § 7.7.3.4 spec references.</li></ul><h2 id="unreleased-fix-writer-set-info-state" class="section-heading"><a href="#unreleased-fix-writer-set-info-state" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Unreleased — fix-writer-set-info-state</span></h2><h3 id="fixed-1" class="section-heading"><a href="#fixed-1" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Fixed</span></h3><ul><li><strong>Info dict lost after page mutations</strong> — <a href="https://hexdocs.pm/ex_pdf_core/1.0.1/Pdf.html#set_info/2"><code class="inline">Pdf.set_info/2</code></a> (and its single-key
+variants <code class="inline">set_title/2</code>, <code class="inline">set_author/2</code>, etc.) stores metadata by updating
+<code class="inline">document.objects</code>. However, <code class="inline">Page</code> carries its own copy of <code class="inline">objects</code> that was
+snapshotted at page-creation time. Any subsequent page mutation (<code class="inline">set_font</code>,
+<code class="inline">text_at</code>, …) calls <code class="inline">sync_page/2</code>, which replaces <code class="inline">document.objects</code> with
+<code class="inline">page.objects</code> — silently discarding the info update. The fix propagates the
+info-dict change into <code class="inline">document.current.objects</code> inside <code class="inline">put_info/2</code>, so both
+copies stay in sync and <code class="inline">sync_page/2</code> no longer clobbers metadata.</li></ul><h2 id="unreleased-pdf-reader-form-xobject-recursion-phase-3" class="section-heading"><a href="#unreleased-pdf-reader-form-xobject-recursion-phase-3" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Unreleased — pdf-reader-form-xobject-recursion (Phase 3)</span></h2><h3 id="added-phase-3-pdf-reader-form-xobject-recursion" class="section-heading"><a href="#added-phase-3-pdf-reader-form-xobject-recursion" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Added — Phase 3 (pdf-reader-form-xobject-recursion)</span></h3><ul><li><strong>Form XObject recursion</strong> — <code class="inline">Do</code> operators referencing <code class="inline">/Type /XObject /Subtype /Form</code> are now recursed into transparently. Text and images inside
+Forms (headers, footers, repeated logos, templated form fields) appear in
+<a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.html#read_text/2"><code class="inline">Pdf.Reader.read_text/2</code></a>, <code class="inline">read_text_with_positions/1</code>, and <code class="inline">read_images/1</code>
+output. Previously these objects were emitted as <code class="inline">{:deferred, :form_xobject, name}</code> events and silently dropped — that behavior is REPLACED.</li><li><strong>CTM × <code class="inline">/Matrix</code> inheritance</strong> — child Form's CTM is <code class="inline">Form.Matrix × parent CTM at time of Do</code>. Graphics state is saved on entry and restored on exit
+(effectively <code class="inline">q ... Q</code> around the form).</li><li><strong>Resource merging</strong> — Form's <code class="inline">/Resources</code> is shallow-merged with the page's
+resources (Form wins on key collision). Per-Form font decoders are built via
+<a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.Font.html#build_decoders_for_resources/2"><code class="inline">Pdf.Reader.Font.build_decoders_for_resources/2</code></a> and benefit from the
+existing <code class="inline">Document.cache</code> <code class="inline">{:font_decoder, font_ref}</code> cache.</li><li><strong>Cycle detection</strong> — interpreter state carries a <code class="inline">:visited</code> <a href="https://hexdocs.pm/elixir/MapSet.html"><code class="inline">MapSet</code></a> of
+<code class="inline">{obj_num, gen_num}</code> xref keys, threaded forward into child states. When a
+Form references an already-visited Form (directly or transitively), an
+internal <code class="inline">{:cycle_detected, ref}</code> event is emitted and recursion is skipped.</li><li><strong>Depth cap</strong> — recursion is capped at <code class="inline">@max_form_depth 8</code>. Beyond that, an
+internal <code class="inline">{:max_depth_exceeded, ref}</code> event is emitted and the Form is
+skipped.</li><li><strong>Image bubble-up</strong> — images embedded inside Form XObjects bubble up to the
+parent's event stream and appear in <code class="inline">read_images/1</code> output, with CTM
+reflecting the full transform (Form.Matrix × parent CTM × image local CTM).</li><li><strong>Internal/cycle/depth events dropped from text output</strong> — the new
+<code class="inline">{:cycle_detected, _}</code> and <code class="inline">{:max_depth_exceeded, _}</code> event types flow
+through <a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.ContentStream.html#interpret/3"><code class="inline">Pdf.Reader.ContentStream.interpret/3</code></a>'s output but are silently
+dropped by <code class="inline">events_to_text_runs/2</code>. Public <code class="inline">read_text*</code> API surface
+unchanged.</li></ul><h3 id="modified-phase-3" class="section-heading"><a href="#modified-phase-3" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Modified — Phase 3</span></h3><ul><li><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.ContentStream.html#interpret/3"><code class="inline">Pdf.Reader.ContentStream.interpret/3</code></a> — public arity and return shape
+unchanged (backward-compat). New private <code class="inline">do_interpret_with_doc/5</code> for the
+recursive path; <code class="inline">extract_page_runs/3</code> and <code class="inline">extract_page_images/3</code> now use it.</li><li><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.Image.html"><code class="inline">Pdf.Reader.Image</code></a> and <a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.TextRun.html"><code class="inline">Pdf.Reader.TextRun</code></a> events from inside Forms are
+appended to the parent page's event list.</li><li><code class="inline">build_xobjects_map/1</code> simplified — passes raw <code class="inline">{:ref, n, g}</code> refs from
+<code class="inline">resources[&quot;XObject&quot;]</code> instead of pre-classifying as <code class="inline">:form</code>. ContentStream
+classifies on demand inside <code class="inline">Do</code>.</li></ul><h3 id="out-of-scope-phase-3" class="section-heading"><a href="#out-of-scope-phase-3" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Out of scope (Phase 3)</span></h3><ul><li>BBox clipping of Form contents — text outside a Form's <code class="inline">/BBox</code> is still
+extracted (presentational concern, not data extraction).</li><li>Pattern XObject recursion — <code class="inline">/Type /Pattern</code> objects referenced via <code class="inline">Do</code>
+are skipped.</li><li>Multi-level page-tree resource inheritance (still one-level walk only).</li><li>AcroForm interactive field extraction.</li></ul><h3 id="internal-phase-3" class="section-heading"><a href="#internal-phase-3" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Internal — Phase 3</span></h3><ul><li>Test suite: 756 tests, 0 failures (738 default + 18 <code class="inline">@tag :fixtures</code>).</li><li>Strict TDD applied throughout (red → green → refactor per task).</li><li>Spec-driven via SDD (<code class="inline">sdd/pdf-reader-form-xobject-recursion/*</code> artifacts in
+engram).</li><li><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.ContentStream.html"><code class="inline">Pdf.Reader.ContentStream</code></a> <code class="inline">@moduledoc</code> cites PDF 1.7 § 8.10 (Form XObjects),
+§ 8.10.2 (Form Dictionaries), § 8.4 (Coordinate Systems), § 8.8 (External
+Objects / Do operator) plus pdf.js + pdfminer-six reference impls.</li></ul><hr class="thin"/><h2 id="unreleased-pdf-reader-encryption-phase-2" class="section-heading"><a href="#unreleased-pdf-reader-encryption-phase-2" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Unreleased — pdf-reader-encryption (Phase 2)</span></h2><h3 id="added-phase-2-pdf-reader-encryption" class="section-heading"><a href="#added-phase-2-pdf-reader-encryption" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Added — Phase 2 (pdf-reader-encryption)</span></h3><ul><li><strong>Standard Security Handler</strong> support — encrypted PDFs are now READABLE via
+<a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.html#open/2"><code class="inline">Pdf.Reader.open/2</code></a> when the correct password is provided (or empty for
+metadata-protection cases). Implements all four spec versions:<ul><li><strong>V1 / R=2</strong> — RC4 40-bit (legacy)</li><li><strong>V2 / R=3</strong> — RC4 up to 128-bit (most common pre-2008)</li><li><strong>V4 / R=4</strong> — Crypt Filters + AES-128 (PDF 1.6+)</li><li><strong>V5 / R=6</strong> — AES-256 + SHA-256/384/512 mixing (PDF 2.0 / Acrobat X+)</li></ul></li><li><strong><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.html#open/2"><code class="inline">Pdf.Reader.open/2</code></a></strong> with <code class="inline">password: String.t()</code> opt (default <code class="inline">&quot;&quot;</code>).<ul><li>Always tries empty password first (metadata-protection auto-unlock).</li><li>If non-empty password supplied, tries as user → owner password.</li><li><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.html#open/1"><code class="inline">Pdf.Reader.open/1</code></a> retained — delegates to <code class="inline">open/2</code> with empty opts.</li></ul></li><li><strong>New error atoms</strong> in <code class="inline">Pdf.Reader.reason/0</code>:<ul><li><code class="inline">:encrypted_password_required</code> — no password supplied, empty failed.</li><li><code class="inline">:encrypted_wrong_password</code> — supplied password rejected as user AND owner.</li><li><code class="inline">:encrypted_unsupported_handler</code> — <code class="inline">/Filter != /Standard</code>, V5/R5 (deprecated),
+or RC4 unavailable on the runtime.</li><li>The legacy <code class="inline">:encrypted</code> atom is REMOVED (existing test updated to assert
+the new atom).</li></ul></li><li><strong><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.Document.html"><code class="inline">Pdf.Reader.Document</code></a> struct</strong> gained <code class="inline">:encryption</code> field
+(<code class="inline">%StandardHandler{}</code> when encrypted, <code class="inline">nil</code> otherwise).</li><li><strong>Decryption hook</strong> integrated transparently in
+<code class="inline">Pdf.Reader.ObjectResolver.resolve_in_use/3</code> only — <code class="inline">resolve_compressed/3</code>
+is left untouched (object-stream contents are decrypted ONCE at the
+containing-stream level; double-decryption would corrupt them).</li><li><strong>Per-object encryption key</strong> derivation per PDF 1.7 § 7.6.2 for V1/V2/V4
+(file key + obj_num + gen_num + optional <code class="inline">sAlT</code> literal → MD5 → truncate).
+V5 uses the file encryption key directly.</li><li><strong>Crypt Filter <code class="inline">/Identity</code></strong> honored — V4 streams marked <code class="inline">/Identity</code> are
+passed through plaintext (common XMP metadata pattern).</li><li><strong><code class="inline">/EncryptMetadata false</code></strong> honored — when set in the Encrypt dict, the
+catalog's <code class="inline">/Metadata</code> stream is read as plaintext regardless of the
+default Stream Filter.</li><li><strong><code class="inline">mix.exs</code></strong> — <code class="inline">:crypto</code> added to <code class="inline">extra_applications</code> (required at
+release time; the OTP <code class="inline">:crypto</code> app is stdlib, not a Hex dep).</li><li>New modules: <a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.Encryption.html"><code class="inline">Pdf.Reader.Encryption</code></a> (facade), <code class="inline">Pdf.Reader.Encryption.{PasswordPad, ObjectKey, StandardHandler, V1V2, V4, V5}</code>.</li></ul><h3 id="known-limitations-phase-2-carried-forward" class="section-heading"><a href="#known-limitations-phase-2-carried-forward" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Known Limitations (Phase 2, carried forward)</span></h3><ul><li><strong>End-to-end V4/V5 round-trip integration tests deferred</strong> — algorithm-level
+unit tests (73 total across V1V2/V4/V5) verify each cipher against published
+vectors from Mozilla pdf.js <code class="inline">crypto_spec.js</code>, cross-checked with Node.js.
+V2/R3 is fully covered end-to-end via <code class="inline">craft_rc4_v2_pdf/1</code> (round-trip from
+hand-crafted PDF through <code class="inline">open/2</code> → <code class="inline">read_text/1</code>). V4/V5 dispatch through
+the resolver hook is unit-validated but lacks a full hand-crafted PDF
+round-trip fixture. Planned as <code class="inline">pdf-reader-encryption-fixtures-handcraft</code>.</li><li><strong>Real-world fixture PDFs not committed</strong> — would require <code class="inline">qpdf</code> as a
+build/test dependency, which contradicts the project's &quot;native only, zero
+external dependencies&quot; principle. Planned as a separate optional change
+if/when the constraint is relaxed.</li><li><strong>R5</strong> (deprecated V5 variant) — unsupported by design. PDFs with <code class="inline">V=5 R=5</code>
+return <code class="inline">{:error, :encrypted_unsupported_handler}</code>.</li><li><strong>Public-Key Security Handler</strong> (X.509 cert-based, <code class="inline">/Filter /Adobe.PubSec</code>
+or similar) — not supported. Returns <code class="inline">:encrypted_unsupported_handler</code>.</li><li><strong>Permission flag enforcement</strong> — flags are read but NOT enforced. We are
+a reader; downstream tools may choose to honor <code class="inline">/P</code> bits.</li><li><strong>RC4 availability</strong> — runtime dependent on OpenSSL configuration. On
+systems where RC4 is disabled (some OpenSSL 3 builds), V1/V2 PDFs return
+<code class="inline">:encrypted_unsupported_handler</code>. AES paths (V4/V5) work everywhere.</li></ul><h3 id="internal-phase-2" class="section-heading"><a href="#internal-phase-2" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Internal — Phase 2</span></h3><ul><li>Test suite: 726 tests, 0 failures (708 default + 18 <code class="inline">@tag :fixtures</code>).</li><li>73 unit tests across V1V2/V4/V5 verify algorithms 2, 4, 5, 6, 7, 8, 9,
+10 against vectors sourced from Mozilla pdf.js <code class="inline">test/unit/crypto_spec.js</code>
+(Apache-2.0). Each vector independently re-computed with Node.js <code class="inline">crypto</code>
+and <code class="inline">:crypto</code> Erlang to confirm parity.</li><li>Strict TDD applied throughout (red → green → refactor per task).</li><li>Spec-driven via SDD (<code class="inline">sdd/pdf-reader-encryption/*</code> artifacts in engram).</li><li>All algorithm modules cite canonical spec URLs (PDF 1.7/2.0, NIST FIPS 197,
+NIST SP 800-38A, RFC 1321) in <code class="inline">@moduledoc</code>.</li></ul><hr class="thin"/><h2 id="unreleased-pdf-reader-cascade-wire-phase-1-1" class="section-heading"><a href="#unreleased-pdf-reader-cascade-wire-phase-1-1" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Unreleased — pdf-reader-cascade-wire (Phase 1.1)</span></h2><h3 id="added-phase-1-1-pdf-reader-cascade-wire" class="section-heading"><a href="#added-phase-1-1-pdf-reader-cascade-wire" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Added — Phase 1.1 (pdf-reader-cascade-wire)</span></h3><ul><li><strong>Encoding cascade wired</strong> through <code class="inline">read_text/2</code> and <code class="inline">read_text_with_positions/1</code> —
+text is now decoded to Unicode (was raw bytes in Phase 1). Per-font cascade order:
+ToUnicode CMap → /Differences + AGL → base encoding (WinAnsi/MacRoman/Standard) → U+FFFD.</li><li><strong>Per-font decoder construction with cache</strong> — <a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.Font.html#build_decoder/2"><code class="inline">Pdf.Reader.Font.build_decoder/2</code></a> builds
+closures per font dict; decoders are cached in <code class="inline">Document.cache</code> keyed by
+<code class="inline">{:font_decoder, font_ref}</code> (indirect-ref fonts only; inline font dicts are not cached).</li><li><strong><code class="inline">Tf</code> operator switches active decoder</strong> mid-content-stream — font changes in the
+stream are respected; each text operation uses the decoder for the currently active font.</li><li><strong>XMP metadata parsing</strong> via <code class="inline">:xmerl</code> (OTP stdlib) — <code class="inline">read_metadata/1</code> merges XMP with
+<code class="inline">/Info</code>; XMP wins on conflict (PDF 1.7 § 14.3.2). Recognized namespaces: dc:, xmp:, pdf:.
+Malformed XMP falls back to <code class="inline">/Info</code>-only silently.</li><li><strong><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.Image.html"><code class="inline">Pdf.Reader.Image</code></a> struct</strong> gained <code class="inline">:ctm</code>, <code class="inline">:render_width</code>, <code class="inline">:render_height</code>,
+<code class="inline">:rotation_radians</code> fields. CTM decomposition follows PDF 1.7 § 8.3.3 and § 8.9.5.</li><li><strong>Resource inheritance</strong> — one-level parent-chain walk added to <code class="inline">resolve_page_resources/2</code>
+so writer-built PDFs (which store resources on the Pages parent node, not the leaf page)
+extract text and images correctly.</li><li>New modules: <a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.Font.html"><code class="inline">Pdf.Reader.Font</code></a>, <a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.XMP.html"><code class="inline">Pdf.Reader.XMP</code></a></li><li>New fixture: <code class="inline">test/fixtures/images/tiny.jpg</code> (32×32 px, ~900 B, public-domain JPEG
+from picsum.photos — used by image CTM integration tests)</li></ul><h3 id="known-limitations-phase-1-1-carried-forward" class="section-heading"><a href="#known-limitations-phase-1-1-carried-forward" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Known Limitations (Phase 1.1, carried forward)</span></h3><ul><li><strong>Resource inheritance</strong> — only one level of parent-chain walk is implemented. PDFs with
+deeply nested page trees that store resources two or more levels above the leaf page may
+produce empty text. Planned as <code class="inline">pdf-reader-resource-inheritance</code> change.</li><li><strong>Per-glyph advance via <code class="inline">/Widths</code></strong> — glyph advance is approximated as uniform
+(<code class="inline">char_count × font_size</code>). Per-glyph widths are a separate change.</li><li><strong>Form XObject <code class="inline">Do</code> recursion</strong> — content inside form XObjects (<code class="inline">/Type /Form</code>) is not
+extracted. Planned for Phase 3.</li><li><strong>CID fonts beyond ToUnicode</strong> — CID-keyed fonts without a <code class="inline">/ToUnicode</code> CMap produce
+U+FFFD substitutions. Planned for Phase 3.</li><li><strong>CCITTFaxDecode, JBIG2Decode, JPXDecode</strong> — not supported; these require third-party
+C libraries and are outside scope.</li></ul><h3 id="internal-phase-1-1" class="section-heading"><a href="#internal-phase-1-1" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Internal — Phase 1.1</span></h3><ul><li>Test suite: 616 tests, 0 failures (598 default + 18 <code class="inline">@tag :fixtures</code>)</li><li>Strict TDD applied throughout (red → green → refactor per task)</li><li>Spec-driven via SDD (<code class="inline">sdd/pdf-reader-cascade-wire/*</code> artifacts in engram)</li></ul><hr class="thin"/><h2 id="unreleased-pdf-reader-core-phase-1" class="section-heading"><a href="#unreleased-pdf-reader-core-phase-1" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Unreleased — pdf-reader-core (Phase 1)</span></h2><h3 id="added-9" class="section-heading"><a href="#added-9" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Added</span></h3><ul><li><a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.html#open/1"><code class="inline">Pdf.Reader.open/1</code></a>, <code class="inline">read_text/2</code>, <code class="inline">read_text_with_positions/1</code>, <code class="inline">read_images/1</code>,
+<code class="inline">read_metadata/1</code>, <code class="inline">page_count/1</code>, <code class="inline">close/1</code> — and bang variants (<code class="inline">open!/1</code>, etc.)</li><li>Stream filter pipeline:<ul><li><code class="inline">FlateDecode</code> with PNG predictors 1–4 and 10–14 and TIFF Predictor 2 (horizontal differencing)</li><li><code class="inline">ASCII85Decode</code> with <code class="inline">z</code> shortcut and <code class="inline">~&gt;</code> EOD marker</li><li><code class="inline">ASCIIHexDecode</code> with whitespace tolerance and <code class="inline">&gt;</code> EOD</li><li><code class="inline">RunLengthDecode</code> (128 = EOD, 0–127 = literal, 129–255 = repeat)</li><li><code class="inline">LZWDecode</code> with variable-width codes (9–12 bit), EarlyChange 0 and 1</li></ul></li><li>Cross-reference table support: classic xref (PDF 1.0–1.4) AND xref streams (PDF 1.5+)
+with <code class="inline">/Prev</code> chain merging and hybrid chains (mixed classic + stream)</li><li>Object stream (<code class="inline">/Type /ObjStm</code>) decoding via <a href="https://hexdocs.pm/ex_pdf_read/1.0.1/Pdf.Reader.ObjectStream.html"><code class="inline">Pdf.Reader.ObjectStream</code></a></li><li>Encoding cascade (per-glyph): ToUnicode CMap → /Differences + Adobe Glyph List →
+base encoding (WinAnsi / MacRoman / StandardEncoding) → <code class="inline">U+FFFD</code> with diagnostic sentinel</li><li>Bundled Adobe Glyph List 2.0 as a compile-time module (~4 500 entries, BSD-licensed)</li><li>Public-domain encoding tables:<ul><li>Apple ROMAN.TXT (canonical Mac Roman mapping)</li><li>PDF 1.7 Annex D.2 StandardEncoding (cross-checked against Mozilla pdf.js)</li></ul></li><li>Lazy indirect-object resolver with pure <a href="https://hexdocs.pm/elixir/Map.html"><code class="inline">Map</code></a> cache — no GenServer, no Agent</li><li>Pure tagged-tuple internal value model:
+<code class="inline">{:ref, n, g}</code>, <code class="inline">{:name, _}</code>, <code class="inline">{:string, _}</code>, <code class="inline">{:hex_string, _}</code>,
+<code class="inline">{:stream, dict, body}</code>, plain <code class="inline">%{}</code> for dicts, plain lists for arrays</li></ul><h3 id="known-limitations-phase-1" class="section-heading"><a href="#known-limitations-phase-1" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Known Limitations (Phase 1)</span></h3><ul><li>No encryption support — encrypted PDFs return <code class="inline">{:error, :encrypted}</code> (deferred to Phase 2)</li><li>No CID fonts beyond ToUnicode-mapped glyphs (deferred to Phase 3)</li><li>No <code class="inline">CCITTFaxDecode</code>, <code class="inline">JBIG2Decode</code>, or JPEG 2000 image filters — these require
+third-party C libraries and are outside scope</li><li>No AcroForm or XFA form field extraction</li><li>No OCR or scanned-PDF text extraction — impossible without third parties</li><li>Form XObject (<code class="inline">Do</code> operator) is recognised but not recursed; content is not extracted</li><li>Glyph advance approximation: uses <code class="inline">char_count × font_size</code> instead of per-glyph
+<code class="inline">/Widths</code>; start-of-run position is exact, inter-run drift is possible for proportional fonts</li><li>CMap multi-codepoint mappings (ligatures): only the first codepoint is used</li><li>Malformed PDFs return strict <code class="inline">{:error, :malformed}</code> — no partial-recovery mode</li><li>XMP metadata streams are not parsed; <code class="inline">read_metadata/1</code> reads only the <code class="inline">/Info</code> dictionary</li></ul><h3 id="internal-7" class="section-heading"><a href="#internal-7" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Internal</span></h3><ul><li>Test suite: 550 tests, 0 failures (541 default + 9 <code class="inline">@tag :fixtures</code>)</li><li>Strict TDD applied throughout (red → green → refactor per task)</li><li>Spec-driven via SDD (<code class="inline">sdd/pdf-reader-core/*</code> artifacts in engram)</li></ul><hr class="thin"/><h2 id="0-7-1-2024-07-23" class="section-heading"><a href="#0-7-1-2024-07-23" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">0.7.1 (2024-07-23)</span></h2><ul><li>Fix memory leak when cleaning up a PDF process</li></ul><h2 id="0-7-0-2024-07-12" class="section-heading"><a href="#0-7-0-2024-07-12" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">0.7.0 (2024-07-12)</span></h2><ul><li>Add <code class="inline">autoprint/1</code> to automatically open the print dialog in a browser</li></ul><h2 id="0-6-1-2023-01-19" class="section-heading"><a href="#0-6-1-2023-01-19" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">0.6.1 (2023-01-19)</span></h2><ul><li>Fix bug with zero width strings and empty rows (also fixes [#24])</li><li>Fix issue with nil cap height [#35]</li><li>Raise RuntimeError when attempting to add text without a font [#36]</li><li>Fix typespec for <code class="inline">text_wrap/5</code> [#37]</li></ul><h2 id="0-6-0-2021-12-07" class="section-heading"><a href="#0-6-0-2021-12-07" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">0.6.0 (2021-12-07)</span></h2><ul><li>Add <code class="inline">:odd</code> and <code class="inline">:even</code> to <code class="inline">:row_style</code> on table with a lower precedence than indexed styles</li><li>Fix bug where only the first non-WinAnsi character was replaced [#32]</li></ul><h2 id="0-5-0-2020-12-02" class="section-heading"><a href="#0-5-0-2020-12-02" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">0.5.0 (2020-12-02)</span></h2><ul><li>Catch errors raised within the GenServer and re-raise them in the calling process</li></ul><h2 id="0-4-0-2020-08-12" class="section-heading"><a href="#0-4-0-2020-08-12" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">0.4.0 (2020-08-12)</span></h2><ul><li>Add <code class="inline">:encoding_replacement_character</code> option to supply a replacement character when encoding fails</li><li>Add <code class="inline">:allow_row_overflow</code> option to <a href="https://hexdocs.pm/ex_pdf_core/1.0.1/Pdf.html#table/4"><code class="inline">Pdf.table/4</code></a> to allow row contents to be split across pages</li></ul><h2 id="0-3-7-2020-04-29" class="section-heading"><a href="#0-3-7-2020-04-29" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">0.3.7 (2020-04-29)</span></h2><ul><li>Bug fix: Fix memory leak by stopping internal processes</li></ul><h2 id="0-3-6-2020-04-22" class="section-heading"><a href="#0-3-6-2020-04-22" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">0.3.6 (2020-04-22)</span></h2><ul><li>Bug fix: Correctly handle encoded text as binary, not UTF-8 encoded string</li><li>Bug fix: External fonts now work like built-in fonts #17</li><li>Bug fix: Reset colours changed by attributed text</li><li>Bug fix: Fix global options for text_at/4 when using a string #11</li></ul><h2 id="0-3-5-2020-04-14" class="section-heading"><a href="#0-3-5-2020-04-14" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">0.3.5 (2020-04-14)</span></h2><ul><li>Deprecate: <a href="https://hexdocs.pm/ex_pdf_core/1.0.1/Pdf.html#delete/1"><code class="inline">Pdf.delete/1</code></a> in favour of <a href="https://hexdocs.pm/ex_pdf_core/1.0.1/Pdf.html#cleanup/1"><code class="inline">Pdf.cleanup/1</code></a></li><li>Deprecate: <a href="https://hexdocs.pm/ex_pdf_core/1.0.1/Pdf.html#open/2"><code class="inline">Pdf.open/2</code></a> in favour of <a href="https://hexdocs.pm/ex_pdf_core/1.0.1/Pdf.html#build/2"><code class="inline">Pdf.build/2</code></a></li></ul>
+
+</div>
+
+<div class="bottom-actions" id="bottom-actions">
+  <div class="bottom-actions-item">
+
+  </div>
+  <div class="bottom-actions-item">
+
+      <a href="license.html" class="bottom-actions-button" rel="next">
+        <span class="subheader">
+          Next Page →
+        </span>
+        <span class="title">
+License
+        </span>
+      </a>
+
+  </div>
+</div>
+    <footer class="footer">
+
+        <p>
+
+            <span class="line">
+              <a href="https://hex.pm/packages/ex_pdf/1.0.5">Hex Package</a>
+
+              <a href="https://preview.hex.pm/preview/ex_pdf/1.0.5">Hex Preview</a>
+
+                (<a href="https://preview.hex.pm/preview/ex_pdf/1.0.5/show/../../CHANGELOG.md">current file</a>)
+
+            </span>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.2) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>
