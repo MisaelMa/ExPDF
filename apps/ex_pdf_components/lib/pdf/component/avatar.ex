@@ -40,7 +40,7 @@ defmodule Pdf.Component.Avatar do
 
   ## Style options
 
-  - `:size` — width and height in points (default `40`)
+  - `:size` — single number or `{width, height}` tuple in points (default `40`)
   - `:initials` — 1-3 character string to display (default `nil`)
   - `:image` — path to JPEG/PNG image or `{:binary, data}` (default `nil`)
   - `:background` — fill color behind initials (default gray)
@@ -52,7 +52,7 @@ defmodule Pdf.Component.Avatar do
   - `:elevation` — shadow level 0-5, like Material UI (default `0`)
   """
   def render(doc, {x, y}, style \\ %{}) do
-    size = Map.get(style, :size, @default_size)
+    {w, h} = normalize_size(Map.get(style, :size, @default_size))
     bg = Map.get(style, :background, @default_background)
     color = Map.get(style, :color, @default_color)
     font = Map.get(style, :font, @default_font)
@@ -61,34 +61,32 @@ defmodule Pdf.Component.Avatar do
     border_w = Map.get(style, :border, 0)
     border_color = Map.get(style, :border_color, :black)
     elevation = Map.get(style, :elevation, 0)
-    radius = resolve_radius(Map.get(style, :border_radius, :circle), size)
+    radius = resolve_radius(Map.get(style, :border_radius, :circle), min(w, h))
 
     # Position: {x, y} is top-left, PDF coords have y going up
-    # So the box bottom-left is {x, y - size}
+    # So the box bottom-left is {x, y - h}
     bx = x
-    by = y - size
+    by = y - h
 
-    doc = draw_shadow(doc, {bx, by}, size, radius, elevation)
-    doc = draw_background(doc, {bx, by}, size, radius, bg)
-    doc = draw_image_or_initials(doc, {bx, by}, size, radius, image, initials, color, font)
-    draw_border(doc, {bx, by}, size, radius, border_w, border_color)
+    doc = draw_shadow(doc, {bx, by}, {w, h}, radius, elevation)
+    doc = draw_background(doc, {bx, by}, {w, h}, radius, bg)
+    doc = draw_image_or_initials(doc, {bx, by}, {w, h}, radius, image, initials, color, font)
+    draw_border(doc, {bx, by}, {w, h}, radius, border_w, border_color)
   end
 
   # ── Shadow / Elevation ──────────────────────────────────────────
 
   defp draw_shadow(doc, _pos, _size, _radius, 0), do: doc
 
-  defp draw_shadow(doc, {x, y}, size, radius, elevation) when elevation > 0 do
-    # Material UI elevation: more layers = deeper shadow
-    # Each layer is slightly larger, more offset, and more transparent
+  defp draw_shadow(doc, {x, y}, {w, h}, radius, elevation) when elevation > 0 do
     layers = shadow_layers(elevation)
 
     Enum.reduce(layers, doc, fn {offset_x, offset_y, spread, opacity}, doc ->
       sx = x + offset_x - spread
       sy = y + offset_y - spread
-      sw = size + spread * 2
-      sh = size + spread * 2
-      sr = min(radius + spread, sw / 2)
+      sw = w + spread * 2
+      sh = h + spread * 2
+      sr = min(radius + spread, min(sw, sh) / 2)
 
       doc
       |> Pdf.save_state()
@@ -148,37 +146,35 @@ defmodule Pdf.Component.Avatar do
 
   # ── Background ──────────────────────────────────────────────────
 
-  defp draw_background(doc, {x, y}, size, radius, bg) do
+  defp draw_background(doc, {x, y}, {w, h}, radius, bg) do
     doc
     |> Pdf.save_state()
     |> Pdf.set_fill_color(bg)
-    |> Pdf.rounded_rectangle({x, y}, {size, size}, radius)
+    |> Pdf.rounded_rectangle({x, y}, {w, h}, radius)
     |> Pdf.fill()
     |> Pdf.restore_state()
   end
 
   # ── Image or Initials ───────────────────────────────────────────
 
-  defp draw_image_or_initials(doc, {x, y}, size, radius, image, _initials, _color, _font)
+  defp draw_image_or_initials(doc, {x, y}, {w, h}, radius, image, _initials, _color, _font)
        when not is_nil(image) do
-    # Clip to rounded shape, then draw image
     doc
     |> Pdf.save_state()
-    |> Pdf.rounded_rectangle({x, y}, {size, size}, radius)
+    |> Pdf.rounded_rectangle({x, y}, {w, h}, radius)
     |> Pdf.clip()
-    |> Pdf.add_image({x, y + size}, image, width: size, height: size)
+    |> Pdf.add_image({x, y}, image, width: w, height: h)
     |> Pdf.restore_state()
   end
 
-  defp draw_image_or_initials(doc, {x, y}, size, _radius, _image, initials, color, font)
+  defp draw_image_or_initials(doc, {x, y}, {w, h}, _radius, _image, initials, color, font)
        when is_binary(initials) and byte_size(initials) > 0 do
-    # Center initials in the avatar
-    font_size = font_size_for_initials(initials, size)
+    font_size = font_size_for_initials(initials, min(w, h))
     text_w = String.length(initials) * font_size * 0.6
     text_h = font_size * 0.7
 
-    tx = x + (size - text_w) / 2
-    ty = y + (size - text_h) / 2
+    tx = x + (w - text_w) / 2
+    ty = y + (h - text_h) / 2
 
     doc
     |> Pdf.save_state()
@@ -196,21 +192,24 @@ defmodule Pdf.Component.Avatar do
 
   defp draw_border(doc, _pos, _size, _radius, 0, _color), do: doc
 
-  defp draw_border(doc, {x, y}, size, radius, border_w, color) do
+  defp draw_border(doc, {x, y}, {w, h}, radius, border_w, color) do
     doc
     |> Pdf.save_state()
     |> Pdf.set_stroke_color(color)
     |> Pdf.set_line_width(border_w)
-    |> Pdf.rounded_rectangle({x, y}, {size, size}, radius)
+    |> Pdf.rounded_rectangle({x, y}, {w, h}, radius)
     |> Pdf.stroke()
     |> Pdf.restore_state()
   end
 
   # ── Helpers ─────────────────────────────────────────────────────
 
-  defp resolve_radius(:circle, size), do: size / 2
-  defp resolve_radius(:rounded, size), do: size * 0.2
-  defp resolve_radius(r, _size) when is_number(r), do: r
+  defp normalize_size({w, h}), do: {w, h}
+  defp normalize_size(s) when is_number(s), do: {s, s}
+
+  defp resolve_radius(:circle, min_dim), do: min_dim / 2
+  defp resolve_radius(:rounded, min_dim), do: min_dim * 0.2
+  defp resolve_radius(r, _min_dim) when is_number(r), do: r
 
   defp font_size_for_initials(text, size) do
     len = String.length(text)

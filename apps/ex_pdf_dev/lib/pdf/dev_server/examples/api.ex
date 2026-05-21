@@ -6,7 +6,7 @@ defmodule Pdf.DevServer.Examples.Api do
     LayoutBox, LayoutRow, LayoutColumn, PageTemplates, NamedStyles,
     TableSimple, TableZebra, TableReceipt, TableInvoice,
     CfdiInvoice, RvReceipt, DebugGrid, Avatar, ComponentsShowcase,
-    FontShowcase, ImageShowcase, ImageBackground
+    FontShowcase, ImageShowcase, ImageBackground, BarcodeQr
   }
 
   def list do
@@ -33,7 +33,8 @@ defmodule Pdf.DevServer.Examples.Api do
       {"debug_grid", "Debug Grid", "Grid overlay with margin outline and cursor position", &DebugGrid.render/0},
       {"font_showcase", "Font Showcase", "All 14 built-in fonts with variants and sizes", &FontShowcase.render/0},
       {"image_showcase", "Image Types", "PNG images from binary data — solid, gradient, checker, scaling", &ImageShowcase.render/0},
-      {"image_background", "Image Background", "Full-page image background with dot pattern and gradient", &ImageBackground.render/0}
+      {"image_background", "Image Background", "Full-page image background with dot pattern and gradient", &ImageBackground.render/0},
+      {"barcode_qr", "Barcode & QR", "Code 128 barcodes and QR codes — pure Elixir encoding", &BarcodeQr.render/0}
     ]
   end
 end

@@ -739,6 +739,26 @@ defmodule Pdf do
   end
 
   @doc """
+  Draw a Bézier curve from the current point through control points to the end point.
+
+  ```elixir
+  pdf
+  |> Pdf.move_to({100, 100})
+  |> Pdf.curve_to({120, 150}, {180, 150}, {200, 100})
+  |> Pdf.stroke()
+  ```
+  """
+  @spec curve_to(Document.t(), coords, coords, coords) :: Document.t()
+  def curve_to(document, cp1, cp2, end_point),
+    do: Document.curve_to(document, cp1, cp2, end_point)
+
+  @doc """
+  Close the current path by drawing a straight line back to the starting point.
+  """
+  @spec close_path(Document.t()) :: Document.t()
+  def close_path(document), do: Document.close_path(document)
+
+  @doc """
   Set the current path as a clipping boundary.
   """
   def clip(document) do

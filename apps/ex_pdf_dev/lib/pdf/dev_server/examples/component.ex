@@ -7,7 +7,7 @@ defmodule Pdf.DevServer.Examples.Component do
     SignatureDemo, StatCardDemo, AlertDemo,
     KeyValueDemo, TimelineDemo, StepIndicatorDemo,
     RatingDemo, MetricDemo, TOCDemo, FootnoteDemo,
-    PaginatorDemo
+    PaginatorDemo, ChartDemo, PageHeaderDemo
   }
 
   def list do
@@ -35,7 +35,9 @@ defmodule Pdf.DevServer.Examples.Component do
       {"metric_demo", "Metric Component", "Before/after comparison with delta", &MetricDemo.render/0},
       {"toc_demo", "TOC Component", "Table of contents with dot leaders", &TOCDemo.render/0},
       {"footnote_demo", "Footnote Component", "Numbered footnotes with separator", &FootnoteDemo.render/0},
-      {"paginator_demo", "Paginator Component", "Automatic page numbering in footer", &PaginatorDemo.render/0}
+      {"paginator_demo", "Paginator Component", "Automatic page numbering in footer", &PaginatorDemo.render/0},
+      {"chart_demo", "Chart Component", "Bar, line, pie and donut charts", &ChartDemo.render/0},
+      {"page_header_demo", "PageHeader Component", "Automatic page headers with title, date, line", &PageHeaderDemo.render/0}
     ]
   end
 
