@@ -788,7 +788,7 @@ defmodule Pdf.Reader.ContentStreamTest do
         )
 
       text_events = Enum.filter(events, &match?({:text, _}, &1))
-      assert length(text_events) >= 1
+      assert text_events != []
       [{:text, run} | _] = text_events
       # CTM = {2,0,0,2,50,100}, Tm after 10 20 Td = {1,0,0,1,10,20}
       # M_render = Tm × CTM = multiply({1,0,0,1,10,20}, {2,0,0,2,50,100})
@@ -823,7 +823,7 @@ defmodule Pdf.Reader.ContentStreamTest do
         )
 
       text_events = Enum.filter(events, &match?({:text, _}, &1))
-      assert length(text_events) >= 1
+      assert text_events != []
       [{:text, run} | _] = text_events
       # No matrix: child CTM = identity; Td 10 20 → position (10, 20)
       assert_in_delta run.x, 10.0, 0.5
@@ -1081,7 +1081,7 @@ defmodule Pdf.Reader.ContentStreamTest do
 
       # The Form's text IS extracted
       text_events = Enum.filter(events, &match?({:text, _}, &1))
-      assert length(text_events) >= 1
+      assert text_events != []
     end
   end
 

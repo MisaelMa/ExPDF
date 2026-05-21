@@ -53,7 +53,7 @@ defmodule Pdf.Reader.XRefTest do
 
       # The binary starts with "xref" at offset 0.
       assert {:ok, entries, trailer} = XRef.load(binary, 0)
-      assert entries[{0, 65535}] == :free
+      assert entries[{0, 65_535}] == :free
       assert entries[{1, 0}] == {:in_use, 200, 0}
       assert trailer.root == {:ref, 1, 0}
     end

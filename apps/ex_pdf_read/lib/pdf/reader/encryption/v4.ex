@@ -245,7 +245,7 @@ defmodule Pdf.Reader.Encryption.V4 do
   # Returns {:ok, name} or :none.
   defp extract_per_stream_filter(stream_dict) do
     case Map.get(stream_dict, "Filter") do
-      list when is_list(list) and length(list) > 0 ->
+      list when is_list(list) and list != [] ->
         case List.last(list) do
           {:name, name} -> {:ok, name}
           _ -> :none
@@ -290,18 +290,16 @@ defmodule Pdf.Reader.Encryption.V4 do
     n = :binary.last(data)
     size = byte_size(data)
 
-    cond do
-      n == 0 or n > 16 or n > size ->
+    if n == 0 or n > 16 or n > size do
+      :error
+    else
+      {plaintext, padding} = :erlang.split_binary(data, size - n)
+
+      if :binary.bin_to_list(padding) |> Enum.all?(&(&1 == n)) do
+        {:ok, plaintext}
+      else
         :error
-
-      true ->
-        {plaintext, padding} = :erlang.split_binary(data, size - n)
-
-        if :binary.bin_to_list(padding) |> Enum.all?(&(&1 == n)) do
-          {:ok, plaintext}
-        else
-          :error
-        end
+      end
     end
   end
 

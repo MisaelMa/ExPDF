@@ -135,7 +135,7 @@ defmodule Pdf.Reader.CsfTest do
         |> Enum.flat_map(& &1.tokens)
         |> Enum.filter(&(&1.kind == :image))
 
-      assert length(image_tokens) > 0
+      assert image_tokens != []
 
       Enum.each(image_tokens, fn t ->
         assert is_binary(t.shape.meta.data_uri)
@@ -205,11 +205,9 @@ defmodule Pdf.Reader.CsfTest do
 
       {:ok, doc} = Pdf.Reader.open(csf_path2)
       {:ok, %Pdf.Reader.Result{pages: pages}, _} = Pdf.Reader.read(doc, dictionary: :es)
-      IO.inspect(pages, label: "Pages with dictionary: :es", pretty: true, limit: :infinity)
       texts = pages |> Enum.flat_map(& &1.lines) |> Enum.map(& &1.text)
 
       _joined = Enum.join(texts, " ")
-      IO.inspect(texts, label: "Pages with lines and tokens", pretty: true, limit: :infinity)
 
       # Word boundaries that must split:
       # assert String.contains?(joined, "de la Entidad Federativa")
@@ -228,7 +226,7 @@ defmodule Pdf.Reader.CsfTest do
       {:ok, doc} = Pdf.Reader.open(@csf_path)
       {:ok, %Pdf.Reader.Result{pages: pages}, _} = Pdf.Reader.read(doc)
 
-      joined = pages |> Enum.flat_map(& &1.lines) |> Enum.map(& &1.text) |> Enum.join(" ")
+      joined = pages |> Enum.flat_map(& &1.lines) |> Enum.map_join(" ", & &1.text)
 
       assert String.contains?(joined, "OMAR ALEXIS JUAN PEREZ")
       assert String.contains?(joined, "CONSTANCIA DE SITUACIÓN FISCAL")
@@ -245,7 +243,7 @@ defmodule Pdf.Reader.CsfTest do
       {:ok, doc} = Pdf.Reader.open(@csf_path)
       {:ok, %Pdf.Reader.Result{pages: pages}, _} = Pdf.Reader.read(doc)
 
-      joined = pages |> Enum.flat_map(& &1.lines) |> Enum.map(& &1.text) |> Enum.join(" ")
+      joined = pages |> Enum.flat_map(& &1.lines) |> Enum.map_join(" ", & &1.text)
 
       assert String.contains?(joined, "Postal: 77710")
       assert String.contains?(joined, "Vialidad: AVENIDA")
@@ -264,7 +262,7 @@ defmodule Pdf.Reader.CsfTest do
       {:ok, doc} = Pdf.Reader.open(@csf_path)
       {:ok, %Pdf.Reader.Result{pages: pages}, _} = Pdf.Reader.read(doc, dictionary: :es)
 
-      joined = pages |> Enum.flat_map(& &1.lines) |> Enum.map(& &1.text) |> Enum.join(" ")
+      joined = pages |> Enum.flat_map(& &1.lines) |> Enum.map_join(" ", & &1.text)
 
       # Glued lowercase boundaries that get split when both halves are
       # in the bundled 50k Spanish wordlist:
@@ -303,7 +301,7 @@ defmodule Pdf.Reader.CsfTest do
       {:ok, doc} = Pdf.Reader.open(@csf_path)
       {:ok, %Pdf.Reader.Result{pages: pages}, _} = Pdf.Reader.read(doc)
 
-      joined = pages |> Enum.flat_map(& &1.lines) |> Enum.map(& &1.text) |> Enum.join(" ")
+      joined = pages |> Enum.flat_map(& &1.lines) |> Enum.map_join(" ", & &1.text)
 
       # Without a dictionary, fully-lowercase glued words stay glued —
       # this is the documented limitation that the dictionary opt fixes.
@@ -319,7 +317,7 @@ defmodule Pdf.Reader.CsfTest do
       {:ok, doc} = Pdf.Reader.open(@csf_path)
       {:ok, %Pdf.Reader.Result{pages: pages}, _} = Pdf.Reader.read(doc, dictionary: custom)
 
-      joined = pages |> Enum.flat_map(& &1.lines) |> Enum.map(& &1.text) |> Enum.join(" ")
+      joined = pages |> Enum.flat_map(& &1.lines) |> Enum.map_join(" ", & &1.text)
 
       assert String.contains?(joined, "inicio de")
       # "el padrón" — "el" + "padrón" both in our custom dict
@@ -337,7 +335,7 @@ defmodule Pdf.Reader.CsfTest do
       {:ok, doc} = Pdf.Reader.open(@csf_path)
       {:ok, %Pdf.Reader.Result{pages: pages}, _} = Pdf.Reader.read(doc)
 
-      joined = pages |> Enum.flat_map(& &1.lines) |> Enum.map(& &1.text) |> Enum.join(" ")
+      joined = pages |> Enum.flat_map(& &1.lines) |> Enum.map_join(" ", & &1.text)
 
       # camelCase splits that must happen:
       assert String.contains?(joined, "Nombre del Municipio")
@@ -388,8 +386,6 @@ defmodule Pdf.Reader.CsfTest do
     test "tokens within a line have distinct X positions" do
       {:ok, doc} = Pdf.Reader.open(@csf_path)
       {:ok, result, _} = Pdf.Reader.read(doc)
-      IO.inspect(result, label: "Full extraction result", pretty: true, limit: :infinity)
-
       all_lines = Enum.flat_map(result.pages, & &1.lines)
       multi_token = Enum.find(all_lines, &(length(&1.tokens) >= 2))
       assert multi_token != nil

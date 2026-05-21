@@ -1,4 +1,7 @@
 defmodule Pdf.Case do
+  @moduledoc """
+  Shared test case for PDF apps: fixtures, output paths, and PDF assertions.
+  """
   use ExUnit.CaseTemplate
 
   using do

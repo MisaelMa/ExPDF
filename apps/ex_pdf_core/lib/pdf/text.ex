@@ -85,8 +85,7 @@ defmodule Pdf.Text do
     |> Enum.map(fn chunks ->
       chunks
       |> Enum.reject(&(elem(&1, 1) == 0.00))
-      |> Enum.map(&elem(&1, 0))
-      |> Enum.join()
+      |> Enum.map_join("", &elem(&1, 0))
     end)
   end
 

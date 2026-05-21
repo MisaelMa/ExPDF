@@ -991,7 +991,7 @@ defmodule Pdf.Reader.ContentStream do
   # Each glyph contributes its portion. The byte matching for Tw uses the raw bytes
   # consumed per glyph: for simple fonts 1 byte/glyph, for CID 2 bytes/glyph.
   defp compute_tx(bytes, widths, tfs, tc, tw, th) do
-    glyph_size = if length(widths) > 0, do: div(byte_size(bytes), length(widths)), else: 1
+    glyph_size = if widths != [], do: div(byte_size(bytes), length(widths)), else: 1
 
     {tx_total, _} =
       Enum.reduce(widths, {0.0, 0}, fn w, {acc_tx, offset} ->
@@ -1008,15 +1008,15 @@ defmodule Pdf.Reader.ContentStream do
   # Tw_if_space: word spacing applied IFF raw glyph bytes are <<0x20>> or <<0x00, 0x20>>.
   # Spec reference: PDF 1.7 § 9.4.4
   defp glyph_advance(w, glyph_bytes, tfs, tc, tw, th) do
-    tw_term = if is_space_glyph(glyph_bytes), do: tw, else: 0.0
+    tw_term = if space_glyph?(glyph_bytes), do: tw, else: 0.0
     (w / 1000.0 * tfs + tc + tw_term) * th
   end
 
   # Space glyph detection (before decoding).
   # Simple font: single byte 0x20. CID font: two bytes <<0x00, 0x20>>.
-  defp is_space_glyph(<<0x20>>), do: true
-  defp is_space_glyph(<<0x00, 0x20>>), do: true
-  defp is_space_glyph(_), do: false
+  defp space_glyph?(<<0x20>>), do: true
+  defp space_glyph?(<<0x00, 0x20>>), do: true
+  defp space_glyph?(_), do: false
 
   # When widths_fn is nil: return list of zeros, one per glyph.
   # Simple heuristic: 1 zero per byte (simple font default).

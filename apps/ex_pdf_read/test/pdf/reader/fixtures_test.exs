@@ -82,7 +82,7 @@ defmodule Pdf.Reader.FixturesTest do
       assert {:ok, texts, _doc} = Pdf.Reader.read_text(doc)
       # Must be a non-empty list
       assert is_list(texts)
-      assert length(texts) > 0
+      assert texts != []
       # At least one entry must be a non-empty string
       assert Enum.any?(texts, fn t -> is_binary(t) and byte_size(t) > 0 end)
     end
@@ -92,7 +92,7 @@ defmodule Pdf.Reader.FixturesTest do
       {:ok, doc} = Pdf.Reader.open(@gov_pdf)
       assert {:ok, texts, _doc} = Pdf.Reader.read_text(doc)
       assert is_list(texts)
-      assert length(texts) > 0
+      assert texts != []
       assert Enum.any?(texts, fn t -> is_binary(t) and byte_size(t) > 0 end)
     end
 
@@ -101,7 +101,7 @@ defmodule Pdf.Reader.FixturesTest do
       {:ok, doc} = Pdf.Reader.open(@sample_pdf)
       assert {:ok, texts, _doc} = Pdf.Reader.read_text(doc)
       assert is_list(texts)
-      assert length(texts) > 0
+      assert texts != []
       assert Enum.any?(texts, fn t -> is_binary(t) and byte_size(t) > 0 end)
     end
 
@@ -110,7 +110,7 @@ defmodule Pdf.Reader.FixturesTest do
     test "9.1: rfc.pdf read_text — contains 'JSON' or '8259' (S-CW15)" do
       {:ok, doc} = Pdf.Reader.open(@rfc_pdf)
       assert {:ok, texts, _doc} = Pdf.Reader.read_text(doc)
-      assert length(texts) >= 1
+      assert texts != []
 
       joined = Enum.join(texts, " ")
 
@@ -129,7 +129,7 @@ defmodule Pdf.Reader.FixturesTest do
     test "9.2a: gov.pdf read_text — contains 'W-9' or 'Taxpayer' or 'IRS'" do
       {:ok, doc} = Pdf.Reader.open(@gov_pdf)
       assert {:ok, texts, _doc} = Pdf.Reader.read_text(doc)
-      assert length(texts) > 0
+      assert texts != []
 
       joined = Enum.join(texts, " ")
       assert Enum.all?(texts, &String.valid?/1)
@@ -145,7 +145,7 @@ defmodule Pdf.Reader.FixturesTest do
     test "9.2b: sample.pdf read_text — non-empty list with valid UTF-8 strings per page" do
       {:ok, doc} = Pdf.Reader.open(@sample_pdf)
       assert {:ok, texts, _doc} = Pdf.Reader.read_text(doc)
-      assert length(texts) > 0
+      assert texts != []
 
       # All page strings must be valid UTF-8 (U+FFFD is valid; raw Latin-1 is not)
       assert Enum.all?(texts, &String.valid?/1),
@@ -205,7 +205,7 @@ defmodule Pdf.Reader.FixturesTest do
       {:ok, doc} = Pdf.Reader.open(bin)
       {:ok, fields, _} = Pdf.Reader.read_acroform(doc)
 
-      assert length(fields) >= 1,
+      assert fields != [],
              "Expected at least 1 AcroForm field in gov.pdf, got #{length(fields)}"
 
       field = hd(fields)
@@ -232,7 +232,7 @@ defmodule Pdf.Reader.FixturesTest do
       assert is_list(images)
 
       # If images present, each must have a 6-tuple ctm and positive render_width
-      if length(images) > 0 do
+      if images != [] do
         Enum.each(images, fn img ->
           assert is_tuple(img.ctm) and tuple_size(img.ctm) == 6
           assert img.render_width > 0.0
@@ -246,7 +246,7 @@ defmodule Pdf.Reader.FixturesTest do
       assert {:ok, images, _doc} = Pdf.Reader.read_images(doc)
       assert is_list(images)
 
-      if length(images) > 0 do
+      if images != [] do
         Enum.each(images, fn img ->
           assert is_tuple(img.ctm) and tuple_size(img.ctm) == 6
           assert img.render_width > 0.0
@@ -260,7 +260,7 @@ defmodule Pdf.Reader.FixturesTest do
       assert {:ok, images, _doc} = Pdf.Reader.read_images(doc)
       assert is_list(images)
 
-      if length(images) > 0 do
+      if images != [] do
         Enum.each(images, fn img ->
           assert is_tuple(img.ctm) and tuple_size(img.ctm) == 6
           assert img.render_width > 0.0

@@ -307,7 +307,7 @@ defmodule Pdf.Reader.RecoveryTest do
       log = Pdf.Reader.recovery_log(updated_doc)
       page_failed_events = Enum.filter(log, &match?({:page_failed, 2, _}, &1))
 
-      assert length(page_failed_events) >= 1,
+      assert page_failed_events != [],
              "Expected {:page_failed, 2, _} in log, got: #{inspect(log)}"
     end
 
@@ -570,7 +570,7 @@ defmodule Pdf.Reader.RecoveryTest do
       log = Pdf.Reader.recovery_log(doc)
       xref_events = Enum.filter(log, &match?({:xref_recovered, _}, &1))
 
-      assert length(xref_events) >= 1,
+      assert xref_events != [],
              "Expected {:xref_recovered, _} in log, got: #{inspect(log)}"
 
       [{:xref_recovered, n}] = Enum.take(xref_events, 1)
@@ -604,12 +604,12 @@ defmodule Pdf.Reader.RecoveryTest do
 
       eof_events = Enum.filter(log, &match?({:eof_marker_missing, :linear_scan_used}, &1))
 
-      assert length(eof_events) >= 1,
+      assert eof_events != [],
              "Expected {:eof_marker_missing, :linear_scan_used} in log, got: #{inspect(log)}"
 
       xref_events = Enum.filter(log, &match?({:xref_recovered, _}, &1))
 
-      assert length(xref_events) >= 1,
+      assert xref_events != [],
              "Expected {:xref_recovered, _} in log, got: #{inspect(log)}"
     end
   end
@@ -924,7 +924,7 @@ defmodule Pdf.Reader.RecoveryTest do
 
       page_tree_events = Enum.filter(log, &match?({:page_tree_recovered, _}, &1))
 
-      assert length(page_tree_events) >= 1,
+      assert page_tree_events != [],
              "Expected {:page_tree_recovered, _} in log, got: #{inspect(log)}"
     end
 
@@ -955,7 +955,7 @@ defmodule Pdf.Reader.RecoveryTest do
       log = Pdf.Reader.recovery_log(doc)
       page_tree_events = Enum.filter(log, &match?({:page_tree_recovered, _}, &1))
 
-      assert length(page_tree_events) >= 1,
+      assert page_tree_events != [],
              "Expected {:page_tree_recovered, _} in log, got: #{inspect(log)}"
     end
 
@@ -987,7 +987,7 @@ defmodule Pdf.Reader.RecoveryTest do
       log = Pdf.Reader.recovery_log(doc)
       page_tree_events = Enum.filter(log, &match?({:page_tree_recovered, _}, &1))
 
-      assert length(page_tree_events) >= 1,
+      assert page_tree_events != [],
              "Expected {:page_tree_recovered, _} in log, got: #{inspect(log)}"
     end
 
@@ -1024,7 +1024,7 @@ defmodule Pdf.Reader.RecoveryTest do
       log = Pdf.Reader.recovery_log(updated_doc)
       page_failed_events = Enum.filter(log, &match?({:page_failed, _, _}, &1))
 
-      assert length(page_failed_events) >= 1,
+      assert page_failed_events != [],
              "Expected at least one {:page_failed, _, _} in log, got: #{inspect(log)}"
     end
 
@@ -1066,7 +1066,7 @@ defmodule Pdf.Reader.RecoveryTest do
           _ -> false
         end)
 
-      assert length(font_skipped_events) >= 1,
+      assert font_skipped_events != [],
              "Expected {:font_skipped, _, _, _} in log, got: #{inspect(log)}"
     end
 
@@ -1268,17 +1268,17 @@ defmodule Pdf.Reader.RecoveryTest do
 
       # (a) R-3: xref_recovered must be present (corrupted startxref offset)
       xref_events = Enum.filter(log, &match?({:xref_recovered, _}, &1))
-      assert length(xref_events) >= 1,
+      assert xref_events != [],
              "Expected {:xref_recovered, _} in log — R-3 not triggered. Log: #{inspect(log)}"
 
       # (b) R-1: page_failed must be present (page 2 /Contents → missing obj 98)
       page_failed_events = Enum.filter(log, &match?({:page_failed, _, _}, &1))
-      assert length(page_failed_events) >= 1,
+      assert page_failed_events != [],
              "Expected {:page_failed, _, _} in log — R-1 not triggered. Log: #{inspect(log)}"
 
       # (c) R-2: font_skipped must be present (page 3 font → missing obj 97)
       font_skipped_events = Enum.filter(log, &match?({:font_skipped, _, _, _}, &1))
-      assert length(font_skipped_events) >= 1,
+      assert font_skipped_events != [],
              "Expected {:font_skipped, _, _, _} in log — R-2 not triggered. Log: #{inspect(log)}"
     end
   end

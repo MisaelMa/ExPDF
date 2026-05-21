@@ -110,7 +110,7 @@ defmodule Pdf.Reader.ShapeTest do
       page: page,
       y: y * 1.0,
       x: x * 1.0,
-      text: token_maps |> Enum.map(& &1.text) |> Enum.join(" "),
+      text: Enum.map_join(token_maps, " ", & &1.text),
       tokens: token_maps
     }
   end

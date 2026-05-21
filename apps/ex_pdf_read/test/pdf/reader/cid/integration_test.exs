@@ -43,7 +43,7 @@ defmodule Pdf.Reader.CID.IntegrationTest do
       bin = build_cid_pdf(<<0, 1>>, "Japan1")
       {:ok, doc} = Pdf.Reader.open(bin)
       assert {:ok, runs, _doc} = Pdf.Reader.read_text_with_positions(doc)
-      assert length(runs) >= 1
+      assert runs != []
       [run | _] = runs
       assert is_binary(run.text)
       assert run.page == 1

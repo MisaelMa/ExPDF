@@ -20,7 +20,7 @@ defmodule Pdf.Reader.AcroFormTest do
       {:ok, doc} = Pdf.Reader.open(bin)
       {:ok, fields, _} = AcroForm.read(doc)
 
-      assert length(fields) >= 1
+      assert fields != []
       f = hd(fields)
       flags = f.flags
 
@@ -62,7 +62,7 @@ defmodule Pdf.Reader.AcroFormTest do
       {:ok, doc} = Pdf.Reader.open(bin)
       {:ok, fields, _} = AcroForm.read(doc)
 
-      assert length(fields) >= 1
+      assert fields != []
       f = hd(fields)
       flags = f.flags
 
@@ -78,7 +78,7 @@ defmodule Pdf.Reader.AcroFormTest do
       {:ok, doc} = Pdf.Reader.open(bin)
       {:ok, fields, _} = AcroForm.read(doc)
 
-      assert length(fields) >= 1
+      assert fields != []
       f = hd(fields)
       flags = f.flags
 

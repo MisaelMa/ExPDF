@@ -708,6 +708,7 @@ defmodule Pdf.Reader do
   # Kind derived from shape.type, mapping action-like types to :link.
   defp kind_from_shape(nil), do: :text
   defp kind_from_shape(%Pdf.Reader.Shape{type: :email}), do: :email
+
   defp kind_from_shape(%Pdf.Reader.Shape{type: type}) when type in [:uri, :goto, :launch, :named],
     do: :link
 
@@ -936,9 +937,10 @@ defmodule Pdf.Reader do
   defp annotation_to_shape(%Pdf.Reader.Annotation{type: :link} = ann) do
     cond do
       ann.url != nil and is_binary(ann.url) ->
-        type = if String.contains?(ann.url, "@") and not String.contains?(ann.url, "://"),
-                 do: :email,
-                 else: :uri
+        type =
+          if String.contains?(ann.url, "@") and not String.contains?(ann.url, "://"),
+            do: :email,
+            else: :uri
 
         [
           %Pdf.Reader.Shape{
@@ -1220,7 +1222,7 @@ defmodule Pdf.Reader do
   end
 
   defp run_chunk_to_token([first | _] = chunk) do
-    text = chunk |> Enum.map(& &1.text) |> Enum.join("")
+    text = Enum.map_join(chunk, "", & &1.text)
     last = List.last(chunk)
     width = max(last.x - first.x, 0.0)
 
@@ -1418,7 +1420,7 @@ defmodule Pdf.Reader do
   end
 
   defp do_dictionary_split(token, prefix, letters, suffix, dict) do
-    cond do
+    if Pdf.Reader.Wordlist.member?(letters, dict) do
       # CRITICAL: if the prefix alone is already a valid word
       # (case-insensitive), leave the leading word intact. Without
       # this guard the greedy split would shred "personales" →
@@ -1427,35 +1429,33 @@ defmodule Pdf.Reader do
       # so trailing content is still processed (e.g. for tokens like
       # `personales,puedeacudiracualquier...` we keep `personales`
       # whole AND split the post-comma chunk).
-      Pdf.Reader.Wordlist.member?(letters, dict) ->
-        emit_with_recursive_suffix(token, prefix <> letters, suffix, dict)
+      emit_with_recursive_suffix(token, prefix <> letters, suffix, dict)
+    else
+      case partition_into_dict_words(letters, dict) do
+        [_single] ->
+          emit_with_recursive_suffix(token, prefix <> letters, suffix, dict)
 
-      true ->
-        case partition_into_dict_words(letters, dict) do
-          [_single] ->
+        words when length(words) >= 2 ->
+          if valid_partition?(words) do
+            [first | rest] = words
+
+            {head_words, last_letter_word} =
+              case Enum.reverse(rest) do
+                [last | mid_rev] -> {[prefix <> first | Enum.reverse(mid_rev)], last}
+              end
+
+            # Last partition word + suffix forms a sub-token that
+            # may itself contain more dict-splittable letters.
+            tail_tokens = recurse_split_tail(token, last_letter_word, suffix, dict)
+
+            parts_to_tokens(token, head_words ++ tail_tokens)
+          else
             emit_with_recursive_suffix(token, prefix <> letters, suffix, dict)
+          end
 
-          words when length(words) >= 2 ->
-            if valid_partition?(words) do
-              [first | rest] = words
-
-              {head_words, last_letter_word} =
-                case Enum.reverse(rest) do
-                  [last | mid_rev] -> {[prefix <> first | Enum.reverse(mid_rev)], last}
-                end
-
-              # Last partition word + suffix forms a sub-token that
-              # may itself contain more dict-splittable letters.
-              tail_tokens = recurse_split_tail(token, last_letter_word, suffix, dict)
-
-              parts_to_tokens(token, head_words ++ tail_tokens)
-            else
-              emit_with_recursive_suffix(token, prefix <> letters, suffix, dict)
-            end
-
-          :none ->
-            emit_with_recursive_suffix(token, prefix <> letters, suffix, dict)
-        end
+        :none ->
+          emit_with_recursive_suffix(token, prefix <> letters, suffix, dict)
+      end
     end
   end
 
@@ -1690,7 +1690,7 @@ defmodule Pdf.Reader do
         texts =
           Enum.map(page_nums, fn page_num ->
             page_runs = Map.get(runs_by_page, page_num, [])
-            page_runs |> Enum.map(& &1.text) |> Enum.join(" ") |> String.trim()
+            page_runs |> Enum.map_join(" ", & &1.text) |> String.trim()
           end)
           |> Enum.reject(&(&1 == ""))
 
@@ -2010,9 +2010,8 @@ defmodule Pdf.Reader do
     with {:ok, encrypt_dict, doc2} <- resolve_encrypt_dict(doc, encrypt_ref),
          doc_id <- extract_doc_id(id_pair),
          {:ok, sh0} <- StandardHandler.parse(encrypt_dict, doc_id),
-         :ok <- check_version_supported(sh0),
-         {:ok, doc3} <- try_passwords(doc2, sh0, password) do
-      {:ok, doc3}
+         :ok <- check_version_supported(sh0) do
+      try_passwords(doc2, sh0, password)
     end
   end
 

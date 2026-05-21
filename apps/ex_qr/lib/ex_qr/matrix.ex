@@ -87,9 +87,9 @@ defmodule ExQR.Matrix do
   defp place_timing_patterns(matrix, reserved, size) do
     Enum.reduce(8..(size - 9), {matrix, reserved}, fn i, {m, r} ->
       val = if rem(i, 2) == 0, do: 1, else: 0
-      m = if not Map.has_key?(r, {6, i}), do: Map.put(m, {6, i}, val), else: m
+      m = if Map.has_key?(r, {6, i}), do: m, else: Map.put(m, {6, i}, val)
       r = Map.put(r, {6, i}, true)
-      m = if not Map.has_key?(r, {i, 6}), do: Map.put(m, {i, 6}, val), else: m
+      m = if Map.has_key?(r, {i, 6}), do: m, else: Map.put(m, {i, 6}, val)
       r = Map.put(r, {i, 6}, true)
       {m, r}
     end)

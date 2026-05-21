@@ -51,7 +51,7 @@ defmodule Pdf.Reader.CID.MixedFontIntegrationTest do
 
       # The Helvetica run for "Hi" should have no unresolved glyphs
       helvetica_runs = Enum.filter(runs, &String.contains?(&1.text, "Hi"))
-      assert length(helvetica_runs) >= 1
+      assert helvetica_runs != []
 
       for run <- helvetica_runs do
         assert run.unresolved == []
@@ -64,7 +64,7 @@ defmodule Pdf.Reader.CID.MixedFontIntegrationTest do
       {:ok, runs, _doc} = Pdf.Reader.read_text_with_positions(doc)
 
       cid_runs = Enum.filter(runs, &String.contains?(&1.text, "あ"))
-      assert length(cid_runs) >= 1
+      assert cid_runs != []
 
       for run <- cid_runs do
         assert run.unresolved == []

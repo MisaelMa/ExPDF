@@ -148,7 +148,7 @@ defmodule Pdf.Color do
   @doc """
   This functions returns the `rgb` tuple for the given color.
 
-  #{Enum.map(@colors, fn {color_name, {r, g, b}} -> "<li style='color: rgb(#{r},#{g},#{b}); margin-right: 6px;'>:#{color_name}</li>" end) |> Enum.join("\n")}
+  #{Enum.map_join(@colors, "\n", fn {color_name, {r, g, b}} -> "<li style='color: rgb(#{r},#{g},#{b}); margin-right: 6px;'>:#{color_name}</li>" end)}
   """
 
   @spec color(Pdf.color_name()) :: Pdf.rgb()

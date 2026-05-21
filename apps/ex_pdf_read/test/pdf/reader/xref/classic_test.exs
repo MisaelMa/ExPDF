@@ -25,7 +25,7 @@ defmodule Pdf.Reader.XRef.ClassicTest do
       """
 
       assert {:ok, entries} = Classic.parse(bin, 0)
-      assert Map.get(entries, {0, 65535}) == :free
+      assert Map.get(entries, {0, 65_535}) == :free
       assert Map.get(entries, {1, 0}) == {:in_use, 9, 0}
       assert Map.get(entries, {2, 2}) == {:in_use, 58, 2}
     end

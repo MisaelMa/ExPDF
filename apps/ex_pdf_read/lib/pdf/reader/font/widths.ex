@@ -151,13 +151,13 @@ defmodule Pdf.Reader.Font.Widths do
   # Dispatch to simple or CID path based on font subtype
   @spec build_widths_internal(map(), Document.t()) :: {widths_fn(), Document.t()}
   defp build_widths_internal(font_dict, doc) do
-    case is_cid_font?(font_dict) do
+    case cid_font?(font_dict) do
       true -> parse_cid(font_dict, doc)
       false -> parse_simple(font_dict, doc)
     end
   end
 
-  defp is_cid_font?(font_dict) do
+  defp cid_font?(font_dict) do
     case Map.get(font_dict, "Subtype") do
       {:name, "Type0"} -> true
       _ -> false

@@ -33,7 +33,7 @@ defmodule Pdf.Reader.PublicApiTest do
       assert {:ok, runs, _doc} = Pdf.Reader.read_text_with_positions(doc)
       assert is_list(runs)
       # writer-generated PDF should have at least one text run
-      assert length(runs) >= 1
+      assert runs != []
     end
 
     # 9.4.2 — each run is a TextRun struct with required fields

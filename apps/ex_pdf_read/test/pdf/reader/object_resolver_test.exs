@@ -363,7 +363,7 @@ defmodule Pdf.Reader.ObjectResolverTest do
       literal =
         for <<b <- ciphertext>>,
           into: "(",
-          do: if(b == ?\( or b == ?\) or b == ?\\, do: "\\#{<<b>>}", else: <<b>>)
+          do: escape_pdf_literal_byte(b)
 
       literal_str = literal <> ")"
       obj_binary = "3 0 obj\n#{literal_str}\nendobj\n"
@@ -479,4 +479,7 @@ defmodule Pdf.Reader.ObjectResolverTest do
       assert {:ok, 42, _doc2} = ObjectResolver.resolve(doc, {:ref, obj_num_inner, 0})
     end
   end
+
+  defp escape_pdf_literal_byte(b) when b in [?(, ?), ?\\], do: "\\#{<<b>>}"
+  defp escape_pdf_literal_byte(b), do: <<b>>
 end

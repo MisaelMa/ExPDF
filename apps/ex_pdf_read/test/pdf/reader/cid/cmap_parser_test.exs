@@ -316,7 +316,7 @@ defmodule Pdf.Reader.CID.CMapParserTest do
 
       assert {:ok, cmap} = CMapParser.parse(text)
       assert map_size(cmap.cidchar) > 100
-      assert length(cmap.codespaces[2]) > 0 or length(Map.values(cmap.codespaces)) > 0
+      assert cmap.codespaces[2] != [] or Map.values(cmap.codespaces) != []
       assert cmap.parent == nil
     end
   end

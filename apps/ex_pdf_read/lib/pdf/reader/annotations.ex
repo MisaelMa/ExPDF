@@ -45,19 +45,20 @@ defmodule Pdf.Reader.Annotations do
   end
 
   defp walk_pages([{n, g} | rest], doc, page_index, page_num, acc) do
-    with {:ok, page_dict, doc1} <- ObjectResolver.resolve(doc, {:ref, n, g}) do
-      case Map.get(page_dict, "Annots") do
-        nil ->
-          walk_pages(rest, doc1, page_index, page_num + 1, acc)
+    case ObjectResolver.resolve(doc, {:ref, n, g}) do
+      {:ok, page_dict, doc1} ->
+        case Map.get(page_dict, "Annots") do
+          nil ->
+            walk_pages(rest, doc1, page_index, page_num + 1, acc)
 
-        annots when is_list(annots) ->
-          {anns, doc2} = walk_annots(annots, doc1, page_index, page_num, [])
-          walk_pages(rest, doc2, page_index, page_num + 1, anns ++ acc)
+          annots when is_list(annots) ->
+            {anns, doc2} = walk_annots(annots, doc1, page_index, page_num, [])
+            walk_pages(rest, doc2, page_index, page_num + 1, anns ++ acc)
 
-        _ ->
-          walk_pages(rest, doc1, page_index, page_num + 1, acc)
-      end
-    else
+          _ ->
+            walk_pages(rest, doc1, page_index, page_num + 1, acc)
+        end
+
       _ ->
         walk_pages(rest, doc, page_index, page_num + 1, acc)
     end

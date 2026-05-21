@@ -3,11 +3,9 @@ defmodule Pdf.DevServer.Templates do
 
   def render_index(categories, initial_path) do
     sidebar_html =
-      categories
-      |> Enum.map(fn {cat_id, cat_name, examples} ->
+      Enum.map_join(categories, "\n", fn {cat_id, cat_name, examples} ->
         buttons =
-          examples
-          |> Enum.map(fn {id, name, desc, _fun} ->
+          Enum.map_join(examples, "\n", fn {id, name, desc, _fun} ->
             """
             <button
               onclick="loadPdf('#{cat_id}', '#{id}')"
@@ -19,7 +17,6 @@ defmodule Pdf.DevServer.Templates do
             </button>
             """
           end)
-          |> Enum.join("\n")
 
         """
         <div class="mb-4">
@@ -28,7 +25,6 @@ defmodule Pdf.DevServer.Templates do
         </div>
         """
       end)
-      |> Enum.join("\n")
 
     """
     <!DOCTYPE html>

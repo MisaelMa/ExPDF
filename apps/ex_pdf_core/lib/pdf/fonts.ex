@@ -25,7 +25,9 @@ defmodule Pdf.Fonts do
     %{last_id: last_id, fonts: fonts} = fonts_state
     font_module = ExternalFont.load(path)
 
-    unless fonts[font_module.name] do
+    if fonts[font_module.name] do
+      {:already_exists, fonts_state, objects}
+    else
       id = last_id + 1
       {font_object, objects} = ObjectCollection.create_object(objects, nil)
       {descriptor_object, objects} = ObjectCollection.create_object(objects, nil)
@@ -45,8 +47,6 @@ defmodule Pdf.Fonts do
 
       fonts = Map.put(fonts, font_module.name, reference)
       {reference, %{fonts_state | last_id: id, fonts: fonts}, objects}
-    else
-      {:already_exists, fonts_state, objects}
     end
   end
 

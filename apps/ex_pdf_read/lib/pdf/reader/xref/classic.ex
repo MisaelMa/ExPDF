@@ -59,21 +59,17 @@ defmodule Pdf.Reader.XRef.Classic do
   defp parse_subsections(rest, entries) do
     rest = skip_whitespace(rest)
 
-    cond do
-      # End of xref — next is "trailer"
-      String.starts_with?(rest, "trailer") ->
-        {:ok, entries}
+    if String.starts_with?(rest, "trailer") do
+      {:ok, entries}
+    else
+      case parse_subsection_header(rest) do
+        {:ok, first, count, rest2} ->
+          {new_entries, rest3} = parse_entries(rest2, first, count, %{})
+          parse_subsections(rest3, Map.merge(entries, new_entries))
 
-      # Subsection header: two integers on a line
-      true ->
-        case parse_subsection_header(rest) do
-          {:ok, first, count, rest2} ->
-            {new_entries, rest3} = parse_entries(rest2, first, count, %{})
-            parse_subsections(rest3, Map.merge(entries, new_entries))
-
-          :error ->
-            {:error, :invalid_xref_subsection}
-        end
+        :error ->
+          {:error, :invalid_xref_subsection}
+      end
     end
   end
 

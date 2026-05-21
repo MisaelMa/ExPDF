@@ -57,7 +57,7 @@ defmodule Pdf.Reader.CID.PredefinedCMapIntegrationTest do
       bin = build_predefined_cmap_pdf(<<0x00, 0x20>>, "UniJIS-UTF16-H", "Japan1")
       assert {:ok, doc} = Pdf.Reader.open(bin)
       assert {:ok, runs, _doc} = Pdf.Reader.read_text_with_positions(doc)
-      full_text = runs |> Enum.map(& &1.text) |> Enum.join()
+      full_text = Enum.map_join(runs, "", & &1.text)
       assert full_text == " ", "Expected space from UniJIS-UTF16-H, got: #{inspect(full_text)}"
     end
 
@@ -284,7 +284,7 @@ defmodule Pdf.Reader.CID.PredefinedCMapIntegrationTest do
       bin = build_identity_cid_pdf(<<0x00, 0x01>>, "Japan1")
       assert {:ok, doc} = Pdf.Reader.open(bin)
       assert {:ok, runs, _doc} = Pdf.Reader.read_text_with_positions(doc)
-      full_text = runs |> Enum.map(& &1.text) |> Enum.join()
+      full_text = Enum.map_join(runs, "", & &1.text)
       assert full_text == " "
     end
 

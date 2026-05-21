@@ -56,7 +56,7 @@ defmodule Pdf.ExportTest do
         hour: 17,
         minute: 2,
         second: 0,
-        utc_offset: -14400,
+        utc_offset: -14_400,
         time_zone: "Eastern Daylight Time",
         zone_abbr: "EDT",
         std_offset: 0

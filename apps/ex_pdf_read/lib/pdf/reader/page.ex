@@ -110,9 +110,8 @@ defmodule Pdf.Reader.Page do
 
       root_ref ->
         with {:ok, catalog, doc2} <- ObjectResolver.resolve(doc, root_ref),
-             {:ok, pages_ref} <- fetch_pages_ref_or_self(root_ref, catalog),
-             {:ok, refs, doc3} <- walk_kids(doc2, pages_ref) do
-          {:ok, refs, doc3}
+             {:ok, pages_ref} <- fetch_pages_ref_or_self(root_ref, catalog) do
+          walk_kids(doc2, pages_ref)
         end
     end
   end
@@ -158,7 +157,7 @@ defmodule Pdf.Reader.Page do
 
         case ObjectResolver.resolve(doc, ref) do
           {:ok, dict, _} when is_map(dict) ->
-            if is_page_dict?(dict), do: [{n, g}], else: []
+            if page_dict?(dict), do: [{n, g}], else: []
 
           _ ->
             []
@@ -173,7 +172,7 @@ defmodule Pdf.Reader.Page do
   # A dict qualifies as a recoverable page if:
   # 1. It has /Type /Page
   # 2. It has either /Contents or /Parent (to exclude Form XObjects and bare stream dicts)
-  defp is_page_dict?(dict) do
+  defp page_dict?(dict) do
     has_page_type =
       case Map.get(dict, "Type") do
         {:name, "Page"} -> true
