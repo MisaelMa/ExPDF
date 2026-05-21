@@ -208,7 +208,7 @@ defmodule Pdf.Reader.CsfTest do
       IO.inspect(pages, label: "Pages with dictionary: :es", pretty: true, limit: :infinity)
       texts = pages |> Enum.flat_map(& &1.lines) |> Enum.map(& &1.text)
 
-      joined = Enum.join(texts, " ")
+      _joined = Enum.join(texts, " ")
       IO.inspect(texts, label: "Pages with lines and tokens", pretty: true, limit: :infinity)
 
       # Word boundaries that must split:

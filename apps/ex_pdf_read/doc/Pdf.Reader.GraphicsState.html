@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.2">
+    <meta name="project" content="ex_pdf_read v1.0.0">
+
+
+    <title>Pdf.Reader.GraphicsState — ex_pdf_read v1.0.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
+
+    <script defer src="dist/sidebar_items-271CC737.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-Y2MUTVIN.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+ex_pdf_read
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.0.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of ex_pdf_read</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Pdf.<wbr />Reader.<wbr />GraphicsState</span> 
+      <small class="app-vsn" translate="no">(ex_pdf_read v1.0.0)</small>
+
+    </h1>
+
+<a href="Pdf.Reader.GraphicsState.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader/graphics_state.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Struct and operations for the PDF graphics state during content stream interpretation.</p><p>CTM (current transformation matrix) and text matrices are stored as 6-float
+tuples <code class="inline">{a, b, c, d, e, f}</code> — the affine subset used by PDF (§8.3.3 of the
+PDF spec). Full 4×4 matrices are NOT used; PDF only needs the 2D affine form.</p><p>The <code class="inline">:stack</code> holds snapshots pushed by the <code class="inline">q</code> operator and restored by <code class="inline">Q</code>.</p><h2 id="module-text-state-additions-9-4-4" class="section-heading"><a href="#module-text-state-additions-9-4-4" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Text state additions (§ 9.4.4)</span></h2><p>The <code class="inline">:widths_fn</code> field holds the per-glyph width closure for the active font.
+It is set by the <code class="inline">Tf</code> operator handler and used by <code class="inline">advance_tm/2</code> to compute
+exact horizontal text advance per the full § 9.4.4 formula. When <code class="inline">nil</code>, advance
+defaults to 0 per glyph (only <code class="inline">Tc</code>, <code class="inline">Tw</code>, and <code class="inline">Tfs</code> terms contribute).</p><h2 id="module-matrix-convention" class="section-heading"><a href="#module-matrix-convention" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Matrix convention</span></h2><p>PDF uses the row-vector convention (§ 8.3.3):</p><pre><code class="makeup elixir" translate="no"><span class="o">|</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">|</span><span class="w">
+</span><span class="o">|</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">|</span><span class="w">
+</span><span class="o">|</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">|</span></code></pre><p>Multiplication: M3 = M1 × M2 with formulas:</p><pre><code class="makeup elixir" translate="no"><span class="n">a3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a1</span><span class="o">*</span><span class="n">a2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b1</span><span class="o">*</span><span class="n">c2</span><span class="w">
+</span><span class="n">b3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a1</span><span class="o">*</span><span class="n">b2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b1</span><span class="o">*</span><span class="n">d2</span><span class="w">
+</span><span class="n">c3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c1</span><span class="o">*</span><span class="n">a2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">d1</span><span class="o">*</span><span class="n">c2</span><span class="w">
+</span><span class="n">d3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c1</span><span class="o">*</span><span class="n">b2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">d1</span><span class="o">*</span><span class="n">d2</span><span class="w">
+</span><span class="n">e3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e1</span><span class="o">*</span><span class="n">a2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">f1</span><span class="o">*</span><span class="n">c2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">e2</span><span class="w">
+</span><span class="n">f3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e1</span><span class="o">*</span><span class="n">b2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">f1</span><span class="o">*</span><span class="n">d2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">f2</span></code></pre>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h2>
+<div class="summary-types summary">
+  <h3>
+    <a href="#types">Types</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:matrix/0" data-no-tooltip="" translate="no">matrix()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:t/0" data-no-tooltip="" translate="no">t()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h3>
+    <a href="#functions">Functions</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#multiply/2" data-no-tooltip="" translate="no">multiply(arg1, arg2)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Multiplies two affine matrices under the PDF row-vector convention.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#new/0" data-no-tooltip="" translate="no">new()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns a fresh GraphicsState with identity matrices and zeroed text state.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#pop/1" data-no-tooltip="" translate="no">pop(state)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Pops the most-recently-pushed graphics state from <code class="inline">:stack</code> (implements PDF <code class="inline">Q</code> operator).</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#push/1" data-no-tooltip="" translate="no">push(state)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Pushes the current graphics state onto <code class="inline">:stack</code> (implements PDF <code class="inline">q</code> operator).</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h2>
+
+    <div class="types-list">
+<section class="detail" id="t:matrix/0">
+
+  <div class="detail-header">
+    <a href="#t:matrix/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">matrix()</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader/graphics_state.ex#L36" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> matrix() :: {<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>()}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:t/0">
+
+  <div class="detail-header">
+    <a href="#t:t/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">t()</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader/graphics_state.ex#L40" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> t() :: %Pdf.Reader.GraphicsState{
+  char_spacing: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>(),
+  ctm: <a href="#t:matrix/0">matrix</a>(),
+  font: nil | <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(),
+  font_size: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>(),
+  horizontal_scaling: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>(),
+  leading: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>(),
+  rise: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>(),
+  stack: [<a href="#t:t/0">t</a>()],
+  tlm: <a href="#t:matrix/0">matrix</a>(),
+  tm: <a href="#t:matrix/0">matrix</a>(),
+  widths_fn: nil | (<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>() -&gt; [<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>()]),
+  word_spacing: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>()
+}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h2>
+
+    <div class="functions-list">
+<section class="detail" id="multiply/2">
+
+  <div class="detail-header">
+    <a href="#multiply/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">multiply(arg1, arg2)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader/graphics_state.ex#L91" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> multiply(<a href="#t:matrix/0">matrix</a>(), <a href="#t:matrix/0">matrix</a>()) :: <a href="#t:matrix/0">matrix</a>()</pre>
+
+      </div>
+
+<p>Multiplies two affine matrices under the PDF row-vector convention.</p><p><code class="inline">multiply(m1, m2)</code> returns <code class="inline">M3 = M1 × M2</code>.
+Both arguments and the result are 6-element <code class="inline">{a, b, c, d, e, f}</code> tuples.</p><p>Spec reference: PDF 1.7 § 8.3.4.</p>
+  </section>
+</section>
+<section class="detail" id="new/0">
+
+  <div class="detail-header">
+    <a href="#new/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">new()</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader/graphics_state.ex#L76" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> new() :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Returns a fresh GraphicsState with identity matrices and zeroed text state.</p>
+  </section>
+</section>
+<section class="detail" id="pop/1">
+
+  <div class="detail-header">
+    <a href="#pop/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">pop(state)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader/graphics_state.ex#L128" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> pop(<a href="#t:t/0">t</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Pops the most-recently-pushed graphics state from <code class="inline">:stack</code> (implements PDF <code class="inline">Q</code> operator).</p><p>If the stack is empty (malformed stream), this is a silent no-op — the interpreter
+remains in the current state rather than crashing. Spec allows senders to have
+unbalanced <code class="inline">q</code>/<code class="inline">Q</code> in practice (e.g. content streams generated without strict nesting).</p>
+  </section>
+</section>
+<section class="detail" id="push/1">
+
+  <div class="detail-header">
+    <a href="#push/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">push(state)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader/graphics_state.ex#L116" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> push(<a href="#t:t/0">t</a>()) :: <a href="#t:t/0">t</a>()</pre>
+
+      </div>
+
+<p>Pushes the current graphics state onto <code class="inline">:stack</code> (implements PDF <code class="inline">q</code> operator).</p><p>The full state struct is saved. No fields are excluded — this keeps semantics
+consistent with the writer's <code class="inline">q</code>/<code class="inline">Q</code> discipline.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+
+        <p>
+
+            <span class="line">
+              <a href="https://hex.pm/packages/ex_pdf_read/1.0.0">Hex Package</a>
+
+              <a href="https://preview.hex.pm/preview/ex_pdf_read/1.0.0">Hex Preview</a>
+
+            </span>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
+
+
+              <a href="ex_pdf_read.epub">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.2) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

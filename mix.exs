@@ -21,7 +21,9 @@ defmodule ExPdf.Umbrella.Mixfile do
 
   defp aliases do
     [
-      test: ["cmd mix test"],
+      # mix test desde la raíz: soporta apps/<app>/test/... (runner del umbrella).
+      # Para forzar tests en cada app por separado: mix test.all
+      "test.all": ["cmd mix test"],
       server: ["cmd --app ex_pdf_dev mix pdf.server"]
     ]
   end

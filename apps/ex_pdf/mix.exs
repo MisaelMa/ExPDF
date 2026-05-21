@@ -31,7 +31,8 @@ defmodule ExPdf.MixProject do
     [
       {:ex_pdf_core, in_umbrella: true},
       {:ex_pdf_components, in_umbrella: true},
-      {:ex_pdf_read, in_umbrella: true}
+      {:ex_pdf_read, in_umbrella: true},
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
     ]
   end
 
@@ -39,7 +40,7 @@ defmodule ExPdf.MixProject do
     [
       maintainers: ["Misael Sánchez"],
       licenses: ["MIT"],
-      files: ~w(lib mix.exs README* CHANGELOG* LICENSE*),
+      files: ~w(lib mix.exs README.md),
       links: %{"GitHub" => @github_url}
     ]
   end

@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.2">
+    <meta name="project" content="ex_pdf_read v1.0.0">
+
+
+    <title>Pdf.Reader.ContentStream — ex_pdf_read v1.0.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
+
+    <script defer src="dist/sidebar_items-271CC737.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-Y2MUTVIN.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+ex_pdf_read
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.0.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of ex_pdf_read</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Pdf.<wbr />Reader.<wbr />ContentStream</span> 
+      <small class="app-vsn" translate="no">(ex_pdf_read v1.0.0)</small>
+
+    </h1>
+
+<a href="Pdf.Reader.ContentStream.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader/content_stream.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>PDF content stream interpreter for text and image extraction.</p><p>Spec reference: PDF 1.7 § 9.4 (text operators), § 8.4 (general graphics state),
+§ 8.8 (XObjects), § 9.4.5 (Tf — set text font and size).</p><h2 id="module-phase-1-1-additions" class="section-heading"><a href="#module-phase-1-1-additions" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Phase 1.1 additions</span></h2><ul><li><p><strong><code class="inline">font_decoders:</code> opt</strong> — <code class="inline">%{font_name =&gt; decoder_fn}</code>. When provided, the
+active decoder is swapped on every <code class="inline">Tf</code> operator. After <code class="inline">Tf /F1 12</code> the
+decoder for <code class="inline">&quot;F1&quot;</code> is activated; subsequent <code class="inline">Tj</code>/<code class="inline">TJ</code>/<code class="inline">'</code>/<code class="inline">&quot;</code> calls use it.
+When a font name is not in the map, the <code class="inline">default_decoder</code> (the second argument
+to <a href="#interpret/3"><code class="inline">interpret/3</code></a>) is used instead.
+Spec reference: PDF 1.7 § 9.4.5 (Tf operator).</p></li><li><p><strong><code class="inline">Do</code> image event shape change</strong> — event is now
+<code class="inline">{:image, %{name: name, ctm: {a, b, c, d, e, f}}}</code> (full 6-tuple of the CTM
+at <code class="inline">Do</code> time). The <code class="inline">:x</code> and <code class="inline">:y</code> fields (formerly present directly) are derived
+from <code class="inline">ctm.e</code> and <code class="inline">ctm.f</code> by the caller (<code class="inline">Pdf.Reader.extract_page_images/3</code>).</p></li></ul><h2 id="module-phase-1-scope" class="section-heading"><a href="#module-phase-1-scope" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Phase 1 scope</span></h2><p>Interprets 15 operators sufficient for text and image extraction:
+<code class="inline">BT</code>, <code class="inline">ET</code>, <code class="inline">Tf</code>, <code class="inline">Tj</code>, <code class="inline">TJ</code>, <code class="inline">'</code>, <code class="inline">&quot;</code>, <code class="inline">Td</code>, <code class="inline">TD</code>, <code class="inline">Tm</code>, <code class="inline">T*</code>,
+<code class="inline">cm</code>, <code class="inline">q</code>, <code class="inline">Q</code>, <code class="inline">Do</code>.</p><p>All other operators (path construction, painting, color, shading, inline images,
+marked content, compatibility) are <strong>silently consumed</strong> — their operands are
+cleared from the operand stack and execution continues. This keeps the interpreter
+robust to real-world content streams without crashing.</p><h2 id="module-api" class="section-heading"><a href="#module-api" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">API</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">interpret</span><span class="p" data-group-id="3867021508-1">(</span><span class="n">content_binary</span><span class="p">,</span><span class="w"> </span><span class="n">decoder</span><span class="p" data-group-id="3867021508-1">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="p" data-group-id="3867021508-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3867021508-3">[</span><span class="n">event</span><span class="p" data-group-id="3867021508-3">]</span><span class="p" data-group-id="3867021508-2">}</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="3867021508-4">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="n">term</span><span class="p" data-group-id="3867021508-4">}</span><span class="w">
+</span><span class="n">interpret</span><span class="p" data-group-id="3867021508-5">(</span><span class="n">content_binary</span><span class="p">,</span><span class="w"> </span><span class="n">decoder</span><span class="p">,</span><span class="w"> </span><span class="n">opts</span><span class="p" data-group-id="3867021508-5">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="p" data-group-id="3867021508-6">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3867021508-7">[</span><span class="n">event</span><span class="p" data-group-id="3867021508-7">]</span><span class="p" data-group-id="3867021508-6">}</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="3867021508-8">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="n">term</span><span class="p" data-group-id="3867021508-8">}</span></code></pre><p>Where <code class="inline">decoder :: (bytes :: binary) -&gt; {text :: String.t(), unresolved :: list()}</code>.</p><h3 id="module-options" class="section-heading"><a href="#module-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Options</span></h3><ul><li><p><code class="inline">:xobjects</code> — <code class="inline">%{name :: binary =&gt; {:ref, n, g} | inline_dict | :image | :form}</code>.
+Phase 3 (Form recursion): the recommended shape is <code class="inline">%{name =&gt; raw_ref}</code> — the
+interpreter classifies on demand by resolving the XObject and inspecting
+<code class="inline">/Subtype</code>. The legacy <code class="inline">:image | :form</code> atoms remain accepted by the public
+<a href="#interpret/3"><code class="inline">interpret/3</code></a> path (which does NOT recurse into Forms) for backward-compat.</p></li><li><code class="inline">:font_decoders</code> — <code class="inline">%{font_name :: binary =&gt; decoder_fn}</code> — per-font decoder map.
+See Phase 1.1 additions above. Default: <code class="inline">%{}</code>.</li></ul><h2 id="module-events" class="section-heading"><a href="#module-events" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Events</span></h2><ul><li><code class="inline">{:text, %{text: String.t(), unresolved: list(), x: float, y: float, font: binary, size: float}}</code></li><li><code class="inline">{:image, %{name: binary, ctm: {float, float, float, float, float, float}}}</code> — Phase 1.1</li><li><code class="inline">{:deferred, :form_xobject, name :: binary}</code> — emitted only on the legacy <a href="#interpret/3"><code class="inline">interpret/3</code></a>
+path (no doc threaded). The recursive path in <code class="inline">do_interpret_with_doc/5</code> REPLACES
+deferred events with the actual recursed Form content.</li><li><code class="inline">{:cycle_detected, {n, g}}</code> — Phase 3: emitted when a Form XObject self-references
+or transitively cycles. Dropped by the reader facade's <code class="inline">events_to_text_runs/2</code>.</li><li><code class="inline">{:max_depth_exceeded, {n, g}}</code> — Phase 3: emitted when recursion would exceed
+<code class="inline">@max_form_depth</code> (8). Dropped by the reader facade.</li></ul><h2 id="module-position-math" class="section-heading"><a href="#module-position-math" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Position math</span></h2><p>Absolute position of a glyph run start:</p><pre><code class="makeup elixir" translate="no"><span class="nc">M_render</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Tm</span><span class="w"> </span><span class="err">×</span><span class="w"> </span><span class="nc">CTM</span><span class="w">
+</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">M_render</span><span class="o">.</span><span class="n">e</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">M_render</span><span class="o">.</span><span class="n">f</span></code></pre><p>Spec: PDF 1.7 § 8.3.3 (row-vector convention), § 9.4.4 (text advance).</p><h2 id="module-glyph-advance-9-4-4" class="section-heading"><a href="#module-glyph-advance-9-4-4" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Glyph advance (§ 9.4.4)</span></h2><p>Text-matrix advance uses the full PDF § 9.4.4 formula per glyph:</p><pre><code class="makeup elixir" translate="no"><span class="n">tx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="8920211252-1">(</span><span class="p" data-group-id="8920211252-2">(</span><span class="n">w</span><span class="o">/</span><span class="mi">1000</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nc">Tj_kern</span><span class="p" data-group-id="8920211252-2">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nc">Tfs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nc">Tc</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nc">Tw_if_space</span><span class="p" data-group-id="8920211252-1">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nc">Th</span></code></pre><p>Where <code class="inline">w</code> comes from the active font's <code class="inline">widths_fn</code> closure (set by <code class="inline">Tf</code>).
+Fonts without embedded <code class="inline">/Widths</code> produce <code class="inline">w=0</code>; advance is then driven
+only by <code class="inline">Tc</code>/<code class="inline">Tw</code>/<code class="inline">Tj_kern</code> (documented gap for Standard-14 fonts).</p><p>Position of the START of each run is exact (derived from Tm at call time).</p><h2 id="module-unknown-operator-strategy" class="section-heading"><a href="#module-unknown-operator-strategy" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Unknown operator strategy</span></h2><p>When an unrecognized operator is encountered, the entire operand stack is cleared
+(per PDF spec § 7.8.2 which states conforming readers should process what they can).
+This is the same strategy used by most major PDF parsers (e.g. pdfminer-six, pdf.js).</p><h2 id="module-spec-references" class="section-heading"><a href="#module-spec-references" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Spec references</span></h2><ul><li>PDF 1.7 (ISO 32000-1) — Adobe free mirror:
+<a rel="nofollow" href="https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf">https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf</a><ul><li>§ 7.8.2 — Content streams (unknown operator strategy)</li><li>§ 8.3.3 — Coordinate Systems / Matrix Math</li><li>§ 8.4 — General Graphics State (<code class="inline">q</code>, <code class="inline">Q</code>, <code class="inline">cm</code>)</li><li>§ 8.8 — External Objects (<code class="inline">Do</code> operator)</li><li>§ 8.10 — Form XObjects (recursion target)</li><li>§ 8.10.2 — Form Dictionaries (<code class="inline">/Matrix</code>, <code class="inline">/BBox</code>, <code class="inline">/Resources</code>)</li><li>§ 9.4 — Text Operators (BT/ET/Tf/Tj/TJ/'/&quot;/Td/TD/Tm/T*)</li><li>§ 9.4.4 — Text advance and Tm update</li><li>§ 9.4.5 — Text State (Tf operator)</li></ul></li><li>Mozilla pdf.js <code class="inline">src/core/evaluator.js</code> (Apache-2.0 reference impl):
+<a rel="nofollow" href="https://github.com/mozilla/pdf.js/blob/master/src/core/evaluator.js">https://github.com/mozilla/pdf.js/blob/master/src/core/evaluator.js</a></li><li>pdfminer-six <code class="inline">pdfminer/pdfinterp.py</code> (MIT reference impl):
+<a rel="nofollow" href="https://github.com/pdfminer/pdfminer.six/blob/master/pdfminer/pdfinterp.py">https://github.com/pdfminer/pdfminer.six/blob/master/pdfminer/pdfinterp.py</a></li></ul>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h2>
+<div class="summary-types summary">
+  <h3>
+    <a href="#types">Types</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:decoder/0" data-no-tooltip="" translate="no">decoder()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:deferred_event/0" data-no-tooltip="" translate="no">deferred_event()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:event/0" data-no-tooltip="" translate="no">event()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:guard_event/0" data-no-tooltip="" translate="no">guard_event()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:image_event/0" data-no-tooltip="" translate="no">image_event()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:text_event/0" data-no-tooltip="" translate="no">text_event()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h3>
+    <a href="#functions">Functions</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#interpret/3" data-no-tooltip="" translate="no">interpret(binary, decoder, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Interprets a PDF content stream binary, emitting text and image events.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h2>
+
+    <div class="types-list">
+<section class="detail" id="t:decoder/0">
+
+  <div class="detail-header">
+    <a href="#t:decoder/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">decoder()</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader/content_stream.ex#L242" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> decoder() :: (<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>() -&gt; {<a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">list</a>()})</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:deferred_event/0">
+
+  <div class="detail-header">
+    <a href="#t:deferred_event/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">deferred_event()</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader/content_stream.ex#L258" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> deferred_event() :: {:deferred, :form_xobject, <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:event/0">
+
+  <div class="detail-header">
+    <a href="#t:event/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">event()</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader/content_stream.ex#L264" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> event() :: <a href="#t:text_event/0">text_event</a>() | <a href="#t:image_event/0">image_event</a>() | <a href="#t:deferred_event/0">deferred_event</a>() | <a href="#t:guard_event/0">guard_event</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:guard_event/0">
+
+  <div class="detail-header">
+    <a href="#t:guard_event/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">guard_event()</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader/content_stream.ex#L260" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> guard_event() ::
+  {:cycle_detected, {<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">pos_integer</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>()}}
+  | {:max_depth_exceeded, {<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">pos_integer</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>()}}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:image_event/0">
+
+  <div class="detail-header">
+    <a href="#t:image_event/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">image_event()</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader/content_stream.ex#L255" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> image_event() ::
+  {:image,
+   %{
+     name: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(),
+     ctm: {<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>()}
+   }}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:text_event/0">
+
+  <div class="detail-header">
+    <a href="#t:text_event/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">text_event()</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader/content_stream.ex#L244" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> text_event() ::
+  {:text,
+   %{
+     text: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+     unresolved: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">list</a>(),
+     x: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>(),
+     y: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>(),
+     font: nil | <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(),
+     size: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">float</a>()
+   }}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h2>
+
+    <div class="functions-list">
+<section class="detail" id="interpret/3">
+
+    <span id="interpret/2"></span>
+
+  <div class="detail-header">
+    <a href="#interpret/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">interpret(binary, decoder, opts \\ [])</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader/content_stream.ex#L276" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> interpret(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(), <a href="#t:decoder/0">decoder</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()) :: {:ok, [<a href="#t:event/0">event</a>()]} | {:error, <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>()}</pre>
+
+      </div>
+
+<p>Interprets a PDF content stream binary, emitting text and image events.</p><p><code class="inline">decoder</code> is called for every string operand (Tj, TJ, etc.) and must
+return <code class="inline">{decoded_utf8_text, unresolved_list}</code>.</p><p>Options:</p><ul><li><p><code class="inline">:xobjects</code> — <code class="inline">%{name =&gt; :image | :form}</code> for <code class="inline">Do</code> operator dispatch.</p></li></ul>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+
+        <p>
+
+            <span class="line">
+              <a href="https://hex.pm/packages/ex_pdf_read/1.0.0">Hex Package</a>
+
+              <a href="https://preview.hex.pm/preview/ex_pdf_read/1.0.0">Hex Preview</a>
+
+            </span>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
+
+
+              <a href="ex_pdf_read.epub">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.2) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

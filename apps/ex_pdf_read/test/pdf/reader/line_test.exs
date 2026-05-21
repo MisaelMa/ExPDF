@@ -109,7 +109,7 @@ defmodule Pdf.Reader.LineTest do
       runs =
         Enum.map(String.graphemes("Asalariado"), fn g ->
           # 6pt advance per char from x=70
-          idx = :string.length('Asalariado') - length(String.graphemes(g)) + 0
+          idx = String.length("Asalariado") - length(String.graphemes(g))
           {g, idx}
         end)
         |> Enum.with_index()

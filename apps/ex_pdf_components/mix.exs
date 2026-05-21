@@ -22,7 +22,7 @@ defmodule ExPdfComponents.MixProject do
     ]
   end
 
-  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(:test), do: ["lib", "../../ex_pdf_core/test/support", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
 
   def application do

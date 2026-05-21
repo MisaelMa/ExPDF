@@ -476,12 +476,9 @@ defmodule Pdf.Reader.ContentStreamTest do
       assert match?({:cycle_detected, {_n, _g}}, cycle_event)
       assert match?({:max_depth_exceeded, {_n, _g}}, depth_event)
 
-      # Verify the catch-all in events_to_text_runs/2 covers these by asserting
-      # that neither pattern matches the {:text, _} or {:image, _} branches.
-      refute match?({:text, _}, cycle_event)
-      refute match?({:image, _}, cycle_event)
-      refute match?({:text, _}, depth_event)
-      refute match?({:image, _}, depth_event)
+      # Catch-all: cycle/depth events are not text or image runs.
+      assert elem(cycle_event, 0) not in [:text, :image]
+      assert elem(depth_event, 0) not in [:text, :image]
     end
   end
 
@@ -1141,7 +1138,6 @@ defmodule Pdf.Reader.ContentStreamTest do
     # Starting x=0, after Tj with 1 byte: x should be 7.2
     test "3.1 — w=600, Tfs=12, Th=1.0, Tc=0, Tw=0 → tx=7.2 per glyph" do
       widths_fn = constant_widths_fn(600)
-      font_dict = %{"Subtype" => {:name, "Type1"}, "__test_widths__" => widths_fn}
       font_widths = %{"F1" => widths_fn}
 
       # After first Tj at (0,0): x starts at 0, one byte, tx=7.2

@@ -147,7 +147,6 @@ defmodule Pdf.Builder do
     gap = Map.get(el, :gap, 0)
 
     ca = Pdf.content_area(doc)
-    available = y - (ca.y - ca.height)
 
     if is_number(h) and h > ca.height do
       render_multipage_row(doc, {x, y}, {width, h}, children, gap)
@@ -695,7 +694,6 @@ defmodule Pdf.Builder do
         {x, y, w} = resolve_cursor(doc, w_spec)
 
         ca = Pdf.content_area(doc)
-        available = y - (ca.y - ca.height)
 
         if is_number(h) and h > ca.height do
           render_multipage_row(doc, {x, y}, {w, h}, e.children, gap)

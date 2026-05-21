@@ -1,0 +1,1555 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.2">
+    <meta name="project" content="ex_pdf_read v1.0.0">
+
+
+    <title>Pdf.Reader — ex_pdf_read v1.0.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
+
+    <script defer src="dist/sidebar_items-271CC737.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-Y2MUTVIN.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+ex_pdf_read
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.0.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of ex_pdf_read</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Pdf.<wbr />Reader</span> 
+      <small class="app-vsn" translate="no">(ex_pdf_read v1.0.0)</small>
+
+    </h1>
+
+<a href="Pdf.Reader.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Native PDF reader — opens a PDF binary or file path and provides pure-functional
+access to text runs with positions, raster images, document metadata, interactive
+form fields, document outlines (bookmarks), and page annotations.
+No GenServer, no mutable state; the reader is a fully lazy, immutable pipeline.</p><h2 id="module-typical-usage" class="section-heading"><a href="#module-typical-usage" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Typical usage</span></h2><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="1236745547-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">doc</span><span class="p" data-group-id="1236745547-1">}</span><span class="w">                          </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">open</span><span class="p" data-group-id="1236745547-2">(</span><span class="s">&quot;report.pdf&quot;</span><span class="p" data-group-id="1236745547-2">)</span><span class="w">
+</span><span class="p" data-group-id="1236745547-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1236745547-4">[</span><span class="n">page1_text</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="bp">_</span><span class="p" data-group-id="1236745547-4">]</span><span class="p">,</span><span class="w"> </span><span class="n">doc</span><span class="p" data-group-id="1236745547-3">}</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">read_text</span><span class="p" data-group-id="1236745547-5">(</span><span class="n">doc</span><span class="p" data-group-id="1236745547-5">)</span><span class="w">
+</span><span class="p" data-group-id="1236745547-6">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">runs</span><span class="p">,</span><span class="w"> </span><span class="n">doc</span><span class="p" data-group-id="1236745547-6">}</span><span class="w">                    </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">read_text_with_positions</span><span class="p" data-group-id="1236745547-7">(</span><span class="n">doc</span><span class="p" data-group-id="1236745547-7">)</span><span class="w">
+</span><span class="p" data-group-id="1236745547-8">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">meta</span><span class="p">,</span><span class="w"> </span><span class="n">doc</span><span class="p" data-group-id="1236745547-8">}</span><span class="w">                    </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">read_metadata</span><span class="p" data-group-id="1236745547-9">(</span><span class="n">doc</span><span class="p" data-group-id="1236745547-9">)</span><span class="w">
+</span><span class="p" data-group-id="1236745547-10">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p" data-group-id="1236745547-10">}</span><span class="w">                            </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">page_count</span><span class="p" data-group-id="1236745547-11">(</span><span class="n">doc</span><span class="p" data-group-id="1236745547-11">)</span><span class="w">
+</span><span class="ss">:ok</span><span class="w">                                 </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">close</span><span class="p" data-group-id="1236745547-12">(</span><span class="n">doc</span><span class="p" data-group-id="1236745547-12">)</span></code></pre><h2 id="module-outlines-bookmarks" class="section-heading"><a href="#module-outlines-bookmarks" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Outlines (bookmarks)</span></h2><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="4004931670-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">outlines</span><span class="p">,</span><span class="w"> </span><span class="c">_doc</span><span class="p" data-group-id="4004931670-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">read_outlines</span><span class="p" data-group-id="4004931670-2">(</span><span class="n">doc</span><span class="p" data-group-id="4004931670-2">)</span><span class="w">
+</span><span class="c1"># =&gt; [%Pdf.Reader.Outline{title: &quot;Chapter 1&quot;, level: 0, dest_page: 1, children: [...]}, ...]</span><span class="w">
+
+</span><span class="c1"># Bang variant — raises Pdf.Reader.Error on failure</span><span class="w">
+</span><span class="n">outlines</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">read_outlines!</span><span class="p" data-group-id="4004931670-3">(</span><span class="n">doc</span><span class="p" data-group-id="4004931670-3">)</span></code></pre><h2 id="module-annotations" class="section-heading"><a href="#module-annotations" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Annotations</span></h2><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="4803043273-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">annotations</span><span class="p">,</span><span class="w"> </span><span class="c">_doc</span><span class="p" data-group-id="4803043273-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">read_annotations</span><span class="p" data-group-id="4803043273-2">(</span><span class="n">doc</span><span class="p" data-group-id="4803043273-2">)</span><span class="w">
+</span><span class="c1"># =&gt; [%Pdf.Reader.Annotation{type: :highlight, page: 2, rect: {x1, y1, x2, y2}, ...}, ...]</span><span class="w">
+
+</span><span class="c1"># Bang variant — raises Pdf.Reader.Error on failure</span><span class="w">
+</span><span class="n">annotations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">read_annotations!</span><span class="p" data-group-id="4803043273-3">(</span><span class="n">doc</span><span class="p" data-group-id="4803043273-3">)</span></code></pre><h2 id="module-error-recovery" class="section-heading"><a href="#module-error-recovery" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Error recovery</span></h2><p><a href="#open/2"><code class="inline">open/2</code></a> accepts a <code class="inline">recover: true</code> option that activates four orthogonal
+recovery phases (R-1..R-4). Each recovery action is logged as a structured
+event tuple appended to <code class="inline">doc.recovery_log</code>. Use <a href="#recovery_log/1"><code class="inline">recovery_log/1</code></a> to inspect:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="6730255254-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">doc</span><span class="p" data-group-id="6730255254-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">open</span><span class="p" data-group-id="6730255254-2">(</span><span class="n">bin</span><span class="p">,</span><span class="w"> </span><span class="ss">recover</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="6730255254-2">)</span><span class="w">
+</span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">recovery_log</span><span class="p" data-group-id="6730255254-3">(</span><span class="n">doc</span><span class="p" data-group-id="6730255254-3">)</span><span class="w">
+</span><span class="c1"># =&gt; [] when the PDF was well-formed</span><span class="w">
+</span><span class="c1"># =&gt; [{:xref_recovered, 5}, {:page_failed, 2, :unresolved_ref}] on a corrupt PDF</span></code></pre><p><strong>Closed set of recovery event tuples:</strong></p><table><thead><tr><th style="text-align: left;">Tuple</th><th style="text-align: left;">Meaning</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">{:xref_recovered, n}</code></td><td style="text-align: left;">Linear scan recovered <code class="inline">n</code> object entries (R-3)</td></tr><tr><td style="text-align: left;"><code class="inline">{:eof_marker_missing, :linear_scan_used}</code></td><td style="text-align: left;"><code class="inline">%%EOF</code> absent; linear scan used (R-3)</td></tr><tr><td style="text-align: left;"><code class="inline">{:page_failed, page_n, reason}</code></td><td style="text-align: left;">Page skipped; text/images from other pages returned (R-1)</td></tr><tr><td style="text-align: left;"><code class="inline">{:font_skipped, page_n, font_name, reason}</code></td><td style="text-align: left;">Font replaced with U+FFFD fallback (R-2)</td></tr><tr><td style="text-align: left;"><code class="inline">{:page_tree_recovered, n_pages}</code></td><td style="text-align: left;">Catalog/Pages fallback; <code class="inline">n_pages</code> recovered (R-4)</td></tr></tbody></table><p>An empty <code class="inline">recovery_log</code> after <a href="#open/2"><code class="inline">open/2</code></a> <strong>guarantees</strong> no recovery occurred.
+No other tuple shapes are appended by the recovery paths.</p><p>The following errors remain fatal even with <code class="inline">recover: true</code>:
+<code class="inline">:not_a_pdf</code>, <code class="inline">:encrypted_password_required</code>, <code class="inline">:encrypted_wrong_password</code>,
+<code class="inline">:encrypted_unsupported_handler</code>, <code class="inline">{:io_error, reason}</code>.</p><p><strong>Known gaps (documented limitations):</strong></p><ul><li><strong>Encrypted AND corrupted PDFs</strong> — the synthetic trailer from R-3 does not
+include <code class="inline">/Encrypt</code>; decryption cannot proceed.</li><li><strong>Catalog-fallback page order (R-4)</strong> — the page list is in xref-insertion
+order, NOT document order. <code class="inline">{:page_tree_recovered, n}</code> signals this.</li><li><strong>R-4 probe cost</strong> — <code class="inline">recover: true</code> triggers a full page-tree walk at
+<a href="#open/2"><code class="inline">open/2</code></a> time (O(pages)). Acceptable for opt-in mode; document in callers
+that open very large PDFs.</li></ul><h2 id="module-encryption-phase-2" class="section-heading"><a href="#module-encryption-phase-2" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Encryption (Phase 2)</span></h2><p>Standard Security Handler V1/V2/V4/V5-R6 supported. Use <a href="#open/2"><code class="inline">open/2</code></a> with the
+<code class="inline">password:</code> opt:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="9105581409-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">doc</span><span class="p" data-group-id="9105581409-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">open</span><span class="p" data-group-id="9105581409-2">(</span><span class="n">bin</span><span class="p">,</span><span class="w"> </span><span class="ss">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;secret&quot;</span><span class="p" data-group-id="9105581409-2">)</span></code></pre><p>Empty password is auto-tried first (covers metadata-protection cases).
+Errors: <code class="inline">:encrypted_password_required</code>, <code class="inline">:encrypted_wrong_password</code>,
+<code class="inline">:encrypted_unsupported_handler</code>. See <a href="Pdf.Reader.Errors.html"><code class="inline">Pdf.Reader.Errors</code></a> for the full set.</p><h2 id="module-form-xobject-recursion-phase-3" class="section-heading"><a href="#module-form-xobject-recursion-phase-3" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Form XObject recursion (Phase 3)</span></h2><p><code class="inline">Do</code> operators referencing <code class="inline">/Type /XObject /Subtype /Form</code> objects are
+recursed into transparently — text and images inside Forms (headers,
+footers, repeated logos, templated form fields) appear in <code class="inline">read_text*</code>
+and <a href="#read_images/1"><code class="inline">read_images/1</code></a> output. CTM is multiplied with the Form's <code class="inline">/Matrix</code>
+and resources are merged (Form wins on key collision). Cycle detection
+via a visited-set guards against <code class="inline">A → B → A</code> loops; recursion depth is
+capped at 8 (<code class="inline">{:cycle_detected, ref}</code> and <code class="inline">{:max_depth_exceeded, ref}</code>
+events are emitted internally and dropped from text output).</p><h2 id="module-known-limitations" class="section-heading"><a href="#module-known-limitations" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Known limitations</span></h2><ul><li><strong>No CID fonts beyond ToUnicode</strong> — CID-keyed fonts that rely on <code class="inline">/CIDToGIDMap</code>
+or registry/ordering/supplement data are not decoded. Only <code class="inline">bfchar</code>/<code class="inline">bfrange</code>
+sections of ToUnicode CMaps are parsed.</li><li><strong>No CCITT / JBIG2 / JPEG2000 image filters</strong> — images using <code class="inline">CCITTFaxDecode</code>,
+<code class="inline">JBIG2Decode</code>, or <code class="inline">JPXDecode</code> produce <code class="inline">{:error, {:unsupported_filter, name}}</code>.</li><li><strong>No OCR</strong> — scanned PDFs with no embedded text produce an empty text list.</li><li><strong>Standard-14 font metrics</strong> — fonts without embedded <code class="inline">/Widths</code> (Standard-14
+such as Helvetica, Times-Roman) produce zero-width glyph advance; only <code class="inline">Tc</code>/<code class="inline">Tw</code>
+character/word spacing contribute. Hardcoded AFM metrics are a separate change.</li><li><strong>No BBox clipping</strong> — text outside a Form's <code class="inline">/BBox</code> is still extracted.</li><li><strong>Annotation appearance streams not rendered</strong> — visual rendering is out of scope.</li><li><strong>Markup popup hierarchies not resolved</strong> — popup windows are not extracted.</li><li><strong>Sound/movie/screen/redact/3D annotations</strong> — not extracted; surface as <code class="inline">:unknown</code>.</li><li><strong>AcroForm widget annotations</strong> — covered by <a href="#read_acroform/1"><code class="inline">read_acroform/1</code></a>, not <a href="#read_annotations/1"><code class="inline">read_annotations/1</code></a>.</li></ul><h2 id="module-spec-references" class="section-heading"><a href="#module-spec-references" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Spec references</span></h2><ul><li>PDF 1.7 § 7.7.3 — Page Tree</li><li>PDF 1.7 § 7.7.3.4 — Inheritance of Page Attributes (resource walk, cycle guard):
+<a rel="nofollow" href="https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf">https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf</a></li><li>PDF 1.7 § 12.3.2 — Destinations</li><li>PDF 1.7 § 12.3.3 — Document Outline</li><li>PDF 1.7 § 12.5 — Annotations</li><li>PDF 1.7 § 12.5.6.x — Annotation subtypes</li><li>PDF 1.7 § 12.6 — Actions</li><li>PDF 1.7 § 14.3.2 — Metadata Streams (XMP merge precedence):
+<a rel="nofollow" href="https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf">https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf</a></li></ul><h2 id="module-error-reasons" class="section-heading"><a href="#module-error-reasons" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Error reasons</span></h2><p>See <a href="Pdf.Reader.Errors.html"><code class="inline">Pdf.Reader.Errors</code></a> for the complete documented reason set.</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h2>
+<div class="summary-types summary">
+  <h3>
+    <a href="#types">Types</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:reason/0" data-no-tooltip="" translate="no">reason()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h3>
+    <a href="#functions">Functions</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#attach_shapes_to_tokens/2" data-no-tooltip="" translate="no">attach_shapes_to_tokens(lines, shapes)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Pure helper: enriches each token in a <code class="inline">Line</code> list with <code class="inline">:kind</code> and
+<code class="inline">:shape</code>. Tokens without an overlapping shape get <code class="inline">kind: :text</code> and
+<code class="inline">shape: nil</code>. Tokens overlapping a shape get the shape attached and
+<code class="inline">:kind</code> derived from <code class="inline">shape.type</code></p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#close/1" data-no-tooltip="" translate="no">close(doc)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>No-op in Phase 1 (no file handle or process held after <a href="#open/1"><code class="inline">open/1</code></a>).</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#lines_from_runs/2" data-no-tooltip="" translate="no">lines_from_runs(runs, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Pure helper: groups a flat <code class="inline">TextRun</code> list into <code class="inline">Line</code> structs.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#open/2" data-no-tooltip="" translate="no">open(path_or_binary, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Opens a PDF from a binary or a file path.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#open!/2" data-no-tooltip="" translate="no">open!(path_or_binary, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Bang variant of <a href="#open/2"><code class="inline">open/2</code></a>. Raises <a href="Pdf.Reader.Error.html"><code class="inline">Pdf.Reader.Error</code></a> on failure.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#page_count/1" data-no-tooltip="" translate="no">page_count(doc)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the total number of pages in the document.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#page_count!/1" data-no-tooltip="" translate="no">page_count!(doc)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Bang variant of <a href="#page_count/1"><code class="inline">page_count/1</code></a>. Raises <a href="Pdf.Reader.Error.html"><code class="inline">Pdf.Reader.Error</code></a> on failure.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read/2" data-no-tooltip="" translate="no">read(doc, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Unified entry point — returns the entire extracted PDF in one struct.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read!/2" data-no-tooltip="" translate="no">read!(doc, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Bang variant of <a href="#read/2"><code class="inline">read/2</code></a>. Raises <a href="Pdf.Reader.Error.html"><code class="inline">Pdf.Reader.Error</code></a> on failure.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_acroform/1" data-no-tooltip="" translate="no">read_acroform(doc)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Extracts AcroForm interactive form fields from the document.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_acroform!/1" data-no-tooltip="" translate="no">read_acroform!(doc)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Bang variant of <a href="#read_acroform/1"><code class="inline">read_acroform/1</code></a>. Raises <a href="Pdf.Reader.Error.html"><code class="inline">Pdf.Reader.Error</code></a> on failure.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_annotations/1" data-no-tooltip="" translate="no">read_annotations(doc)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Extracts all annotations from all pages in the document.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_annotations!/1" data-no-tooltip="" translate="no">read_annotations!(doc)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Bang variant of <a href="#read_annotations/1"><code class="inline">read_annotations/1</code></a>. Raises <a href="Pdf.Reader.Error.html"><code class="inline">Pdf.Reader.Error</code></a> on failure.
+Returns the annotations list directly on success.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_images/1" data-no-tooltip="" translate="no">read_images(doc)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Extracts images from all pages.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_images!/1" data-no-tooltip="" translate="no">read_images!(doc)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Bang variant of <a href="#read_images/1"><code class="inline">read_images/1</code></a>. Raises <a href="Pdf.Reader.Error.html"><code class="inline">Pdf.Reader.Error</code></a> on failure.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_lines/2" data-no-tooltip="" translate="no">read_lines(doc, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Reconstructs logical text lines from the page's <code class="inline">TextRun</code>s.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_lines!/2" data-no-tooltip="" translate="no">read_lines!(doc, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Bang variant of <a href="#read_lines/2"><code class="inline">read_lines/2</code></a>. Raises <a href="Pdf.Reader.Error.html"><code class="inline">Pdf.Reader.Error</code></a> on failure.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_metadata/1" data-no-tooltip="" translate="no">read_metadata(doc)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Extracts document metadata from the Info dictionary.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_metadata!/1" data-no-tooltip="" translate="no">read_metadata!(doc)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Bang variant of <a href="#read_metadata/1"><code class="inline">read_metadata/1</code></a>. Raises <a href="Pdf.Reader.Error.html"><code class="inline">Pdf.Reader.Error</code></a> on failure.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_outlines/1" data-no-tooltip="" translate="no">read_outlines(doc)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Extracts document outline (bookmarks) from the PDF catalog's <code class="inline">/Outlines</code> tree.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_outlines!/1" data-no-tooltip="" translate="no">read_outlines!(doc)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Bang variant of <a href="#read_outlines/1"><code class="inline">read_outlines/1</code></a>. Raises <a href="Pdf.Reader.Error.html"><code class="inline">Pdf.Reader.Error</code></a> on failure.
+Returns the outlines list directly on success.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_shapes/1" data-no-tooltip="" translate="no">read_shapes(doc)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the actionable elements (link-like shapes) of the document.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_shapes!/1" data-no-tooltip="" translate="no">read_shapes!(doc)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Bang variant of <a href="#read_shapes/1"><code class="inline">read_shapes/1</code></a>. Raises <a href="Pdf.Reader.Error.html"><code class="inline">Pdf.Reader.Error</code></a> on failure.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_text/2" data-no-tooltip="" translate="no">read_text(doc, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the plain text for each page as a list of strings.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_text!/2" data-no-tooltip="" translate="no">read_text!(doc, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Bang variant of <a href="#read_text/2"><code class="inline">read_text/2</code></a>. Raises <a href="Pdf.Reader.Error.html"><code class="inline">Pdf.Reader.Error</code></a> on failure.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_text_with_positions/1" data-no-tooltip="" translate="no">read_text_with_positions(doc)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns text runs with absolute positions for all pages.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#read_text_with_positions!/1" data-no-tooltip="" translate="no">read_text_with_positions!(doc)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Bang variant of <a href="#read_text_with_positions/1"><code class="inline">read_text_with_positions/1</code></a>. Raises <a href="Pdf.Reader.Error.html"><code class="inline">Pdf.Reader.Error</code></a> on failure.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#recovery_log/1" data-no-tooltip="" translate="no">recovery_log(document)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the recovery event log for a document in chronological (oldest-first) order.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#shapes_from_lines/1" data-no-tooltip="" translate="no">shapes_from_lines(lines)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Pure helper: scans a list of <code class="inline">Line</code> structs for URL and email patterns
+and emits the inferred shapes. Exposed for callers that already have
+a lines list and want the inference layer alone (no annotations).</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h2>
+
+    <div class="types-list">
+<section class="detail" id="t:reason/0">
+
+  <div class="detail-header">
+    <a href="#t:reason/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">reason()</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L150" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> reason() ::
+  :not_a_pdf
+  | :malformed
+  | :encrypted_password_required
+  | :encrypted_wrong_password
+  | :encrypted_unsupported_handler
+  | :io_error
+  | {:io_error, <a href="https://hexdocs.pm/elixir/File.html#t:posix/0">File.posix</a>()}
+  | {:unsupported_filter, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>()}
+  | {:unresolved_ref, <a href="Pdf.Reader.Document.html#t:ref/0">Pdf.Reader.Document.ref</a>()}
+  | {:unsupported_pdf_version, <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()}
+  | {:malformed, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h2>
+
+    <div class="functions-list">
+<section class="detail" id="attach_shapes_to_tokens/2">
+
+  <div class="detail-header">
+    <a href="#attach_shapes_to_tokens/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">attach_shapes_to_tokens(lines, shapes)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L689" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> attach_shapes_to_tokens([<a href="Pdf.Reader.Line.html#t:t/0">Pdf.Reader.Line.t</a>()], [<a href="Pdf.Reader.Shape.html#t:t/0">Pdf.Reader.Shape.t</a>()]) :: [
+  <a href="Pdf.Reader.Line.html#t:t/0">Pdf.Reader.Line.t</a>()
+]</pre>
+
+      </div>
+
+<p>Pure helper: enriches each token in a <code class="inline">Line</code> list with <code class="inline">:kind</code> and
+<code class="inline">:shape</code>. Tokens without an overlapping shape get <code class="inline">kind: :text</code> and
+<code class="inline">shape: nil</code>. Tokens overlapping a shape get the shape attached and
+<code class="inline">:kind</code> derived from <code class="inline">shape.type</code>:</p><ul><li><p><code class="inline">:uri | :goto | :launch | :named</code> → <code class="inline">:link</code></p></li><li><code class="inline">:email</code> → <code class="inline">:email</code></li></ul><p>A shape &quot;contains&quot; a token when:</p><ul><li>The shape and the line are on the same page.</li><li>The shape's X range overlaps the token's X range.</li><li>The shape's Y is within ±2 points of the line's Y.</li></ul><p>Spec references:</p><ul><li>PDF 1.7 § 12.5.6.5 — Link Annotations (rect semantics)</li><li>PDF 1.7 § 12.6.4   — Action types (URI/GoTo/Launch/Named)</li></ul>
+  </section>
+</section>
+<section class="detail" id="close/1">
+
+  <div class="detail-header">
+    <a href="#close/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">close(doc)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L256" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> close(<a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()) :: :ok</pre>
+
+      </div>
+
+<p>No-op in Phase 1 (no file handle or process held after <a href="#open/1"><code class="inline">open/1</code></a>).</p><p>Exists to reserve the API slot for future streaming/mmap support and to
+signal to callers that they may drop the <code class="inline">:binary</code> field to reclaim memory.</p><p>Always returns <code class="inline">:ok</code>. Does NOT raise.</p>
+  </section>
+</section>
+<section class="detail" id="lines_from_runs/2">
+
+    <span id="lines_from_runs/1"></span>
+
+  <div class="detail-header">
+    <a href="#lines_from_runs/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">lines_from_runs(runs, opts \\ [])</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L987" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> lines_from_runs(
+  [<a href="Pdf.Reader.TextRun.html#t:t/0">Pdf.Reader.TextRun.t</a>()],
+  <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()
+) :: [<a href="Pdf.Reader.Line.html#t:t/0">Pdf.Reader.Line.t</a>()]</pre>
+
+      </div>
+
+<p>Pure helper: groups a flat <code class="inline">TextRun</code> list into <code class="inline">Line</code> structs.</p><p>Exposed publicly so callers who already have a runs list (from
+<a href="#read_text_with_positions/1"><code class="inline">read_text_with_positions/1</code></a> or hand-crafted in tests) can reuse the
+grouping logic without reopening the document.</p><p>See <a href="#read_lines/2"><code class="inline">read_lines/2</code></a> for option semantics.</p>
+  </section>
+</section>
+<section class="detail" id="open/2">
+
+    <span id="open/1"></span>
+
+  <div class="detail-header">
+    <a href="#open/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">open(path_or_binary, opts \\ [])</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L205" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> open(
+  <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>() | <a href="https://hexdocs.pm/elixir/Path.html#t:t/0">Path.t</a>(),
+  <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()
+) :: {:ok, <a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()} | {:error, <a href="#t:reason/0">reason</a>()}</pre>
+
+      </div>
+
+<p>Opens a PDF from a binary or a file path.</p><h2 id="open/2-options" class="section-heading"><a href="#open/2-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Options</span></h2><ul><li><code class="inline">password: String.t()</code> — the password to use when opening an encrypted PDF.
+Defaults to <code class="inline">&quot;&quot;</code> (the empty string). The empty password is ALWAYS tried first
+regardless of this option (R-ENC4). If the empty password succeeds, the PDF is
+opened without requiring a non-empty password.</li></ul><h2 id="open/2-success" class="section-heading"><a href="#open/2-success" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Success</span></h2><p>Returns <code class="inline">{:ok, %Pdf.Reader.Document{}}</code> with:</p><ul><li><code class="inline">:version</code> — the PDF version string (e.g. <code class="inline">&quot;1.7&quot;</code>)</li><li><code class="inline">:xref</code> — merged cross-reference table (all <code class="inline">/Prev</code> chains followed)</li><li><code class="inline">:trailer</code> — the most-recent trailer dictionary as a plain map</li><li><code class="inline">:binary</code> — the full PDF binary (held for lazy object resolution)</li><li><code class="inline">:cache</code> — starts as <code class="inline">%{}</code></li><li><code class="inline">:encryption</code> — <code class="inline">nil</code> for non-encrypted PDFs; populated <code class="inline">%StandardHandler{}</code> on success</li></ul><h2 id="open/2-errors" class="section-heading"><a href="#open/2-errors" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Errors</span></h2><ul><li><code class="inline">{:error, :not_a_pdf}</code> — binary does not start with <code class="inline">%PDF-</code></li><li><code class="inline">{:error, :malformed}</code> — missing <code class="inline">%%EOF</code>, invalid <code class="inline">startxref</code>, etc.</li><li><code class="inline">{:error, :encrypted_password_required}</code> — <code class="inline">/Encrypt</code> found; no password supplied or empty password rejected.</li><li><code class="inline">{:error, :encrypted_wrong_password}</code> — password supplied but authentication failed.</li><li><code class="inline">{:error, :encrypted_unsupported_handler}</code> — unsupported encryption handler or RC4 unavailable.</li><li><code class="inline">{:error, :io_error}</code> — file read failed (no detail)</li><li><code class="inline">{:error, {:io_error, posix}}</code> — file read failed with POSIX reason</li></ul><h2 id="open/2-spec-references" class="section-heading"><a href="#open/2-spec-references" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Spec references</span></h2><ul><li>PDF 1.7 § 7.6 — Standard Security Handler:
+<a rel="nofollow" href="https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf">https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf</a></li><li>PDF 2.0 § 7.6 — Standard Security Handler (V5/R6):
+<a rel="nofollow" href="https://www.pdfa.org/wp-content/uploads/2023/04/ISO_32000_2_2020_PDF_2.0_FDIS.pdf">https://www.pdfa.org/wp-content/uploads/2023/04/ISO_32000_2_2020_PDF_2.0_FDIS.pdf</a></li></ul>
+  </section>
+</section>
+<section class="detail" id="open!/2">
+
+    <span id="open!/1"></span>
+
+  <div class="detail-header">
+    <a href="#open!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">open!(path_or_binary, opts \\ [])</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L1723" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> open!(
+  <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>() | <a href="https://hexdocs.pm/elixir/Path.html#t:t/0">Path.t</a>(),
+  <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()
+) :: <a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()</pre>
+
+      </div>
+
+<p>Bang variant of <a href="#open/2"><code class="inline">open/2</code></a>. Raises <a href="Pdf.Reader.Error.html"><code class="inline">Pdf.Reader.Error</code></a> on failure.</p>
+  </section>
+</section>
+<section class="detail" id="page_count/1">
+
+  <div class="detail-header">
+    <a href="#page_count/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">page_count(doc)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L348" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> page_count(<a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()) :: {:ok, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">pos_integer</a>()} | {:error, <a href="#t:reason/0">reason</a>()}</pre>
+
+      </div>
+
+<p>Returns the total number of pages in the document.</p><p>Cross-validates the <code class="inline">/Count</code> entry in the page tree root against the
+actual number of leaf page refs found by traversal. If they disagree,
+returns <code class="inline">{:error, {:malformed, :page_tree_count_mismatch, %{declared: n, actual: m}}}</code>.</p><h2 id="page_count/1-recovery-mode-r-4" class="section-heading"><a href="#page_count/1-recovery-mode-r-4" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Recovery mode (R-4)</span></h2><p>When <code class="inline">recover_mode: true</code> and the page list was recovered via the catalog
+fallback (xref scan), there is no <code class="inline">/Pages /Count</code> to cross-validate against.
+In that case, the declared-count lookup is skipped and the actual count from
+the xref scan is returned directly. This branch is signalled by
+<code class="inline">{:page_tree_recovered, n}</code> in <code class="inline">recovery_log</code>.</p><p>Spec references: PDF 1.7 § 7.7.3 (Page Tree), § 7.7.3.4 (Inheritance).</p>
+  </section>
+</section>
+<section class="detail" id="page_count!/1">
+
+  <div class="detail-header">
+    <a href="#page_count!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">page_count!(doc)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L1743" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> page_count!(<a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">pos_integer</a>()</pre>
+
+      </div>
+
+<p>Bang variant of <a href="#page_count/1"><code class="inline">page_count/1</code></a>. Raises <a href="Pdf.Reader.Error.html"><code class="inline">Pdf.Reader.Error</code></a> on failure.</p>
+  </section>
+</section>
+<section class="detail" id="read/2">
+
+    <span id="read/1"></span>
+
+  <div class="detail-header">
+    <a href="#read/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">read(doc, opts \\ [])</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L446" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> read(
+  <a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>(),
+  <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()
+) :: {:ok, <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(), <a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()} | {:error, <a href="#t:reason/0">reason</a>()}</pre>
+
+      </div>
+
+<p>Unified entry point — returns the entire extracted PDF in one struct.</p><p>Default shape is <code class="inline">%Pdf.Reader.Result{}</code> carrying:</p><ul><li><code class="inline">:meta</code> — document-level metadata (title, author, subject,
+creator, producer, dates, page_count, PDF version, encryption flag,
+recovery_log, plus the raw Info+XMP map). PDF 1.7 § 14.3.</li><li><code class="inline">:pages</code> — <code class="inline">[%Pdf.Reader.Result.Page{number, meta, lines}]</code>. Each
+page's <code class="inline">:lines</code> includes text lines AND embedded images as
+synthetic lines, sorted top-to-bottom. Each line's tokens carry
+<code class="inline">:kind</code> (<code class="inline">:text | :link | :email | :image</code>) and <code class="inline">:shape</code>.</li></ul><h2 id="read/2-convenience-shapes" class="section-heading"><a href="#read/2-convenience-shapes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Convenience shapes</span></h2><p>Pass <code class="inline">:shape</code> if you only want one slice without building the full struct:</p><ul><li><code class="inline">:text</code> → <code class="inline">[String.t()]</code> (plain text per page)</li><li><code class="inline">:shapes</code> → <code class="inline">[%Pdf.Reader.Shape{}]</code> (links/emails/images flat)</li></ul><h2 id="read/2-line-tokenisation-opts" class="section-heading"><a href="#read/2-line-tokenisation-opts" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Line tokenisation opts</span></h2><ul><li><code class="inline">:y_tolerance</code> (default <code class="inline">2.0</code>) — PDF point tolerance to collapse
+text runs onto the same line.</li><li><code class="inline">:gap_factor</code> (default <code class="inline">1.15</code>) — token-split threshold as a
+multiplier on the per-line median inter-glyph gap. Forwarded to
+<a href="#read_lines/2"><code class="inline">read_lines/2</code></a>.</li></ul><h2 id="read/2-image-opts" class="section-heading"><a href="#read/2-image-opts" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Image opts</span></h2><ul><li><code class="inline">:image_bytes</code> (default <code class="inline">false</code>) — when <code class="inline">true</code>, image tokens carry
+the raw decoded <code class="inline">:bytes</code> in <code class="inline">meta</code> alongside the always-present
+<code class="inline">:data_uri</code>. Off by default to keep the result lightweight; turn
+on if the caller needs the binary (e.g. to write images to disk
+or run a QR decoder).</li></ul><h2 id="read/2-dictionary-split" class="section-heading"><a href="#read/2-dictionary-split" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Dictionary split</span></h2><ul><li><p><code class="inline">:dictionary</code> (default <code class="inline">nil</code>) — when set, runs an additional
+post-pass that splits glued lowercase tokens at boundaries where
+BOTH halves are valid dictionary words (e.g. <code class="inline">&quot;iniciode&quot;</code> →
+<code class="inline">&quot;inicio&quot;</code> + <code class="inline">&quot;de&quot;</code>). Accepts:</p><ul><li><code class="inline">:es</code> — bundled 10k Spanish wordlist
+(<a href="Pdf.Reader.Wordlist.html#spanish/0"><code class="inline">Pdf.Reader.Wordlist.spanish/0</code></a>, MIT-licensed)</li><li><code class="inline">%MapSet{}</code> — caller-supplied wordlist of lowercase strings</li><li><code class="inline">nil</code> — disabled</li></ul><p>URLs/emails and tokens with digits or special chars are exempted.</p></li></ul><h2 id="read/2-spec-references" class="section-heading"><a href="#read/2-spec-references" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Spec references</span></h2><ul><li>PDF 1.7 § 7.7.3      — Page Tree</li><li>PDF 1.7 § 8.9        — Images (XObject /Subtype /Image)</li><li>PDF 1.7 § 9.4        — Text objects</li><li>PDF 1.7 § 12.5.6.5   — Link Annotations</li><li>PDF 1.7 § 12.6.4     — Action types (URI, GoTo, Launch, Named)</li><li>PDF 1.7 § 14.3       — Document Information Dictionary + XMP</li></ul>
+  </section>
+</section>
+<section class="detail" id="read!/2">
+
+    <span id="read!/1"></span>
+
+  <div class="detail-header">
+    <a href="#read!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">read!(doc, opts \\ [])</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L459" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> read!(
+  <a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>(),
+  <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()
+) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>()</pre>
+
+      </div>
+
+<p>Bang variant of <a href="#read/2"><code class="inline">read/2</code></a>. Raises <a href="Pdf.Reader.Error.html"><code class="inline">Pdf.Reader.Error</code></a> on failure.</p>
+  </section>
+</section>
+<section class="detail" id="read_acroform/1">
+
+  <div class="detail-header">
+    <a href="#read_acroform/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">read_acroform(doc)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L1802" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> read_acroform(<a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()) ::
+  {:ok, [<a href="Pdf.Reader.FormField.html#t:t/0">Pdf.Reader.FormField.t</a>()], <a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()}
+  | {:error, <a href="#t:reason/0">reason</a>()}</pre>
+
+      </div>
+
+<p>Extracts AcroForm interactive form fields from the document.</p><p>Walks the <code class="inline">/AcroForm /Fields</code> tree depth-first, emitting only leaf fields
+as a flat list of <code class="inline">%Pdf.Reader.FormField{}</code> structs. Hierarchical names
+(<code class="inline">/T</code> dot-joined from ancestor path) are resolved. <code class="inline">/FT</code> is inherited
+downward from the nearest ancestor that defines it.</p><p>Returns <code class="inline">{:ok, [], doc}</code> when no <code class="inline">/AcroForm</code> is present or <code class="inline">/Fields</code> is empty.
+Never returns <code class="inline">{:error, _}</code> for absent or empty AcroForms.</p><h2 id="read_acroform/1-spec-references" class="section-heading"><a href="#read_acroform/1-spec-references" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Spec references</span></h2><ul><li>PDF 1.7 § 12.7 (Interactive Forms)</li><li>PDF 1.7 § 12.7.3 (Field Dictionaries)</li><li>PDF 1.7 § 12.7.4 (Field Types)</li></ul>
+  </section>
+</section>
+<section class="detail" id="read_acroform!/1">
+
+  <div class="detail-header">
+    <a href="#read_acroform!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">read_acroform!(doc)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L1808" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> read_acroform!(<a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()) :: [<a href="Pdf.Reader.FormField.html#t:t/0">Pdf.Reader.FormField.t</a>()]</pre>
+
+      </div>
+
+<p>Bang variant of <a href="#read_acroform/1"><code class="inline">read_acroform/1</code></a>. Raises <a href="Pdf.Reader.Error.html"><code class="inline">Pdf.Reader.Error</code></a> on failure.</p>
+  </section>
+</section>
+<section class="detail" id="read_annotations/1">
+
+  <div class="detail-header">
+    <a href="#read_annotations/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">read_annotations(doc)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L1863" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> read_annotations(<a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()) ::
+  {:ok, [<a href="Pdf.Reader.Annotation.html#t:t/0">Pdf.Reader.Annotation.t</a>()], <a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()}
+  | {:error, <a href="#t:reason/0">reason</a>()}</pre>
+
+      </div>
+
+<p>Extracts all annotations from all pages in the document.</p><p>Enumerates every page via <code class="inline">Page.list_refs/1</code> and, for each page, resolves
+its <code class="inline">/Annots</code> array. Supports 10 annotation subtypes:
+<code class="inline">:link</code>, <code class="inline">:text</code>, <code class="inline">:highlight</code>, <code class="inline">:underline</code>, <code class="inline">:strikeout</code>, <code class="inline">:squiggly</code>,
+<code class="inline">:square</code>, <code class="inline">:circle</code>, <code class="inline">:freetext</code>, <code class="inline">:file_attachment</code>. Other subtypes
+surface as <code class="inline">:unknown</code> with raw fields preserved in <code class="inline">:kind_specific</code>.</p><p>Returns <code class="inline">{:ok, [], doc}</code> when no page has an <code class="inline">/Annots</code> array — never an error.</p><h2 id="read_annotations/1-spec-references" class="section-heading"><a href="#read_annotations/1-spec-references" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Spec references</span></h2><ul><li>PDF 1.7 § 12.5 — Annotations</li><li>PDF 1.7 § 12.5.6.x — Annotation subtypes</li><li>PDF 1.7 § 12.6 — Actions</li></ul>
+  </section>
+</section>
+<section class="detail" id="read_annotations!/1">
+
+  <div class="detail-header">
+    <a href="#read_annotations!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">read_annotations!(doc)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L1870" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> read_annotations!(<a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()) :: [<a href="Pdf.Reader.Annotation.html#t:t/0">Pdf.Reader.Annotation.t</a>()]</pre>
+
+      </div>
+
+<p>Bang variant of <a href="#read_annotations/1"><code class="inline">read_annotations/1</code></a>. Raises <a href="Pdf.Reader.Error.html"><code class="inline">Pdf.Reader.Error</code></a> on failure.
+Returns the annotations list directly on success.</p>
+  </section>
+</section>
+<section class="detail" id="read_images/1">
+
+  <div class="detail-header">
+    <a href="#read_images/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">read_images(doc)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L1713" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> read_images(<a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()) ::
+  {:ok, [<a href="Pdf.Reader.Image.html#t:t/0">Pdf.Reader.Image.t</a>()], <a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()} | {:error, <a href="#t:reason/0">reason</a>()}</pre>
+
+      </div>
+
+<p>Extracts images from all pages.</p><p>For each page, resolves the XObject references from content-stream <code class="inline">Do</code>
+operators and classifies them as JPEG or PNG-like based on their <code class="inline">/Filter</code>.</p><p>Returns <code class="inline">{:ok, [], doc}</code> when no images are found. The returned <code class="inline">doc</code>
+carries an updated <code class="inline">:recovery_log</code> when opened with <code class="inline">recover: true</code>.</p>
+  </section>
+</section>
+<section class="detail" id="read_images!/1">
+
+  <div class="detail-header">
+    <a href="#read_images!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">read_images!(doc)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L1776" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> read_images!(<a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()) :: [<a href="Pdf.Reader.Image.html#t:t/0">Pdf.Reader.Image.t</a>()]</pre>
+
+      </div>
+
+<p>Bang variant of <a href="#read_images/1"><code class="inline">read_images/1</code></a>. Raises <a href="Pdf.Reader.Error.html"><code class="inline">Pdf.Reader.Error</code></a> on failure.</p>
+  </section>
+</section>
+<section class="detail" id="read_lines/2">
+
+    <span id="read_lines/1"></span>
+
+  <div class="detail-header">
+    <a href="#read_lines/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">read_lines(doc, opts \\ [])</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L800" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> read_lines(
+  <a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>(),
+  <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()
+) :: {:ok, [<a href="Pdf.Reader.Line.html#t:t/0">Pdf.Reader.Line.t</a>()], <a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()} | {:error, <a href="#t:reason/0">reason</a>()}</pre>
+
+      </div>
+
+<p>Reconstructs logical text lines from the page's <code class="inline">TextRun</code>s.</p><p>Many machine-generated PDFs (government forms, tax documents) place
+glyphs individually with TJ + per-glyph kerning, producing one
+<code class="inline">TextRun</code> per character. This function coalesces those runs into a
+list of <a href="Pdf.Reader.Line.html"><code class="inline">Pdf.Reader.Line</code></a> structs, where each line carries:</p><ul><li><code class="inline">:page</code>, <code class="inline">:y</code>, <code class="inline">:x</code> — absolute position in user space</li><li><code class="inline">:text</code> — the joined text with single spaces between tokens</li><li><code class="inline">:tokens</code> — <code class="inline">[%{x, text, width}]</code> separated by visible whitespace</li></ul><p>The token list lets callers detect column layouts (e.g. table rows
+where every line has tokens at the same X positions).</p><h2 id="read_lines/2-options" class="section-heading"><a href="#read_lines/2-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Options</span></h2><ul><li><code class="inline">:y_tolerance</code> (default <code class="inline">2.0</code>) — runs whose Y differs by less than
+this many points collapse onto the same line. PDFs often jitter
+by fractional points within a line.</li><li><code class="inline">:gap_factor</code> (default <code class="inline">1.15</code>) — split into a new token when the
+horizontal gap between two consecutive runs exceeds the <strong>median</strong>
+inter-glyph gap on that line, multiplied by <code class="inline">gap_factor</code>. Using the
+median makes detection robust across fonts and sizes: monospace 4pt
+advances split at ~4.6pt, 6pt advances split at ~6.9pt, etc.
+Lower factor = more splits. Falls back to <code class="inline">font_size × gap_factor</code>
+when a line has fewer than two runs (no gap to measure).</li></ul><p>Returns <code class="inline">{:ok, [Line.t()], doc}</code>. Lines are ordered by page ascending,
+then by Y descending (top-to-bottom in PDF user space).</p><h2 id="read_lines/2-spec-references" class="section-heading"><a href="#read_lines/2-spec-references" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Spec references</span></h2><ul><li>PDF 1.7 § 9.4 — Text objects</li><li>PDF 1.7 § 9.4.4 — Text-showing operators</li></ul>
+  </section>
+</section>
+<section class="detail" id="read_lines!/2">
+
+    <span id="read_lines!/1"></span>
+
+  <div class="detail-header">
+    <a href="#read_lines!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">read_lines!(doc, opts \\ [])</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L810" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> read_lines!(
+  <a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>(),
+  <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()
+) :: [<a href="Pdf.Reader.Line.html#t:t/0">Pdf.Reader.Line.t</a>()]</pre>
+
+      </div>
+
+<p>Bang variant of <a href="#read_lines/2"><code class="inline">read_lines/2</code></a>. Raises <a href="Pdf.Reader.Error.html"><code class="inline">Pdf.Reader.Error</code></a> on failure.</p>
+  </section>
+</section>
+<section class="detail" id="read_metadata/1">
+
+  <div class="detail-header">
+    <a href="#read_metadata/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">read_metadata(doc)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L292" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> read_metadata(<a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()) ::
+  {:ok, %{required(<a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) =&gt; <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()}, <a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()}
+  | {:error, <a href="#t:reason/0">reason</a>()}</pre>
+
+      </div>
+
+<p>Extracts document metadata from the Info dictionary.</p><p>Resolves the trailer's <code class="inline">/Info</code> reference and returns its key-value pairs
+as a <code class="inline">%{String.t() =&gt; String.t()}</code> map. String values are decoded from
+PDF literal strings (<code class="inline">{:string, binary}</code>).</p><p>Common keys: <code class="inline">&quot;Title&quot;</code>, <code class="inline">&quot;Author&quot;</code>, <code class="inline">&quot;Subject&quot;</code>, <code class="inline">&quot;Keywords&quot;</code>,
+<code class="inline">&quot;Creator&quot;</code>, <code class="inline">&quot;Producer&quot;</code>, <code class="inline">&quot;CreationDate&quot;</code>, <code class="inline">&quot;ModDate&quot;</code>.</p><p>Returns <code class="inline">{:ok, %{}, doc}</code> when no <code class="inline">/Info</code> entry is present.</p><h2 id="read_metadata/1-spec-reference" class="section-heading"><a href="#read_metadata/1-spec-reference" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Spec reference</span></h2><p>PDF 1.7 § 14.3.3 (Document Information Dictionary).</p>
+  </section>
+</section>
+<section class="detail" id="read_metadata!/1">
+
+  <div class="detail-header">
+    <a href="#read_metadata!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">read_metadata!(doc)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L1734" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> read_metadata!(<a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()) :: %{required(<a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) =&gt; <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()}</pre>
+
+      </div>
+
+<p>Bang variant of <a href="#read_metadata/1"><code class="inline">read_metadata/1</code></a>. Raises <a href="Pdf.Reader.Error.html"><code class="inline">Pdf.Reader.Error</code></a> on failure.</p>
+  </section>
+</section>
+<section class="detail" id="read_outlines/1">
+
+  <div class="detail-header">
+    <a href="#read_outlines/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">read_outlines(doc)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L1830" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> read_outlines(<a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()) ::
+  {:ok, [<a href="Pdf.Reader.Outline.html#t:t/0">Pdf.Reader.Outline.t</a>()], <a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()} | {:error, <a href="#t:reason/0">reason</a>()}</pre>
+
+      </div>
+
+<p>Extracts document outline (bookmarks) from the PDF catalog's <code class="inline">/Outlines</code> tree.</p><p>Walks the <code class="inline">/First</code>/<code class="inline">/Next</code> linked list at each nesting level, threading
+<code class="inline">/Parent</code> for depth. Cycle detection via <a href="https://hexdocs.pm/elixir/MapSet.html"><code class="inline">MapSet</code></a> and a depth cap of 32
+prevent hangs on corrupt PDFs.</p><p>Returns <code class="inline">{:ok, [], doc}</code> when no <code class="inline">/Outlines</code> entry is present — never an error.</p><h2 id="read_outlines/1-spec-references" class="section-heading"><a href="#read_outlines/1-spec-references" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Spec references</span></h2><ul><li>PDF 1.7 § 12.3.3 — Document Outline</li><li>PDF 1.7 § 12.3.2 — Destinations</li></ul>
+  </section>
+</section>
+<section class="detail" id="read_outlines!/1">
+
+  <div class="detail-header">
+    <a href="#read_outlines!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">read_outlines!(doc)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L1837" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> read_outlines!(<a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()) :: [<a href="Pdf.Reader.Outline.html#t:t/0">Pdf.Reader.Outline.t</a>()]</pre>
+
+      </div>
+
+<p>Bang variant of <a href="#read_outlines/1"><code class="inline">read_outlines/1</code></a>. Raises <a href="Pdf.Reader.Error.html"><code class="inline">Pdf.Reader.Error</code></a> on failure.
+Returns the outlines list directly on success.</p>
+  </section>
+</section>
+<section class="detail" id="read_shapes/1">
+
+  <div class="detail-header">
+    <a href="#read_shapes/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">read_shapes(doc)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L842" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> read_shapes(<a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()) ::
+  {:ok, [<a href="Pdf.Reader.Shape.html#t:t/0">Pdf.Reader.Shape.t</a>()], <a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()} | {:error, <a href="#t:reason/0">reason</a>()}</pre>
+
+      </div>
+
+<p>Returns the actionable elements (link-like shapes) of the document.</p><p>Combines two sources:</p><ul><li><strong>Annotations</strong> of subtype <code class="inline">/Link</code> (PDF 1.7 § 12.5.6.5) — real
+clickable regions placed by the document author. Each becomes a
+<code class="inline">%Pdf.Reader.Shape{source: :annotation}</code>.</li><li><strong>Inferred shapes</strong> — URL and email patterns appearing as plain
+text in <a href="#read_lines/2"><code class="inline">read_lines/2</code></a> output. Common in government forms that
+print <code class="inline">http://...</code> or <code class="inline">email@domain</code> without making them clickable.
+Each becomes <code class="inline">%Pdf.Reader.Shape{source: :inferred}</code>.</li></ul><p>Returns <code class="inline">{:ok, shapes, doc}</code>. Shapes are sorted by <code class="inline">:page</code> ascending,
+then by <code class="inline">:y</code> descending (top-to-bottom) when a rect is available.</p><h2 id="read_shapes/1-spec-references" class="section-heading"><a href="#read_shapes/1-spec-references" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Spec references</span></h2><ul><li>PDF 1.7 § 12.5.6.5 — Link Annotations</li><li>PDF 1.7 § 12.6.4   — Action types (URI, GoTo, Launch, Named)</li><li>RFC 3986 § 3        — URI Generic Syntax</li><li>RFC 5321 § 4.1.2    — Mailbox/Domain syntax (mailto)</li></ul>
+  </section>
+</section>
+<section class="detail" id="read_shapes!/1">
+
+  <div class="detail-header">
+    <a href="#read_shapes!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">read_shapes!(doc)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L862" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> read_shapes!(<a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()) :: [<a href="Pdf.Reader.Shape.html#t:t/0">Pdf.Reader.Shape.t</a>()]</pre>
+
+      </div>
+
+<p>Bang variant of <a href="#read_shapes/1"><code class="inline">read_shapes/1</code></a>. Raises <a href="Pdf.Reader.Error.html"><code class="inline">Pdf.Reader.Error</code></a> on failure.</p>
+  </section>
+</section>
+<section class="detail" id="read_text/2">
+
+    <span id="read_text/1"></span>
+
+  <div class="detail-header">
+    <a href="#read_text/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">read_text(doc, opts \\ [])</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L1673" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> read_text(
+  <a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>(),
+  <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()
+) :: {:ok, [<a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()], <a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()} | {:error, <a href="#t:reason/0">reason</a>()}</pre>
+
+      </div>
+
+<p>Returns the plain text for each page as a list of strings.</p><p>Options:</p><ul><li><code class="inline">:pages</code> — <code class="inline">[pos_integer]</code> to filter to specific 1-indexed page numbers.
+Default: all pages.</li></ul><p>Returns <code class="inline">{:ok, page_strings, doc}</code> where each element is the concatenated
+text for one page. The returned <code class="inline">doc</code> carries an updated <code class="inline">:recovery_log</code>
+when opened with <code class="inline">recover: true</code>. Unresolved glyphs appear as <code class="inline">U+FFFD</code>
+(already encoded by the encoding cascade layer).</p>
+  </section>
+</section>
+<section class="detail" id="read_text!/2">
+
+    <span id="read_text!/1"></span>
+
+  <div class="detail-header">
+    <a href="#read_text!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">read_text!(doc, opts \\ [])</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L1765" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> read_text!(
+  <a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>(),
+  <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()
+) :: [<a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()]</pre>
+
+      </div>
+
+<p>Bang variant of <a href="#read_text/2"><code class="inline">read_text/2</code></a>. Raises <a href="Pdf.Reader.Error.html"><code class="inline">Pdf.Reader.Error</code></a> on failure.</p>
+  </section>
+</section>
+<section class="detail" id="read_text_with_positions/1">
+
+  <div class="detail-header">
+    <a href="#read_text_with_positions/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">read_text_with_positions(doc)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L756" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> read_text_with_positions(<a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()) ::
+  {:ok, [<a href="Pdf.Reader.TextRun.html#t:t/0">Pdf.Reader.TextRun.t</a>()], <a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()} | {:error, <a href="#t:reason/0">reason</a>()}</pre>
+
+      </div>
+
+<p>Returns text runs with absolute positions for all pages.</p><p>Walks each page, decodes its content stream(s), and returns a flat list of
+<code class="inline">%Pdf.Reader.TextRun{}</code> structs ordered by page then appearance in the
+content stream.</p><p>Returns <code class="inline">{:ok, [], doc}</code> when no text is found. Never returns <code class="inline">:no_text_found</code>
+as an error per the spec resolution (empty is valid).</p><p>The returned <code class="inline">doc</code> carries an updated <code class="inline">:recovery_log</code> when opened with
+<code class="inline">recover: true</code> — callers should pass the returned doc to <a href="#recovery_log/1"><code class="inline">recovery_log/1</code></a>
+to inspect per-page failures.</p><p>Form XObjects (<code class="inline">Do</code> operator referencing <code class="inline">/Type /Form</code>) are NOT recursed —
+per Phase 1 scope. A deferred marker is recorded but produces no TextRun.</p>
+  </section>
+</section>
+<section class="detail" id="read_text_with_positions!/1">
+
+  <div class="detail-header">
+    <a href="#read_text_with_positions!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">read_text_with_positions!(doc)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L1754" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> read_text_with_positions!(<a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()) :: [<a href="Pdf.Reader.TextRun.html#t:t/0">Pdf.Reader.TextRun.t</a>()]</pre>
+
+      </div>
+
+<p>Bang variant of <a href="#read_text_with_positions/1"><code class="inline">read_text_with_positions/1</code></a>. Raises <a href="Pdf.Reader.Error.html"><code class="inline">Pdf.Reader.Error</code></a> on failure.</p>
+  </section>
+</section>
+<section class="detail" id="recovery_log/1">
+
+  <div class="detail-header">
+    <a href="#recovery_log/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">recovery_log(document)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L272" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> recovery_log(<a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()) :: [<a href="Pdf.Reader.Document.html#t:recovery_event/0">Pdf.Reader.Document.recovery_event</a>()]</pre>
+
+      </div>
+
+<p>Returns the recovery event log for a document in chronological (oldest-first) order.</p><p>An empty list guarantees that no recovery action occurred during <a href="#open/2"><code class="inline">open/2</code></a>.
+This is the canonical way for callers to inspect recovery events — direct
+access to <code class="inline">doc.recovery_log</code> MUST NOT be used in application code.</p><p>The closed set of recovery event tuples is documented in <a href="Pdf.Reader.Document.html"><code class="inline">Pdf.Reader.Document</code></a>.</p><h2 id="recovery_log/1-spec-reference" class="section-heading"><a href="#recovery_log/1-spec-reference" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Spec reference</span></h2><p>PDF 1.7 § 7.5 — PDF file structure (recovery model).</p>
+  </section>
+</section>
+<section class="detail" id="shapes_from_lines/1">
+
+  <div class="detail-header">
+    <a href="#shapes_from_lines/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">shapes_from_lines(lines)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader.ex#L875" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> shapes_from_lines([<a href="Pdf.Reader.Line.html#t:t/0">Pdf.Reader.Line.t</a>()]) :: [<a href="Pdf.Reader.Shape.html#t:t/0">Pdf.Reader.Shape.t</a>()]</pre>
+
+      </div>
+
+<p>Pure helper: scans a list of <code class="inline">Line</code> structs for URL and email patterns
+and emits the inferred shapes. Exposed for callers that already have
+a lines list and want the inference layer alone (no annotations).</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+
+        <p>
+
+            <span class="line">
+              <a href="https://hex.pm/packages/ex_pdf_read/1.0.0">Hex Package</a>
+
+              <a href="https://preview.hex.pm/preview/ex_pdf_read/1.0.0">Hex Preview</a>
+
+            </span>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
+
+
+              <a href="ex_pdf_read.epub">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.2) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

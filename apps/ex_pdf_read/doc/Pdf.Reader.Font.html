@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.2">
+    <meta name="project" content="ex_pdf_read v1.0.0">
+
+
+    <title>Pdf.Reader.Font — ex_pdf_read v1.0.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
+
+    <script defer src="dist/sidebar_items-271CC737.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-Y2MUTVIN.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+ex_pdf_read
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.0.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of ex_pdf_read</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Pdf.<wbr />Reader.<wbr />Font</span> 
+      <small class="app-vsn" translate="no">(ex_pdf_read v1.0.0)</small>
+
+    </h1>
+
+<a href="Pdf.Reader.Font.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader/font.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Per-font decoder construction for the encoding cascade.</p><p>A &quot;decoder&quot; is a closure <code class="inline">(binary -&gt; {String.t(), [{non_neg_integer(), binary()}]})</code>
+that maps raw font-code bytes to UTF-8 text plus a list of unresolved sentinels.</p><h2 id="module-simple-fonts-type1-truetype-etc" class="section-heading"><a href="#module-simple-fonts-type1-truetype-etc" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Simple fonts (Type1, TrueType, etc.)</span></h2><p>Cascade per byte (delegates to <a href="Pdf.Reader.Encoding.html#resolve_byte/3"><code class="inline">Pdf.Reader.Encoding.resolve_byte/3</code></a>):
+ToUnicode CMap → /Differences + AGL → base encoding → U+FFFD + sentinel.</p><h2 id="module-composite-fonts-type0-identity-h-v" class="section-heading"><a href="#module-composite-fonts-type0-identity-h-v" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Composite fonts (Type0/Identity-H/V)</span></h2><p>When <code class="inline">/Encoding</code> is <code class="inline">Identity-H</code> or <code class="inline">Identity-V</code>, the font is dispatched to
+<a href="Pdf.Reader.CID.Decoder.html#build/2"><code class="inline">Pdf.Reader.CID.Decoder.build/2</code></a>. The CID decoder consumes bytes in 2-byte
+big-endian chunks and resolves via:
+ToUnicode CMap → Adobe registry table (Japan1/CNS1/Korea1/GB1) → U+FFFD.</p><p>Non-Identity predefined CMaps (<code class="inline">UniJIS-UTF16-H</code>, <code class="inline">GBK-EUC-H</code>, etc.) are
+also supported when bundled in <code class="inline">priv/cmap/</code> — the decoder dispatches to
+<a href="Pdf.Reader.CID.Decoder.html#build_predefined/2"><code class="inline">Pdf.Reader.CID.Decoder.build_predefined/2</code></a> which uses
+<a href="Pdf.Reader.CID.PredefinedCMap.html"><code class="inline">Pdf.Reader.CID.PredefinedCMap</code></a> for byte→CID lookup followed by the
+same Adobe registry → Unicode resolution as Identity-H/V.</p><h2 id="module-cache" class="section-heading"><a href="#module-cache" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Cache</span></h2><p>Decoders for fonts referenced by indirect ref <code class="inline">{:ref, n, g}</code> are cached in
+<code class="inline">Document.cache</code> under key <code class="inline">{:font_decoder, {n, g}}</code> for reuse across pages
+with shared font resources. Inline font dicts (plain maps, no ref) are NOT
+cached.</p><h2 id="module-recovery-mode-r-2" class="section-heading"><a href="#module-recovery-mode-r-2" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Recovery mode (R-2)</span></h2><p>When <code class="inline">doc.recover_mode</code> is <code class="inline">true</code> and a font dict fails to resolve or build,
+<a href="#build_decoders_for_resources/2"><code class="inline">build_decoders_for_resources/2</code></a> installs a fallback U+FFFD identity decoder
+for that font instead of returning <code class="inline">{:error, _}</code>. The fallback emits
+<code class="inline">&lt;&lt;0xFFFD::utf8&gt;&gt;</code> per input byte, which guarantees <a href="https://hexdocs.pm/elixir/String.html#valid?/1"><code class="inline">String.valid?/1</code></a> is
+<code class="inline">true</code> on the resulting text. A <code class="inline">{:font_skipped, page_n, font_name, reason}</code>
+event is logged to <code class="inline">doc.recovery_log</code> for each failed font. Fonts that build
+successfully are NOT affected.</p><p>Spec: PDF 1.7 § 9.6 (font dictionaries), § 9.10 (text content extraction).</p><h2 id="module-spec-references" class="section-heading"><a href="#module-spec-references" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Spec references</span></h2><ul><li>PDF 1.7 § 9.6 — Type 1 Fonts:
+<a rel="nofollow" href="https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf">https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf</a></li><li>PDF 1.7 § 9.6.5, § 9.6.5.1 — Character Encoding, /Differences arrays</li><li>PDF 1.7 § 9.7 — Composite Fonts (Type0, CIDFonts, CMaps)</li><li>PDF 1.7 § 9.7.4 — CIDFonts</li><li>PDF 1.7 § 9.7.5 — Predefined CMaps (Identity-H, Identity-V)</li><li>PDF 1.7 § 9.10.3 — ToUnicode CMaps</li></ul>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h2>
+<div class="summary-types summary">
+  <h3>
+    <a href="#types">Types</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:decoder_fn/0" data-no-tooltip="" translate="no">decoder_fn()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h3>
+    <a href="#functions">Functions</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#build_decoder/2" data-no-tooltip="" translate="no">build_decoder(font_ref, doc)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Build a decoder closure for a font.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#build_decoders_for_resources/2" data-no-tooltip="" translate="no">build_decoders_for_resources(resources, doc)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Build decoders for all fonts in a page's resources map.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h2>
+
+    <div class="types-list">
+<section class="detail" id="t:decoder_fn/0">
+
+  <div class="detail-header">
+    <a href="#t:decoder_fn/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">decoder_fn()</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader/font.ex#L60" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> decoder_fn() :: (<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>() -&gt; {<a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(), [{<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()}]})</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h2>
+
+    <div class="functions-list">
+<section class="detail" id="build_decoder/2">
+
+  <div class="detail-header">
+    <a href="#build_decoder/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">build_decoder(font_ref, doc)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader/font.ex#L74" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> build_decoder(
+  <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>() | {:ref, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">pos_integer</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>()},
+  <a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()
+) ::
+  {:ok, <a href="#t:decoder_fn/0">decoder_fn</a>(), <a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()} | {:error, <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>()}</pre>
+
+      </div>
+
+<p>Build a decoder closure for a font.</p><p>Accepts either:</p><ul><li>A <code class="inline">font_dict</code> (plain map) — inline font, built directly without caching.</li><li>A <code class="inline">{:ref, n, g}</code> tuple — indirect font reference; result is cached in
+<code class="inline">doc.cache</code> under <code class="inline">{:font_decoder, {n, g}}</code>.</li></ul><p>Returns <code class="inline">{:ok, decoder_fn, updated_doc}</code>.</p>
+  </section>
+</section>
+<section class="detail" id="build_decoders_for_resources/2">
+
+  <div class="detail-header">
+    <a href="#build_decoders_for_resources/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">build_decoders_for_resources(resources, doc)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader/font.ex#L120" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> build_decoders_for_resources(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(), <a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()) ::
+  {:ok, %{required(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()) =&gt; <a href="#t:decoder_fn/0">decoder_fn</a>()}, [{<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>()}],
+   <a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()}
+  | {:error, <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>()}</pre>
+
+      </div>
+
+<p>Build decoders for all fonts in a page's resources map.</p><p>Walks <code class="inline">resources[&quot;Font&quot;]</code> (a map of font name → font dict or ref) and calls
+<a href="#build_decoder/2"><code class="inline">build_decoder/2</code></a> for each entry. Returns a map keyed by font name.</p><p>In strict mode (<code class="inline">doc.recover_mode == false</code>): returns <code class="inline">{:ok, decoders, [], doc}</code>
+on success, or <code class="inline">{:error, reason}</code> on first font build failure (unchanged).</p><p>In recovery mode (<code class="inline">doc.recover_mode == true</code>): on per-font build failure,
+installs a per-byte U+FFFD fallback decoder for that font name and appends
+<code class="inline">{font_name, reason}</code> to the returned <code class="inline">font_failures</code> list. The page is NOT
+aborted. The caller is responsible for converting failures to
+<code class="inline">{:font_skipped, page_n, font_name, reason}</code> events and logging them.</p><p>Returns <code class="inline">{:ok, %{font_name =&gt; decoder_fn}, [{font_name, reason}], updated_doc}</code>.</p><h2 id="build_decoders_for_resources/2-spec-references" class="section-heading"><a href="#build_decoders_for_resources/2-spec-references" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Spec references</span></h2><ul><li>PDF 1.7 § 9.6 — Font dictionaries</li><li>PDF 1.7 § 9.10 — Extraction of text content</li></ul>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+
+        <p>
+
+            <span class="line">
+              <a href="https://hex.pm/packages/ex_pdf_read/1.0.0">Hex Package</a>
+
+              <a href="https://preview.hex.pm/preview/ex_pdf_read/1.0.0">Hex Preview</a>
+
+            </span>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
+
+
+              <a href="ex_pdf_read.epub">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.2) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

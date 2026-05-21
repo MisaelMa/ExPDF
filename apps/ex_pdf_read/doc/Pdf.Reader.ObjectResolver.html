@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.2">
+    <meta name="project" content="ex_pdf_read v1.0.0">
+
+
+    <title>Pdf.Reader.ObjectResolver — ex_pdf_read v1.0.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
+
+    <script defer src="dist/sidebar_items-271CC737.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-Y2MUTVIN.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+ex_pdf_read
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v1.0.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of ex_pdf_read</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Pdf.<wbr />Reader.<wbr />ObjectResolver</span> 
+      <small class="app-vsn" translate="no">(ex_pdf_read v1.0.0)</small>
+
+    </h1>
+
+<a href="Pdf.Reader.ObjectResolver.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader/object_resolver.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Lazy indirect-object resolver with Map-based cache.</p><p>Per the design (<code class="inline">sdd/pdf-reader-core/design</code> § 5 &quot;Lazy Resolution Contract&quot;):</p><ul><li><strong>Cache</strong>: a plain <a href="https://hexdocs.pm/elixir/Map.html"><code class="inline">Map</code></a> on <code class="inline">%Pdf.Reader.Document{}.cache</code>. No GenServer.
+Key: <code class="inline">{obj_num, gen_num}</code>. Value: the resolved Elixir term.</li><li><p><strong>Signature</strong>: <code class="inline">resolve(doc, {:ref, n, g}) :: {:ok, value, doc} | {:error, reason}</code>.
+The returned <code class="inline">doc</code> carries the updated cache. The caller threads <code class="inline">doc</code> forward
+for cache benefit; dropping the updated doc still yields correct results on
+the next call (re-parse, same value — the binary is immutable).</p></li><li><strong>Idempotent</strong>: calling <a href="#resolve/2"><code class="inline">resolve/2</code></a> twice on the same ref with the same doc
+returns the same value. The cache is a hint, not state.</li></ul><h2 id="module-resolution-paths" class="section-heading"><a href="#module-resolution-paths" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Resolution paths</span></h2><ol><li><strong>Cache hit</strong>: <code class="inline">Map.get(doc.cache, {n, g})</code> → immediate return.</li><li><strong>In-use (classic)</strong>: look up <code class="inline">{n, g}</code> in <code class="inline">doc.xref</code> → <code class="inline">{:in_use, offset, _gen}</code>.
+Slice <code class="inline">binary_part(doc.binary, offset, ...)</code>, run <code class="inline">Parser.parse_object/1</code>.</li><li><strong>Compressed (ObjStm)</strong>: look up <code class="inline">{n, g}</code> → <code class="inline">{:compressed, objstm_n, index}</code>.
+Recursively <code class="inline">resolve(doc, {:ref, objstm_n, 0})</code>, decode filters, then
+<code class="inline">ObjectStream.fetch/3</code>.</li><li><strong>Free / absent</strong>: <code class="inline">{:error, {:unresolved_ref, {n, g}}}</code>.</li></ol><h2 id="module-ref-chasing" class="section-heading"><a href="#module-ref-chasing" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Ref chasing</span></h2><p><a href="#resolve/2"><code class="inline">resolve/2</code></a> does <strong>NOT</strong> automatically follow nested refs. If a resolved value
+is itself <code class="inline">{:ref, _, _}</code>, the caller decides whether to chase it. This avoids
+infinite loops on circular references and keeps the interface predictable.</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h2>
+<div class="summary-functions summary">
+  <h3>
+    <a href="#functions">Functions</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#resolve/2" data-no-tooltip="" translate="no">resolve(doc, arg)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Resolve an indirect object reference to its value.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h2>
+
+    <div class="functions-list">
+<section class="detail" id="resolve/2">
+
+  <div class="detail-header">
+    <a href="#resolve/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">resolve(doc, arg)</h1>
+
+
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.0/lib/pdf/reader/object_resolver.ex#L57" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> resolve(<a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>(), {:ref, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">pos_integer</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>()}) ::
+  {:ok, <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(), <a href="Pdf.Reader.Document.html#t:t/0">Pdf.Reader.Document.t</a>()} | {:error, <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>()}</pre>
+
+      </div>
+
+<p>Resolve an indirect object reference to its value.</p><p>Returns <code class="inline">{:ok, value, updated_doc}</code> on success, where <code class="inline">updated_doc</code> has
+the resolved value cached. Returns <code class="inline">{:error, reason}</code> on failure.</p><p>The caller should thread the returned <code class="inline">doc</code> forward to benefit from caching
+on subsequent resolutions.</p><h2 id="resolve/2-error-reasons" class="section-heading"><a href="#resolve/2-error-reasons" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Error reasons</span></h2><ul><li><code class="inline">{:error, {:unresolved_ref, {n, g}}}</code> — ref is absent from xref or is a free entry.</li><li><code class="inline">{:error, :malformed}</code> — parse failure.</li><li><code class="inline">{:error, {:unsupported_filter, name}}</code> — propagated from filter chain.</li></ul>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+
+        <p>
+
+            <span class="line">
+              <a href="https://hex.pm/packages/ex_pdf_read/1.0.0">Hex Package</a>
+
+              <a href="https://preview.hex.pm/preview/ex_pdf_read/1.0.0">Hex Preview</a>
+
+            </span>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
+
+
+              <a href="ex_pdf_read.epub">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.2) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>
