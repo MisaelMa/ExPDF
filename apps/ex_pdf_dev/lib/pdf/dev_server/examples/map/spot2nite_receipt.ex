@@ -47,7 +47,6 @@ defmodule Pdf.DevServer.Examples.Map.Receipt do
 
   defp build(reservations, price_groups, payment_groups) do
     dark = {0.1, 0.1, 0.1}
-    teal = {0.0, 0.50, 0.50}
     gray = {0.5, 0.5, 0.5}
     border = {0.82, 0.82, 0.82}
     divider_color = {0.85, 0.85, 0.85}
@@ -56,11 +55,16 @@ defmodule Pdf.DevServer.Examples.Map.Receipt do
 
     {font_r, _font_b, font_d} = avenir_fonts()
 
+    logo_path =
+      Application.app_dir(:ex_pdf_dev)
+      |> Path.join("priv/pdf_assets/img/logo_spot2nite.png")
+
     pad = 10
     kv_line_h = 14
     alq_gap = 8
     col_gap = 5
     resort_header_h = 65
+    date_strip_h = 40
     kv_lh = 18
     kv_fs = 10
     divider_h = 8
@@ -84,12 +88,15 @@ defmodule Pdf.DevServer.Examples.Map.Receipt do
     {reservation_children, total_left_h} =
       Enum.reduce(reservations, {[], 0}, fn res, {acc, y_off} ->
         kv_h = Pdf.Component.KeyValue.measure_height(kv_style, res.details_reservation)
-        box_h = resort_header_h + 2 + kv_h + 4
+        box_h = resort_header_h + date_strip_h + 16 + kv_h + 4
+        half_w = div(col_inner_w, 2)
+        strip_top = resort_header_h
+        strip_label_y = strip_top + 9
+        strip_date_y = strip_top + 19
+        strip_time_y = strip_top + 29
 
-        cancelled_chip =
+        status_chip =
           if Map.get(res, :cancelled, false) do
-            # box inner_w = col_inner_w - 2*border(0.8) - 2*padding(10)
-            # chip_approx_w ≈ 58 for "CANCELLED" at fs 8, so stay ~4pt from right edge
             chip_x = col_inner_w - 65
             [%{type: :chip, props: %{
               label: "CANCELLED",
@@ -101,12 +108,68 @@ defmodule Pdf.DevServer.Examples.Map.Receipt do
                 height: 16,
                 border_radius: 5,
                 opacity: 0.4
-
               }
             }}]
           else
-            []
+            chip_x = col_inner_w - 65
+            [%{type: :chip, props: %{
+              label: "CONFIRMED",
+              style: %{
+                position: {chip_x, 4},
+                background: {0.18, 0.65, 0.35},
+                color: :black,
+                font_size: 8,
+                height: 16,
+                border_radius: 5,
+                opacity: 0.4
+              }
+            }}]
           end
+
+        date_strip = [
+          %{type: :line_segment, props: %{style: %{
+            from: {0, -strip_top},
+            to: {:full, -strip_top},
+            stroke: {0.85, 0.85, 0.85},
+            line_width: 0.5
+          }}},
+          %{type: :text, props: %{
+            content: "CHECK-IN",
+            style: %{position: {2, -strip_label_y}, font_size: 7, font: font_r, color: gray}
+          }},
+          %{type: :text, props: %{
+            content: Map.get(res, :check_in, ""),
+            style: %{position: {2, -strip_date_y}, font_size: 9, font: font_r, bold: true, color: dark}
+          }},
+          %{type: :text, props: %{
+            content: Map.get(res, :check_in_time, ""),
+            style: %{position: {2, -strip_time_y}, font_size: 8, font: font_r, color: gray}
+          }},
+          %{type: :line_segment, props: %{style: %{
+            from: {half_w, -(strip_top + 4)},
+            to: {half_w, -(strip_top + date_strip_h - 4)},
+            stroke: {0.85, 0.85, 0.85},
+            line_width: 0.5
+          }}},
+          %{type: :text, props: %{
+            content: "CHECK-OUT",
+            style: %{position: {half_w + 6, -strip_label_y}, font_size: 7, font: font_r, color: gray}
+          }},
+          %{type: :text, props: %{
+            content: Map.get(res, :check_out, ""),
+            style: %{position: {half_w + 6, -strip_date_y}, font_size: 9, font: font_r, bold: true, color: dark}
+          }},
+          %{type: :text, props: %{
+            content: Map.get(res, :check_out_time, ""),
+            style: %{position: {half_w + 6, -strip_time_y}, font_size: 8, font: font_r, color: gray}
+          }},
+          %{type: :line_segment, props: %{style: %{
+            from: {0, -(strip_top + date_strip_h)},
+            to: {:full, -(strip_top + date_strip_h)},
+            stroke: {0.85, 0.85, 0.85},
+            line_width: 0.5
+          }}}
+        ]
 
         box = %{
           type: :box,
@@ -131,12 +194,13 @@ defmodule Pdf.DevServer.Examples.Map.Receipt do
               %{type: :text, props: %{
                 content: res.details.support_email,
                 style: %{position: {85, -42}, font_size: 9, font: font_r, color: gray}
-              }},
-              %{type: :key_value, props: %{
-                pairs: res.details_reservation,
-                style: Map.put(kv_style, :position, {0, -(resort_header_h + 2)})
               }}
-              | cancelled_chip
+              | date_strip ++ [
+                %{type: :key_value, props: %{
+                  pairs: res.details_reservation,
+                  style: Map.put(kv_style, :position, {0, -(resort_header_h + date_strip_h + 16)})
+                }}
+              ] ++ status_chip
             ],
             style: Map.merge(box_style, %{position: {0, -y_off}, size: {:full, box_h}})
           }
@@ -277,17 +341,17 @@ defmodule Pdf.DevServer.Examples.Map.Receipt do
         children: [
           {3, [%{type: :text, props: %{
             content: "Your receipt from Spot2Nite",
-            style: %{position: {0, -16}, font_size: 17, font: font_r, bold: true, color: dark}
+            style: %{position: {0, -20}, font_size: 17, font: font_r, bold: true, color: dark}
           }}]},
-          {1, [%{type: :text, props: %{
-            content: "SPOT2NITE",
-            style: %{position: {0, -16}, font_size: 14, font: font_r, bold: true, color: teal}
+          {1, [%{type: :avatar, props: %{
+            image: logo_path,
+            style: %{position: {43, -5}, size: {100, 16}, border_radius: 0, background: :none}
           }}]}
         ],
-        style: %{position: :cursor, size: {:full, -15}}
+        style: %{position: :cursor, size: {:full, 28}}
       }},
 
-      %{type: :spacer, props: %{amount: 25}},
+      %{type: :spacer, props: %{amount: -35}},
 
       %{type: :row, props: %{
         children: [

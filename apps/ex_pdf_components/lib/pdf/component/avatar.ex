@@ -146,6 +146,10 @@ defmodule Pdf.Component.Avatar do
 
   # ── Background ──────────────────────────────────────────────────
 
+  defp draw_background(doc, _pos, _size, _radius, nil), do: doc
+  defp draw_background(doc, _pos, _size, _radius, :none), do: doc
+  defp draw_background(doc, _pos, _size, _radius, :transparent), do: doc
+
   defp draw_background(doc, {x, y}, {w, h}, radius, bg) do
     doc
     |> Pdf.save_state()
