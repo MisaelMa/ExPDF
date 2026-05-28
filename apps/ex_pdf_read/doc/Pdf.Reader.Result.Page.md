@@ -1,5 +1,5 @@
 # `Pdf.Reader.Result.Page`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/result.ex#L51)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/result.ex#L51)
 
 Per-page slice of the unified extraction result.
 

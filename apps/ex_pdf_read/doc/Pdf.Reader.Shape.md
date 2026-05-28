@@ -1,5 +1,5 @@
 # `Pdf.Reader.Shape`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/shape.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/shape.ex#L1)
 
 Polymorphic struct describing an "interactive" or actionable element
 extracted from a PDF — currently link-like elements (URIs, emails,

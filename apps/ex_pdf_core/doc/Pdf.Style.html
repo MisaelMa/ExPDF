@@ -5,10 +5,10 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.40.2">
-    <meta name="project" content="ex_pdf_core v1.0.1">
+    <meta name="project" content="ex_pdf_core v1.0.2">
 
 
-    <title>Pdf.Style — ex_pdf_core v1.0.1</title>
+    <title>Pdf.Style — ex_pdf_core v1.0.2</title>
 
     <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
 
@@ -37,7 +37,7 @@
 ex_pdf_core
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v1.0.1
+          v1.0.2
         </div>
       </div>
     </div>
@@ -94,7 +94,7 @@ ex_pdf_core
   <div class="heading-with-actions top-heading">
     <h1>
       <span translate="no">Pdf.<wbr />Style</span> 
-      <small class="app-vsn" translate="no">(ex_pdf_core v1.0.1)</small>
+      <small class="app-vsn" translate="no">(ex_pdf_core v1.0.2)</small>
 
     </h1>
 
@@ -105,7 +105,7 @@ ex_pdf_core
 
 
 
-      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/style.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/style.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -115,9 +115,9 @@ ex_pdf_core
 
     <section id="moduledoc">
 <p>CSS-like styling system for PDF elements.</p><p>Styles are maps with atom keys that can be created, merged, and resolved.
-Supports shorthand notation for padding, margin, and border (similar to CSS).</p><h2 id="module-examples" class="section-heading"><a href="#module-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="nc">Style</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="1824926386-1">(</span><span class="p" data-group-id="1824926386-2">%{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:red</span><span class="p">,</span><span class="w"> </span><span class="ss">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="1824926386-2">}</span><span class="p" data-group-id="1824926386-1">)</span><span class="w">
-</span><span class="nc">Style</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="1824926386-3">(</span><span class="p" data-group-id="1824926386-4">%{</span><span class="ss">font</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Helvetica&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">bold</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p">,</span><span class="w"> </span><span class="ss">opacity</span><span class="p">:</span><span class="w"> </span><span class="mf">0.5</span><span class="p" data-group-id="1824926386-4">}</span><span class="p" data-group-id="1824926386-3">)</span><span class="w">
-</span><span class="nc">Style</span><span class="o">.</span><span class="n">merge</span><span class="p" data-group-id="1824926386-5">(</span><span class="n">parent_style</span><span class="p">,</span><span class="w"> </span><span class="n">child_style</span><span class="p" data-group-id="1824926386-5">)</span></code></pre>
+Supports shorthand notation for padding, margin, and border (similar to CSS).</p><h2 id="module-examples" class="section-heading"><a href="#module-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="nc">Style</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="9035131716-1">(</span><span class="p" data-group-id="9035131716-2">%{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:red</span><span class="p">,</span><span class="w"> </span><span class="ss">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="9035131716-2">}</span><span class="p" data-group-id="9035131716-1">)</span><span class="w">
+</span><span class="nc">Style</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="9035131716-3">(</span><span class="p" data-group-id="9035131716-4">%{</span><span class="ss">font</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Helvetica&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">bold</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p">,</span><span class="w"> </span><span class="ss">opacity</span><span class="p">:</span><span class="w"> </span><span class="mf">0.5</span><span class="p" data-group-id="9035131716-4">}</span><span class="p" data-group-id="9035131716-3">)</span><span class="w">
+</span><span class="nc">Style</span><span class="o">.</span><span class="n">merge</span><span class="p" data-group-id="9035131716-5">(</span><span class="n">parent_style</span><span class="p">,</span><span class="w"> </span><span class="n">child_style</span><span class="p" data-group-id="9035131716-5">)</span></code></pre>
     </section>
 
 </div>
@@ -214,7 +214,7 @@ existing Page/Document functions.</p></div>
       <h1 class="signature" translate="no">t()</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/style.ex#L40" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/style.ex#L40" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -280,7 +280,7 @@ existing Page/Document functions.</p></div>
       <h1 class="signature" translate="no">expand_shorthand(value)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/style.ex#L111" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/style.ex#L111" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -308,7 +308,7 @@ existing Page/Document functions.</p></div>
       <h1 class="signature" translate="no">merge(parent, child)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/style.ex#L83" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/style.ex#L83" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -324,9 +324,9 @@ existing Page/Document functions.</p></div>
       </div>
 
 <p>Merge two styles. The child style overrides the parent for any non-nil fields
-explicitly set in the child.</p><h2 id="merge/2-examples" class="section-heading"><a href="#merge/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">parent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Style</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="6459685536-1">(</span><span class="p" data-group-id="6459685536-2">%{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:black</span><span class="p" data-group-id="6459685536-2">}</span><span class="p" data-group-id="6459685536-1">)</span><span class="w">
-</span><span class="gp unselectable">iex&gt; </span><span class="n">child</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Style</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="6459685536-3">(</span><span class="p" data-group-id="6459685536-4">%{</span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:red</span><span class="p">,</span><span class="w"> </span><span class="ss">bold</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="6459685536-4">}</span><span class="p" data-group-id="6459685536-3">)</span><span class="w">
-</span><span class="gp unselectable">iex&gt; </span><span class="n">merged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Style</span><span class="o">.</span><span class="n">merge</span><span class="p" data-group-id="6459685536-5">(</span><span class="n">parent</span><span class="p">,</span><span class="w"> </span><span class="n">child</span><span class="p" data-group-id="6459685536-5">)</span><span class="w">
+explicitly set in the child.</p><h2 id="merge/2-examples" class="section-heading"><a href="#merge/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">parent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Style</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="0262733179-1">(</span><span class="p" data-group-id="0262733179-2">%{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:black</span><span class="p" data-group-id="0262733179-2">}</span><span class="p" data-group-id="0262733179-1">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">child</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Style</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="0262733179-3">(</span><span class="p" data-group-id="0262733179-4">%{</span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:red</span><span class="p">,</span><span class="w"> </span><span class="ss">bold</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="0262733179-4">}</span><span class="p" data-group-id="0262733179-3">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">merged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Style</span><span class="o">.</span><span class="n">merge</span><span class="p" data-group-id="0262733179-5">(</span><span class="n">parent</span><span class="p">,</span><span class="w"> </span><span class="n">child</span><span class="p" data-group-id="0262733179-5">)</span><span class="w">
 </span><span class="gp unselectable">iex&gt; </span><span class="n">merged</span><span class="o">.</span><span class="n">font_size</span><span class="w">
 </span><span class="mi">12</span><span class="w">
 </span><span class="gp unselectable">iex&gt; </span><span class="n">merged</span><span class="o">.</span><span class="n">color</span><span class="w">
@@ -347,7 +347,7 @@ explicitly set in the child.</p><h2 id="merge/2-examples" class="section-heading
       <h1 class="signature" translate="no">new(attrs \\ %{})</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/style.ex#L54" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/style.ex#L54" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -362,11 +362,11 @@ explicitly set in the child.</p><h2 id="merge/2-examples" class="section-heading
 
       </div>
 
-<p>Create a new Style from a map or keyword list.</p><h2 id="new/1-examples" class="section-heading"><a href="#new/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Pdf.Style</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="2028371865-1">(</span><span class="p" data-group-id="2028371865-2">%{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:red</span><span class="p" data-group-id="2028371865-2">}</span><span class="p" data-group-id="2028371865-1">)</span><span class="w">
-</span><span class="p" data-group-id="2028371865-3">%</span><span class="nc" data-group-id="2028371865-3">Pdf.Style</span><span class="p" data-group-id="2028371865-3">{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:red</span><span class="p" data-group-id="2028371865-3">}</span><span class="w">
+<p>Create a new Style from a map or keyword list.</p><h2 id="new/1-examples" class="section-heading"><a href="#new/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Pdf.Style</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="9200515137-1">(</span><span class="p" data-group-id="9200515137-2">%{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:red</span><span class="p" data-group-id="9200515137-2">}</span><span class="p" data-group-id="9200515137-1">)</span><span class="w">
+</span><span class="p" data-group-id="9200515137-3">%</span><span class="nc" data-group-id="9200515137-3">Pdf.Style</span><span class="p" data-group-id="9200515137-3">{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:red</span><span class="p" data-group-id="9200515137-3">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="nc">Pdf.Style</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="2028371865-4">(</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="ss">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="2028371865-4">)</span><span class="w">
-</span><span class="p" data-group-id="2028371865-5">%</span><span class="nc" data-group-id="2028371865-5">Pdf.Style</span><span class="p" data-group-id="2028371865-5">{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="ss">padding</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2028371865-6">{</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="2028371865-6">}</span><span class="p" data-group-id="2028371865-5">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Pdf.Style</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="9200515137-4">(</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="ss">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="9200515137-4">)</span><span class="w">
+</span><span class="p" data-group-id="9200515137-5">%</span><span class="nc" data-group-id="9200515137-5">Pdf.Style</span><span class="p" data-group-id="9200515137-5">{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="ss">padding</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9200515137-6">{</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="9200515137-6">}</span><span class="p" data-group-id="9200515137-5">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="to_opts/1">
@@ -379,7 +379,7 @@ explicitly set in the child.</p><h2 id="merge/2-examples" class="section-heading
       <h1 class="signature" translate="no">to_opts(style)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/style.ex#L121" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/style.ex#L121" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -407,9 +407,9 @@ existing Page/Document functions.</p>
         <p>
 
             <span class="line">
-              <a href="https://hex.pm/packages/ex_pdf_core/1.0.1">Hex Package</a>
+              <a href="https://hex.pm/packages/ex_pdf_core/1.0.2">Hex Package</a>
 
-              <a href="https://preview.hex.pm/preview/ex_pdf_core/1.0.1">Hex Preview</a>
+              <a href="https://preview.hex.pm/preview/ex_pdf_core/1.0.2">Hex Preview</a>
 
             </span>
 

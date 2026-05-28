@@ -1,5 +1,5 @@
 # `Pdf.Reader.CID.AdobeJapan1`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/cid/adobe_japan1.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/cid/adobe_japan1.ex#L1)
 
 Adobe-Japan1 CID to Unicode mapping (~9600 entries).
 

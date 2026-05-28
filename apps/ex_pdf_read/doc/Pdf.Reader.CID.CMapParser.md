@@ -1,5 +1,5 @@
 # `Pdf.Reader.CID.CMapParser`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/cid/cmap_parser.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/cid/cmap_parser.ex#L1)
 
 Minimal PostScript subset parser for Adobe predefined CMap files.
 

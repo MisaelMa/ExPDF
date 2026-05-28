@@ -5,10 +5,10 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.40.2">
-    <meta name="project" content="ex_pdf_components v1.0.1">
+    <meta name="project" content="ex_pdf_components v1.0.2">
 
 
-    <title>Pdf.Builder — ex_pdf_components v1.0.1</title>
+    <title>Pdf.Builder — ex_pdf_components v1.0.2</title>
 
     <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
 
@@ -37,7 +37,7 @@
 ex_pdf_components
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v1.0.1
+          v1.0.2
         </div>
       </div>
     </div>
@@ -94,7 +94,7 @@ ex_pdf_components
   <div class="heading-with-actions top-heading">
     <h1>
       <span translate="no">Pdf.<wbr />Builder</span> 
-      <small class="app-vsn" translate="no">(ex_pdf_components v1.0.1)</small>
+      <small class="app-vsn" translate="no">(ex_pdf_components v1.0.2)</small>
 
     </h1>
 
@@ -105,7 +105,7 @@ ex_pdf_components
 
 
 
-      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/builder.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/builder.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -115,24 +115,24 @@ ex_pdf_components
 
     <section id="moduledoc">
 <p>Declarative PDF builder from template lists.</p><p>Renders a list of content tuples into a PDF document, applying
-global configuration for page size, margins, fonts, and templates.</p><h2 id="module-example" class="section-heading"><a href="#module-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">template</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="6170928019-1">[</span><span class="w">
-  </span><span class="p" data-group-id="6170928019-2">{</span><span class="ss">:text</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Title&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6170928019-3">%{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">24</span><span class="p">,</span><span class="w"> </span><span class="ss">bold</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="6170928019-3">}</span><span class="p" data-group-id="6170928019-2">}</span><span class="p">,</span><span class="w">
-  </span><span class="p" data-group-id="6170928019-4">{</span><span class="ss">:spacer</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="6170928019-4">}</span><span class="p">,</span><span class="w">
-  </span><span class="p" data-group-id="6170928019-5">{</span><span class="ss">:text</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Body text&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6170928019-6">%{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p" data-group-id="6170928019-6">}</span><span class="p" data-group-id="6170928019-5">}</span><span class="p">,</span><span class="w">
-  </span><span class="p" data-group-id="6170928019-7">{</span><span class="ss">:line</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6170928019-8">%{</span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:gray</span><span class="p" data-group-id="6170928019-8">}</span><span class="p" data-group-id="6170928019-7">}</span><span class="p">,</span><span class="w">
-  </span><span class="p" data-group-id="6170928019-9">{</span><span class="ss">:page_break</span><span class="p" data-group-id="6170928019-9">}</span><span class="p">,</span><span class="w">
-  </span><span class="p" data-group-id="6170928019-10">{</span><span class="ss">:text</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Page 2&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6170928019-11">%{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">18</span><span class="p" data-group-id="6170928019-11">}</span><span class="p" data-group-id="6170928019-10">}</span><span class="w">
-</span><span class="p" data-group-id="6170928019-1">]</span><span class="w">
+global configuration for page size, margins, fonts, and templates.</p><h2 id="module-example" class="section-heading"><a href="#module-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">template</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="2183732091-1">[</span><span class="w">
+  </span><span class="p" data-group-id="2183732091-2">{</span><span class="ss">:text</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Title&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2183732091-3">%{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">24</span><span class="p">,</span><span class="w"> </span><span class="ss">bold</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="2183732091-3">}</span><span class="p" data-group-id="2183732091-2">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="2183732091-4">{</span><span class="ss">:spacer</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="2183732091-4">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="2183732091-5">{</span><span class="ss">:text</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Body text&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2183732091-6">%{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p" data-group-id="2183732091-6">}</span><span class="p" data-group-id="2183732091-5">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="2183732091-7">{</span><span class="ss">:line</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2183732091-8">%{</span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:gray</span><span class="p" data-group-id="2183732091-8">}</span><span class="p" data-group-id="2183732091-7">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="2183732091-9">{</span><span class="ss">:page_break</span><span class="p" data-group-id="2183732091-9">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="2183732091-10">{</span><span class="ss">:text</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Page 2&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2183732091-11">%{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">18</span><span class="p" data-group-id="2183732091-11">}</span><span class="p" data-group-id="2183732091-10">}</span><span class="w">
+</span><span class="p" data-group-id="2183732091-1">]</span><span class="w">
 
-</span><span class="n">config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="6170928019-12">%{</span><span class="w">
+</span><span class="n">config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="2183732091-12">%{</span><span class="w">
   </span><span class="ss">size</span><span class="p">:</span><span class="w"> </span><span class="ss">:a4</span><span class="p">,</span><span class="w">
   </span><span class="ss">margin</span><span class="p">:</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span><span class="w">
   </span><span class="ss">font</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Helvetica&quot;</span><span class="p">,</span><span class="w">
   </span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="w">
-</span><span class="p" data-group-id="6170928019-12">}</span><span class="w">
+</span><span class="p" data-group-id="2183732091-12">}</span><span class="w">
 
-</span><span class="n">doc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Builder</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="6170928019-13">(</span><span class="n">template</span><span class="p">,</span><span class="w"> </span><span class="n">config</span><span class="p" data-group-id="6170928019-13">)</span><span class="w">
-</span><span class="n">binary</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">export</span><span class="p" data-group-id="6170928019-14">(</span><span class="n">doc</span><span class="p" data-group-id="6170928019-14">)</span></code></pre>
+</span><span class="n">doc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Builder</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="2183732091-13">(</span><span class="n">template</span><span class="p">,</span><span class="w"> </span><span class="n">config</span><span class="p" data-group-id="2183732091-13">)</span><span class="w">
+</span><span class="n">binary</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">export</span><span class="p" data-group-id="2183732091-14">(</span><span class="n">doc</span><span class="p" data-group-id="2183732091-14">)</span></code></pre>
     </section>
 
 </div>
@@ -196,7 +196,7 @@ Nested lists are automatically flattened.</p></div>
       <h1 class="signature" translate="no">render(template, config \\ %{})</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/builder.ex#L45" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/builder.ex#L45" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -218,7 +218,7 @@ Nested lists are automatically flattened.</p></div>
       <h1 class="signature" translate="no">render_into(document, template)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/builder.ex#L69" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/builder.ex#L73" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -228,7 +228,9 @@ Nested lists are automatically flattened.</p></div>
   <section class="docstring">
 
 <p>Render a template list into an existing document.
-Nested lists are automatically flattened.</p>
+Nested lists are automatically flattened.</p><p>If a <code class="inline">:page_footer</code> element was rendered during the template (registering a
+<code class="inline">:footer</code> page template), it is applied to the last page automatically — because
+<a href="https://hexdocs.pm/ex_pdf_core/1.0.2/Pdf.html#on_page/3"><code class="inline">Pdf.on_page/3</code></a> only fires on <em>page breaks</em>, leaving the final page uncovered.</p>
   </section>
 </section>
 
@@ -240,9 +242,9 @@ Nested lists are automatically flattened.</p>
         <p>
 
             <span class="line">
-              <a href="https://hex.pm/packages/ex_pdf_components/1.0.1">Hex Package</a>
+              <a href="https://hex.pm/packages/ex_pdf_components/1.0.2">Hex Package</a>
 
-              <a href="https://preview.hex.pm/preview/ex_pdf_components/1.0.1">Hex Preview</a>
+              <a href="https://preview.hex.pm/preview/ex_pdf_components/1.0.2">Hex Preview</a>
 
             </span>
 

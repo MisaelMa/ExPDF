@@ -1,5 +1,5 @@
 # `Pdf.Component.Chart`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/chart.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/chart.ex#L1)
 
 Chart component for PDF documents — renders bar, line, and pie charts.
 

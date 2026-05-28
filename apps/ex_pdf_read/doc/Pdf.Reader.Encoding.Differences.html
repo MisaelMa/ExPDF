@@ -5,10 +5,10 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.40.2">
-    <meta name="project" content="ex_pdf_read v1.0.1">
+    <meta name="project" content="ex_pdf_read v1.0.2">
 
 
-    <title>Pdf.Reader.Encoding.Differences — ex_pdf_read v1.0.1</title>
+    <title>Pdf.Reader.Encoding.Differences — ex_pdf_read v1.0.2</title>
 
     <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
 
@@ -37,7 +37,7 @@
 ex_pdf_read
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v1.0.1
+          v1.0.2
         </div>
       </div>
     </div>
@@ -94,7 +94,7 @@ ex_pdf_read
   <div class="heading-with-actions top-heading">
     <h1>
       <span translate="no">Pdf.<wbr />Reader.<wbr />Encoding.<wbr />Differences</span> 
-      <small class="app-vsn" translate="no">(ex_pdf_read v1.0.1)</small>
+      <small class="app-vsn" translate="no">(ex_pdf_read v1.0.2)</small>
 
     </h1>
 
@@ -105,7 +105,7 @@ ex_pdf_read
 
 
 
-      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/encoding/differences.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/encoding/differences.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -114,7 +114,7 @@ ex_pdf_read
 
 
     <section id="moduledoc">
-<p>Applies a PDF <code class="inline">/Differences</code> array on top of a base encoding override map.</p><p>Spec reference: PDF 1.7 § 9.6.5.1.</p><h2 id="module-format" class="section-heading"><a href="#module-format" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Format</span></h2><p><code class="inline">/Differences</code> is an array mixing integers and names:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="1515577021-1">[</span><span class="mi">32</span><span class="w"> </span><span class="o">/</span><span class="n">space</span><span class="w"> </span><span class="mi">65</span><span class="w"> </span><span class="o">/</span><span class="nc">A</span><span class="w"> </span><span class="o">/</span><span class="nc">B</span><span class="w"> </span><span class="o">/</span><span class="nc">C</span><span class="w"> </span><span class="mi">200</span><span class="w"> </span><span class="o">/</span><span class="n">uni0024</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="1515577021-1">]</span></code></pre><ul><li>An integer <code class="inline">N</code> sets the current code position to <code class="inline">N</code>.</li><li>Each subsequent name installs that glyph name at position, then increments by 1.</li></ul><h2 id="module-api" class="section-heading"><a href="#module-api" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">API</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">apply</span><span class="p" data-group-id="5992624374-1">(</span><span class="n">base_overrides</span><span class="p">,</span><span class="w"> </span><span class="n">differences_array</span><span class="p" data-group-id="5992624374-1">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="p" data-group-id="5992624374-2">%{</span><span class="n">integer</span><span class="p" data-group-id="5992624374-3">(</span><span class="p" data-group-id="5992624374-3">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">glyph_name</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">binary</span><span class="p" data-group-id="5992624374-4">(</span><span class="p" data-group-id="5992624374-4">)</span><span class="p" data-group-id="5992624374-2">}</span></code></pre><p>The output is a byte→glyph_name map. Codepoint resolution (via AGL or ToUnicode)
+<p>Applies a PDF <code class="inline">/Differences</code> array on top of a base encoding override map.</p><p>Spec reference: PDF 1.7 § 9.6.5.1.</p><h2 id="module-format" class="section-heading"><a href="#module-format" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Format</span></h2><p><code class="inline">/Differences</code> is an array mixing integers and names:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="5060525951-1">[</span><span class="mi">32</span><span class="w"> </span><span class="o">/</span><span class="n">space</span><span class="w"> </span><span class="mi">65</span><span class="w"> </span><span class="o">/</span><span class="nc">A</span><span class="w"> </span><span class="o">/</span><span class="nc">B</span><span class="w"> </span><span class="o">/</span><span class="nc">C</span><span class="w"> </span><span class="mi">200</span><span class="w"> </span><span class="o">/</span><span class="n">uni0024</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="5060525951-1">]</span></code></pre><ul><li>An integer <code class="inline">N</code> sets the current code position to <code class="inline">N</code>.</li><li>Each subsequent name installs that glyph name at position, then increments by 1.</li></ul><h2 id="module-api" class="section-heading"><a href="#module-api" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">API</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">apply</span><span class="p" data-group-id="5421813928-1">(</span><span class="n">base_overrides</span><span class="p">,</span><span class="w"> </span><span class="n">differences_array</span><span class="p" data-group-id="5421813928-1">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="p" data-group-id="5421813928-2">%{</span><span class="n">integer</span><span class="p" data-group-id="5421813928-3">(</span><span class="p" data-group-id="5421813928-3">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="n">glyph_name</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">binary</span><span class="p" data-group-id="5421813928-4">(</span><span class="p" data-group-id="5421813928-4">)</span><span class="p" data-group-id="5421813928-2">}</span></code></pre><p>The output is a byte→glyph_name map. Codepoint resolution (via AGL or ToUnicode)
 happens later in the encoding facade (<a href="Pdf.Reader.Encoding.html"><code class="inline">Pdf.Reader.Encoding</code></a>).</p><p><code class="inline">/Differences</code> entries override the base map. Base entries not touched by
 <code class="inline">/Differences</code> are preserved.</p>
     </section>
@@ -168,7 +168,7 @@ byte→glyph_name override map.</p></div>
       <h1 class="signature" translate="no">apply(base, differences)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/encoding/differences.ex#L35" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/encoding/differences.ex#L35" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -199,9 +199,9 @@ the tagged-tuple convention used by the reader's parser.</p>
         <p>
 
             <span class="line">
-              <a href="https://hex.pm/packages/ex_pdf_read/1.0.1">Hex Package</a>
+              <a href="https://hex.pm/packages/ex_pdf_read/1.0.2">Hex Package</a>
 
-              <a href="https://preview.hex.pm/preview/ex_pdf_read/1.0.1">Hex Preview</a>
+              <a href="https://preview.hex.pm/preview/ex_pdf_read/1.0.2">Hex Preview</a>
 
             </span>
 

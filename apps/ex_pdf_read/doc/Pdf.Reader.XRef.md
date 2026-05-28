@@ -1,5 +1,5 @@
 # `Pdf.Reader.XRef`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/xref.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/xref.ex#L1)
 
 Facade that dispatches to the appropriate xref reader and follows /Prev chains.
 

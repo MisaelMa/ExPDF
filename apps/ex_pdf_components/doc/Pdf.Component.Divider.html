@@ -5,10 +5,10 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.40.2">
-    <meta name="project" content="ex_pdf_components v1.0.1">
+    <meta name="project" content="ex_pdf_components v1.0.2">
 
 
-    <title>Pdf.Component.Divider — ex_pdf_components v1.0.1</title>
+    <title>Pdf.Component.Divider — ex_pdf_components v1.0.2</title>
 
     <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
 
@@ -37,7 +37,7 @@
 ex_pdf_components
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v1.0.1
+          v1.0.2
         </div>
       </div>
     </div>
@@ -94,7 +94,7 @@ ex_pdf_components
   <div class="heading-with-actions top-heading">
     <h1>
       <span translate="no">Pdf.<wbr />Component.<wbr />Divider</span> 
-      <small class="app-vsn" translate="no">(ex_pdf_components v1.0.1)</small>
+      <small class="app-vsn" translate="no">(ex_pdf_components v1.0.2)</small>
 
     </h1>
 
@@ -105,7 +105,7 @@ ex_pdf_components
 
 
 
-      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/divider.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/divider.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -116,21 +116,21 @@ ex_pdf_components
     <section id="moduledoc">
 <p>Divider component for PDF documents.</p><p>Renders a horizontal or vertical line separator with configurable
 color, width, style (solid/dashed), and margin.</p><p>Inspired by Material UI's Divider component.</p><h2 id="module-examples" class="section-heading"><a href="#module-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="c1"># Simple horizontal divider</span><span class="w">
-</span><span class="n">doc</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.Divider</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="9824654884-1">(</span><span class="p" data-group-id="9824654884-2">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">400</span><span class="p" data-group-id="9824654884-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9824654884-3">%{</span><span class="ss">width</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p" data-group-id="9824654884-3">}</span><span class="p" data-group-id="9824654884-1">)</span><span class="w">
+</span><span class="n">doc</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.Divider</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="6546154162-1">(</span><span class="p" data-group-id="6546154162-2">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">400</span><span class="p" data-group-id="6546154162-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6546154162-3">%{</span><span class="ss">width</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p" data-group-id="6546154162-3">}</span><span class="p" data-group-id="6546154162-1">)</span><span class="w">
 
 </span><span class="c1"># Dashed divider with color</span><span class="w">
-</span><span class="n">doc</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.Divider</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="9824654884-4">(</span><span class="p" data-group-id="9824654884-5">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">400</span><span class="p" data-group-id="9824654884-5">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9824654884-6">%{</span><span class="w">
+</span><span class="n">doc</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.Divider</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="6546154162-4">(</span><span class="p" data-group-id="6546154162-5">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">400</span><span class="p" data-group-id="6546154162-5">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6546154162-6">%{</span><span class="w">
   </span><span class="ss">width</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
-  </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9824654884-7">{</span><span class="mf">0.8</span><span class="p">,</span><span class="w"> </span><span class="mf">0.8</span><span class="p">,</span><span class="w"> </span><span class="mf">0.8</span><span class="p" data-group-id="9824654884-7">}</span><span class="p">,</span><span class="w">
+  </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6546154162-7">{</span><span class="mf">0.8</span><span class="p">,</span><span class="w"> </span><span class="mf">0.8</span><span class="p">,</span><span class="w"> </span><span class="mf">0.8</span><span class="p" data-group-id="6546154162-7">}</span><span class="p">,</span><span class="w">
   </span><span class="ss">style</span><span class="p">:</span><span class="w"> </span><span class="ss">:dashed</span><span class="p">,</span><span class="w">
   </span><span class="ss">thickness</span><span class="p">:</span><span class="w"> </span><span class="mf">0.5</span><span class="w">
-</span><span class="p" data-group-id="9824654884-6">}</span><span class="p" data-group-id="9824654884-4">)</span><span class="w">
+</span><span class="p" data-group-id="6546154162-6">}</span><span class="p" data-group-id="6546154162-4">)</span><span class="w">
 
 </span><span class="c1"># Vertical divider</span><span class="w">
-</span><span class="n">doc</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.Divider</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="9824654884-8">(</span><span class="p" data-group-id="9824654884-9">{</span><span class="mi">250</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="9824654884-9">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9824654884-10">%{</span><span class="w">
+</span><span class="n">doc</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.Divider</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="6546154162-8">(</span><span class="p" data-group-id="6546154162-9">{</span><span class="mi">250</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="6546154162-9">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6546154162-10">%{</span><span class="w">
   </span><span class="ss">height</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
   </span><span class="ss">orientation</span><span class="p">:</span><span class="w"> </span><span class="ss">:vertical</span><span class="w">
-</span><span class="p" data-group-id="9824654884-10">}</span><span class="p" data-group-id="9824654884-8">)</span></code></pre>
+</span><span class="p" data-group-id="6546154162-10">}</span><span class="p" data-group-id="6546154162-8">)</span></code></pre>
     </section>
 
 </div>
@@ -183,7 +183,7 @@ color, width, style (solid/dashed), and margin.</p><p>Inspired by Material UI's 
       <h1 class="signature" translate="no">render(doc, arg, style \\ %{})</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/divider.ex#L49" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/divider.ex#L49" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -204,9 +204,9 @@ color, width, style (solid/dashed), and margin.</p><p>Inspired by Material UI's 
         <p>
 
             <span class="line">
-              <a href="https://hex.pm/packages/ex_pdf_components/1.0.1">Hex Package</a>
+              <a href="https://hex.pm/packages/ex_pdf_components/1.0.2">Hex Package</a>
 
-              <a href="https://preview.hex.pm/preview/ex_pdf_components/1.0.1">Hex Preview</a>
+              <a href="https://preview.hex.pm/preview/ex_pdf_components/1.0.2">Hex Preview</a>
 
             </span>
 

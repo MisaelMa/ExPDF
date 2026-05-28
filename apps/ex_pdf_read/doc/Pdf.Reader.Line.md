@@ -1,5 +1,5 @@
 # `Pdf.Reader.Line`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/line.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/line.ex#L1)
 
 Logical text line reconstructed from individual `TextRun`s.
 

@@ -1,5 +1,5 @@
 # `Pdf.Component.StepIndicator`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/step_indicator.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/step_indicator.ex#L1)
 
 Step indicator component for PDF documents.
 

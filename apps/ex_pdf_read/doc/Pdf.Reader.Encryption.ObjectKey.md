@@ -1,5 +1,5 @@
 # `Pdf.Reader.Encryption.ObjectKey`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/encryption/object_key.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/encryption/object_key.ex#L1)
 
 Derives the per-object encryption key used for V1, V2, and V4 Standard
 Security Handler streams and strings.

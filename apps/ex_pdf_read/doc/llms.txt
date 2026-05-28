@@ -1,4 +1,4 @@
-# ex_pdf_read v1.0.1 - Table of Contents
+# ex_pdf_read v1.0.2 - Table of Contents
 
 > PDF reader — text extraction, layout, links, images, metadata, encryption, AcroForm.
 

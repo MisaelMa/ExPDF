@@ -1,5 +1,5 @@
 # `Pdf.Component.Divider`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/divider.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/divider.ex#L1)
 
 Divider component for PDF documents.
 

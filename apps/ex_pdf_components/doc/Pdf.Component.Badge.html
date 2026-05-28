@@ -5,10 +5,10 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.40.2">
-    <meta name="project" content="ex_pdf_components v1.0.1">
+    <meta name="project" content="ex_pdf_components v1.0.2">
 
 
-    <title>Pdf.Component.Badge — ex_pdf_components v1.0.1</title>
+    <title>Pdf.Component.Badge — ex_pdf_components v1.0.2</title>
 
     <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
 
@@ -37,7 +37,7 @@
 ex_pdf_components
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v1.0.1
+          v1.0.2
         </div>
       </div>
     </div>
@@ -94,7 +94,7 @@ ex_pdf_components
   <div class="heading-with-actions top-heading">
     <h1>
       <span translate="no">Pdf.<wbr />Component.<wbr />Badge</span> 
-      <small class="app-vsn" translate="no">(ex_pdf_components v1.0.1)</small>
+      <small class="app-vsn" translate="no">(ex_pdf_components v1.0.2)</small>
 
     </h1>
 
@@ -105,7 +105,7 @@ ex_pdf_components
 
 
 
-      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/badge.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/badge.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -116,15 +116,15 @@ ex_pdf_components
     <section id="moduledoc">
 <p>Badge component for PDF documents.</p><p>Renders a small circle or pill-shaped label, typically used to show
 counts, notifications, or status indicators overlaid on another element.</p><p>Inspired by Material UI's Badge component.</p><h2 id="module-examples" class="section-heading"><a href="#module-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="c1"># Simple notification badge</span><span class="w">
-</span><span class="n">doc</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.Badge</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="3699503033-1">(</span><span class="p" data-group-id="3699503033-2">{</span><span class="mi">120</span><span class="p">,</span><span class="w"> </span><span class="mi">710</span><span class="p" data-group-id="3699503033-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3699503033-3">%{</span><span class="ss">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;3&quot;</span><span class="p" data-group-id="3699503033-3">}</span><span class="p" data-group-id="3699503033-1">)</span><span class="w">
+</span><span class="n">doc</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.Badge</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="4365111808-1">(</span><span class="p" data-group-id="4365111808-2">{</span><span class="mi">120</span><span class="p">,</span><span class="w"> </span><span class="mi">710</span><span class="p" data-group-id="4365111808-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4365111808-3">%{</span><span class="ss">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;3&quot;</span><span class="p" data-group-id="4365111808-3">}</span><span class="p" data-group-id="4365111808-1">)</span><span class="w">
 
 </span><span class="c1"># Custom styled badge</span><span class="w">
-</span><span class="n">doc</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.Badge</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="3699503033-4">(</span><span class="p" data-group-id="3699503033-5">{</span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="3699503033-5">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3699503033-6">%{</span><span class="w">
+</span><span class="n">doc</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.Badge</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="4365111808-4">(</span><span class="p" data-group-id="4365111808-5">{</span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="4365111808-5">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4365111808-6">%{</span><span class="w">
   </span><span class="ss">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NEW&quot;</span><span class="p">,</span><span class="w">
-  </span><span class="ss">background</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3699503033-7">{</span><span class="mf">0.18</span><span class="p">,</span><span class="w"> </span><span class="mf">0.72</span><span class="p">,</span><span class="w"> </span><span class="mf">0.45</span><span class="p" data-group-id="3699503033-7">}</span><span class="p">,</span><span class="w">
+  </span><span class="ss">background</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4365111808-7">{</span><span class="mf">0.18</span><span class="p">,</span><span class="w"> </span><span class="mf">0.72</span><span class="p">,</span><span class="w"> </span><span class="mf">0.45</span><span class="p" data-group-id="4365111808-7">}</span><span class="p">,</span><span class="w">
   </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:white</span><span class="p">,</span><span class="w">
   </span><span class="ss">variant</span><span class="p">:</span><span class="w"> </span><span class="ss">:pill</span><span class="w">
-</span><span class="p" data-group-id="3699503033-6">}</span><span class="p" data-group-id="3699503033-4">)</span></code></pre>
+</span><span class="p" data-group-id="4365111808-6">}</span><span class="p" data-group-id="4365111808-4">)</span></code></pre>
     </section>
 
 </div>
@@ -177,7 +177,7 @@ counts, notifications, or status indicators overlaid on another element.</p><p>I
       <h1 class="signature" translate="no">render(doc, arg, style \\ %{})</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/badge.ex#L45" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/badge.ex#L45" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -198,9 +198,9 @@ counts, notifications, or status indicators overlaid on another element.</p><p>I
         <p>
 
             <span class="line">
-              <a href="https://hex.pm/packages/ex_pdf_components/1.0.1">Hex Package</a>
+              <a href="https://hex.pm/packages/ex_pdf_components/1.0.2">Hex Package</a>
 
-              <a href="https://preview.hex.pm/preview/ex_pdf_components/1.0.1">Hex Preview</a>
+              <a href="https://preview.hex.pm/preview/ex_pdf_components/1.0.2">Hex Preview</a>
 
             </span>
 

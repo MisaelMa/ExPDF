@@ -1,5 +1,5 @@
 # `Pdf.Reader.Lexer`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/lexer.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/lexer.ex#L1)
 
 PDF binary tokenizer.
 

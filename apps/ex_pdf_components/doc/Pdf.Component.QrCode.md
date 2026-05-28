@@ -1,5 +1,5 @@
 # `Pdf.Component.QrCode`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/qr_code.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/qr_code.ex#L1)
 
 QR Code PDF component — renders a QR code at a given position.
 

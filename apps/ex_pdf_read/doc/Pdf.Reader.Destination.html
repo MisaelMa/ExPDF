@@ -5,10 +5,10 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.40.2">
-    <meta name="project" content="ex_pdf_read v1.0.1">
+    <meta name="project" content="ex_pdf_read v1.0.2">
 
 
-    <title>Pdf.Reader.Destination — ex_pdf_read v1.0.1</title>
+    <title>Pdf.Reader.Destination — ex_pdf_read v1.0.2</title>
 
     <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
 
@@ -37,7 +37,7 @@
 ex_pdf_read
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v1.0.1
+          v1.0.2
         </div>
       </div>
     </div>
@@ -94,7 +94,7 @@ ex_pdf_read
   <div class="heading-with-actions top-heading">
     <h1>
       <span translate="no">Pdf.<wbr />Reader.<wbr />Destination</span> 
-      <small class="app-vsn" translate="no">(ex_pdf_read v1.0.1)</small>
+      <small class="app-vsn" translate="no">(ex_pdf_read v1.0.2)</small>
 
     </h1>
 
@@ -105,7 +105,7 @@ ex_pdf_read
 
 
 
-      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/destination.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/destination.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -187,7 +187,7 @@ ex_pdf_read
       <h1 class="signature" translate="no">build_named_dest_index(doc)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/destination.ex#L113" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/destination.ex#L113" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -219,7 +219,7 @@ may violate sort order).</li><li>Depth cap: <code class="inline">@max_name_tree_
       <h1 class="signature" translate="no">ensure_page_index(doc)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/destination.ex#L85" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/destination.ex#L85" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -238,8 +238,8 @@ may violate sort order).</li><li>Depth cap: <code class="inline">@max_name_tree_
 
 <p>Ensures the page-ref index is built and returns it.</p><p>The index maps <code class="inline">{obj_num, gen_num}</code> refs to 1-indexed page numbers.
 The result is cached in <code class="inline">doc.cache[:page_ref_index]</code> — subsequent calls
-return the cached value without re-traversing the page tree.</p><h2 id="ensure_page_index/1-example" class="section-heading"><a href="#ensure_page_index/1-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="2776026510-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="n">doc</span><span class="p" data-group-id="2776026510-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader.Destination</span><span class="o">.</span><span class="n">ensure_page_index</span><span class="p" data-group-id="2776026510-2">(</span><span class="n">doc</span><span class="p" data-group-id="2776026510-2">)</span><span class="w">
-</span><span class="n">page_num</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Map</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="2776026510-3">(</span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2776026510-4">{</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="2776026510-4">}</span><span class="p" data-group-id="2776026510-3">)</span><span class="w">  </span><span class="c1"># =&gt; 1</span></code></pre>
+return the cached value without re-traversing the page tree.</p><h2 id="ensure_page_index/1-example" class="section-heading"><a href="#ensure_page_index/1-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="3586630158-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="n">doc</span><span class="p" data-group-id="3586630158-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader.Destination</span><span class="o">.</span><span class="n">ensure_page_index</span><span class="p" data-group-id="3586630158-2">(</span><span class="n">doc</span><span class="p" data-group-id="3586630158-2">)</span><span class="w">
+</span><span class="n">page_num</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Map</span><span class="o">.</span><span class="n">get</span><span class="p" data-group-id="3586630158-3">(</span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3586630158-4">{</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p" data-group-id="3586630158-4">}</span><span class="p" data-group-id="3586630158-3">)</span><span class="w">  </span><span class="c1"># =&gt; 1</span></code></pre>
   </section>
 </section>
 <section class="detail" id="resolve/3">
@@ -252,7 +252,7 @@ return the cached value without re-traversing the page tree.</p><h2 id="ensure_p
       <h1 class="signature" translate="no">resolve(dest, doc, page_index)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/destination.ex#L47" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/destination.ex#L47" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -284,9 +284,9 @@ obtain via <a href="#ensure_page_index/1"><code class="inline">ensure_page_index
         <p>
 
             <span class="line">
-              <a href="https://hex.pm/packages/ex_pdf_read/1.0.1">Hex Package</a>
+              <a href="https://hex.pm/packages/ex_pdf_read/1.0.2">Hex Package</a>
 
-              <a href="https://preview.hex.pm/preview/ex_pdf_read/1.0.1">Hex Preview</a>
+              <a href="https://preview.hex.pm/preview/ex_pdf_read/1.0.2">Hex Preview</a>
 
             </span>
 

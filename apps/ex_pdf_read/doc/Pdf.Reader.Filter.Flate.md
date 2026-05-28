@@ -1,5 +1,5 @@
 # `Pdf.Reader.Filter.Flate`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/filter/flate.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/filter/flate.ex#L1)
 
 FlateDecode filter — zlib inflate, with optional PNG and TIFF predictor
 un-filtering.

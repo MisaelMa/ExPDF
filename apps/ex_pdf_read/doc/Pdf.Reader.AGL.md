@@ -1,5 +1,5 @@
 # `Pdf.Reader.AGL`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/agl.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/agl.ex#L1)
 
 Adobe Glyph List (AGL) — compile-time glyph name to Unicode codepoint lookup.
 

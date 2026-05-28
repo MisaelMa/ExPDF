@@ -5,10 +5,10 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.40.2">
-    <meta name="project" content="ex_pdf_read v1.0.1">
+    <meta name="project" content="ex_pdf_read v1.0.2">
 
 
-    <title>Pdf.Reader.Result — ex_pdf_read v1.0.1</title>
+    <title>Pdf.Reader.Result — ex_pdf_read v1.0.2</title>
 
     <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
 
@@ -37,7 +37,7 @@
 ex_pdf_read
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v1.0.1
+          v1.0.2
         </div>
       </div>
     </div>
@@ -94,7 +94,7 @@ ex_pdf_read
   <div class="heading-with-actions top-heading">
     <h1>
       <span translate="no">Pdf.<wbr />Reader.<wbr />Result</span> 
-      <small class="app-vsn" translate="no">(ex_pdf_read v1.0.1)</small>
+      <small class="app-vsn" translate="no">(ex_pdf_read v1.0.2)</small>
 
     </h1>
 
@@ -105,7 +105,7 @@ ex_pdf_read
 
 
 
-      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/result.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/result.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -114,8 +114,8 @@ ex_pdf_read
 
 
     <section id="moduledoc">
-<p>Unified extraction result returned by <a href="Pdf.Reader.html#read/2"><code class="inline">Pdf.Reader.read/2</code></a>.</p><h2 id="module-shape" class="section-heading"><a href="#module-shape" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Shape</span></h2><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="8932757793-1">%</span><span class="nc" data-group-id="8932757793-1">Pdf.Reader.Result</span><span class="p" data-group-id="8932757793-1">{</span><span class="w">
-  </span><span class="ss">meta</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8932757793-2">%{</span><span class="w">                              </span><span class="c1"># document-level metadata</span><span class="w">
+<p>Unified extraction result returned by <a href="Pdf.Reader.html#read/2"><code class="inline">Pdf.Reader.read/2</code></a>.</p><h2 id="module-shape" class="section-heading"><a href="#module-shape" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Shape</span></h2><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="5909124239-1">%</span><span class="nc" data-group-id="5909124239-1">Pdf.Reader.Result</span><span class="p" data-group-id="5909124239-1">{</span><span class="w">
+  </span><span class="ss">meta</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5909124239-2">%{</span><span class="w">                              </span><span class="c1"># document-level metadata</span><span class="w">
     </span><span class="ss">title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;...&quot;</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
     </span><span class="ss">author</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;...&quot;</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
     </span><span class="ss">subject</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;...&quot;</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="no">nil</span><span class="p">,</span><span class="w">
@@ -127,18 +127,18 @@ ex_pdf_read
     </span><span class="ss">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.7&quot;</span><span class="p">,</span><span class="w">
     </span><span class="ss">page_count</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
     </span><span class="ss">encrypted</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p">,</span><span class="w">
-    </span><span class="ss">recovery_log</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8932757793-3">[</span><span class="p" data-group-id="8932757793-3">]</span><span class="p">,</span><span class="w">                   </span><span class="c1"># see Pdf.Reader.recovery_log/1</span><span class="w">
-    </span><span class="ss">raw</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8932757793-4">%{</span><span class="n">...</span><span class="p" data-group-id="8932757793-4">}</span><span class="w">                         </span><span class="c1"># the full Info-dict + XMP merge</span><span class="w">
-  </span><span class="p" data-group-id="8932757793-2">}</span><span class="p">,</span><span class="w">
-  </span><span class="ss">pages</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8932757793-5">[</span><span class="w">
-    </span><span class="p" data-group-id="8932757793-6">%</span><span class="nc" data-group-id="8932757793-6">Pdf.Reader.Result.Page</span><span class="p" data-group-id="8932757793-6">{</span><span class="w">
+    </span><span class="ss">recovery_log</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5909124239-3">[</span><span class="p" data-group-id="5909124239-3">]</span><span class="p">,</span><span class="w">                   </span><span class="c1"># see Pdf.Reader.recovery_log/1</span><span class="w">
+    </span><span class="ss">raw</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5909124239-4">%{</span><span class="n">...</span><span class="p" data-group-id="5909124239-4">}</span><span class="w">                         </span><span class="c1"># the full Info-dict + XMP merge</span><span class="w">
+  </span><span class="p" data-group-id="5909124239-2">}</span><span class="p">,</span><span class="w">
+  </span><span class="ss">pages</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5909124239-5">[</span><span class="w">
+    </span><span class="p" data-group-id="5909124239-6">%</span><span class="nc" data-group-id="5909124239-6">Pdf.Reader.Result.Page</span><span class="p" data-group-id="5909124239-6">{</span><span class="w">
       </span><span class="ss">number</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">                        </span><span class="c1"># 1-indexed</span><span class="w">
-      </span><span class="ss">meta</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8932757793-7">%{</span><span class="p" data-group-id="8932757793-7">}</span><span class="p">,</span><span class="w">                        </span><span class="c1"># reserved for page-level info</span><span class="w">
-      </span><span class="ss">lines</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8932757793-8">[</span><span class="p" data-group-id="8932757793-9">%</span><span class="nc" data-group-id="8932757793-9">Pdf.Reader.Line</span><span class="p" data-group-id="8932757793-9">{</span><span class="p" data-group-id="8932757793-9">}</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="8932757793-8">]</span><span class="w">  </span><span class="c1"># text + image lines, top-to-bottom</span><span class="w">
-    </span><span class="p" data-group-id="8932757793-6">}</span><span class="p">,</span><span class="w">
+      </span><span class="ss">meta</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5909124239-7">%{</span><span class="p" data-group-id="5909124239-7">}</span><span class="p">,</span><span class="w">                        </span><span class="c1"># reserved for page-level info</span><span class="w">
+      </span><span class="ss">lines</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5909124239-8">[</span><span class="p" data-group-id="5909124239-9">%</span><span class="nc" data-group-id="5909124239-9">Pdf.Reader.Line</span><span class="p" data-group-id="5909124239-9">{</span><span class="p" data-group-id="5909124239-9">}</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="5909124239-8">]</span><span class="w">  </span><span class="c1"># text + image lines, top-to-bottom</span><span class="w">
+    </span><span class="p" data-group-id="5909124239-6">}</span><span class="p">,</span><span class="w">
     </span><span class="n">...</span><span class="w">
-  </span><span class="p" data-group-id="8932757793-5">]</span><span class="w">
-</span><span class="p" data-group-id="8932757793-1">}</span></code></pre><p>Each line's tokens carry <code class="inline">:kind</code> and <code class="inline">:shape</code> so the caller can tell
+  </span><span class="p" data-group-id="5909124239-5">]</span><span class="w">
+</span><span class="p" data-group-id="5909124239-1">}</span></code></pre><p>Each line's tokens carry <code class="inline">:kind</code> and <code class="inline">:shape</code> so the caller can tell
 whether each token is text, link, email or image — see <a href="Pdf.Reader.Line.html"><code class="inline">Pdf.Reader.Line</code></a>
 and <a href="Pdf.Reader.Shape.html"><code class="inline">Pdf.Reader.Shape</code></a>.</p><p>Standard PDF 1.7 (ISO 32000-1) Info-dictionary keys are normalised to
 atom keys (<code class="inline">:title</code>, <code class="inline">:author</code>, etc.) for ergonomic access. The raw
@@ -194,7 +194,7 @@ that need vendor-specific fields (e.g. Oracle XML Publisher's
       <h1 class="signature" translate="no">t()</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/result.ex#L71" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/result.ex#L71" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -221,9 +221,9 @@ that need vendor-specific fields (e.g. Oracle XML Publisher's
         <p>
 
             <span class="line">
-              <a href="https://hex.pm/packages/ex_pdf_read/1.0.1">Hex Package</a>
+              <a href="https://hex.pm/packages/ex_pdf_read/1.0.2">Hex Package</a>
 
-              <a href="https://preview.hex.pm/preview/ex_pdf_read/1.0.1">Hex Preview</a>
+              <a href="https://preview.hex.pm/preview/ex_pdf_read/1.0.2">Hex Preview</a>
 
             </span>
 

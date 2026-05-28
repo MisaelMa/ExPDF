@@ -1,5 +1,5 @@
 # `Pdf.Reader.Error`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/error.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/error.ex#L1)
 
 Exception raised by bang variants of `Pdf.Reader` functions.
 

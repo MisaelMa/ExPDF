@@ -1,5 +1,5 @@
 # `Pdf.Component.Timeline`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/timeline.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/timeline.ex#L1)
 
 Timeline component for PDF documents.
 

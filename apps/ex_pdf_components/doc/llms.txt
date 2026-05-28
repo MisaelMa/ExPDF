@@ -1,4 +1,4 @@
-# ex_pdf_components v1.0.1 - Table of Contents
+# ex_pdf_components v1.0.2 - Table of Contents
 
 > Reusable PDF components — Avatar, Badge, Card, Chip, Divider, Progress, Builder, StyledTable.
 

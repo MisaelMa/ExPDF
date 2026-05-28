@@ -1,5 +1,5 @@
 # `Pdf.Layout`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/layout.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/layout.ex#L1)
 
 Layout helpers for positioning content in PDF documents.
 

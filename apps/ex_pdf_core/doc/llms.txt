@@ -1,4 +1,4 @@
-# ex_pdf_core v1.0.1 - Table of Contents
+# ex_pdf_core v1.0.2 - Table of Contents
 
 > Core PDF writer engine — document, page, export, fonts, layout primitives.
 

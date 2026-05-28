@@ -1,5 +1,5 @@
 # `Pdf.Reader.Encryption.PasswordPad`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/encryption/password_pad.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/encryption/password_pad.ex#L1)
 
 Provides the canonical 32-byte PDF password-padding constant and a helper
 to pad (or truncate) an arbitrary password binary to exactly 32 bytes.

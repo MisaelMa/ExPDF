@@ -5,10 +5,10 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.40.2">
-    <meta name="project" content="ex_pdf_read v1.0.1">
+    <meta name="project" content="ex_pdf_read v1.0.2">
 
 
-    <title>Pdf.Reader.ContentStream — ex_pdf_read v1.0.1</title>
+    <title>Pdf.Reader.ContentStream — ex_pdf_read v1.0.2</title>
 
     <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
 
@@ -37,7 +37,7 @@
 ex_pdf_read
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v1.0.1
+          v1.0.2
         </div>
       </div>
     </div>
@@ -94,7 +94,7 @@ ex_pdf_read
   <div class="heading-with-actions top-heading">
     <h1>
       <span translate="no">Pdf.<wbr />Reader.<wbr />ContentStream</span> 
-      <small class="app-vsn" translate="no">(ex_pdf_read v1.0.1)</small>
+      <small class="app-vsn" translate="no">(ex_pdf_read v1.0.2)</small>
 
     </h1>
 
@@ -105,7 +105,7 @@ ex_pdf_read
 
 
 
-      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/content_stream.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/content_stream.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -128,8 +128,8 @@ from <code class="inline">ctm.e</code> and <code class="inline">ctm.f</code> by 
 <code class="inline">cm</code>, <code class="inline">q</code>, <code class="inline">Q</code>, <code class="inline">Do</code>.</p><p>All other operators (path construction, painting, color, shading, inline images,
 marked content, compatibility) are <strong>silently consumed</strong> — their operands are
 cleared from the operand stack and execution continues. This keeps the interpreter
-robust to real-world content streams without crashing.</p><h2 id="module-api" class="section-heading"><a href="#module-api" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">API</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">interpret</span><span class="p" data-group-id="1638230590-1">(</span><span class="n">content_binary</span><span class="p">,</span><span class="w"> </span><span class="n">decoder</span><span class="p" data-group-id="1638230590-1">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="p" data-group-id="1638230590-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1638230590-3">[</span><span class="n">event</span><span class="p" data-group-id="1638230590-3">]</span><span class="p" data-group-id="1638230590-2">}</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="1638230590-4">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="n">term</span><span class="p" data-group-id="1638230590-4">}</span><span class="w">
-</span><span class="n">interpret</span><span class="p" data-group-id="1638230590-5">(</span><span class="n">content_binary</span><span class="p">,</span><span class="w"> </span><span class="n">decoder</span><span class="p">,</span><span class="w"> </span><span class="n">opts</span><span class="p" data-group-id="1638230590-5">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="p" data-group-id="1638230590-6">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1638230590-7">[</span><span class="n">event</span><span class="p" data-group-id="1638230590-7">]</span><span class="p" data-group-id="1638230590-6">}</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="1638230590-8">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="n">term</span><span class="p" data-group-id="1638230590-8">}</span></code></pre><p>Where <code class="inline">decoder :: (bytes :: binary) -&gt; {text :: String.t(), unresolved :: list()}</code>.</p><h3 id="module-options" class="section-heading"><a href="#module-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Options</span></h3><ul><li><p><code class="inline">:xobjects</code> — <code class="inline">%{name :: binary =&gt; {:ref, n, g} | inline_dict | :image | :form}</code>.
+robust to real-world content streams without crashing.</p><h2 id="module-api" class="section-heading"><a href="#module-api" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">API</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">interpret</span><span class="p" data-group-id="1851039556-1">(</span><span class="n">content_binary</span><span class="p">,</span><span class="w"> </span><span class="n">decoder</span><span class="p" data-group-id="1851039556-1">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="p" data-group-id="1851039556-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1851039556-3">[</span><span class="n">event</span><span class="p" data-group-id="1851039556-3">]</span><span class="p" data-group-id="1851039556-2">}</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="1851039556-4">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="n">term</span><span class="p" data-group-id="1851039556-4">}</span><span class="w">
+</span><span class="n">interpret</span><span class="p" data-group-id="1851039556-5">(</span><span class="n">content_binary</span><span class="p">,</span><span class="w"> </span><span class="n">decoder</span><span class="p">,</span><span class="w"> </span><span class="n">opts</span><span class="p" data-group-id="1851039556-5">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="p" data-group-id="1851039556-6">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1851039556-7">[</span><span class="n">event</span><span class="p" data-group-id="1851039556-7">]</span><span class="p" data-group-id="1851039556-6">}</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="1851039556-8">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="n">term</span><span class="p" data-group-id="1851039556-8">}</span></code></pre><p>Where <code class="inline">decoder :: (bytes :: binary) -&gt; {text :: String.t(), unresolved :: list()}</code>.</p><h3 id="module-options" class="section-heading"><a href="#module-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Options</span></h3><ul><li><p><code class="inline">:xobjects</code> — <code class="inline">%{name :: binary =&gt; {:ref, n, g} | inline_dict | :image | :form}</code>.
 Phase 3 (Form recursion): the recommended shape is <code class="inline">%{name =&gt; raw_ref}</code> — the
 interpreter classifies on demand by resolving the XObject and inspecting
 <code class="inline">/Subtype</code>. The legacy <code class="inline">:image | :form</code> atoms remain accepted by the public
@@ -139,7 +139,7 @@ path (no doc threaded). The recursive path in <code class="inline">do_interpret_
 deferred events with the actual recursed Form content.</li><li><code class="inline">{:cycle_detected, {n, g}}</code> — Phase 3: emitted when a Form XObject self-references
 or transitively cycles. Dropped by the reader facade's <code class="inline">events_to_text_runs/2</code>.</li><li><code class="inline">{:max_depth_exceeded, {n, g}}</code> — Phase 3: emitted when recursion would exceed
 <code class="inline">@max_form_depth</code> (8). Dropped by the reader facade.</li></ul><h2 id="module-position-math" class="section-heading"><a href="#module-position-math" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Position math</span></h2><p>Absolute position of a glyph run start:</p><pre><code class="makeup elixir" translate="no"><span class="nc">M_render</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Tm</span><span class="w"> </span><span class="err">×</span><span class="w"> </span><span class="nc">CTM</span><span class="w">
-</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">M_render</span><span class="o">.</span><span class="n">e</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">M_render</span><span class="o">.</span><span class="n">f</span></code></pre><p>Spec: PDF 1.7 § 8.3.3 (row-vector convention), § 9.4.4 (text advance).</p><h2 id="module-glyph-advance-9-4-4" class="section-heading"><a href="#module-glyph-advance-9-4-4" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Glyph advance (§ 9.4.4)</span></h2><p>Text-matrix advance uses the full PDF § 9.4.4 formula per glyph:</p><pre><code class="makeup elixir" translate="no"><span class="n">tx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="3504274473-1">(</span><span class="p" data-group-id="3504274473-2">(</span><span class="n">w</span><span class="o">/</span><span class="mi">1000</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nc">Tj_kern</span><span class="p" data-group-id="3504274473-2">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nc">Tfs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nc">Tc</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nc">Tw_if_space</span><span class="p" data-group-id="3504274473-1">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nc">Th</span></code></pre><p>Where <code class="inline">w</code> comes from the active font's <code class="inline">widths_fn</code> closure (set by <code class="inline">Tf</code>).
+</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">M_render</span><span class="o">.</span><span class="n">e</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">M_render</span><span class="o">.</span><span class="n">f</span></code></pre><p>Spec: PDF 1.7 § 8.3.3 (row-vector convention), § 9.4.4 (text advance).</p><h2 id="module-glyph-advance-9-4-4" class="section-heading"><a href="#module-glyph-advance-9-4-4" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Glyph advance (§ 9.4.4)</span></h2><p>Text-matrix advance uses the full PDF § 9.4.4 formula per glyph:</p><pre><code class="makeup elixir" translate="no"><span class="n">tx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="6535114301-1">(</span><span class="p" data-group-id="6535114301-2">(</span><span class="n">w</span><span class="o">/</span><span class="mi">1000</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nc">Tj_kern</span><span class="p" data-group-id="6535114301-2">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nc">Tfs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nc">Tc</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nc">Tw_if_space</span><span class="p" data-group-id="6535114301-1">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nc">Th</span></code></pre><p>Where <code class="inline">w</code> comes from the active font's <code class="inline">widths_fn</code> closure (set by <code class="inline">Tf</code>).
 Fonts without embedded <code class="inline">/Widths</code> produce <code class="inline">w=0</code>; advance is then driven
 only by <code class="inline">Tc</code>/<code class="inline">Tw</code>/<code class="inline">Tj_kern</code> (documented gap for Standard-14 fonts).</p><p>Position of the START of each run is exact (derived from Tm at call time).</p><h2 id="module-unknown-operator-strategy" class="section-heading"><a href="#module-unknown-operator-strategy" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Unknown operator strategy</span></h2><p>When an unrecognized operator is encountered, the entire operand stack is cleared
 (per PDF spec § 7.8.2 which states conforming readers should process what they can).
@@ -251,7 +251,7 @@ This is the same strategy used by most major PDF parsers (e.g. pdfminer-six, pdf
       <h1 class="signature" translate="no">decoder()</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/content_stream.ex#L242" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/content_stream.ex#L242" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -279,7 +279,7 @@ This is the same strategy used by most major PDF parsers (e.g. pdfminer-six, pdf
       <h1 class="signature" translate="no">deferred_event()</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/content_stream.ex#L258" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/content_stream.ex#L258" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -307,7 +307,7 @@ This is the same strategy used by most major PDF parsers (e.g. pdfminer-six, pdf
       <h1 class="signature" translate="no">event()</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/content_stream.ex#L264" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/content_stream.ex#L264" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -335,7 +335,7 @@ This is the same strategy used by most major PDF parsers (e.g. pdfminer-six, pdf
       <h1 class="signature" translate="no">guard_event()</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/content_stream.ex#L260" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/content_stream.ex#L260" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -365,7 +365,7 @@ This is the same strategy used by most major PDF parsers (e.g. pdfminer-six, pdf
       <h1 class="signature" translate="no">image_event()</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/content_stream.ex#L255" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/content_stream.ex#L255" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -398,7 +398,7 @@ This is the same strategy used by most major PDF parsers (e.g. pdfminer-six, pdf
       <h1 class="signature" translate="no">text_event()</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/content_stream.ex#L244" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/content_stream.ex#L244" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -450,7 +450,7 @@ This is the same strategy used by most major PDF parsers (e.g. pdfminer-six, pdf
       <h1 class="signature" translate="no">interpret(binary, decoder, opts \\ [])</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/content_stream.ex#L276" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/content_stream.ex#L276" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -478,9 +478,9 @@ return <code class="inline">{decoded_utf8_text, unresolved_list}</code>.</p><p>O
         <p>
 
             <span class="line">
-              <a href="https://hex.pm/packages/ex_pdf_read/1.0.1">Hex Package</a>
+              <a href="https://hex.pm/packages/ex_pdf_read/1.0.2">Hex Package</a>
 
-              <a href="https://preview.hex.pm/preview/ex_pdf_read/1.0.1">Hex Preview</a>
+              <a href="https://preview.hex.pm/preview/ex_pdf_read/1.0.2">Hex Preview</a>
 
             </span>
 

@@ -1,5 +1,5 @@
 # `Pdf.Reader.Destination`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/destination.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/destination.ex#L1)
 
 Destination resolution for outline and annotation `/Dest` values.
 

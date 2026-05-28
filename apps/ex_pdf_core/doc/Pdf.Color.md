@@ -1,5 +1,5 @@
 # `Pdf.Color`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/color.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/color.ex#L1)
 
 A list of predefined colors you can use
 

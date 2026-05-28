@@ -1,5 +1,5 @@
 # `Pdf.Reader.Encoding.MacRoman`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/encoding/mac_roman.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/encoding/mac_roman.ex#L1)
 
 Mac OS Roman (MacRomanEncoding) byte-to-Unicode codepoint table.
 

@@ -1,5 +1,5 @@
 # `Pdf.Component.StatCard`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/stat_card.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/stat_card.ex#L1)
 
 Stat card component for PDF documents.
 

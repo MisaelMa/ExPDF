@@ -5,10 +5,10 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.40.2">
-    <meta name="project" content="ex_pdf_components v1.0.1">
+    <meta name="project" content="ex_pdf_components v1.0.2">
 
 
-    <title>Pdf.Component.Chip — ex_pdf_components v1.0.1</title>
+    <title>Pdf.Component.Chip — ex_pdf_components v1.0.2</title>
 
     <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
 
@@ -37,7 +37,7 @@
 ex_pdf_components
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v1.0.1
+          v1.0.2
         </div>
       </div>
     </div>
@@ -94,7 +94,7 @@ ex_pdf_components
   <div class="heading-with-actions top-heading">
     <h1>
       <span translate="no">Pdf.<wbr />Component.<wbr />Chip</span> 
-      <small class="app-vsn" translate="no">(ex_pdf_components v1.0.1)</small>
+      <small class="app-vsn" translate="no">(ex_pdf_components v1.0.2)</small>
 
     </h1>
 
@@ -105,7 +105,7 @@ ex_pdf_components
 
 
 
-      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/chip.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/chip.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -116,21 +116,21 @@ ex_pdf_components
     <section id="moduledoc">
 <p>Chip component for PDF documents.</p><p>Renders a compact rounded label/tag element, useful for displaying
 categories, tags, status indicators, or filter selections.</p><p>Inspired by Material UI's Chip component.</p><h2 id="module-examples" class="section-heading"><a href="#module-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="c1"># Simple chip</span><span class="w">
-</span><span class="n">doc</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.Chip</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="1432156950-1">(</span><span class="p" data-group-id="1432156950-2">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">400</span><span class="p" data-group-id="1432156950-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1432156950-3">%{</span><span class="ss">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Elixir&quot;</span><span class="p" data-group-id="1432156950-3">}</span><span class="p" data-group-id="1432156950-1">)</span><span class="w">
+</span><span class="n">doc</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.Chip</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="6495345300-1">(</span><span class="p" data-group-id="6495345300-2">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">400</span><span class="p" data-group-id="6495345300-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6495345300-3">%{</span><span class="ss">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Elixir&quot;</span><span class="p" data-group-id="6495345300-3">}</span><span class="p" data-group-id="6495345300-1">)</span><span class="w">
 
 </span><span class="c1"># Outlined chip</span><span class="w">
-</span><span class="n">doc</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.Chip</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="1432156950-4">(</span><span class="p" data-group-id="1432156950-5">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">400</span><span class="p" data-group-id="1432156950-5">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1432156950-6">%{</span><span class="w">
+</span><span class="n">doc</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.Chip</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="6495345300-4">(</span><span class="p" data-group-id="6495345300-5">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">400</span><span class="p" data-group-id="6495345300-5">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6495345300-6">%{</span><span class="w">
   </span><span class="ss">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Active&quot;</span><span class="p">,</span><span class="w">
   </span><span class="ss">variant</span><span class="p">:</span><span class="w"> </span><span class="ss">:outlined</span><span class="p">,</span><span class="w">
-  </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1432156950-7">{</span><span class="mf">0.18</span><span class="p">,</span><span class="w"> </span><span class="mf">0.72</span><span class="p">,</span><span class="w"> </span><span class="mf">0.45</span><span class="p" data-group-id="1432156950-7">}</span><span class="w">
-</span><span class="p" data-group-id="1432156950-6">}</span><span class="p" data-group-id="1432156950-4">)</span><span class="w">
+  </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6495345300-7">{</span><span class="mf">0.18</span><span class="p">,</span><span class="w"> </span><span class="mf">0.72</span><span class="p">,</span><span class="w"> </span><span class="mf">0.45</span><span class="p" data-group-id="6495345300-7">}</span><span class="w">
+</span><span class="p" data-group-id="6495345300-6">}</span><span class="p" data-group-id="6495345300-4">)</span><span class="w">
 
 </span><span class="c1"># Filled chip with custom colors</span><span class="w">
-</span><span class="n">doc</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.Chip</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="1432156950-8">(</span><span class="p" data-group-id="1432156950-9">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">400</span><span class="p" data-group-id="1432156950-9">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1432156950-10">%{</span><span class="w">
+</span><span class="n">doc</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.Chip</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="6495345300-8">(</span><span class="p" data-group-id="6495345300-9">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">400</span><span class="p" data-group-id="6495345300-9">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6495345300-10">%{</span><span class="w">
   </span><span class="ss">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Priority&quot;</span><span class="p">,</span><span class="w">
-  </span><span class="ss">background</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1432156950-11">{</span><span class="mf">0.85</span><span class="p">,</span><span class="w"> </span><span class="mf">0.26</span><span class="p">,</span><span class="w"> </span><span class="mf">0.33</span><span class="p" data-group-id="1432156950-11">}</span><span class="p">,</span><span class="w">
+  </span><span class="ss">background</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6495345300-11">{</span><span class="mf">0.85</span><span class="p">,</span><span class="w"> </span><span class="mf">0.26</span><span class="p">,</span><span class="w"> </span><span class="mf">0.33</span><span class="p" data-group-id="6495345300-11">}</span><span class="p">,</span><span class="w">
   </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:white</span><span class="w">
-</span><span class="p" data-group-id="1432156950-10">}</span><span class="p" data-group-id="1432156950-8">)</span></code></pre>
+</span><span class="p" data-group-id="6495345300-10">}</span><span class="p" data-group-id="6495345300-8">)</span></code></pre>
     </section>
 
 </div>
@@ -183,7 +183,7 @@ categories, tags, status indicators, or filter selections.</p><p>Inspired by Mat
       <h1 class="signature" translate="no">render(doc, arg, style \\ %{})</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/chip.ex#L54" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/chip.ex#L59" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -192,7 +192,7 @@ categories, tags, status indicators, or filter selections.</p><p>Inspired by Mat
 
   <section class="docstring">
 
-<p>Render a chip at <code class="inline">{x, y}</code> (top-left corner).</p><p>Returns <code class="inline">{doc, width}</code> — the document and the rendered chip width.</p><h2 id="render/3-style-options" class="section-heading"><a href="#render/3-style-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Style options</span></h2><ul><li><code class="inline">:label</code> — text to display (required)</li><li><code class="inline">:variant</code> — <code class="inline">:filled</code> (default) or <code class="inline">:outlined</code></li><li><code class="inline">:background</code> — fill color for filled variant (default light gray)</li><li><code class="inline">:color</code> — text/border color (default dark gray)</li><li><code class="inline">:font</code> — font name (default <code class="inline">&quot;Helvetica&quot;</code>)</li><li><code class="inline">:font_size</code> — font size (default <code class="inline">10</code>)</li><li><code class="inline">:height</code> — chip height in points (default <code class="inline">24</code>)</li><li><code class="inline">:padding_h</code> — horizontal padding (default <code class="inline">10</code>)</li><li><code class="inline">:border</code> — border width for outlined variant (default <code class="inline">1</code>)</li></ul>
+<p>Render a chip at <code class="inline">{x, y}</code> (top-left corner).</p><p>Returns <code class="inline">{doc, width}</code> — the document and the rendered chip width.</p><h2 id="render/3-style-options" class="section-heading"><a href="#render/3-style-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Style options</span></h2><ul><li><code class="inline">:label</code> — text to display (required)</li><li><code class="inline">:variant</code> — <code class="inline">:filled</code> (default) or <code class="inline">:outlined</code></li><li><code class="inline">:background</code> — fill color for filled variant (default light gray)</li><li><code class="inline">:color</code> — text/border color (default dark gray)</li><li><code class="inline">:font</code> — font name (default <code class="inline">&quot;Helvetica&quot;</code>)</li><li><code class="inline">:font_size</code> — font size (default <code class="inline">10</code>)</li><li><code class="inline">:height</code> — chip height in points (default <code class="inline">24</code>)</li><li><code class="inline">:padding_h</code> — horizontal padding (default <code class="inline">10</code>)</li><li><code class="inline">:border</code> — border width for outlined variant (default <code class="inline">1</code>)</li><li><code class="inline">:opacity</code> — overall opacity 0.0–1.0 (default <code class="inline">1.0</code>, fully opaque)</li><li><code class="inline">:background_opacity</code> — fill opacity only (default inherits <code class="inline">:opacity</code>)</li><li><code class="inline">:text_opacity</code> — label opacity only (default inherits <code class="inline">:opacity</code>)</li><li><code class="inline">:border_radius</code> — corner radius in points, or <code class="inline">:pill</code> for fully rounded (default <code class="inline">:pill</code>)</li></ul>
   </section>
 </section>
 
@@ -204,9 +204,9 @@ categories, tags, status indicators, or filter selections.</p><p>Inspired by Mat
         <p>
 
             <span class="line">
-              <a href="https://hex.pm/packages/ex_pdf_components/1.0.1">Hex Package</a>
+              <a href="https://hex.pm/packages/ex_pdf_components/1.0.2">Hex Package</a>
 
-              <a href="https://preview.hex.pm/preview/ex_pdf_components/1.0.1">Hex Preview</a>
+              <a href="https://preview.hex.pm/preview/ex_pdf_components/1.0.2">Hex Preview</a>
 
             </span>
 

@@ -5,10 +5,10 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.40.2">
-    <meta name="project" content="ex_pdf_components v1.0.1">
+    <meta name="project" content="ex_pdf_components v1.0.2">
 
 
-    <title>Pdf.Component.KeyValue — ex_pdf_components v1.0.1</title>
+    <title>Pdf.Component.KeyValue — ex_pdf_components v1.0.2</title>
 
     <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
 
@@ -37,7 +37,7 @@
 ex_pdf_components
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v1.0.1
+          v1.0.2
         </div>
       </div>
     </div>
@@ -94,7 +94,7 @@ ex_pdf_components
   <div class="heading-with-actions top-heading">
     <h1>
       <span translate="no">Pdf.<wbr />Component.<wbr />KeyValue</span> 
-      <small class="app-vsn" translate="no">(ex_pdf_components v1.0.1)</small>
+      <small class="app-vsn" translate="no">(ex_pdf_components v1.0.2)</small>
 
     </h1>
 
@@ -105,7 +105,7 @@ ex_pdf_components
 
 
 
-      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/key_value.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/key_value.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -114,11 +114,11 @@ ex_pdf_components
 
 
     <section id="moduledoc">
-<p>Key-value pair component for PDF documents.</p><p>Renders aligned label-value rows, like invoice details or profile info.</p><h2 id="module-examples" class="section-heading"><a href="#module-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">doc</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.KeyValue</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="6979268112-1">(</span><span class="p" data-group-id="6979268112-2">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="6979268112-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6979268112-3">%{</span><span class="ss">width</span><span class="p">:</span><span class="w"> </span><span class="mi">300</span><span class="p" data-group-id="6979268112-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6979268112-4">[</span><span class="w">
-  </span><span class="p" data-group-id="6979268112-5">{</span><span class="s">&quot;Name:&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;John Doe&quot;</span><span class="p" data-group-id="6979268112-5">}</span><span class="p">,</span><span class="w">
-  </span><span class="p" data-group-id="6979268112-6">{</span><span class="s">&quot;Email:&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;john@example.com&quot;</span><span class="p" data-group-id="6979268112-6">}</span><span class="p">,</span><span class="w">
-  </span><span class="p" data-group-id="6979268112-7">{</span><span class="s">&quot;Role:&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Admin&quot;</span><span class="p" data-group-id="6979268112-7">}</span><span class="w">
-</span><span class="p" data-group-id="6979268112-4">]</span><span class="p" data-group-id="6979268112-1">)</span></code></pre>
+<p>Key-value pair component for PDF documents.</p><p>Renders aligned label-value rows, like invoice details or profile info.</p><h2 id="module-examples" class="section-heading"><a href="#module-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">doc</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.KeyValue</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="2947656872-1">(</span><span class="p" data-group-id="2947656872-2">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="2947656872-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2947656872-3">%{</span><span class="ss">width</span><span class="p">:</span><span class="w"> </span><span class="mi">300</span><span class="p" data-group-id="2947656872-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2947656872-4">[</span><span class="w">
+  </span><span class="p" data-group-id="2947656872-5">{</span><span class="s">&quot;Name:&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;John Doe&quot;</span><span class="p" data-group-id="2947656872-5">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="2947656872-6">{</span><span class="s">&quot;Email:&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;john@example.com&quot;</span><span class="p" data-group-id="2947656872-6">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="2947656872-7">{</span><span class="s">&quot;Role:&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Admin&quot;</span><span class="p" data-group-id="2947656872-7">}</span><span class="w">
+</span><span class="p" data-group-id="2947656872-4">]</span><span class="p" data-group-id="2947656872-1">)</span></code></pre>
     </section>
 
 </div>
@@ -182,7 +182,7 @@ accounting for word-wrap on long values.</p></div>
       <h1 class="signature" translate="no">measure_height(style \\ %{}, pairs)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/key_value.ex#L138" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/key_value.ex#L141" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -208,7 +208,7 @@ Returns the height in points.</p>
       <h1 class="signature" translate="no">render(doc, arg, style \\ %{}, pairs)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/key_value.ex#L43" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/key_value.ex#L43" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -229,9 +229,9 @@ Returns the height in points.</p>
         <p>
 
             <span class="line">
-              <a href="https://hex.pm/packages/ex_pdf_components/1.0.1">Hex Package</a>
+              <a href="https://hex.pm/packages/ex_pdf_components/1.0.2">Hex Package</a>
 
-              <a href="https://preview.hex.pm/preview/ex_pdf_components/1.0.1">Hex Preview</a>
+              <a href="https://preview.hex.pm/preview/ex_pdf_components/1.0.2">Hex Preview</a>
 
             </span>
 

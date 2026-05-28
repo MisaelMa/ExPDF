@@ -5,10 +5,10 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.40.2">
-    <meta name="project" content="ex_pdf_components v1.0.1">
+    <meta name="project" content="ex_pdf_components v1.0.2">
 
 
-    <title>Pdf.Component.Avatar — ex_pdf_components v1.0.1</title>
+    <title>Pdf.Component.Avatar — ex_pdf_components v1.0.2</title>
 
     <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
 
@@ -37,7 +37,7 @@
 ex_pdf_components
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v1.0.1
+          v1.0.2
         </div>
       </div>
     </div>
@@ -94,7 +94,7 @@ ex_pdf_components
   <div class="heading-with-actions top-heading">
     <h1>
       <span translate="no">Pdf.<wbr />Component.<wbr />Avatar</span> 
-      <small class="app-vsn" translate="no">(ex_pdf_components v1.0.1)</small>
+      <small class="app-vsn" translate="no">(ex_pdf_components v1.0.2)</small>
 
     </h1>
 
@@ -105,7 +105,7 @@ ex_pdf_components
 
 
 
-      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/avatar.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/avatar.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -117,23 +117,23 @@ ex_pdf_components
 <p>Avatar component for PDF documents.</p><p>Renders a circular (or rounded) container with an image or initials,
 with optional border and elevation (box-shadow simulation).</p><p>Inspired by Material UI's Avatar component.</p><h2 id="module-examples" class="section-heading"><a href="#module-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="c1"># Avatar with initials</span><span class="w">
 </span><span class="n">doc</span><span class="w">
-</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.Avatar</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="3734974079-1">(</span><span class="p" data-group-id="3734974079-2">{</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="3734974079-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3734974079-3">%{</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.Avatar</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="6445971643-1">(</span><span class="p" data-group-id="6445971643-2">{</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="6445971643-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6445971643-3">%{</span><span class="w">
   </span><span class="ss">size</span><span class="p">:</span><span class="w"> </span><span class="mi">48</span><span class="p">,</span><span class="w">
   </span><span class="ss">initials</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;AM&quot;</span><span class="p">,</span><span class="w">
-  </span><span class="ss">background</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3734974079-4">{</span><span class="mf">0.3</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.9</span><span class="p" data-group-id="3734974079-4">}</span><span class="p">,</span><span class="w">
+  </span><span class="ss">background</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6445971643-4">{</span><span class="mf">0.3</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.9</span><span class="p" data-group-id="6445971643-4">}</span><span class="p">,</span><span class="w">
   </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:white</span><span class="p">,</span><span class="w">
   </span><span class="ss">elevation</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="w">
-</span><span class="p" data-group-id="3734974079-3">}</span><span class="p" data-group-id="3734974079-1">)</span><span class="w">
+</span><span class="p" data-group-id="6445971643-3">}</span><span class="p" data-group-id="6445971643-1">)</span><span class="w">
 
 </span><span class="c1"># Avatar with image</span><span class="w">
 </span><span class="n">doc</span><span class="w">
-</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.Avatar</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="3734974079-5">(</span><span class="p" data-group-id="3734974079-6">{</span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="3734974079-6">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3734974079-7">%{</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.Avatar</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="6445971643-5">(</span><span class="p" data-group-id="6445971643-6">{</span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="6445971643-6">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6445971643-7">%{</span><span class="w">
   </span><span class="ss">size</span><span class="p">:</span><span class="w"> </span><span class="mi">64</span><span class="p">,</span><span class="w">
   </span><span class="ss">image</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;path/to/photo.jpg&quot;</span><span class="p">,</span><span class="w">
   </span><span class="ss">border</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
   </span><span class="ss">border_color</span><span class="p">:</span><span class="w"> </span><span class="ss">:white</span><span class="p">,</span><span class="w">
   </span><span class="ss">elevation</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="w">
-</span><span class="p" data-group-id="3734974079-7">}</span><span class="p" data-group-id="3734974079-5">)</span></code></pre>
+</span><span class="p" data-group-id="6445971643-7">}</span><span class="p" data-group-id="6445971643-5">)</span></code></pre>
     </section>
 
 </div>
@@ -186,7 +186,7 @@ with optional border and elevation (box-shadow simulation).</p><p>Inspired by Ma
       <h1 class="signature" translate="no">render(doc, arg, style \\ %{})</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/avatar.ex#L54" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/avatar.ex#L54" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -207,9 +207,9 @@ with optional border and elevation (box-shadow simulation).</p><p>Inspired by Ma
         <p>
 
             <span class="line">
-              <a href="https://hex.pm/packages/ex_pdf_components/1.0.1">Hex Package</a>
+              <a href="https://hex.pm/packages/ex_pdf_components/1.0.2">Hex Package</a>
 
-              <a href="https://preview.hex.pm/preview/ex_pdf_components/1.0.1">Hex Preview</a>
+              <a href="https://preview.hex.pm/preview/ex_pdf_components/1.0.2">Hex Preview</a>
 
             </span>
 

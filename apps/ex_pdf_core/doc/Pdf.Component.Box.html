@@ -5,10 +5,10 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.40.2">
-    <meta name="project" content="ex_pdf_core v1.0.1">
+    <meta name="project" content="ex_pdf_core v1.0.2">
 
 
-    <title>Pdf.Component.Box — ex_pdf_core v1.0.1</title>
+    <title>Pdf.Component.Box — ex_pdf_core v1.0.2</title>
 
     <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
 
@@ -37,7 +37,7 @@
 ex_pdf_core
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v1.0.1
+          v1.0.2
         </div>
       </div>
     </div>
@@ -94,7 +94,7 @@ ex_pdf_core
   <div class="heading-with-actions top-heading">
     <h1>
       <span translate="no">Pdf.<wbr />Component.<wbr />Box</span> 
-      <small class="app-vsn" translate="no">(ex_pdf_core v1.0.1)</small>
+      <small class="app-vsn" translate="no">(ex_pdf_core v1.0.2)</small>
 
     </h1>
 
@@ -105,7 +105,7 @@ ex_pdf_core
 
 
 
-      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/box.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/box.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -116,11 +116,11 @@ ex_pdf_core
     <section id="moduledoc">
 <p>Box component for PDF documents.</p><p>Renders a rectangular container with optional padding, margin, border,
 border_radius, and background. Operates at Document level.</p><h2 id="module-example" class="section-heading"><a href="#module-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">doc</span><span class="w">
-</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.Box</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="3029708475-1">(</span><span class="p" data-group-id="3029708475-2">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="3029708475-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3029708475-3">{</span><span class="mi">300</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p" data-group-id="3029708475-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3029708475-4">%{</span><span class="w">
-  </span><span class="ss">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="ss">border</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">border_radius</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="ss">background</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3029708475-5">{</span><span class="mf">0.95</span><span class="p">,</span><span class="w"> </span><span class="mf">0.95</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p" data-group-id="3029708475-5">}</span><span class="w">
-</span><span class="p" data-group-id="3029708475-4">}</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="3029708475-6">fn</span><span class="w"> </span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
-  </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="3029708475-7">(</span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3029708475-8">{</span><span class="n">area</span><span class="o">.</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="o">.</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">14</span><span class="p" data-group-id="3029708475-8">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Inside the box&quot;</span><span class="p" data-group-id="3029708475-7">)</span><span class="w">
-</span><span class="k" data-group-id="3029708475-6">end</span><span class="p" data-group-id="3029708475-1">)</span></code></pre>
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.Box</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="1976214074-1">(</span><span class="p" data-group-id="1976214074-2">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="1976214074-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1976214074-3">{</span><span class="mi">300</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p" data-group-id="1976214074-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1976214074-4">%{</span><span class="w">
+  </span><span class="ss">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="ss">border</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="ss">border_radius</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="ss">background</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1976214074-5">{</span><span class="mf">0.95</span><span class="p">,</span><span class="w"> </span><span class="mf">0.95</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p" data-group-id="1976214074-5">}</span><span class="w">
+</span><span class="p" data-group-id="1976214074-4">}</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="1976214074-6">fn</span><span class="w"> </span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+  </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="1976214074-7">(</span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1976214074-8">{</span><span class="n">area</span><span class="o">.</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="o">.</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">14</span><span class="p" data-group-id="1976214074-8">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Inside the box&quot;</span><span class="p" data-group-id="1976214074-7">)</span><span class="w">
+</span><span class="k" data-group-id="1976214074-6">end</span><span class="p" data-group-id="1976214074-1">)</span></code></pre>
     </section>
 
 </div>
@@ -174,7 +174,7 @@ then invoke <code class="inline">callback.(doc, inner_area)</code>.</p></div>
       <h1 class="signature" translate="no">render(doc, arg1, arg2, style \\ %{}, callback)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/box.ex#L33" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/box.ex#L33" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -196,9 +196,9 @@ then invoke <code class="inline">callback.(doc, inner_area)</code>.</p><h2 id="r
         <p>
 
             <span class="line">
-              <a href="https://hex.pm/packages/ex_pdf_core/1.0.1">Hex Package</a>
+              <a href="https://hex.pm/packages/ex_pdf_core/1.0.2">Hex Package</a>
 
-              <a href="https://preview.hex.pm/preview/ex_pdf_core/1.0.1">Hex Preview</a>
+              <a href="https://preview.hex.pm/preview/ex_pdf_core/1.0.2">Hex Preview</a>
 
             </span>
 

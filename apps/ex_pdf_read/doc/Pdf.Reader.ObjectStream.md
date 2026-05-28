@@ -1,5 +1,5 @@
 # `Pdf.Reader.ObjectStream`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/object_stream.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/object_stream.ex#L1)
 
 Decodes objects embedded in a PDF Object Stream (`/Type /ObjStm`).
 

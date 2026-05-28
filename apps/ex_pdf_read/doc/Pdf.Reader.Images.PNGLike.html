@@ -5,10 +5,10 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.40.2">
-    <meta name="project" content="ex_pdf_read v1.0.1">
+    <meta name="project" content="ex_pdf_read v1.0.2">
 
 
-    <title>Pdf.Reader.Images.PNGLike — ex_pdf_read v1.0.1</title>
+    <title>Pdf.Reader.Images.PNGLike — ex_pdf_read v1.0.2</title>
 
     <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
 
@@ -37,7 +37,7 @@
 ex_pdf_read
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v1.0.1
+          v1.0.2
         </div>
       </div>
     </div>
@@ -94,7 +94,7 @@ ex_pdf_read
   <div class="heading-with-actions top-heading">
     <h1>
       <span translate="no">Pdf.<wbr />Reader.<wbr />Images.<wbr />PNGLike</span> 
-      <small class="app-vsn" translate="no">(ex_pdf_read v1.0.1)</small>
+      <small class="app-vsn" translate="no">(ex_pdf_read v1.0.2)</small>
 
     </h1>
 
@@ -105,7 +105,7 @@ ex_pdf_read
 
 
 
-      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/images/png_like.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/images/png_like.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -116,7 +116,7 @@ ex_pdf_read
     <section id="moduledoc">
 <p>PNG-like image decoding for <a href="Pdf.Reader.html"><code class="inline">Pdf.Reader</code></a>.</p><p>Handles PDF Image XObjects with <code class="inline">/Filter /FlateDecode</code> and optional
 <code class="inline">/DecodeParms</code> predictor. After Flate inflation (via <code class="inline">:zlib</code>) and
-predictor un-filtering, the result is raw pixel data.</p><h2 id="module-api" class="section-heading"><a href="#module-api" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">API</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">decode</span><span class="p" data-group-id="5457812255-1">(</span><span class="n">stream_bytes</span><span class="p">,</span><span class="w"> </span><span class="n">params</span><span class="p" data-group-id="5457812255-1">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="p" data-group-id="5457812255-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">raw_pixels</span><span class="p" data-group-id="5457812255-2">}</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="5457812255-3">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="n">reason</span><span class="p" data-group-id="5457812255-3">}</span></code></pre><p><code class="inline">stream_bytes</code> is the raw (still compressed) XObject stream body.
+predictor un-filtering, the result is raw pixel data.</p><h2 id="module-api" class="section-heading"><a href="#module-api" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">API</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">decode</span><span class="p" data-group-id="8159533109-1">(</span><span class="n">stream_bytes</span><span class="p">,</span><span class="w"> </span><span class="n">params</span><span class="p" data-group-id="8159533109-1">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="p" data-group-id="8159533109-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">raw_pixels</span><span class="p" data-group-id="8159533109-2">}</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="8159533109-3">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="n">reason</span><span class="p" data-group-id="8159533109-3">}</span></code></pre><p><code class="inline">stream_bytes</code> is the raw (still compressed) XObject stream body.
 <code class="inline">params</code> is the XObject dictionary (or its <code class="inline">/DecodeParms</code> sub-dict) and
 should contain:</p><ul><li><code class="inline">&quot;Width&quot;</code> (integer)</li><li><code class="inline">&quot;Height&quot;</code> (integer)</li><li><code class="inline">&quot;BitsPerComponent&quot;</code> (integer, default 8)</li><li><code class="inline">&quot;ColorSpace&quot;</code> (name or nil — used to infer number of color components)</li><li><code class="inline">&quot;Colors&quot;</code> (integer, default inferred from ColorSpace or 1)</li><li><code class="inline">&quot;Predictor&quot;</code> (integer, default 1 = no predictor)</li><li><code class="inline">&quot;Columns&quot;</code> (integer, default = Width)</li></ul><h2 id="module-spec-reference" class="section-heading"><a href="#module-spec-reference" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Spec reference</span></h2><p>PDF 1.7 § 7.4.4.4 (FlateDecode filter), § 7.4.4.3 (PNG predictor).
 Delegates to <a href="Pdf.Reader.Filter.Flate.html#decode/2"><code class="inline">Pdf.Reader.Filter.Flate.decode/2</code></a> for the combined inflate +
@@ -172,7 +172,7 @@ predictors 10–15 per batch 2.</p>
       <h1 class="signature" translate="no">decode(stream_bytes, params)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/images/png_like.ex#L44" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/images/png_like.ex#L44" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -201,9 +201,9 @@ PNG predictor un-filtering.</p><p>Returns <code class="inline">{:ok, raw_pixel_b
         <p>
 
             <span class="line">
-              <a href="https://hex.pm/packages/ex_pdf_read/1.0.1">Hex Package</a>
+              <a href="https://hex.pm/packages/ex_pdf_read/1.0.2">Hex Package</a>
 
-              <a href="https://preview.hex.pm/preview/ex_pdf_read/1.0.1">Hex Preview</a>
+              <a href="https://preview.hex.pm/preview/ex_pdf_read/1.0.2">Hex Preview</a>
 
             </span>
 

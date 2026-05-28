@@ -1,5 +1,5 @@
 # `Pdf.Component.Rating`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/rating.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/rating.ex#L1)
 
 Rating component for PDF documents.
 

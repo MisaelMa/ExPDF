@@ -1,4 +1,4 @@
-# ex_pdf_components v1.0.1 - API Reference
+# ex_pdf_components v1.0.2 - API Reference
 
 ## Modules
 

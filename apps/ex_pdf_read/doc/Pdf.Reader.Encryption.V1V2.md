@@ -1,5 +1,5 @@
 # `Pdf.Reader.Encryption.V1V2`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/encryption/v1v2.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/encryption/v1v2.ex#L1)
 
 Implements PDF Standard Security Handler algorithms for V1 (RC4-40) and
 V2 (RC4-128) — revisions R=2 and R=3/4.

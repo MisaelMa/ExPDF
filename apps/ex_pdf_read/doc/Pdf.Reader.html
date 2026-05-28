@@ -5,10 +5,10 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.40.2">
-    <meta name="project" content="ex_pdf_read v1.0.1">
+    <meta name="project" content="ex_pdf_read v1.0.2">
 
 
-    <title>Pdf.Reader — ex_pdf_read v1.0.1</title>
+    <title>Pdf.Reader — ex_pdf_read v1.0.2</title>
 
     <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
 
@@ -37,7 +37,7 @@
 ex_pdf_read
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v1.0.1
+          v1.0.2
         </div>
       </div>
     </div>
@@ -94,7 +94,7 @@ ex_pdf_read
   <div class="heading-with-actions top-heading">
     <h1>
       <span translate="no">Pdf.<wbr />Reader</span> 
-      <small class="app-vsn" translate="no">(ex_pdf_read v1.0.1)</small>
+      <small class="app-vsn" translate="no">(ex_pdf_read v1.0.2)</small>
 
     </h1>
 
@@ -105,7 +105,7 @@ ex_pdf_read
 
 
 
-      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -117,23 +117,23 @@ ex_pdf_read
 <p>Native PDF reader — opens a PDF binary or file path and provides pure-functional
 access to text runs with positions, raster images, document metadata, interactive
 form fields, document outlines (bookmarks), and page annotations.
-No GenServer, no mutable state; the reader is a fully lazy, immutable pipeline.</p><h2 id="module-typical-usage" class="section-heading"><a href="#module-typical-usage" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Typical usage</span></h2><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="2182440948-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">doc</span><span class="p" data-group-id="2182440948-1">}</span><span class="w">                          </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">open</span><span class="p" data-group-id="2182440948-2">(</span><span class="s">&quot;report.pdf&quot;</span><span class="p" data-group-id="2182440948-2">)</span><span class="w">
-</span><span class="p" data-group-id="2182440948-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2182440948-4">[</span><span class="n">page1_text</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="bp">_</span><span class="p" data-group-id="2182440948-4">]</span><span class="p">,</span><span class="w"> </span><span class="n">doc</span><span class="p" data-group-id="2182440948-3">}</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">read_text</span><span class="p" data-group-id="2182440948-5">(</span><span class="n">doc</span><span class="p" data-group-id="2182440948-5">)</span><span class="w">
-</span><span class="p" data-group-id="2182440948-6">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">runs</span><span class="p">,</span><span class="w"> </span><span class="n">doc</span><span class="p" data-group-id="2182440948-6">}</span><span class="w">                    </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">read_text_with_positions</span><span class="p" data-group-id="2182440948-7">(</span><span class="n">doc</span><span class="p" data-group-id="2182440948-7">)</span><span class="w">
-</span><span class="p" data-group-id="2182440948-8">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">meta</span><span class="p">,</span><span class="w"> </span><span class="n">doc</span><span class="p" data-group-id="2182440948-8">}</span><span class="w">                    </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">read_metadata</span><span class="p" data-group-id="2182440948-9">(</span><span class="n">doc</span><span class="p" data-group-id="2182440948-9">)</span><span class="w">
-</span><span class="p" data-group-id="2182440948-10">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p" data-group-id="2182440948-10">}</span><span class="w">                            </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">page_count</span><span class="p" data-group-id="2182440948-11">(</span><span class="n">doc</span><span class="p" data-group-id="2182440948-11">)</span><span class="w">
-</span><span class="ss">:ok</span><span class="w">                                 </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">close</span><span class="p" data-group-id="2182440948-12">(</span><span class="n">doc</span><span class="p" data-group-id="2182440948-12">)</span></code></pre><h2 id="module-outlines-bookmarks" class="section-heading"><a href="#module-outlines-bookmarks" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Outlines (bookmarks)</span></h2><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="4535033836-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">outlines</span><span class="p">,</span><span class="w"> </span><span class="c">_doc</span><span class="p" data-group-id="4535033836-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">read_outlines</span><span class="p" data-group-id="4535033836-2">(</span><span class="n">doc</span><span class="p" data-group-id="4535033836-2">)</span><span class="w">
+No GenServer, no mutable state; the reader is a fully lazy, immutable pipeline.</p><h2 id="module-typical-usage" class="section-heading"><a href="#module-typical-usage" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Typical usage</span></h2><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="9761105510-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">doc</span><span class="p" data-group-id="9761105510-1">}</span><span class="w">                          </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">open</span><span class="p" data-group-id="9761105510-2">(</span><span class="s">&quot;report.pdf&quot;</span><span class="p" data-group-id="9761105510-2">)</span><span class="w">
+</span><span class="p" data-group-id="9761105510-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9761105510-4">[</span><span class="n">page1_text</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="bp">_</span><span class="p" data-group-id="9761105510-4">]</span><span class="p">,</span><span class="w"> </span><span class="n">doc</span><span class="p" data-group-id="9761105510-3">}</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">read_text</span><span class="p" data-group-id="9761105510-5">(</span><span class="n">doc</span><span class="p" data-group-id="9761105510-5">)</span><span class="w">
+</span><span class="p" data-group-id="9761105510-6">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">runs</span><span class="p">,</span><span class="w"> </span><span class="n">doc</span><span class="p" data-group-id="9761105510-6">}</span><span class="w">                    </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">read_text_with_positions</span><span class="p" data-group-id="9761105510-7">(</span><span class="n">doc</span><span class="p" data-group-id="9761105510-7">)</span><span class="w">
+</span><span class="p" data-group-id="9761105510-8">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">meta</span><span class="p">,</span><span class="w"> </span><span class="n">doc</span><span class="p" data-group-id="9761105510-8">}</span><span class="w">                    </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">read_metadata</span><span class="p" data-group-id="9761105510-9">(</span><span class="n">doc</span><span class="p" data-group-id="9761105510-9">)</span><span class="w">
+</span><span class="p" data-group-id="9761105510-10">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p" data-group-id="9761105510-10">}</span><span class="w">                            </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">page_count</span><span class="p" data-group-id="9761105510-11">(</span><span class="n">doc</span><span class="p" data-group-id="9761105510-11">)</span><span class="w">
+</span><span class="ss">:ok</span><span class="w">                                 </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">close</span><span class="p" data-group-id="9761105510-12">(</span><span class="n">doc</span><span class="p" data-group-id="9761105510-12">)</span></code></pre><h2 id="module-outlines-bookmarks" class="section-heading"><a href="#module-outlines-bookmarks" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Outlines (bookmarks)</span></h2><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="6582323796-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">outlines</span><span class="p">,</span><span class="w"> </span><span class="c">_doc</span><span class="p" data-group-id="6582323796-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">read_outlines</span><span class="p" data-group-id="6582323796-2">(</span><span class="n">doc</span><span class="p" data-group-id="6582323796-2">)</span><span class="w">
 </span><span class="c1"># =&gt; [%Pdf.Reader.Outline{title: &quot;Chapter 1&quot;, level: 0, dest_page: 1, children: [...]}, ...]</span><span class="w">
 
 </span><span class="c1"># Bang variant — raises Pdf.Reader.Error on failure</span><span class="w">
-</span><span class="n">outlines</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">read_outlines!</span><span class="p" data-group-id="4535033836-3">(</span><span class="n">doc</span><span class="p" data-group-id="4535033836-3">)</span></code></pre><h2 id="module-annotations" class="section-heading"><a href="#module-annotations" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Annotations</span></h2><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="9616138076-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">annotations</span><span class="p">,</span><span class="w"> </span><span class="c">_doc</span><span class="p" data-group-id="9616138076-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">read_annotations</span><span class="p" data-group-id="9616138076-2">(</span><span class="n">doc</span><span class="p" data-group-id="9616138076-2">)</span><span class="w">
+</span><span class="n">outlines</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">read_outlines!</span><span class="p" data-group-id="6582323796-3">(</span><span class="n">doc</span><span class="p" data-group-id="6582323796-3">)</span></code></pre><h2 id="module-annotations" class="section-heading"><a href="#module-annotations" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Annotations</span></h2><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="1084563255-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">annotations</span><span class="p">,</span><span class="w"> </span><span class="c">_doc</span><span class="p" data-group-id="1084563255-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">read_annotations</span><span class="p" data-group-id="1084563255-2">(</span><span class="n">doc</span><span class="p" data-group-id="1084563255-2">)</span><span class="w">
 </span><span class="c1"># =&gt; [%Pdf.Reader.Annotation{type: :highlight, page: 2, rect: {x1, y1, x2, y2}, ...}, ...]</span><span class="w">
 
 </span><span class="c1"># Bang variant — raises Pdf.Reader.Error on failure</span><span class="w">
-</span><span class="n">annotations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">read_annotations!</span><span class="p" data-group-id="9616138076-3">(</span><span class="n">doc</span><span class="p" data-group-id="9616138076-3">)</span></code></pre><h2 id="module-error-recovery" class="section-heading"><a href="#module-error-recovery" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Error recovery</span></h2><p><a href="#open/2"><code class="inline">open/2</code></a> accepts a <code class="inline">recover: true</code> option that activates four orthogonal
+</span><span class="n">annotations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">read_annotations!</span><span class="p" data-group-id="1084563255-3">(</span><span class="n">doc</span><span class="p" data-group-id="1084563255-3">)</span></code></pre><h2 id="module-error-recovery" class="section-heading"><a href="#module-error-recovery" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Error recovery</span></h2><p><a href="#open/2"><code class="inline">open/2</code></a> accepts a <code class="inline">recover: true</code> option that activates four orthogonal
 recovery phases (R-1..R-4). Each recovery action is logged as a structured
-event tuple appended to <code class="inline">doc.recovery_log</code>. Use <a href="#recovery_log/1"><code class="inline">recovery_log/1</code></a> to inspect:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="0230539191-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">doc</span><span class="p" data-group-id="0230539191-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">open</span><span class="p" data-group-id="0230539191-2">(</span><span class="n">bin</span><span class="p">,</span><span class="w"> </span><span class="ss">recover</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="0230539191-2">)</span><span class="w">
-</span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">recovery_log</span><span class="p" data-group-id="0230539191-3">(</span><span class="n">doc</span><span class="p" data-group-id="0230539191-3">)</span><span class="w">
+event tuple appended to <code class="inline">doc.recovery_log</code>. Use <a href="#recovery_log/1"><code class="inline">recovery_log/1</code></a> to inspect:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="9525723612-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">doc</span><span class="p" data-group-id="9525723612-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">open</span><span class="p" data-group-id="9525723612-2">(</span><span class="n">bin</span><span class="p">,</span><span class="w"> </span><span class="ss">recover</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="9525723612-2">)</span><span class="w">
+</span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">recovery_log</span><span class="p" data-group-id="9525723612-3">(</span><span class="n">doc</span><span class="p" data-group-id="9525723612-3">)</span><span class="w">
 </span><span class="c1"># =&gt; [] when the PDF was well-formed</span><span class="w">
 </span><span class="c1"># =&gt; [{:xref_recovered, 5}, {:page_failed, 2, :unresolved_ref}] on a corrupt PDF</span></code></pre><p><strong>Closed set of recovery event tuples:</strong></p><table><thead><tr><th style="text-align: left;">Tuple</th><th style="text-align: left;">Meaning</th></tr></thead><tbody><tr><td style="text-align: left;"><code class="inline">{:xref_recovered, n}</code></td><td style="text-align: left;">Linear scan recovered <code class="inline">n</code> object entries (R-3)</td></tr><tr><td style="text-align: left;"><code class="inline">{:eof_marker_missing, :linear_scan_used}</code></td><td style="text-align: left;"><code class="inline">%%EOF</code> absent; linear scan used (R-3)</td></tr><tr><td style="text-align: left;"><code class="inline">{:page_failed, page_n, reason}</code></td><td style="text-align: left;">Page skipped; text/images from other pages returned (R-1)</td></tr><tr><td style="text-align: left;"><code class="inline">{:font_skipped, page_n, font_name, reason}</code></td><td style="text-align: left;">Font replaced with U+FFFD fallback (R-2)</td></tr><tr><td style="text-align: left;"><code class="inline">{:page_tree_recovered, n_pages}</code></td><td style="text-align: left;">Catalog/Pages fallback; <code class="inline">n_pages</code> recovered (R-4)</td></tr></tbody></table><p>An empty <code class="inline">recovery_log</code> after <a href="#open/2"><code class="inline">open/2</code></a> <strong>guarantees</strong> no recovery occurred.
 No other tuple shapes are appended by the recovery paths.</p><p>The following errors remain fatal even with <code class="inline">recover: true</code>:
@@ -143,7 +143,7 @@ include <code class="inline">/Encrypt</code>; decryption cannot proceed.</li><li
 order, NOT document order. <code class="inline">{:page_tree_recovered, n}</code> signals this.</li><li><strong>R-4 probe cost</strong> — <code class="inline">recover: true</code> triggers a full page-tree walk at
 <a href="#open/2"><code class="inline">open/2</code></a> time (O(pages)). Acceptable for opt-in mode; document in callers
 that open very large PDFs.</li></ul><h2 id="module-encryption-phase-2" class="section-heading"><a href="#module-encryption-phase-2" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Encryption (Phase 2)</span></h2><p>Standard Security Handler V1/V2/V4/V5-R6 supported. Use <a href="#open/2"><code class="inline">open/2</code></a> with the
-<code class="inline">password:</code> opt:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="7158108676-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">doc</span><span class="p" data-group-id="7158108676-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">open</span><span class="p" data-group-id="7158108676-2">(</span><span class="n">bin</span><span class="p">,</span><span class="w"> </span><span class="ss">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;secret&quot;</span><span class="p" data-group-id="7158108676-2">)</span></code></pre><p>Empty password is auto-tried first (covers metadata-protection cases).
+<code class="inline">password:</code> opt:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="3181250501-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">doc</span><span class="p" data-group-id="3181250501-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf.Reader</span><span class="o">.</span><span class="n">open</span><span class="p" data-group-id="3181250501-2">(</span><span class="n">bin</span><span class="p">,</span><span class="w"> </span><span class="ss">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;secret&quot;</span><span class="p" data-group-id="3181250501-2">)</span></code></pre><p>Empty password is auto-tried first (covers metadata-protection cases).
 Errors: <code class="inline">:encrypted_password_required</code>, <code class="inline">:encrypted_wrong_password</code>,
 <code class="inline">:encrypted_unsupported_handler</code>. See <a href="Pdf.Reader.Errors.html"><code class="inline">Pdf.Reader.Errors</code></a> for the full set.</p><h2 id="module-form-xobject-recursion-phase-3" class="section-heading"><a href="#module-form-xobject-recursion-phase-3" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Form XObject recursion (Phase 3)</span></h2><p><code class="inline">Do</code> operators referencing <code class="inline">/Type /XObject /Subtype /Form</code> objects are
 recursed into transparently — text and images inside Forms (headers,
@@ -511,7 +511,7 @@ a lines list and want the inference layer alone (no annotations).</p></div>
       <h1 class="signature" translate="no">reason()</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L150" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L150" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -563,7 +563,7 @@ a lines list and want the inference layer alone (no annotations).</p></div>
       <h1 class="signature" translate="no">attach_shapes_to_tokens(lines, shapes)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L689" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L689" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -596,7 +596,7 @@ a lines list and want the inference layer alone (no annotations).</p></div>
       <h1 class="signature" translate="no">close(doc)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L256" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L256" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -627,7 +627,7 @@ signal to callers that they may drop the <code class="inline">:binary</code> fie
       <h1 class="signature" translate="no">lines_from_runs(runs, opts \\ [])</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L989" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L989" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -662,7 +662,7 @@ grouping logic without reopening the document.</p><p>See <a href="#read_lines/2"
       <h1 class="signature" translate="no">open(path_or_binary, opts \\ [])</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L205" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L205" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -700,7 +700,7 @@ opened without requiring a non-empty password.</li></ul><h2 id="open/2-success" 
       <h1 class="signature" translate="no">open!(path_or_binary, opts \\ [])</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L1723" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L1723" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -731,7 +731,7 @@ opened without requiring a non-empty password.</li></ul><h2 id="open/2-success" 
       <h1 class="signature" translate="no">page_count(doc)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L348" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L348" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -765,7 +765,7 @@ the xref scan is returned directly. This branch is signalled by
       <h1 class="signature" translate="no">page_count!(doc)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L1743" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L1743" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -795,7 +795,7 @@ the xref scan is returned directly. This branch is signalled by
       <h1 class="signature" translate="no">read(doc, opts \\ [])</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L446" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L446" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -844,7 +844,7 @@ BOTH halves are valid dictionary words (e.g. <code class="inline">&quot;iniciode
       <h1 class="signature" translate="no">read!(doc, opts \\ [])</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L459" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L459" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -875,7 +875,7 @@ BOTH halves are valid dictionary words (e.g. <code class="inline">&quot;iniciode
       <h1 class="signature" translate="no">read_acroform(doc)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L1802" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L1802" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -909,7 +909,7 @@ Never returns <code class="inline">{:error, _}</code> for absent or empty AcroFo
       <h1 class="signature" translate="no">read_acroform!(doc)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L1808" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L1808" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -937,7 +937,7 @@ Never returns <code class="inline">{:error, _}</code> for absent or empty AcroFo
       <h1 class="signature" translate="no">read_annotations(doc)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L1863" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L1863" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -971,7 +971,7 @@ surface as <code class="inline">:unknown</code> with raw fields preserved in <co
       <h1 class="signature" translate="no">read_annotations!(doc)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L1870" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L1870" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1000,7 +1000,7 @@ Returns the annotations list directly on success.</p>
       <h1 class="signature" translate="no">read_images(doc)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L1713" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L1713" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1031,7 +1031,7 @@ carries an updated <code class="inline">:recovery_log</code> when opened with <c
       <h1 class="signature" translate="no">read_images!(doc)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L1776" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L1776" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1061,7 +1061,7 @@ carries an updated <code class="inline">:recovery_log</code> when opened with <c
       <h1 class="signature" translate="no">read_lines(doc, opts \\ [])</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L801" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L801" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1107,7 +1107,7 @@ then by Y descending (top-to-bottom in PDF user space).</p><h2 id="read_lines/2-
       <h1 class="signature" translate="no">read_lines!(doc, opts \\ [])</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L811" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L811" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1138,7 +1138,7 @@ then by Y descending (top-to-bottom in PDF user space).</p><h2 id="read_lines/2-
       <h1 class="signature" translate="no">read_metadata(doc)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L292" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L292" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1171,7 +1171,7 @@ PDF literal strings (<code class="inline">{:string, binary}</code>).</p><p>Commo
       <h1 class="signature" translate="no">read_metadata!(doc)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L1734" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L1734" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1199,7 +1199,7 @@ PDF literal strings (<code class="inline">{:string, binary}</code>).</p><p>Commo
       <h1 class="signature" translate="no">read_outlines(doc)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L1830" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L1830" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1230,7 +1230,7 @@ prevent hangs on corrupt PDFs.</p><p>Returns <code class="inline">{:ok, [], doc}
       <h1 class="signature" translate="no">read_outlines!(doc)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L1837" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L1837" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1259,7 +1259,7 @@ Returns the outlines list directly on success.</p>
       <h1 class="signature" translate="no">read_shapes(doc)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L843" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L843" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1294,7 +1294,7 @@ then by <code class="inline">:y</code> descending (top-to-bottom) when a rect is
       <h1 class="signature" translate="no">read_shapes!(doc)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L863" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L863" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1324,7 +1324,7 @@ then by <code class="inline">:y</code> descending (top-to-bottom) when a rect is
       <h1 class="signature" translate="no">read_text(doc, opts \\ [])</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L1673" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L1673" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1361,7 +1361,7 @@ when opened with <code class="inline">recover: true</code>. Unresolved glyphs ap
       <h1 class="signature" translate="no">read_text!(doc, opts \\ [])</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L1765" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L1765" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1392,7 +1392,7 @@ when opened with <code class="inline">recover: true</code>. Unresolved glyphs ap
       <h1 class="signature" translate="no">read_text_with_positions(doc)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L757" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L757" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1427,7 +1427,7 @@ per Phase 1 scope. A deferred marker is recorded but produces no TextRun.</p>
       <h1 class="signature" translate="no">read_text_with_positions!(doc)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L1754" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L1754" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1455,7 +1455,7 @@ per Phase 1 scope. A deferred marker is recorded but produces no TextRun.</p>
       <h1 class="signature" translate="no">recovery_log(document)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L272" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L272" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1485,7 +1485,7 @@ access to <code class="inline">doc.recovery_log</code> MUST NOT be used in appli
       <h1 class="signature" translate="no">shapes_from_lines(lines)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L876" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L876" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1514,9 +1514,9 @@ a lines list and want the inference layer alone (no annotations).</p>
         <p>
 
             <span class="line">
-              <a href="https://hex.pm/packages/ex_pdf_read/1.0.1">Hex Package</a>
+              <a href="https://hex.pm/packages/ex_pdf_read/1.0.2">Hex Package</a>
 
-              <a href="https://preview.hex.pm/preview/ex_pdf_read/1.0.1">Hex Preview</a>
+              <a href="https://preview.hex.pm/preview/ex_pdf_read/1.0.2">Hex Preview</a>
 
             </span>
 

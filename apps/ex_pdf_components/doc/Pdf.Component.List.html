@@ -5,10 +5,10 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.40.2">
-    <meta name="project" content="ex_pdf_components v1.0.1">
+    <meta name="project" content="ex_pdf_components v1.0.2">
 
 
-    <title>Pdf.Component.List — ex_pdf_components v1.0.1</title>
+    <title>Pdf.Component.List — ex_pdf_components v1.0.2</title>
 
     <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
 
@@ -37,7 +37,7 @@
 ex_pdf_components
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v1.0.1
+          v1.0.2
         </div>
       </div>
     </div>
@@ -94,7 +94,7 @@ ex_pdf_components
   <div class="heading-with-actions top-heading">
     <h1>
       <span translate="no">Pdf.<wbr />Component.<wbr />List</span> 
-      <small class="app-vsn" translate="no">(ex_pdf_components v1.0.1)</small>
+      <small class="app-vsn" translate="no">(ex_pdf_components v1.0.2)</small>
 
     </h1>
 
@@ -105,7 +105,7 @@ ex_pdf_components
 
 
 
-      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/list.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/list.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -115,18 +115,18 @@ ex_pdf_components
 
     <section id="moduledoc">
 <p>List component for PDF documents.</p><p>Renders bulleted or numbered lists with support for nesting,
-custom markers, and per-level styling.</p><h2 id="module-examples" class="section-heading"><a href="#module-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">doc</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.List</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="7862989095-1">(</span><span class="p" data-group-id="7862989095-2">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="7862989095-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7862989095-3">%{</span><span class="p" data-group-id="7862989095-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7862989095-4">[</span><span class="w">
+custom markers, and per-level styling.</p><h2 id="module-examples" class="section-heading"><a href="#module-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">doc</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.List</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="0286826766-1">(</span><span class="p" data-group-id="0286826766-2">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="0286826766-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0286826766-3">%{</span><span class="p" data-group-id="0286826766-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0286826766-4">[</span><span class="w">
   </span><span class="s">&quot;First item&quot;</span><span class="p">,</span><span class="w">
   </span><span class="s">&quot;Second item&quot;</span><span class="p">,</span><span class="w">
-  </span><span class="p" data-group-id="7862989095-5">{</span><span class="ss">:nested</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7862989095-6">[</span><span class="s">&quot;Sub-item A&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Sub-item B&quot;</span><span class="p" data-group-id="7862989095-6">]</span><span class="p" data-group-id="7862989095-5">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="0286826766-5">{</span><span class="ss">:nested</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0286826766-6">[</span><span class="s">&quot;Sub-item A&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Sub-item B&quot;</span><span class="p" data-group-id="0286826766-6">]</span><span class="p" data-group-id="0286826766-5">}</span><span class="p">,</span><span class="w">
   </span><span class="s">&quot;Third item&quot;</span><span class="w">
-</span><span class="p" data-group-id="7862989095-4">]</span><span class="p" data-group-id="7862989095-1">)</span><span class="w">
+</span><span class="p" data-group-id="0286826766-4">]</span><span class="p" data-group-id="0286826766-1">)</span><span class="w">
 
-</span><span class="n">doc</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.List</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="7862989095-7">(</span><span class="p" data-group-id="7862989095-8">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="7862989095-8">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7862989095-9">%{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="ss">:numbered</span><span class="p" data-group-id="7862989095-9">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7862989095-10">[</span><span class="w">
+</span><span class="n">doc</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.List</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="0286826766-7">(</span><span class="p" data-group-id="0286826766-8">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="0286826766-8">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0286826766-9">%{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="ss">:numbered</span><span class="p" data-group-id="0286826766-9">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="0286826766-10">[</span><span class="w">
   </span><span class="s">&quot;Step one&quot;</span><span class="p">,</span><span class="w">
   </span><span class="s">&quot;Step two&quot;</span><span class="p">,</span><span class="w">
   </span><span class="s">&quot;Step three&quot;</span><span class="w">
-</span><span class="p" data-group-id="7862989095-10">]</span><span class="p" data-group-id="7862989095-7">)</span></code></pre>
+</span><span class="p" data-group-id="0286826766-10">]</span><span class="p" data-group-id="0286826766-7">)</span></code></pre>
     </section>
 
 </div>
@@ -179,7 +179,7 @@ custom markers, and per-level styling.</p><h2 id="module-examples" class="sectio
       <h1 class="signature" translate="no">render(doc, arg, style \\ %{}, items)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/list.ex#L54" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/list.ex#L54" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -200,9 +200,9 @@ custom markers, and per-level styling.</p><h2 id="module-examples" class="sectio
         <p>
 
             <span class="line">
-              <a href="https://hex.pm/packages/ex_pdf_components/1.0.1">Hex Package</a>
+              <a href="https://hex.pm/packages/ex_pdf_components/1.0.2">Hex Package</a>
 
-              <a href="https://preview.hex.pm/preview/ex_pdf_components/1.0.1">Hex Preview</a>
+              <a href="https://preview.hex.pm/preview/ex_pdf_components/1.0.2">Hex Preview</a>
 
             </span>
 

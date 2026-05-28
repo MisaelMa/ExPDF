@@ -5,10 +5,10 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.40.2">
-    <meta name="project" content="ex_pdf_core v1.0.1">
+    <meta name="project" content="ex_pdf_core v1.0.2">
 
 
-    <title>Pdf — ex_pdf_core v1.0.1</title>
+    <title>Pdf — ex_pdf_core v1.0.2</title>
 
     <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
 
@@ -37,7 +37,7 @@
 ex_pdf_core
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v1.0.1
+          v1.0.2
         </div>
       </div>
     </div>
@@ -94,7 +94,7 @@ ex_pdf_core
   <div class="heading-with-actions top-heading">
     <h1>
       <span translate="no">Pdf</span> 
-      <small class="app-vsn" translate="no">(ex_pdf_core v1.0.1)</small>
+      <small class="app-vsn" translate="no">(ex_pdf_core v1.0.2)</small>
 
     </h1>
 
@@ -105,7 +105,7 @@ ex_pdf_core
 
 
 
-      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -114,13 +114,13 @@ ex_pdf_core
 
 
     <section id="moduledoc">
-<p>The missing PDF library for Elixir.</p><h2 id="module-usage" class="section-heading"><a href="#module-usage" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Usage</span></h2><pre><code class="makeup elixir" translate="no"><span class="nc">Pdf</span><span class="o">.</span><span class="n">build</span><span class="p" data-group-id="5065263779-1">(</span><span class="p" data-group-id="5065263779-2">[</span><span class="ss">size</span><span class="p">:</span><span class="w"> </span><span class="ss">:a4</span><span class="p">,</span><span class="w"> </span><span class="ss">compress</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="5065263779-2">]</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="5065263779-3">fn</span><span class="w"> </span><span class="n">pdf</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+<p>The missing PDF library for Elixir.</p><h2 id="module-usage" class="section-heading"><a href="#module-usage" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Usage</span></h2><pre><code class="makeup elixir" translate="no"><span class="nc">Pdf</span><span class="o">.</span><span class="n">build</span><span class="p" data-group-id="0167801596-1">(</span><span class="p" data-group-id="0167801596-2">[</span><span class="ss">size</span><span class="p">:</span><span class="w"> </span><span class="ss">:a4</span><span class="p">,</span><span class="w"> </span><span class="ss">compress</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="0167801596-2">]</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="0167801596-3">fn</span><span class="w"> </span><span class="n">pdf</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
   </span><span class="n">pdf</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">set_info</span><span class="p" data-group-id="5065263779-4">(</span><span class="ss">title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Demo PDF&quot;</span><span class="p" data-group-id="5065263779-4">)</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p" data-group-id="5065263779-5">(</span><span class="s">&quot;Helvetica&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="5065263779-5">)</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="5065263779-6">(</span><span class="p" data-group-id="5065263779-7">{</span><span class="mi">200</span><span class="p">,</span><span class="mi">200</span><span class="p" data-group-id="5065263779-7">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Welcome to Pdf&quot;</span><span class="p" data-group-id="5065263779-6">)</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">write_to</span><span class="p" data-group-id="5065263779-8">(</span><span class="s">&quot;test.pdf&quot;</span><span class="p" data-group-id="5065263779-8">)</span><span class="w">
-</span><span class="k" data-group-id="5065263779-3">end</span><span class="p" data-group-id="5065263779-1">)</span></code></pre><h2 id="module-page-sizes" class="section-heading"><a href="#module-page-sizes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Page sizes</span></h2><p>The available page sizes are:</p><ul><li><code class="inline">:a0</code> - <code class="inline">:a9</code></li><li><code class="inline">:b0</code> - <code class="inline">:b9</code></li><li><code class="inline">:c5e</code></li><li><code class="inline">:comm10e</code></li><li><code class="inline">:dle</code></li><li><code class="inline">:executive</code></li><li><code class="inline">:folio</code></li><li><code class="inline">:ledger</code></li><li><code class="inline">:legal</code></li><li><code class="inline">:letter</code></li><li><code class="inline">:tabloid</code></li><li>a custom size <code class="inline">[width, height]</code> in Pdf points.</li></ul><p>or you can also specify a tuple <code class="inline">{size, :landscape}</code>.</p>
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">set_info</span><span class="p" data-group-id="0167801596-4">(</span><span class="ss">title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Demo PDF&quot;</span><span class="p" data-group-id="0167801596-4">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p" data-group-id="0167801596-5">(</span><span class="s">&quot;Helvetica&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="0167801596-5">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="0167801596-6">(</span><span class="p" data-group-id="0167801596-7">{</span><span class="mi">200</span><span class="p">,</span><span class="mi">200</span><span class="p" data-group-id="0167801596-7">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Welcome to Pdf&quot;</span><span class="p" data-group-id="0167801596-6">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">write_to</span><span class="p" data-group-id="0167801596-8">(</span><span class="s">&quot;test.pdf&quot;</span><span class="p" data-group-id="0167801596-8">)</span><span class="w">
+</span><span class="k" data-group-id="0167801596-3">end</span><span class="p" data-group-id="0167801596-1">)</span></code></pre><h2 id="module-page-sizes" class="section-heading"><a href="#module-page-sizes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Page sizes</span></h2><p>The available page sizes are:</p><ul><li><code class="inline">:a0</code> - <code class="inline">:a9</code></li><li><code class="inline">:b0</code> - <code class="inline">:b9</code></li><li><code class="inline">:c5e</code></li><li><code class="inline">:comm10e</code></li><li><code class="inline">:dle</code></li><li><code class="inline">:executive</code></li><li><code class="inline">:folio</code></li><li><code class="inline">:ledger</code></li><li><code class="inline">:legal</code></li><li><code class="inline">:letter</code></li><li><code class="inline">:tabloid</code></li><li>a custom size <code class="inline">[width, height]</code> in Pdf points.</li></ul><p>or you can also specify a tuple <code class="inline">{size, :landscape}</code>.</p>
     </section>
 
 </div>
@@ -1152,7 +1152,7 @@ Must be used within <code class="inline">save_state/restore_state</code>.</p></d
       <h1 class="signature" translate="no">cap_style()</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L80" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L80" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1180,7 +1180,7 @@ Must be used within <code class="inline">save_state/restore_state</code>.</p></d
       <h1 class="signature" translate="no">cmyk()</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L64" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L64" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1208,7 +1208,7 @@ Must be used within <code class="inline">save_state/restore_state</code>.</p></d
       <h1 class="signature" translate="no">color_name()</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L56" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L56" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1236,7 +1236,7 @@ Must be used within <code class="inline">save_state/restore_state</code>.</p></d
       <h1 class="signature" translate="no">coords()</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L42" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L42" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1265,7 +1265,7 @@ In Pdf these start from the bottom-left of the page.</p>
       <h1 class="signature" translate="no">dimension()</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L44" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L44" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1293,7 +1293,7 @@ In Pdf these start from the bottom-left of the page.</p>
       <h1 class="signature" translate="no">height()</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L52" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L52" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1321,7 +1321,7 @@ In Pdf these start from the bottom-left of the page.</p>
       <h1 class="signature" translate="no">join_style()</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L96" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L96" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1349,7 +1349,7 @@ In Pdf these start from the bottom-left of the page.</p>
       <h1 class="signature" translate="no">rgb()</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L60" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L60" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1377,7 +1377,7 @@ In Pdf these start from the bottom-left of the page.</p>
       <h1 class="signature" translate="no">width()</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L50" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L50" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1405,7 +1405,7 @@ In Pdf these start from the bottom-left of the page.</p>
       <h1 class="signature" translate="no">x()</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L46" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L46" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1433,7 +1433,7 @@ In Pdf these start from the bottom-left of the page.</p>
       <h1 class="signature" translate="no">y()</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L48" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L48" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1474,7 +1474,7 @@ In Pdf these start from the bottom-left of the page.</p>
       <h1 class="signature" translate="no">add_font(document, path)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L427" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L427" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1484,11 +1484,11 @@ In Pdf these start from the bottom-left of the page.</p>
   <section class="docstring">
 
 <p>Add a font to the list of available fonts.</p><p>Currently only <em>Type 1</em> AFM/PFB fonts are supported.</p><pre><code class="makeup elixir" translate="no"><span class="w">
-</span><span class="n">fonts_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Application</span><span class="o">.</span><span class="n">app_dir</span><span class="p" data-group-id="2607874457-1">(</span><span class="ss">:my_app</span><span class="p" data-group-id="2607874457-1">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Path</span><span class="o">.</span><span class="n">join</span><span class="p" data-group-id="2607874457-2">(</span><span class="s">&quot;priv&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;fonts&quot;</span><span class="p" data-group-id="2607874457-2">)</span><span class="w">
+</span><span class="n">fonts_dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Application</span><span class="o">.</span><span class="n">app_dir</span><span class="p" data-group-id="4630082854-1">(</span><span class="ss">:my_app</span><span class="p" data-group-id="4630082854-1">)</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Path</span><span class="o">.</span><span class="n">join</span><span class="p" data-group-id="4630082854-2">(</span><span class="s">&quot;priv&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;fonts&quot;</span><span class="p" data-group-id="4630082854-2">)</span><span class="w">
 
 </span><span class="n">pdf</span><span class="w">
-</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">add_font</span><span class="p" data-group-id="2607874457-3">(</span><span class="nc">Path</span><span class="o">.</span><span class="n">join</span><span class="p" data-group-id="2607874457-4">(</span><span class="n">fonts_dir</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;DejavuSans.afm&quot;</span><span class="p" data-group-id="2607874457-4">)</span><span class="w">
-</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">add_font</span><span class="p" data-group-id="2607874457-5">(</span><span class="nc">Path</span><span class="o">.</span><span class="n">join</span><span class="p" data-group-id="2607874457-6">(</span><span class="n">fonts_dir</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;DejavuSans-Bold.afm&quot;</span><span class="p" data-group-id="2607874457-6">)</span></code></pre><p>The font can then be set with <a href="#set_font/3"><code class="inline">set_font/3</code></a>.</p><p>You have to <a href="#add_font/2"><code class="inline">add_font/2</code></a> all variants you want to use, bold, italic, ...</p>
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">add_font</span><span class="p" data-group-id="4630082854-3">(</span><span class="nc">Path</span><span class="o">.</span><span class="n">join</span><span class="p" data-group-id="4630082854-4">(</span><span class="n">fonts_dir</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;DejavuSans.afm&quot;</span><span class="p" data-group-id="4630082854-4">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">add_font</span><span class="p" data-group-id="4630082854-5">(</span><span class="nc">Path</span><span class="o">.</span><span class="n">join</span><span class="p" data-group-id="4630082854-6">(</span><span class="n">fonts_dir</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;DejavuSans-Bold.afm&quot;</span><span class="p" data-group-id="4630082854-6">)</span></code></pre><p>The font can then be set with <a href="#set_font/3"><code class="inline">set_font/3</code></a>.</p><p>You have to <a href="#add_font/2"><code class="inline">add_font/2</code></a> all variants you want to use, bold, italic, ...</p>
   </section>
 </section>
 <section class="detail" id="add_image/3">
@@ -1501,7 +1501,7 @@ In Pdf these start from the bottom-left of the page.</p>
       <h1 class="signature" translate="no">add_image(document, coords, image_path)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L588" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L588" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1523,7 +1523,7 @@ In Pdf these start from the bottom-left of the page.</p>
       <h1 class="signature" translate="no">add_image(document, coords, image_path, opts)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L595" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L595" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1545,7 +1545,7 @@ In Pdf these start from the bottom-left of the page.</p>
       <h1 class="signature" translate="no">add_page(document, size)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L208" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L208" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1567,7 +1567,7 @@ In Pdf these start from the bottom-left of the page.</p>
       <h1 class="signature" translate="no">autoprint(document)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L217" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L217" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1591,7 +1591,7 @@ In Pdf these start from the bottom-left of the page.</p>
       <h1 class="signature" translate="no">background(document, style_or_name \\ %{})</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L1175" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L1175" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1600,7 +1600,7 @@ In Pdf these start from the bottom-left of the page.</p>
 
   <section class="docstring">
 
-<p>Fill the current page background with a color.</p><h2 id="background/2-example" class="section-heading"><a href="#background/2-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">background</span><span class="p" data-group-id="5031696727-1">(</span><span class="p" data-group-id="5031696727-2">%{</span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5031696727-3">{</span><span class="mf">0.95</span><span class="p">,</span><span class="w"> </span><span class="mf">0.95</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p" data-group-id="5031696727-3">}</span><span class="p" data-group-id="5031696727-2">}</span><span class="p" data-group-id="5031696727-1">)</span></code></pre>
+<p>Fill the current page background with a color.</p><h2 id="background/2-example" class="section-heading"><a href="#background/2-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">background</span><span class="p" data-group-id="0078328160-1">(</span><span class="p" data-group-id="0078328160-2">%{</span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0078328160-3">{</span><span class="mf">0.95</span><span class="p">,</span><span class="w"> </span><span class="mf">0.95</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p" data-group-id="0078328160-3">}</span><span class="p" data-group-id="0078328160-2">}</span><span class="p" data-group-id="0078328160-1">)</span></code></pre>
   </section>
 </section>
 <section class="detail" id="box/5">
@@ -1615,7 +1615,7 @@ In Pdf these start from the bottom-left of the page.</p>
       <h1 class="signature" translate="no">box(document, pos, size, style \\ %{}, callback)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L788" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L788" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1626,9 +1626,9 @@ In Pdf these start from the bottom-left of the page.</p>
 
 <p>Render a box container at <code class="inline">{x, y}</code> with size <code class="inline">{w, h}</code>.</p><p>Supports padding, margin, border, border_radius, and background.
 The callback receives <code class="inline">(doc, %{x, y, width, height})</code> with the inner area.</p><p>Size supports relative dimensions:</p><ul><li><code class="inline">:full</code> — 100% of the document's content area</li><li><code class="inline">&quot;50%&quot;</code> — percentage of the content area</li><li><code class="inline">number</code> — absolute points (default)</li></ul><h2 id="box/5-example" class="section-heading"><a href="#box/5-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">doc</span><span class="w">
-</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">box</span><span class="p" data-group-id="7136121027-1">(</span><span class="p" data-group-id="7136121027-2">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="7136121027-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7136121027-3">{</span><span class="ss">:full</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p" data-group-id="7136121027-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7136121027-4">%{</span><span class="ss">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="ss">border</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="7136121027-4">}</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="7136121027-5">fn</span><span class="w"> </span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
-  </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="7136121027-6">(</span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7136121027-7">{</span><span class="n">area</span><span class="o">.</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="o">.</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">14</span><span class="p" data-group-id="7136121027-7">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Inside the box&quot;</span><span class="p" data-group-id="7136121027-6">)</span><span class="w">
-</span><span class="k" data-group-id="7136121027-5">end</span><span class="p" data-group-id="7136121027-1">)</span></code></pre>
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">box</span><span class="p" data-group-id="3762726700-1">(</span><span class="p" data-group-id="3762726700-2">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="3762726700-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3762726700-3">{</span><span class="ss">:full</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p" data-group-id="3762726700-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3762726700-4">%{</span><span class="ss">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="ss">border</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="3762726700-4">}</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="3762726700-5">fn</span><span class="w"> </span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+  </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="3762726700-6">(</span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3762726700-7">{</span><span class="n">area</span><span class="o">.</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="o">.</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">14</span><span class="p" data-group-id="3762726700-7">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Inside the box&quot;</span><span class="p" data-group-id="3762726700-6">)</span><span class="w">
+</span><span class="k" data-group-id="3762726700-5">end</span><span class="p" data-group-id="3762726700-1">)</span></code></pre>
   </section>
 </section>
 <section class="detail" id="build/2">
@@ -1643,7 +1643,7 @@ The callback receives <code class="inline">(doc, %{x, y, width, height})</code> 
       <h1 class="signature" translate="no">build(opts \\ [], func)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L131" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L131" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1652,16 +1652,16 @@ The callback receives <code class="inline">(doc, %{x, y, width, height})</code> 
 
   <section class="docstring">
 
-<p>Builds a PDF document.</p><pre><code class="makeup elixir" translate="no"><span class="nc">Pdf</span><span class="o">.</span><span class="n">build</span><span class="p" data-group-id="2973431123-1">(</span><span class="p" data-group-id="2973431123-2">[</span><span class="ss">size</span><span class="p">:</span><span class="w"> </span><span class="ss">:a3</span><span class="p" data-group-id="2973431123-2">]</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="2973431123-3">fn</span><span class="w"> </span><span class="n">pdf</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+<p>Builds a PDF document.</p><pre><code class="makeup elixir" translate="no"><span class="nc">Pdf</span><span class="o">.</span><span class="n">build</span><span class="p" data-group-id="3831686080-1">(</span><span class="p" data-group-id="3831686080-2">[</span><span class="ss">size</span><span class="p">:</span><span class="w"> </span><span class="ss">:a3</span><span class="p" data-group-id="3831686080-2">]</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="3831686080-3">fn</span><span class="w"> </span><span class="n">pdf</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
   </span><span class="n">pdf</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p" data-group-id="2973431123-4">(</span><span class="s">&quot;Helvetica&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p" data-group-id="2973431123-4">)</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="2973431123-5">(</span><span class="p" data-group-id="2973431123-6">{</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="2973431123-6">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Open&quot;</span><span class="p" data-group-id="2973431123-5">)</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">write_to</span><span class="p" data-group-id="2973431123-7">(</span><span class="s">&quot;test.pdf&quot;</span><span class="p" data-group-id="2973431123-7">)</span><span class="w">
-</span><span class="k" data-group-id="2973431123-3">end</span><span class="p" data-group-id="2973431123-1">)</span></code></pre><p>is equivalent to</p><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="8359683247-1">(</span><span class="ss">size</span><span class="p">:</span><span class="w"> </span><span class="ss">:a3</span><span class="p" data-group-id="8359683247-1">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p" data-group-id="3831686080-4">(</span><span class="s">&quot;Helvetica&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p" data-group-id="3831686080-4">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="3831686080-5">(</span><span class="p" data-group-id="3831686080-6">{</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="3831686080-6">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Open&quot;</span><span class="p" data-group-id="3831686080-5">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">write_to</span><span class="p" data-group-id="3831686080-7">(</span><span class="s">&quot;test.pdf&quot;</span><span class="p" data-group-id="3831686080-7">)</span><span class="w">
+</span><span class="k" data-group-id="3831686080-3">end</span><span class="p" data-group-id="3831686080-1">)</span></code></pre><p>is equivalent to</p><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="8194114228-1">(</span><span class="ss">size</span><span class="p">:</span><span class="w"> </span><span class="ss">:a3</span><span class="p" data-group-id="8194114228-1">)</span><span class="w">
 </span><span class="n">pdf</span><span class="w">
-</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p" data-group-id="8359683247-2">(</span><span class="s">&quot;Helvetica&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p" data-group-id="8359683247-2">)</span><span class="w">
-</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="8359683247-3">(</span><span class="p" data-group-id="8359683247-4">{</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="8359683247-4">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Open&quot;</span><span class="p" data-group-id="8359683247-3">)</span><span class="w">
-</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">write_to</span><span class="p" data-group-id="8359683247-5">(</span><span class="s">&quot;test.pdf&quot;</span><span class="p" data-group-id="8359683247-5">)</span></code></pre>
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p" data-group-id="8194114228-2">(</span><span class="s">&quot;Helvetica&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p" data-group-id="8194114228-2">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="8194114228-3">(</span><span class="p" data-group-id="8194114228-4">{</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="8194114228-4">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Open&quot;</span><span class="p" data-group-id="8194114228-3">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">write_to</span><span class="p" data-group-id="8194114228-5">(</span><span class="s">&quot;test.pdf&quot;</span><span class="p" data-group-id="8194114228-5">)</span></code></pre>
   </section>
 </section>
 <section class="detail" id="cleanup/1">
@@ -1674,7 +1674,7 @@ The callback receives <code class="inline">(doc, %{x, y, width, height})</code> 
       <h1 class="signature" translate="no">cleanup(document)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L144" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L144" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1696,7 +1696,7 @@ The callback receives <code class="inline">(doc, %{x, y, width, height})</code> 
       <h1 class="signature" translate="no">clip(document)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L764" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L764" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1718,7 +1718,7 @@ The callback receives <code class="inline">(doc, %{x, y, width, height})</code> 
       <h1 class="signature" translate="no">close_path(document)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L759" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L759" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1746,7 +1746,7 @@ The callback receives <code class="inline">(doc, %{x, y, width, height})</code> 
       <h1 class="signature" translate="no">cm(x)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L165" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L165" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1776,7 +1776,7 @@ The callback receives <code class="inline">(doc, %{x, y, width, height})</code> 
       <h1 class="signature" translate="no">column(document, pos, size, rows, opts \\ [])</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L826" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L826" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1787,10 +1787,10 @@ The callback receives <code class="inline">(doc, %{x, y, width, height})</code> 
 
 <p>Stack content vertically with fixed heights.</p><p><code class="inline">rows</code> is a list of <code class="inline">{height, callback}</code> tuples.
 Size supports relative dimensions (<code class="inline">:full</code>, <code class="inline">&quot;50%&quot;</code>).</p><h2 id="column/5-example" class="section-heading"><a href="#column/5-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">doc</span><span class="w">
-</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">column</span><span class="p" data-group-id="8421235765-1">(</span><span class="p" data-group-id="8421235765-2">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="8421235765-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8421235765-3">{</span><span class="ss">:full</span><span class="p">,</span><span class="w"> </span><span class="mi">400</span><span class="p" data-group-id="8421235765-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8421235765-4">[</span><span class="w">
-  </span><span class="p" data-group-id="8421235765-5">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="8421235765-6">fn</span><span class="w"> </span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="8421235765-7">(</span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8421235765-8">{</span><span class="n">area</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="o">.</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">14</span><span class="p" data-group-id="8421235765-8">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Row 1&quot;</span><span class="p" data-group-id="8421235765-7">)</span><span class="w"> </span><span class="k" data-group-id="8421235765-6">end</span><span class="p" data-group-id="8421235765-5">}</span><span class="p">,</span><span class="w">
-  </span><span class="p" data-group-id="8421235765-9">{</span><span class="mi">80</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="8421235765-10">fn</span><span class="w"> </span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="8421235765-11">(</span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8421235765-12">{</span><span class="n">area</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="o">.</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">14</span><span class="p" data-group-id="8421235765-12">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Row 2&quot;</span><span class="p" data-group-id="8421235765-11">)</span><span class="w"> </span><span class="k" data-group-id="8421235765-10">end</span><span class="p" data-group-id="8421235765-9">}</span><span class="w">
-</span><span class="p" data-group-id="8421235765-4">]</span><span class="p">,</span><span class="w"> </span><span class="ss">gap</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p" data-group-id="8421235765-1">)</span></code></pre>
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">column</span><span class="p" data-group-id="2923157440-1">(</span><span class="p" data-group-id="2923157440-2">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="2923157440-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2923157440-3">{</span><span class="ss">:full</span><span class="p">,</span><span class="w"> </span><span class="mi">400</span><span class="p" data-group-id="2923157440-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2923157440-4">[</span><span class="w">
+  </span><span class="p" data-group-id="2923157440-5">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="2923157440-6">fn</span><span class="w"> </span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="2923157440-7">(</span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2923157440-8">{</span><span class="n">area</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="o">.</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">14</span><span class="p" data-group-id="2923157440-8">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Row 1&quot;</span><span class="p" data-group-id="2923157440-7">)</span><span class="w"> </span><span class="k" data-group-id="2923157440-6">end</span><span class="p" data-group-id="2923157440-5">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="2923157440-9">{</span><span class="mi">80</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="2923157440-10">fn</span><span class="w"> </span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="2923157440-11">(</span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2923157440-12">{</span><span class="n">area</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="o">.</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">14</span><span class="p" data-group-id="2923157440-12">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Row 2&quot;</span><span class="p" data-group-id="2923157440-11">)</span><span class="w"> </span><span class="k" data-group-id="2923157440-10">end</span><span class="p" data-group-id="2923157440-9">}</span><span class="w">
+</span><span class="p" data-group-id="2923157440-4">]</span><span class="p">,</span><span class="w"> </span><span class="ss">gap</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p" data-group-id="2923157440-1">)</span></code></pre>
   </section>
 </section>
 <section class="detail" id="content_area/1">
@@ -1803,7 +1803,7 @@ Size supports relative dimensions (<code class="inline">:full</code>, <code clas
       <h1 class="signature" translate="no">content_area(document)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L620" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L620" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1825,7 +1825,7 @@ Size supports relative dimensions (<code class="inline">:full</code>, <code clas
       <h1 class="signature" translate="no">cursor(document)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L635" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L635" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1853,7 +1853,7 @@ Size supports relative dimensions (<code class="inline">:full</code>, <code clas
       <h1 class="signature" translate="no">cursor_xy(document)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L643" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L643" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1881,7 +1881,7 @@ Size supports relative dimensions (<code class="inline">:full</code>, <code clas
       <h1 class="signature" translate="no">curve_to(document, cp1, cp2, end_point)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L752" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L752" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1897,9 +1897,9 @@ Size supports relative dimensions (<code class="inline">:full</code>, <code clas
       </div>
 
 <p>Draw a Bézier curve from the current point through control points to the end point.</p><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w">
-</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">move_to</span><span class="p" data-group-id="1608768321-1">(</span><span class="p" data-group-id="1608768321-2">{</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="1608768321-2">}</span><span class="p" data-group-id="1608768321-1">)</span><span class="w">
-</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">curve_to</span><span class="p" data-group-id="1608768321-3">(</span><span class="p" data-group-id="1608768321-4">{</span><span class="mi">120</span><span class="p">,</span><span class="w"> </span><span class="mi">150</span><span class="p" data-group-id="1608768321-4">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1608768321-5">{</span><span class="mi">180</span><span class="p">,</span><span class="w"> </span><span class="mi">150</span><span class="p" data-group-id="1608768321-5">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1608768321-6">{</span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="1608768321-6">}</span><span class="p" data-group-id="1608768321-3">)</span><span class="w">
-</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">stroke</span><span class="p" data-group-id="1608768321-7">(</span><span class="p" data-group-id="1608768321-7">)</span></code></pre>
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">move_to</span><span class="p" data-group-id="4603113084-1">(</span><span class="p" data-group-id="4603113084-2">{</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="4603113084-2">}</span><span class="p" data-group-id="4603113084-1">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">curve_to</span><span class="p" data-group-id="4603113084-3">(</span><span class="p" data-group-id="4603113084-4">{</span><span class="mi">120</span><span class="p">,</span><span class="w"> </span><span class="mi">150</span><span class="p" data-group-id="4603113084-4">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4603113084-5">{</span><span class="mi">180</span><span class="p">,</span><span class="w"> </span><span class="mi">150</span><span class="p" data-group-id="4603113084-5">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4603113084-6">{</span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="4603113084-6">}</span><span class="p" data-group-id="4603113084-3">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">stroke</span><span class="p" data-group-id="4603113084-7">(</span><span class="p" data-group-id="4603113084-7">)</span></code></pre>
   </section>
 </section>
 <section class="detail" id="debug_grid/2">
@@ -1914,7 +1914,7 @@ Size supports relative dimensions (<code class="inline">:full</code>, <code clas
       <h1 class="signature" translate="no">debug_grid(document, opts \\ %{})</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L868" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L868" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1923,10 +1923,10 @@ Size supports relative dimensions (<code class="inline">:full</code>, <code clas
 
   <section class="docstring">
 
-<p>Draw a debug grid overlay on the current page.</p><h2 id="debug_grid/2-options" class="section-heading"><a href="#debug_grid/2-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Options</span></h2><ul><li><code class="inline">:grid</code> — <code class="inline">:horizontal</code>, <code class="inline">:vertical</code>, or <code class="inline">:both</code> (default <code class="inline">:both</code>)</li><li><code class="inline">:area</code> — where to draw the grid:<ul><li><code class="inline">:content</code> — inside margins only (default)</li><li><code class="inline">:page</code> — entire page (0,0 to page width/height)</li><li><code class="inline">:margins</code> — only in the margin zones (outside content area)</li></ul></li><li><code class="inline">:spacing</code> — distance between grid lines in points (default <code class="inline">10</code>)</li><li><code class="inline">:color</code> — grid line color (default <code class="inline">{0.85, 0.85, 0.85}</code>)</li><li><code class="inline">:line_width</code> — grid line width (default <code class="inline">0.25</code>)</li><li><code class="inline">:labels</code> — show coordinate labels (default <code class="inline">true</code>)</li><li><code class="inline">:label_every</code> — show a coordinate label every N points (default <code class="inline">50</code>)</li><li><code class="inline">:info</code> — show page/margin info text (default <code class="inline">true</code>)</li><li><code class="inline">:margin_border</code> — draw the margin boundary rectangle (default <code class="inline">true</code>)</li><li><code class="inline">:cursor_line</code> — draw cursor Y position line (default <code class="inline">true</code>)</li></ul><h2 id="debug_grid/2-examples" class="section-heading"><a href="#debug_grid/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">debug_grid</span><span class="p" data-group-id="9383786544-1">(</span><span class="p" data-group-id="9383786544-1">)</span><span class="w">
-</span><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">debug_grid</span><span class="p" data-group-id="9383786544-2">(</span><span class="p" data-group-id="9383786544-3">%{</span><span class="ss">grid</span><span class="p">:</span><span class="w"> </span><span class="ss">:horizontal</span><span class="p">,</span><span class="w"> </span><span class="ss">area</span><span class="p">:</span><span class="w"> </span><span class="ss">:page</span><span class="p" data-group-id="9383786544-3">}</span><span class="p" data-group-id="9383786544-2">)</span><span class="w">
-</span><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">debug_grid</span><span class="p" data-group-id="9383786544-4">(</span><span class="p" data-group-id="9383786544-5">%{</span><span class="ss">grid</span><span class="p">:</span><span class="w"> </span><span class="ss">:vertical</span><span class="p">,</span><span class="w"> </span><span class="ss">area</span><span class="p">:</span><span class="w"> </span><span class="ss">:content</span><span class="p">,</span><span class="w"> </span><span class="ss">spacing</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="9383786544-5">}</span><span class="p" data-group-id="9383786544-4">)</span><span class="w">
-</span><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">debug_grid</span><span class="p" data-group-id="9383786544-6">(</span><span class="p" data-group-id="9383786544-7">%{</span><span class="ss">area</span><span class="p">:</span><span class="w"> </span><span class="ss">:margins</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9383786544-8">{</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.9</span><span class="p">,</span><span class="w"> </span><span class="mf">0.9</span><span class="p" data-group-id="9383786544-8">}</span><span class="p" data-group-id="9383786544-7">}</span><span class="p" data-group-id="9383786544-6">)</span></code></pre>
+<p>Draw a debug grid overlay on the current page.</p><h2 id="debug_grid/2-options" class="section-heading"><a href="#debug_grid/2-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Options</span></h2><ul><li><code class="inline">:grid</code> — <code class="inline">:horizontal</code>, <code class="inline">:vertical</code>, or <code class="inline">:both</code> (default <code class="inline">:both</code>)</li><li><code class="inline">:area</code> — where to draw the grid:<ul><li><code class="inline">:content</code> — inside margins only (default)</li><li><code class="inline">:page</code> — entire page (0,0 to page width/height)</li><li><code class="inline">:margins</code> — only in the margin zones (outside content area)</li></ul></li><li><code class="inline">:spacing</code> — distance between grid lines in points (default <code class="inline">10</code>)</li><li><code class="inline">:color</code> — grid line color (default <code class="inline">{0.85, 0.85, 0.85}</code>)</li><li><code class="inline">:line_width</code> — grid line width (default <code class="inline">0.25</code>)</li><li><code class="inline">:labels</code> — show coordinate labels (default <code class="inline">true</code>)</li><li><code class="inline">:label_every</code> — show a coordinate label every N points (default <code class="inline">50</code>)</li><li><code class="inline">:info</code> — show page/margin info text (default <code class="inline">true</code>)</li><li><code class="inline">:margin_border</code> — draw the margin boundary rectangle (default <code class="inline">true</code>)</li><li><code class="inline">:cursor_line</code> — draw cursor Y position line (default <code class="inline">true</code>)</li></ul><h2 id="debug_grid/2-examples" class="section-heading"><a href="#debug_grid/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">debug_grid</span><span class="p" data-group-id="9575802739-1">(</span><span class="p" data-group-id="9575802739-1">)</span><span class="w">
+</span><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">debug_grid</span><span class="p" data-group-id="9575802739-2">(</span><span class="p" data-group-id="9575802739-3">%{</span><span class="ss">grid</span><span class="p">:</span><span class="w"> </span><span class="ss">:horizontal</span><span class="p">,</span><span class="w"> </span><span class="ss">area</span><span class="p">:</span><span class="w"> </span><span class="ss">:page</span><span class="p" data-group-id="9575802739-3">}</span><span class="p" data-group-id="9575802739-2">)</span><span class="w">
+</span><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">debug_grid</span><span class="p" data-group-id="9575802739-4">(</span><span class="p" data-group-id="9575802739-5">%{</span><span class="ss">grid</span><span class="p">:</span><span class="w"> </span><span class="ss">:vertical</span><span class="p">,</span><span class="w"> </span><span class="ss">area</span><span class="p">:</span><span class="w"> </span><span class="ss">:content</span><span class="p">,</span><span class="w"> </span><span class="ss">spacing</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="9575802739-5">}</span><span class="p" data-group-id="9575802739-4">)</span><span class="w">
+</span><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">debug_grid</span><span class="p" data-group-id="9575802739-6">(</span><span class="p" data-group-id="9575802739-7">%{</span><span class="ss">area</span><span class="p">:</span><span class="w"> </span><span class="ss">:margins</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9575802739-8">{</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">0.9</span><span class="p">,</span><span class="w"> </span><span class="mf">0.9</span><span class="p" data-group-id="9575802739-8">}</span><span class="p" data-group-id="9575802739-7">}</span><span class="p" data-group-id="9575802739-6">)</span></code></pre>
   </section>
 </section>
 <section class="detail" id="delete/1">
@@ -1939,7 +1939,7 @@ Size supports relative dimensions (<code class="inline">:full</code>, <code clas
       <h1 class="signature" translate="no">delete(document)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L147" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L147" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1965,7 +1965,7 @@ Size supports relative dimensions (<code class="inline">:full</code>, <code clas
       <h1 class="signature" translate="no">export(document)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L201" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L201" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1977,15 +1977,15 @@ Size supports relative dimensions (<code class="inline">:full</code>, <code clas
 <p>Export the Pdf to a binary representation.</p><p>This is can be used in eg Phoenix to send a PDF to the browser.</p><pre><code class="makeup elixir" translate="no"><span class="w">  </span><span class="n">report</span><span class="w"> </span><span class="o">=</span><span class="w">
     </span><span class="n">pdf</span><span class="w">
     </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">...</span><span class="w">
-    </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">export</span><span class="p" data-group-id="5251870454-1">(</span><span class="p" data-group-id="5251870454-1">)</span><span class="w">
+    </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">export</span><span class="p" data-group-id="7787554715-1">(</span><span class="p" data-group-id="7787554715-1">)</span><span class="w">
 
  </span><span class="n">conn</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">put_resp_content_type</span><span class="p" data-group-id="5251870454-2">(</span><span class="s">&quot;application/pdf&quot;</span><span class="p" data-group-id="5251870454-2">)</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">put_resp_header</span><span class="p" data-group-id="5251870454-3">(</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">put_resp_content_type</span><span class="p" data-group-id="7787554715-2">(</span><span class="s">&quot;application/pdf&quot;</span><span class="p" data-group-id="7787554715-2">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">put_resp_header</span><span class="p" data-group-id="7787554715-3">(</span><span class="w">
     </span><span class="s">&quot;content-disposition&quot;</span><span class="p">,</span><span class="w">
     </span><span class="s">&quot;attachment; filename=&quot;</span><span class="n">document</span><span class="o">.</span><span class="n">pdf</span><span class="s">&quot;&quot;</span><span class="w">
-  </span><span class="p" data-group-id="5251870454-3">)</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">send_resp</span><span class="p" data-group-id="5251870454-4">(</span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="n">report</span><span class="p" data-group-id="5251870454-4">)</span></code></pre>
+  </span><span class="p" data-group-id="7787554715-3">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="n">send_resp</span><span class="p" data-group-id="7787554715-4">(</span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="n">report</span><span class="p" data-group-id="7787554715-4">)</span></code></pre>
   </section>
 </section>
 <section class="detail" id="fill/1">
@@ -1998,7 +1998,7 @@ Size supports relative dimensions (<code class="inline">:full</code>, <code clas
       <h1 class="signature" translate="no">fill(document)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L310" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L310" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2026,7 +2026,7 @@ Size supports relative dimensions (<code class="inline">:full</code>, <code clas
       <h1 class="signature" translate="no">fill_and_stroke(document)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L737" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L737" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2050,7 +2050,7 @@ Size supports relative dimensions (<code class="inline">:full</code>, <code clas
       <h1 class="signature" translate="no">horizontal_line(document, style_or_name \\ %{})</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L1106" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L1106" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2059,8 +2059,8 @@ Size supports relative dimensions (<code class="inline">:full</code>, <code clas
 
   <section class="docstring">
 
-<p>Draw a horizontal line at the current cursor position across the content width.</p><h2 id="horizontal_line/2-example" class="section-heading"><a href="#horizontal_line/2-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">horizontal_line</span><span class="p" data-group-id="5051300855-1">(</span><span class="p" data-group-id="5051300855-1">)</span><span class="w">
-</span><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">horizontal_line</span><span class="p" data-group-id="5051300855-2">(</span><span class="p" data-group-id="5051300855-3">%{</span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:gray</span><span class="p">,</span><span class="w"> </span><span class="ss">line_width</span><span class="p">:</span><span class="w"> </span><span class="mf">0.5</span><span class="p" data-group-id="5051300855-3">}</span><span class="p" data-group-id="5051300855-2">)</span></code></pre>
+<p>Draw a horizontal line at the current cursor position across the content width.</p><h2 id="horizontal_line/2-example" class="section-heading"><a href="#horizontal_line/2-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">horizontal_line</span><span class="p" data-group-id="3418141902-1">(</span><span class="p" data-group-id="3418141902-1">)</span><span class="w">
+</span><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">horizontal_line</span><span class="p" data-group-id="3418141902-2">(</span><span class="p" data-group-id="3418141902-3">%{</span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:gray</span><span class="p">,</span><span class="w"> </span><span class="ss">line_width</span><span class="p">:</span><span class="w"> </span><span class="mf">0.5</span><span class="p" data-group-id="3418141902-3">}</span><span class="p" data-group-id="3418141902-2">)</span></code></pre>
   </section>
 </section>
 <section class="detail" id="inches/1">
@@ -2073,7 +2073,7 @@ Size supports relative dimensions (<code class="inline">:full</code>, <code clas
       <h1 class="signature" translate="no">inches(x)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L161" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L161" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2101,7 +2101,7 @@ Size supports relative dimensions (<code class="inline">:full</code>, <code clas
       <h1 class="signature" translate="no">line(document, coords, coords_to)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L281" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L281" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2129,7 +2129,7 @@ Size supports relative dimensions (<code class="inline">:full</code>, <code clas
       <h1 class="signature" translate="no">line_append(document, coords)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L298" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L298" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2145,8 +2145,8 @@ Size supports relative dimensions (<code class="inline">:full</code>, <code clas
       </div>
 
 <p>Draw a line from the last position to the given coordinates.</p><pre><code class="makeup elixir" translate="no"><span class="w">  </span><span class="n">pdf</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">move_to</span><span class="p" data-group-id="8843106067-1">(</span><span class="p" data-group-id="8843106067-2">{</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="8843106067-2">}</span><span class="p" data-group-id="8843106067-1">)</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">line_append</span><span class="p" data-group-id="8843106067-3">(</span><span class="p" data-group-id="8843106067-4">{</span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p" data-group-id="8843106067-4">}</span><span class="p" data-group-id="8843106067-3">)</span></code></pre>
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">move_to</span><span class="p" data-group-id="4710723720-1">(</span><span class="p" data-group-id="4710723720-2">{</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="4710723720-2">}</span><span class="p" data-group-id="4710723720-1">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">line_append</span><span class="p" data-group-id="4710723720-3">(</span><span class="p" data-group-id="4710723720-4">{</span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p" data-group-id="4710723720-4">}</span><span class="p" data-group-id="4710723720-3">)</span></code></pre>
   </section>
 </section>
 <section class="detail" id="mm/1">
@@ -2159,7 +2159,7 @@ Size supports relative dimensions (<code class="inline">:full</code>, <code clas
       <h1 class="signature" translate="no">mm(x)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L169" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L169" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2187,7 +2187,7 @@ Size supports relative dimensions (<code class="inline">:full</code>, <code clas
       <h1 class="signature" translate="no">move_down(document, amount)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L667" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L667" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2215,7 +2215,7 @@ Size supports relative dimensions (<code class="inline">:full</code>, <code clas
       <h1 class="signature" translate="no">move_right(document, amount)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L675" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L675" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2243,7 +2243,7 @@ Size supports relative dimensions (<code class="inline">:full</code>, <code clas
       <h1 class="signature" translate="no">move_to(document, coords)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L287" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L287" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2273,7 +2273,7 @@ Size supports relative dimensions (<code class="inline">:full</code>, <code clas
       <h1 class="signature" translate="no">new(opts \\ [])</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L109" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L109" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2301,7 +2301,7 @@ Size supports relative dimensions (<code class="inline">:full</code>, <code clas
       <h1 class="signature" translate="no">on_page(document, name, func)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L613" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L613" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2311,9 +2311,9 @@ Size supports relative dimensions (<code class="inline">:full</code>, <code clas
   <section class="docstring">
 
 <p>Register a page template that runs on every new page.</p><p>Supported template names: <code class="inline">:header</code>, <code class="inline">:footer</code>, <code class="inline">:watermark</code>, <code class="inline">:background</code>.</p><p>The function receives <code class="inline">(document, page_info)</code> where <code class="inline">page_info</code> is <code class="inline">%{number: n}</code>.</p><h2 id="on_page/3-example" class="section-heading"><a href="#on_page/3-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w">
-</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">on_page</span><span class="p" data-group-id="2778063883-1">(</span><span class="ss">:header</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="2778063883-2">fn</span><span class="w"> </span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="c">_info</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
-  </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="2778063883-3">(</span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2778063883-4">{</span><span class="mi">40</span><span class="p">,</span><span class="w"> </span><span class="mi">820</span><span class="p" data-group-id="2778063883-4">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;My Header&quot;</span><span class="p" data-group-id="2778063883-3">)</span><span class="w">
-</span><span class="k" data-group-id="2778063883-2">end</span><span class="p" data-group-id="2778063883-1">)</span></code></pre>
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">on_page</span><span class="p" data-group-id="9982151291-1">(</span><span class="ss">:header</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="9982151291-2">fn</span><span class="w"> </span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="c">_info</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+  </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="9982151291-3">(</span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9982151291-4">{</span><span class="mi">40</span><span class="p">,</span><span class="w"> </span><span class="mi">820</span><span class="p" data-group-id="9982151291-4">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;My Header&quot;</span><span class="p" data-group-id="9982151291-3">)</span><span class="w">
+</span><span class="k" data-group-id="9982151291-2">end</span><span class="p" data-group-id="9982151291-1">)</span></code></pre>
   </section>
 </section>
 <section class="detail" id="open/2">
@@ -2328,7 +2328,7 @@ Size supports relative dimensions (<code class="inline">:full</code>, <code clas
       <h1 class="signature" translate="no">open(opts \\ [], func)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L137" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L137" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2356,7 +2356,7 @@ Size supports relative dimensions (<code class="inline">:full</code>, <code clas
       <h1 class="signature" translate="no">page_break(document, size \\ nil)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L1139" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L1139" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2366,8 +2366,8 @@ Size supports relative dimensions (<code class="inline">:full</code>, <code clas
   <section class="docstring">
 
 <p>Insert a page break. Executes footer template on the current page
-and header/watermark templates on the new page.</p><h2 id="page_break/2-example" class="section-heading"><a href="#page_break/2-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">page_break</span><span class="p" data-group-id="9538344916-1">(</span><span class="p" data-group-id="9538344916-1">)</span><span class="w">
-</span><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">page_break</span><span class="p" data-group-id="9538344916-2">(</span><span class="ss">:letter</span><span class="p" data-group-id="9538344916-2">)</span></code></pre>
+and header/watermark templates on the new page.</p><h2 id="page_break/2-example" class="section-heading"><a href="#page_break/2-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">page_break</span><span class="p" data-group-id="9958169343-1">(</span><span class="p" data-group-id="9958169343-1">)</span><span class="w">
+</span><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">page_break</span><span class="p" data-group-id="9958169343-2">(</span><span class="ss">:letter</span><span class="p" data-group-id="9958169343-2">)</span></code></pre>
   </section>
 </section>
 <section class="detail" id="page_number/1">
@@ -2380,7 +2380,7 @@ and header/watermark templates on the new page.</p><h2 id="page_break/2-example"
       <h1 class="signature" translate="no">page_number(document)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L222" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L222" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2402,7 +2402,7 @@ and header/watermark templates on the new page.</p><h2 id="page_break/2-example"
       <h1 class="signature" translate="no">picas(x)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L157" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L157" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2432,7 +2432,7 @@ and header/watermark templates on the new page.</p><h2 id="page_break/2-example"
       <h1 class="signature" translate="no">pixels_to_points(pixels, dpi \\ 300)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L173" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L173" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2460,7 +2460,7 @@ and header/watermark templates on the new page.</p><h2 id="page_break/2-example"
       <h1 class="signature" translate="no">points(x)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L153" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L153" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2483,7 +2483,7 @@ This means that a standard A4 page, 8.27 inch, translates to 595 points.</p>
       <h1 class="signature" translate="no">rectangle(document, coords, dimensions)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L274" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L274" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2511,7 +2511,7 @@ This means that a standard A4 page, 8.27 inch, translates to 595 points.</p>
       <h1 class="signature" translate="no">register_style(document, name, style_attrs)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L699" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L699" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2521,11 +2521,11 @@ This means that a standard A4 page, 8.27 inch, translates to 595 points.</p>
   <section class="docstring">
 
 <p>Register a named style that can be referenced by atom in text/3, horizontal_line/2, etc.</p><h2 id="register_style/3-example" class="section-heading"><a href="#register_style/3-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w">
-</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">register_style</span><span class="p" data-group-id="1317544513-1">(</span><span class="ss">:heading</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1317544513-2">%{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">24</span><span class="p">,</span><span class="w"> </span><span class="ss">bold</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:navy</span><span class="p" data-group-id="1317544513-2">}</span><span class="p" data-group-id="1317544513-1">)</span><span class="w">
-</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">register_style</span><span class="p" data-group-id="1317544513-3">(</span><span class="ss">:body</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1317544513-4">%{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:black</span><span class="p" data-group-id="1317544513-4">}</span><span class="p" data-group-id="1317544513-3">)</span><span class="w">
-</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">register_style</span><span class="p" data-group-id="1317544513-5">(</span><span class="ss">:accent</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1317544513-6">%{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:green</span><span class="p" data-group-id="1317544513-6">}</span><span class="p" data-group-id="1317544513-5">)</span><span class="w">
-</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text</span><span class="p" data-group-id="1317544513-7">(</span><span class="s">&quot;My Title&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">:heading</span><span class="p" data-group-id="1317544513-7">)</span><span class="w">
-</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text</span><span class="p" data-group-id="1317544513-8">(</span><span class="s">&quot;Body text&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">:body</span><span class="p" data-group-id="1317544513-8">)</span></code></pre>
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">register_style</span><span class="p" data-group-id="3848435643-1">(</span><span class="ss">:heading</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3848435643-2">%{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">24</span><span class="p">,</span><span class="w"> </span><span class="ss">bold</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:navy</span><span class="p" data-group-id="3848435643-2">}</span><span class="p" data-group-id="3848435643-1">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">register_style</span><span class="p" data-group-id="3848435643-3">(</span><span class="ss">:body</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3848435643-4">%{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:black</span><span class="p" data-group-id="3848435643-4">}</span><span class="p" data-group-id="3848435643-3">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">register_style</span><span class="p" data-group-id="3848435643-5">(</span><span class="ss">:accent</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3848435643-6">%{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:green</span><span class="p" data-group-id="3848435643-6">}</span><span class="p" data-group-id="3848435643-5">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text</span><span class="p" data-group-id="3848435643-7">(</span><span class="s">&quot;My Title&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">:heading</span><span class="p" data-group-id="3848435643-7">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text</span><span class="p" data-group-id="3848435643-8">(</span><span class="s">&quot;Body text&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">:body</span><span class="p" data-group-id="3848435643-8">)</span></code></pre>
   </section>
 </section>
 <section class="detail" id="register_styles/2">
@@ -2538,7 +2538,7 @@ This means that a standard A4 page, 8.27 inch, translates to 595 points.</p>
       <h1 class="signature" translate="no">register_styles(document, styles)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L714" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L714" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2547,11 +2547,11 @@ This means that a standard A4 page, 8.27 inch, translates to 595 points.</p>
 
   <section class="docstring">
 
-<p>Register multiple named styles at once from a map.</p><h2 id="register_styles/2-example" class="section-heading"><a href="#register_styles/2-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="nc">Pdf</span><span class="o">.</span><span class="n">register_styles</span><span class="p" data-group-id="5011898468-1">(</span><span class="n">pdf</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5011898468-2">%{</span><span class="w">
-  </span><span class="ss">heading</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5011898468-3">%{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">24</span><span class="p">,</span><span class="w"> </span><span class="ss">bold</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:navy</span><span class="p" data-group-id="5011898468-3">}</span><span class="p">,</span><span class="w">
-  </span><span class="ss">body</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5011898468-4">%{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p" data-group-id="5011898468-4">}</span><span class="p">,</span><span class="w">
-  </span><span class="ss">footer</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5011898468-5">%{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:gray</span><span class="p" data-group-id="5011898468-5">}</span><span class="w">
-</span><span class="p" data-group-id="5011898468-2">}</span><span class="p" data-group-id="5011898468-1">)</span></code></pre>
+<p>Register multiple named styles at once from a map.</p><h2 id="register_styles/2-example" class="section-heading"><a href="#register_styles/2-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="nc">Pdf</span><span class="o">.</span><span class="n">register_styles</span><span class="p" data-group-id="6231110563-1">(</span><span class="n">pdf</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6231110563-2">%{</span><span class="w">
+  </span><span class="ss">heading</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6231110563-3">%{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">24</span><span class="p">,</span><span class="w"> </span><span class="ss">bold</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:navy</span><span class="p" data-group-id="6231110563-3">}</span><span class="p">,</span><span class="w">
+  </span><span class="ss">body</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6231110563-4">%{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p" data-group-id="6231110563-4">}</span><span class="p">,</span><span class="w">
+  </span><span class="ss">footer</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6231110563-5">%{</span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:gray</span><span class="p" data-group-id="6231110563-5">}</span><span class="w">
+</span><span class="p" data-group-id="6231110563-2">}</span><span class="p" data-group-id="6231110563-1">)</span></code></pre>
   </section>
 </section>
 <section class="detail" id="reset_x/1">
@@ -2564,7 +2564,7 @@ This means that a standard A4 page, 8.27 inch, translates to 595 points.</p>
       <h1 class="signature" translate="no">reset_x(document)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L683" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L683" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2592,7 +2592,7 @@ This means that a standard A4 page, 8.27 inch, translates to 595 points.</p>
       <h1 class="signature" translate="no">restore_state(document)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L371" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L371" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2620,7 +2620,7 @@ This means that a standard A4 page, 8.27 inch, translates to 595 points.</p>
       <h1 class="signature" translate="no">rotate(document, angle)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L335" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L335" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2649,7 +2649,7 @@ Must be used within <code class="inline">save_state/restore_state</code>.</p>
       <h1 class="signature" translate="no">rounded_rectangle(document, xy, wh, r)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L730" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L730" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2673,7 +2673,7 @@ Must be used within <code class="inline">save_state/restore_state</code>.</p>
       <h1 class="signature" translate="no">row(document, pos, size, columns, opts \\ [])</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L807" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L807" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2684,10 +2684,10 @@ Must be used within <code class="inline">save_state/restore_state</code>.</p>
 
 <p>Distribute content horizontally in columns by weight.</p><p><code class="inline">columns</code> is a list of <code class="inline">{weight, callback}</code> tuples.
 Size supports relative dimensions (<code class="inline">:full</code>, <code class="inline">&quot;50%&quot;</code>).</p><h2 id="row/5-example" class="section-heading"><a href="#row/5-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">doc</span><span class="w">
-</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">row</span><span class="p" data-group-id="8270047183-1">(</span><span class="p" data-group-id="8270047183-2">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="8270047183-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8270047183-3">{</span><span class="ss">:full</span><span class="p">,</span><span class="w"> </span><span class="mi">80</span><span class="p" data-group-id="8270047183-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8270047183-4">[</span><span class="w">
-  </span><span class="p" data-group-id="8270047183-5">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="8270047183-6">fn</span><span class="w"> </span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="8270047183-7">(</span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8270047183-8">{</span><span class="n">area</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="o">.</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">14</span><span class="p" data-group-id="8270047183-8">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Left&quot;</span><span class="p" data-group-id="8270047183-7">)</span><span class="w"> </span><span class="k" data-group-id="8270047183-6">end</span><span class="p" data-group-id="8270047183-5">}</span><span class="p">,</span><span class="w">
-  </span><span class="p" data-group-id="8270047183-9">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="8270047183-10">fn</span><span class="w"> </span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="8270047183-11">(</span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8270047183-12">{</span><span class="n">area</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="o">.</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">14</span><span class="p" data-group-id="8270047183-12">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Center&quot;</span><span class="p" data-group-id="8270047183-11">)</span><span class="w"> </span><span class="k" data-group-id="8270047183-10">end</span><span class="p" data-group-id="8270047183-9">}</span><span class="w">
-</span><span class="p" data-group-id="8270047183-4">]</span><span class="p">,</span><span class="w"> </span><span class="ss">gap</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="8270047183-1">)</span></code></pre>
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">row</span><span class="p" data-group-id="9014005586-1">(</span><span class="p" data-group-id="9014005586-2">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="9014005586-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9014005586-3">{</span><span class="ss">:full</span><span class="p">,</span><span class="w"> </span><span class="mi">80</span><span class="p" data-group-id="9014005586-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9014005586-4">[</span><span class="w">
+  </span><span class="p" data-group-id="9014005586-5">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="9014005586-6">fn</span><span class="w"> </span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="9014005586-7">(</span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9014005586-8">{</span><span class="n">area</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="o">.</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">14</span><span class="p" data-group-id="9014005586-8">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Left&quot;</span><span class="p" data-group-id="9014005586-7">)</span><span class="w"> </span><span class="k" data-group-id="9014005586-6">end</span><span class="p" data-group-id="9014005586-5">}</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="9014005586-9">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="9014005586-10">fn</span><span class="w"> </span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="9014005586-11">(</span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9014005586-12">{</span><span class="n">area</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="o">.</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">14</span><span class="p" data-group-id="9014005586-12">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Center&quot;</span><span class="p" data-group-id="9014005586-11">)</span><span class="w"> </span><span class="k" data-group-id="9014005586-10">end</span><span class="p" data-group-id="9014005586-9">}</span><span class="w">
+</span><span class="p" data-group-id="9014005586-4">]</span><span class="p">,</span><span class="w"> </span><span class="ss">gap</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="9014005586-1">)</span></code></pre>
   </section>
 </section>
 <section class="detail" id="save_state/1">
@@ -2700,7 +2700,7 @@ Size supports relative dimensions (<code class="inline">:full</code>, <code clas
       <h1 class="signature" translate="no">save_state(document)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L363" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L363" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2729,7 +2729,7 @@ transformations like rotation, translation, scaling, and opacity changes.</p>
       <h1 class="signature" translate="no">scale(document, factors)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L349" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L349" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2761,7 +2761,7 @@ Must be used within <code class="inline">save_state/restore_state</code>.</p>
       <h1 class="signature" translate="no">set_author(document, author)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L1196" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L1196" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2783,7 +2783,7 @@ Must be used within <code class="inline">save_state/restore_state</code>.</p>
       <h1 class="signature" translate="no">set_creator(document, creator)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L1201" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L1201" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2805,7 +2805,7 @@ Must be used within <code class="inline">save_state/restore_state</code>.</p>
       <h1 class="signature" translate="no">set_cursor(document, y)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L651" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L651" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2833,7 +2833,7 @@ Must be used within <code class="inline">save_state/restore_state</code>.</p>
       <h1 class="signature" translate="no">set_cursor_x(document, x)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L659" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L659" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2863,7 +2863,7 @@ Must be used within <code class="inline">save_state/restore_state</code>.</p>
       <h1 class="signature" translate="no">set_dash(document, dash_array, phase \\ 0)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L267" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L267" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2885,7 +2885,7 @@ Must be used within <code class="inline">save_state/restore_state</code>.</p>
       <h1 class="signature" translate="no">set_fill_color(document, color)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L232" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L232" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2914,7 +2914,7 @@ Must be used within <code class="inline">save_state/restore_state</code>.</p>
       <h1 class="signature" translate="no">set_fill_opacity(document, opacity)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L316" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L316" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2942,7 +2942,7 @@ Must be used within <code class="inline">save_state/restore_state</code>.</p>
       <h1 class="signature" translate="no">set_font(document, font_name, opts)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L386" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L386" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2971,7 +2971,7 @@ You can either specify the font size, or a list of options:</p><table><thead><tr
       <h1 class="signature" translate="no">set_font_size(document, size)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L405" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L405" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2993,7 +2993,7 @@ You can either specify the font size, or a list of options:</p><table><thead><tr
       <h1 class="signature" translate="no">set_info(document, info_list)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L1239" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L1239" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3021,7 +3021,7 @@ You can either specify the font size, or a list of options:</p><table><thead><tr
       <h1 class="signature" translate="no">set_keywords(document, keywords)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L1206" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L1206" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3043,7 +3043,7 @@ You can either specify the font size, or a list of options:</p><table><thead><tr
       <h1 class="signature" translate="no">set_line_cap(document, style)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L252" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L252" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3071,7 +3071,7 @@ You can either specify the font size, or a list of options:</p><table><thead><tr
       <h1 class="signature" translate="no">set_line_join(document, style)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L258" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L258" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3099,7 +3099,7 @@ You can either specify the font size, or a list of options:</p><table><thead><tr
       <h1 class="signature" translate="no">set_line_width(document, width)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L246" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L246" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3127,7 +3127,7 @@ You can either specify the font size, or a list of options:</p><table><thead><tr
       <h1 class="signature" translate="no">set_opacity(document, opacity)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L328" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L328" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3155,7 +3155,7 @@ You can either specify the font size, or a list of options:</p><table><thead><tr
       <h1 class="signature" translate="no">set_producer(document, producer)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L1211" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L1211" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3177,7 +3177,7 @@ You can either specify the font size, or a list of options:</p><table><thead><tr
       <h1 class="signature" translate="no">set_stroke_color(document, color)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L240" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L240" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3206,7 +3206,7 @@ You can either specify the font size, or a list of options:</p><table><thead><tr
       <h1 class="signature" translate="no">set_stroke_opacity(document, opacity)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L322" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L322" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3234,7 +3234,7 @@ You can either specify the font size, or a list of options:</p><table><thead><tr
       <h1 class="signature" translate="no">set_subject(document, subject)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L1216" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L1216" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3256,7 +3256,7 @@ You can either specify the font size, or a list of options:</p><table><thead><tr
       <h1 class="signature" translate="no">set_text_leading(document, leading)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L436" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L436" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3278,7 +3278,7 @@ You can either specify the font size, or a list of options:</p><table><thead><tr
       <h1 class="signature" translate="no">set_title(document, title)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L1221" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L1221" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3300,7 +3300,7 @@ You can either specify the font size, or a list of options:</p><table><thead><tr
       <h1 class="signature" translate="no">size(document)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L627" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L627" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3322,7 +3322,7 @@ You can either specify the font size, or a list of options:</p><table><thead><tr
       <h1 class="signature" translate="no">spacer(document, amount)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L1126" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L1126" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3331,7 +3331,7 @@ You can either specify the font size, or a list of options:</p><table><thead><tr
 
   <section class="docstring">
 
-<p>Add vertical space by moving the cursor down.</p><h2 id="spacer/2-example" class="section-heading"><a href="#spacer/2-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">spacer</span><span class="p" data-group-id="8534031301-1">(</span><span class="mi">20</span><span class="p" data-group-id="8534031301-1">)</span></code></pre>
+<p>Add vertical space by moving the cursor down.</p><h2 id="spacer/2-example" class="section-heading"><a href="#spacer/2-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">spacer</span><span class="p" data-group-id="2060439095-1">(</span><span class="mi">20</span><span class="p" data-group-id="2060439095-1">)</span></code></pre>
   </section>
 </section>
 <section class="detail" id="stroke/1">
@@ -3344,7 +3344,7 @@ You can either specify the font size, or a list of options:</p><table><thead><tr
       <h1 class="signature" translate="no">stroke(document)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L304" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L304" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3374,7 +3374,7 @@ You can either specify the font size, or a list of options:</p><table><thead><tr
       <h1 class="signature" translate="no">table(document, coords, dimensions, data, opts \\ [])</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L571" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L571" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3398,7 +3398,7 @@ You can either specify the font size, or a list of options:</p><table><thead><tr
       <h1 class="signature" translate="no">table!(document, coords, dimensions, data, opts \\ [])</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L581" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L581" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3423,7 +3423,7 @@ Raises an exception if the table does not fit the dimensions.</p><p>See <a href=
       <h1 class="signature" translate="no">text(document, string, style_or_name \\ %{})</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L1070" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L1070" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3433,8 +3433,8 @@ Raises an exception if the table does not fit the dimensions.</p><p>See <a href=
   <section class="docstring">
 
 <p>Write styled text at the current cursor position with auto-wrapping.
-Moves the cursor down after writing.</p><h2 id="text/3-example" class="section-heading"><a href="#text/3-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text</span><span class="p" data-group-id="1079554610-1">(</span><span class="s">&quot;Hello world&quot;</span><span class="p" data-group-id="1079554610-1">)</span><span class="w">
-</span><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text</span><span class="p" data-group-id="1079554610-2">(</span><span class="s">&quot;Bold red&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1079554610-3">%{</span><span class="ss">bold</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:red</span><span class="p">,</span><span class="w"> </span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="p" data-group-id="1079554610-3">}</span><span class="p" data-group-id="1079554610-2">)</span></code></pre>
+Moves the cursor down after writing.</p><h2 id="text/3-example" class="section-heading"><a href="#text/3-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text</span><span class="p" data-group-id="5243985791-1">(</span><span class="s">&quot;Hello world&quot;</span><span class="p" data-group-id="5243985791-1">)</span><span class="w">
+</span><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text</span><span class="p" data-group-id="5243985791-2">(</span><span class="s">&quot;Bold red&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5243985791-3">%{</span><span class="ss">bold</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:red</span><span class="p">,</span><span class="w"> </span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="p" data-group-id="5243985791-3">}</span><span class="p" data-group-id="5243985791-2">)</span></code></pre>
   </section>
 </section>
 <section class="detail" id="text_at/3">
@@ -3447,7 +3447,7 @@ Moves the cursor down after writing.</p><h2 id="text/3-example" class="section-h
       <h1 class="signature" translate="no">text_at(document, coords, text)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L461" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L461" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3473,7 +3473,7 @@ If using an external font, you have to <a href="#add_font/2"><code class="inline
       <h1 class="signature" translate="no">text_at(document, coords, text, style_or_opts)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L475" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L475" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3483,9 +3483,9 @@ If using an external font, you have to <a href="#add_font/2"><code class="inline
   <section class="docstring">
 
 <p>Writes the text at the given coordinates.
-The coordinates are the bottom left of the text.</p><p>Accepts either a keyword list of options or a style map/atom:</p><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="1326931677-1">(</span><span class="p" data-group-id="1326931677-2">{</span><span class="mi">300</span><span class="p">,</span><span class="w"> </span><span class="mi">730</span><span class="p" data-group-id="1326931677-2">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;BILL TO&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1326931677-3">%{</span><span class="ss">bold</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:gray</span><span class="p" data-group-id="1326931677-3">}</span><span class="p" data-group-id="1326931677-1">)</span><span class="w">
-</span><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="1326931677-4">(</span><span class="p" data-group-id="1326931677-5">{</span><span class="mi">300</span><span class="p">,</span><span class="w"> </span><span class="mi">730</span><span class="p" data-group-id="1326931677-5">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;BILL TO&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">:label</span><span class="p" data-group-id="1326931677-4">)</span><span class="w">
-</span><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="1326931677-6">(</span><span class="p" data-group-id="1326931677-7">{</span><span class="mi">300</span><span class="p">,</span><span class="w"> </span><span class="mi">730</span><span class="p" data-group-id="1326931677-7">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;BILL TO&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">kerning</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="1326931677-6">)</span></code></pre>
+The coordinates are the bottom left of the text.</p><p>Accepts either a keyword list of options or a style map/atom:</p><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="8029672229-1">(</span><span class="p" data-group-id="8029672229-2">{</span><span class="mi">300</span><span class="p">,</span><span class="w"> </span><span class="mi">730</span><span class="p" data-group-id="8029672229-2">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;BILL TO&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8029672229-3">%{</span><span class="ss">bold</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:gray</span><span class="p" data-group-id="8029672229-3">}</span><span class="p" data-group-id="8029672229-1">)</span><span class="w">
+</span><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="8029672229-4">(</span><span class="p" data-group-id="8029672229-5">{</span><span class="mi">300</span><span class="p">,</span><span class="w"> </span><span class="mi">730</span><span class="p" data-group-id="8029672229-5">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;BILL TO&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">:label</span><span class="p" data-group-id="8029672229-4">)</span><span class="w">
+</span><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="8029672229-6">(</span><span class="p" data-group-id="8029672229-7">{</span><span class="mi">300</span><span class="p">,</span><span class="w"> </span><span class="mi">730</span><span class="p" data-group-id="8029672229-7">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;BILL TO&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">kerning</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="8029672229-6">)</span></code></pre>
   </section>
 </section>
 <section class="detail" id="text_lines/4">
@@ -3500,7 +3500,7 @@ The coordinates are the bottom left of the text.</p><p>Accepts either a keyword 
       <h1 class="signature" translate="no">text_lines(document, coords, lines, opts \\ [])</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L562" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L562" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3529,7 +3529,7 @@ The list can overrun the page, no errors or wrapping will occur.</p><p>Kerning c
       <h1 class="signature" translate="no">text_wrap(document, coords, dimensions, text)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L521" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L521" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3563,7 +3563,7 @@ If using an external font, you have to <a href="#add_font/2"><code class="inline
       <h1 class="signature" translate="no">text_wrap(document, coords, dimensions, text, opts)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L535" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L535" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3592,7 +3592,7 @@ If using an external font, you have to <a href="#add_font/2"><code class="inline
       <h1 class="signature" translate="no">text_wrap!(document, coords, dimensions, text)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L543" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L543" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3621,7 +3621,7 @@ If using an external font, you have to <a href="#add_font/2"><code class="inline
       <h1 class="signature" translate="no">text_wrap!(document, coords, dimensions, text, opts)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L551" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L551" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3656,7 +3656,7 @@ If using an external font, you have to <a href="#add_font/2"><code class="inline
       <h1 class="signature" translate="no">transform(document, matrix)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L356" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L356" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3689,7 +3689,7 @@ Must be used within <code class="inline">save_state/restore_state</code>.</p>
       <h1 class="signature" translate="no">translate(document, coords)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L342" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L342" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3723,7 +3723,7 @@ Must be used within <code class="inline">save_state/restore_state</code>.</p>
       <h1 class="signature" translate="no">watermark(document, text, style_or_name \\ %{})</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L1151" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L1151" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3732,7 +3732,7 @@ Must be used within <code class="inline">save_state/restore_state</code>.</p>
 
   <section class="docstring">
 
-<p>Add a text watermark to the current page with rotation and opacity.</p><h2 id="watermark/3-example" class="section-heading"><a href="#watermark/3-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">watermark</span><span class="p" data-group-id="4397660915-1">(</span><span class="s">&quot;DRAFT&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4397660915-2">%{</span><span class="ss">opacity</span><span class="p">:</span><span class="w"> </span><span class="mf">0.1</span><span class="p">,</span><span class="w"> </span><span class="ss">rotate</span><span class="p">:</span><span class="w"> </span><span class="mi">45</span><span class="p">,</span><span class="w"> </span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:gray</span><span class="p" data-group-id="4397660915-2">}</span><span class="p" data-group-id="4397660915-1">)</span></code></pre>
+<p>Add a text watermark to the current page with rotation and opacity.</p><h2 id="watermark/3-example" class="section-heading"><a href="#watermark/3-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">pdf</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">watermark</span><span class="p" data-group-id="3359263549-1">(</span><span class="s">&quot;DRAFT&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3359263549-2">%{</span><span class="ss">opacity</span><span class="p">:</span><span class="w"> </span><span class="mf">0.1</span><span class="p">,</span><span class="w"> </span><span class="ss">rotate</span><span class="p">:</span><span class="w"> </span><span class="mi">45</span><span class="p">,</span><span class="w"> </span><span class="ss">font_size</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:gray</span><span class="p" data-group-id="3359263549-2">}</span><span class="p" data-group-id="3359263549-1">)</span></code></pre>
   </section>
 </section>
 <section class="detail" id="write_to/2">
@@ -3745,7 +3745,7 @@ Must be used within <code class="inline">save_state/restore_state</code>.</p>
       <h1 class="signature" translate="no">write_to(document, path)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf.ex#L176" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf.ex#L176" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3766,9 +3766,9 @@ Must be used within <code class="inline">save_state/restore_state</code>.</p>
         <p>
 
             <span class="line">
-              <a href="https://hex.pm/packages/ex_pdf_core/1.0.1">Hex Package</a>
+              <a href="https://hex.pm/packages/ex_pdf_core/1.0.2">Hex Package</a>
 
-              <a href="https://preview.hex.pm/preview/ex_pdf_core/1.0.1">Hex Preview</a>
+              <a href="https://preview.hex.pm/preview/ex_pdf_core/1.0.2">Hex Preview</a>
 
             </span>
 

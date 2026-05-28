@@ -5,10 +5,10 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.40.2">
-    <meta name="project" content="ex_pdf_read v1.0.1">
+    <meta name="project" content="ex_pdf_read v1.0.2">
 
 
-    <title>Pdf.Reader.AGL — ex_pdf_read v1.0.1</title>
+    <title>Pdf.Reader.AGL — ex_pdf_read v1.0.2</title>
 
     <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
 
@@ -37,7 +37,7 @@
 ex_pdf_read
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v1.0.1
+          v1.0.2
         </div>
       </div>
     </div>
@@ -94,7 +94,7 @@ ex_pdf_read
   <div class="heading-with-actions top-heading">
     <h1>
       <span translate="no">Pdf.<wbr />Reader.<wbr />AGL</span> 
-      <small class="app-vsn" translate="no">(ex_pdf_read v1.0.1)</small>
+      <small class="app-vsn" translate="no">(ex_pdf_read v1.0.2)</small>
 
     </h1>
 
@@ -105,7 +105,7 @@ ex_pdf_read
 
 
 
-      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/agl.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/agl.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -116,10 +116,10 @@ ex_pdf_read
     <section id="moduledoc">
 <p>Adobe Glyph List (AGL) — compile-time glyph name to Unicode codepoint lookup.</p><p>Bundled from the Adobe Glyph List 2.0 (2002), available at:
 <a rel="nofollow" href="https://github.com/adobe-type-tools/agl-aglfn">https://github.com/adobe-type-tools/agl-aglfn</a></p><p>Licensed under the BSD-style permissive license reproduced in the header of
-<code class="inline">priv/glyphlist.txt</code>.</p><h2 id="module-usage" class="section-heading"><a href="#module-usage" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Usage</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Pdf.Reader.AGL</span><span class="o">.</span><span class="n">glyph_to_unicode</span><span class="p" data-group-id="9709100926-1">(</span><span class="s">&quot;eacute&quot;</span><span class="p" data-group-id="9709100926-1">)</span><span class="w">
-</span><span class="p" data-group-id="9709100926-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="mh">0x00E9</span><span class="p" data-group-id="9709100926-2">}</span><span class="w">
+<code class="inline">priv/glyphlist.txt</code>.</p><h2 id="module-usage" class="section-heading"><a href="#module-usage" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Usage</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Pdf.Reader.AGL</span><span class="o">.</span><span class="n">glyph_to_unicode</span><span class="p" data-group-id="3371368168-1">(</span><span class="s">&quot;eacute&quot;</span><span class="p" data-group-id="3371368168-1">)</span><span class="w">
+</span><span class="p" data-group-id="3371368168-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="mh">0x00E9</span><span class="p" data-group-id="3371368168-2">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="nc">Pdf.Reader.AGL</span><span class="o">.</span><span class="n">glyph_to_unicode</span><span class="p" data-group-id="9709100926-3">(</span><span class="s">&quot;notaname&quot;</span><span class="p" data-group-id="9709100926-3">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Pdf.Reader.AGL</span><span class="o">.</span><span class="n">glyph_to_unicode</span><span class="p" data-group-id="3371368168-3">(</span><span class="s">&quot;notaname&quot;</span><span class="p" data-group-id="3371368168-3">)</span><span class="w">
 </span><span class="ss">:error</span></code></pre><h2 id="module-notes" class="section-heading"><a href="#module-notes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Notes</span></h2><ul><li>Only the FIRST codepoint of multi-codepoint entries is returned (ligatures
 such as <code class="inline">fi</code> map to their decomposed form's first character). This is
 sufficient for single-glyph font-encoding lookups.</li><li>All ~4500 entries are compiled to BEAM pattern-match clauses at build time
@@ -174,7 +174,7 @@ for O(1) lookup performance during text extraction.</li></ul>
       <h1 class="signature" translate="no">glyph_to_unicode(arg1)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/agl.ex#L41" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/agl.ex#L41" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -201,9 +201,9 @@ for O(1) lookup performance during text extraction.</li></ul>
         <p>
 
             <span class="line">
-              <a href="https://hex.pm/packages/ex_pdf_read/1.0.1">Hex Package</a>
+              <a href="https://hex.pm/packages/ex_pdf_read/1.0.2">Hex Package</a>
 
-              <a href="https://preview.hex.pm/preview/ex_pdf_read/1.0.1">Hex Preview</a>
+              <a href="https://preview.hex.pm/preview/ex_pdf_read/1.0.2">Hex Preview</a>
 
             </span>
 

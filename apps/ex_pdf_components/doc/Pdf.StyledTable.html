@@ -5,10 +5,10 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.40.2">
-    <meta name="project" content="ex_pdf_components v1.0.1">
+    <meta name="project" content="ex_pdf_components v1.0.2">
 
 
-    <title>Pdf.StyledTable — ex_pdf_components v1.0.1</title>
+    <title>Pdf.StyledTable — ex_pdf_components v1.0.2</title>
 
     <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
 
@@ -37,7 +37,7 @@
 ex_pdf_components
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v1.0.1
+          v1.0.2
         </div>
       </div>
     </div>
@@ -94,7 +94,7 @@ ex_pdf_components
   <div class="heading-with-actions top-heading">
     <h1>
       <span translate="no">Pdf.<wbr />StyledTable</span> 
-      <small class="app-vsn" translate="no">(ex_pdf_components v1.0.1)</small>
+      <small class="app-vsn" translate="no">(ex_pdf_components v1.0.2)</small>
 
     </h1>
 
@@ -105,7 +105,7 @@ ex_pdf_components
 
 
 
-      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/styled_table.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/styled_table.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -115,23 +115,23 @@ ex_pdf_components
 
     <section id="moduledoc">
 <p>Styled table component with CSS-like configuration.</p><p>Renders data tables with customizable borders, rounded corners, backgrounds,
-padding, and per-row/cell styling using <a href="https://hexdocs.pm/ex_pdf_core/1.0.1/Pdf.Style.html"><code class="inline">Pdf.Style</code></a> maps.</p><h2 id="module-example" class="section-heading"><a href="#module-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="nc">Pdf.StyledTable</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="6131320462-1">(</span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6131320462-2">[</span><span class="w">
-  </span><span class="p" data-group-id="6131320462-3">[</span><span class="s">&quot;Name&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Qty&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Price&quot;</span><span class="p" data-group-id="6131320462-3">]</span><span class="p">,</span><span class="w">
-  </span><span class="p" data-group-id="6131320462-4">[</span><span class="s">&quot;Widget A&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;5&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;$10.00&quot;</span><span class="p" data-group-id="6131320462-4">]</span><span class="p">,</span><span class="w">
-  </span><span class="p" data-group-id="6131320462-5">[</span><span class="s">&quot;Widget B&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;3&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;$15.00&quot;</span><span class="p" data-group-id="6131320462-5">]</span><span class="w">
-</span><span class="p" data-group-id="6131320462-2">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6131320462-6">%{</span><span class="w">
-  </span><span class="ss">columns</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6131320462-7">[</span><span class="w">
-    </span><span class="p" data-group-id="6131320462-8">%{</span><span class="ss">width</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p" data-group-id="6131320462-8">}</span><span class="p">,</span><span class="w">
-    </span><span class="p" data-group-id="6131320462-9">%{</span><span class="ss">width</span><span class="p">:</span><span class="w"> </span><span class="mi">80</span><span class="p">,</span><span class="w"> </span><span class="ss">align</span><span class="p">:</span><span class="w"> </span><span class="ss">:center</span><span class="p" data-group-id="6131320462-9">}</span><span class="p">,</span><span class="w">
-    </span><span class="p" data-group-id="6131320462-10">%{</span><span class="ss">width</span><span class="p">:</span><span class="w"> </span><span class="mi">120</span><span class="p">,</span><span class="w"> </span><span class="ss">align</span><span class="p">:</span><span class="w"> </span><span class="ss">:right</span><span class="p" data-group-id="6131320462-10">}</span><span class="w">
-  </span><span class="p" data-group-id="6131320462-7">]</span><span class="p">,</span><span class="w">
-  </span><span class="ss">header</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6131320462-11">%{</span><span class="ss">bold</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p">,</span><span class="w"> </span><span class="ss">background</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6131320462-12">{</span><span class="mf">0.2</span><span class="p">,</span><span class="w"> </span><span class="mf">0.3</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p" data-group-id="6131320462-12">}</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:white</span><span class="p">,</span><span class="w"> </span><span class="ss">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p" data-group-id="6131320462-11">}</span><span class="p">,</span><span class="w">
-  </span><span class="ss">row</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6131320462-13">%{</span><span class="ss">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="ss">border_bottom</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="6131320462-13">}</span><span class="p">,</span><span class="w">
-  </span><span class="ss">alt_row</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6131320462-14">%{</span><span class="ss">background</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6131320462-15">{</span><span class="mf">0.95</span><span class="p">,</span><span class="w"> </span><span class="mf">0.95</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p" data-group-id="6131320462-15">}</span><span class="p" data-group-id="6131320462-14">}</span><span class="p">,</span><span class="w">
+padding, and per-row/cell styling using <a href="https://hexdocs.pm/ex_pdf_core/1.0.2/Pdf.Style.html"><code class="inline">Pdf.Style</code></a> maps.</p><h2 id="module-example" class="section-heading"><a href="#module-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="nc">Pdf.StyledTable</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="9573229424-1">(</span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9573229424-2">[</span><span class="w">
+  </span><span class="p" data-group-id="9573229424-3">[</span><span class="s">&quot;Name&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Qty&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Price&quot;</span><span class="p" data-group-id="9573229424-3">]</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="9573229424-4">[</span><span class="s">&quot;Widget A&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;5&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;$10.00&quot;</span><span class="p" data-group-id="9573229424-4">]</span><span class="p">,</span><span class="w">
+  </span><span class="p" data-group-id="9573229424-5">[</span><span class="s">&quot;Widget B&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;3&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;$15.00&quot;</span><span class="p" data-group-id="9573229424-5">]</span><span class="w">
+</span><span class="p" data-group-id="9573229424-2">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9573229424-6">%{</span><span class="w">
+  </span><span class="ss">columns</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9573229424-7">[</span><span class="w">
+    </span><span class="p" data-group-id="9573229424-8">%{</span><span class="ss">width</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p" data-group-id="9573229424-8">}</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="9573229424-9">%{</span><span class="ss">width</span><span class="p">:</span><span class="w"> </span><span class="mi">80</span><span class="p">,</span><span class="w"> </span><span class="ss">align</span><span class="p">:</span><span class="w"> </span><span class="ss">:center</span><span class="p" data-group-id="9573229424-9">}</span><span class="p">,</span><span class="w">
+    </span><span class="p" data-group-id="9573229424-10">%{</span><span class="ss">width</span><span class="p">:</span><span class="w"> </span><span class="mi">120</span><span class="p">,</span><span class="w"> </span><span class="ss">align</span><span class="p">:</span><span class="w"> </span><span class="ss">:right</span><span class="p" data-group-id="9573229424-10">}</span><span class="w">
+  </span><span class="p" data-group-id="9573229424-7">]</span><span class="p">,</span><span class="w">
+  </span><span class="ss">header</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9573229424-11">%{</span><span class="ss">bold</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p">,</span><span class="w"> </span><span class="ss">background</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9573229424-12">{</span><span class="mf">0.2</span><span class="p">,</span><span class="w"> </span><span class="mf">0.3</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p" data-group-id="9573229424-12">}</span><span class="p">,</span><span class="w"> </span><span class="ss">color</span><span class="p">:</span><span class="w"> </span><span class="ss">:white</span><span class="p">,</span><span class="w"> </span><span class="ss">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p" data-group-id="9573229424-11">}</span><span class="p">,</span><span class="w">
+  </span><span class="ss">row</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9573229424-13">%{</span><span class="ss">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="ss">border_bottom</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p" data-group-id="9573229424-13">}</span><span class="p">,</span><span class="w">
+  </span><span class="ss">alt_row</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9573229424-14">%{</span><span class="ss">background</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9573229424-15">{</span><span class="mf">0.95</span><span class="p">,</span><span class="w"> </span><span class="mf">0.95</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0</span><span class="p" data-group-id="9573229424-15">}</span><span class="p" data-group-id="9573229424-14">}</span><span class="p">,</span><span class="w">
   </span><span class="ss">border</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-  </span><span class="ss">border_color</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6131320462-16">{</span><span class="mf">0.3</span><span class="p">,</span><span class="w"> </span><span class="mf">0.3</span><span class="p">,</span><span class="w"> </span><span class="mf">0.3</span><span class="p" data-group-id="6131320462-16">}</span><span class="p">,</span><span class="w">
+  </span><span class="ss">border_color</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9573229424-16">{</span><span class="mf">0.3</span><span class="p">,</span><span class="w"> </span><span class="mf">0.3</span><span class="p">,</span><span class="w"> </span><span class="mf">0.3</span><span class="p" data-group-id="9573229424-16">}</span><span class="p">,</span><span class="w">
   </span><span class="ss">border_radius</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="w">
-</span><span class="p" data-group-id="6131320462-6">}</span><span class="p" data-group-id="6131320462-1">)</span></code></pre>
+</span><span class="p" data-group-id="9573229424-6">}</span><span class="p" data-group-id="9573229424-1">)</span></code></pre>
     </section>
 
 </div>
@@ -194,7 +194,7 @@ padding, and per-row/cell styling using <a href="https://hexdocs.pm/ex_pdf_core/
       <h1 class="signature" translate="no">render(document, data, opts \\ %{})</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/styled_table.ex#L68" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/styled_table.ex#L68" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -218,7 +218,7 @@ padding, and per-row/cell styling using <a href="https://hexdocs.pm/ex_pdf_core/
       <h1 class="signature" translate="no">render_on_page(page, arg, data, opts \\ %{})</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/styled_table.ex#L114" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/styled_table.ex#L114" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -239,9 +239,9 @@ padding, and per-row/cell styling using <a href="https://hexdocs.pm/ex_pdf_core/
         <p>
 
             <span class="line">
-              <a href="https://hex.pm/packages/ex_pdf_components/1.0.1">Hex Package</a>
+              <a href="https://hex.pm/packages/ex_pdf_components/1.0.2">Hex Package</a>
 
-              <a href="https://preview.hex.pm/preview/ex_pdf_components/1.0.1">Hex Preview</a>
+              <a href="https://preview.hex.pm/preview/ex_pdf_components/1.0.2">Hex Preview</a>
 
             </span>
 

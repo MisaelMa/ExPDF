@@ -1,5 +1,5 @@
 # `Pdf.Component.Column`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/column.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/column.ex#L1)
 
 Column component for PDF documents.
 

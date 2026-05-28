@@ -1,5 +1,5 @@
 # `Pdf.Builder`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/builder.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/builder.ex#L1)
 
 Declarative PDF builder from template lists.
 
@@ -47,6 +47,10 @@ Render a template list with the given config into a PDF document.
 
 Render a template list into an existing document.
 Nested lists are automatically flattened.
+
+If a `:page_footer` element was rendered during the template (registering a
+`:footer` page template), it is applied to the last page automatically — because
+`Pdf.on_page/3` only fires on *page breaks*, leaving the final page uncovered.
 
 ---
 

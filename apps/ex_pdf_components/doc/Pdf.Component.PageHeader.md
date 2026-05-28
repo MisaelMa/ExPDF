@@ -1,5 +1,5 @@
 # `Pdf.Component.PageHeader`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/page_header.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/page_header.ex#L1)
 
 Automatic page header component for PDF documents.
 

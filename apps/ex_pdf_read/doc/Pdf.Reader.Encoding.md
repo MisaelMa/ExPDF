@@ -1,5 +1,5 @@
 # `Pdf.Reader.Encoding`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/encoding.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/encoding.ex#L1)
 
 Encoding cascade facade for resolving PDF character codes to Unicode codepoints.
 

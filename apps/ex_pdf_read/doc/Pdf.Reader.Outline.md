@@ -1,5 +1,5 @@
 # `Pdf.Reader.Outline`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/outline.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/outline.ex#L1)
 
 Represents a single node in a PDF document outline (bookmark tree).
 

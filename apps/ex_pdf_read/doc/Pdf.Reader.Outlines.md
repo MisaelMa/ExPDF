@@ -1,5 +1,5 @@
 # `Pdf.Reader.Outlines`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/outlines.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/outlines.ex#L1)
 
 Walker for catalog `/Outlines` (PDF document outline / bookmarks tree).
 

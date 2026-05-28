@@ -1,5 +1,5 @@
 # `Pdf.Reader.Wordlist`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/wordlist.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/wordlist.ex#L1)
 
 Compile-time dictionaries used by `Pdf.Reader.read/2` to recover word
 boundaries that the PDF producer collapsed (e.g. `iniciode` →

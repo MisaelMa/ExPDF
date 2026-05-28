@@ -1,5 +1,5 @@
 # `Pdf.StyledTable`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/styled_table.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/styled_table.ex#L1)
 
 Styled table component with CSS-like configuration.
 

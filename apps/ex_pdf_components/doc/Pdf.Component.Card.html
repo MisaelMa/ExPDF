@@ -5,10 +5,10 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.40.2">
-    <meta name="project" content="ex_pdf_components v1.0.1">
+    <meta name="project" content="ex_pdf_components v1.0.2">
 
 
-    <title>Pdf.Component.Card — ex_pdf_components v1.0.1</title>
+    <title>Pdf.Component.Card — ex_pdf_components v1.0.2</title>
 
     <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
 
@@ -37,7 +37,7 @@
 ex_pdf_components
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v1.0.1
+          v1.0.2
         </div>
       </div>
     </div>
@@ -94,7 +94,7 @@ ex_pdf_components
   <div class="heading-with-actions top-heading">
     <h1>
       <span translate="no">Pdf.<wbr />Component.<wbr />Card</span> 
-      <small class="app-vsn" translate="no">(ex_pdf_components v1.0.1)</small>
+      <small class="app-vsn" translate="no">(ex_pdf_components v1.0.2)</small>
 
     </h1>
 
@@ -105,7 +105,7 @@ ex_pdf_components
 
 
 
-      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/card.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/card.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -117,21 +117,21 @@ ex_pdf_components
 <p>Card component for PDF documents.</p><p>Renders a container with optional header, body, and footer sections,
 elevation (box-shadow), and rounded corners. Designed for structured
 content blocks like profile cards, info panels, and summaries.</p><p>Inspired by Material UI's Card component.</p><h2 id="module-examples" class="section-heading"><a href="#module-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="c1"># Simple card with callback</span><span class="w">
-</span><span class="n">doc</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.Card</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="5099616976-1">(</span><span class="p" data-group-id="5099616976-2">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="5099616976-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5099616976-3">{</span><span class="mi">300</span><span class="p">,</span><span class="w"> </span><span class="mi">150</span><span class="p" data-group-id="5099616976-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5099616976-4">%{</span><span class="w">
+</span><span class="n">doc</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.Card</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="7377946112-1">(</span><span class="p" data-group-id="7377946112-2">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="7377946112-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7377946112-3">{</span><span class="mi">300</span><span class="p">,</span><span class="w"> </span><span class="mi">150</span><span class="p" data-group-id="7377946112-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7377946112-4">%{</span><span class="w">
   </span><span class="ss">elevation</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
   </span><span class="ss">border_radius</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="w">
-</span><span class="p" data-group-id="5099616976-4">}</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="5099616976-5">fn</span><span class="w"> </span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
-  </span><span class="n">doc</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="5099616976-6">(</span><span class="p" data-group-id="5099616976-7">{</span><span class="n">area</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="o">.</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">14</span><span class="p" data-group-id="5099616976-7">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Card content&quot;</span><span class="p" data-group-id="5099616976-6">)</span><span class="w">
-</span><span class="k" data-group-id="5099616976-5">end</span><span class="p" data-group-id="5099616976-1">)</span><span class="w">
+</span><span class="p" data-group-id="7377946112-4">}</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="7377946112-5">fn</span><span class="w"> </span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+  </span><span class="n">doc</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="7377946112-6">(</span><span class="p" data-group-id="7377946112-7">{</span><span class="n">area</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="o">.</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">14</span><span class="p" data-group-id="7377946112-7">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Card content&quot;</span><span class="p" data-group-id="7377946112-6">)</span><span class="w">
+</span><span class="k" data-group-id="7377946112-5">end</span><span class="p" data-group-id="7377946112-1">)</span><span class="w">
 
 </span><span class="c1"># Card with header and body</span><span class="w">
-</span><span class="n">doc</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.Card</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="5099616976-8">(</span><span class="p" data-group-id="5099616976-9">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="5099616976-9">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5099616976-10">{</span><span class="mi">300</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p" data-group-id="5099616976-10">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5099616976-11">%{</span><span class="w">
+</span><span class="n">doc</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf.Component.Card</span><span class="o">.</span><span class="n">render</span><span class="p" data-group-id="7377946112-8">(</span><span class="p" data-group-id="7377946112-9">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="7377946112-9">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7377946112-10">{</span><span class="mi">300</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p" data-group-id="7377946112-10">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7377946112-11">%{</span><span class="w">
   </span><span class="ss">elevation</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
-  </span><span class="ss">header</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5099616976-12">%{</span><span class="ss">title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;User Profile&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">subtitle</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Senior Developer&quot;</span><span class="p" data-group-id="5099616976-12">}</span><span class="p">,</span><span class="w">
+  </span><span class="ss">header</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7377946112-12">%{</span><span class="ss">title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;User Profile&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">subtitle</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Senior Developer&quot;</span><span class="p" data-group-id="7377946112-12">}</span><span class="p">,</span><span class="w">
   </span><span class="ss">padding</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="w">
-</span><span class="p" data-group-id="5099616976-11">}</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="5099616976-13">fn</span><span class="w"> </span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
-  </span><span class="n">doc</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="5099616976-14">(</span><span class="p" data-group-id="5099616976-15">{</span><span class="n">area</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="o">.</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">14</span><span class="p" data-group-id="5099616976-15">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Card body content here&quot;</span><span class="p" data-group-id="5099616976-14">)</span><span class="w">
-</span><span class="k" data-group-id="5099616976-13">end</span><span class="p" data-group-id="5099616976-8">)</span></code></pre>
+</span><span class="p" data-group-id="7377946112-11">}</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="7377946112-13">fn</span><span class="w"> </span><span class="n">doc</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+  </span><span class="n">doc</span><span class="w"> </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="7377946112-14">(</span><span class="p" data-group-id="7377946112-15">{</span><span class="n">area</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">area</span><span class="o">.</span><span class="n">y</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">14</span><span class="p" data-group-id="7377946112-15">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Card body content here&quot;</span><span class="p" data-group-id="7377946112-14">)</span><span class="w">
+</span><span class="k" data-group-id="7377946112-13">end</span><span class="p" data-group-id="7377946112-8">)</span></code></pre>
     </section>
 
 </div>
@@ -186,7 +186,7 @@ content blocks like profile cards, info panels, and summaries.</p><p>Inspired by
       <h1 class="signature" translate="no">render(doc, arg1, arg2, style \\ %{}, callback \\ nil)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/card.ex#L54" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/card.ex#L54" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -208,9 +208,9 @@ content area after header and padding are accounted for.</p>
         <p>
 
             <span class="line">
-              <a href="https://hex.pm/packages/ex_pdf_components/1.0.1">Hex Package</a>
+              <a href="https://hex.pm/packages/ex_pdf_components/1.0.2">Hex Package</a>
 
-              <a href="https://preview.hex.pm/preview/ex_pdf_components/1.0.1">Hex Preview</a>
+              <a href="https://preview.hex.pm/preview/ex_pdf_components/1.0.2">Hex Preview</a>
 
             </span>
 

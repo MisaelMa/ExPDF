@@ -1,5 +1,5 @@
 # `Pdf.Reader.CID.CIDToGIDMap`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/cid/cid_to_gid.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/cid/cid_to_gid.ex#L1)
 
 Parser and lookup for the PDF `/CIDToGIDMap` entry in Type2 CIDFont dicts.
 

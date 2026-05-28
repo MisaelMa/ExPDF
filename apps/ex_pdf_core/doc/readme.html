@@ -5,10 +5,10 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.40.2">
-    <meta name="project" content="ex_pdf_core v1.0.1">
+    <meta name="project" content="ex_pdf_core v1.0.2">
 
 
-    <title>ExPdfCore — ex_pdf_core v1.0.1</title>
+    <title>ExPdfCore — ex_pdf_core v1.0.2</title>
 
     <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
 
@@ -37,7 +37,7 @@
 ex_pdf_core
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v1.0.1
+          v1.0.2
         </div>
       </div>
     </div>
@@ -100,7 +100,7 @@ ex_pdf_core
 </a>
 
 
-      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/README.md#L1" title="View Source" class="icon-action" rel="help nofollow">
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/README.md#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -112,19 +112,19 @@ ex_pdf_core
 <a href="https://hexdocs.pm/ex_pdf_core"><img src="https://img.shields.io/badge/docs-hexdocs-blue" alt="Docs"/></a>
 <a rel="nofollow" href="https://github.com/MisaelMa/ExPDF/blob/main/LICENSE.md"><img src="https://img.shields.io/hexpm/l/ex_pdf_core.svg" alt="License"/></a></p><p>Core PDF writer engine for Elixir — document, page, export, fonts, images,
 graphics state, and layout primitives. Uses only the Erlang/OTP standard
-library. No Hex runtime dependencies, no system tools.</p><p>Part of the <a href="https://hex.pm/packages/ex_pdf">ExPDF</a> umbrella.</p><h2 id="installation" class="section-heading"><a href="#installation" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Installation</span></h2><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">deps</span><span class="w"> </span><span class="k" data-group-id="7497323660-1">do</span><span class="w">
-  </span><span class="p" data-group-id="7497323660-2">[</span><span class="w">
-    </span><span class="p" data-group-id="7497323660-3">{</span><span class="ss">:ex_pdf_core</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;~&gt; 1.0&quot;</span><span class="p" data-group-id="7497323660-3">}</span><span class="w">
-  </span><span class="p" data-group-id="7497323660-2">]</span><span class="w">
-</span><span class="k" data-group-id="7497323660-1">end</span></code></pre><blockquote><p>Most users should depend on <a href="https://hex.pm/packages/ex_pdf"><code class="inline">ex_pdf</code></a>
+library. No Hex runtime dependencies, no system tools.</p><p>Part of the <a href="https://hex.pm/packages/ex_pdf">ExPDF</a> umbrella.</p><h2 id="installation" class="section-heading"><a href="#installation" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Installation</span></h2><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">deps</span><span class="w"> </span><span class="k" data-group-id="1455765199-1">do</span><span class="w">
+  </span><span class="p" data-group-id="1455765199-2">[</span><span class="w">
+    </span><span class="p" data-group-id="1455765199-3">{</span><span class="ss">:ex_pdf_core</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;~&gt; 1.0&quot;</span><span class="p" data-group-id="1455765199-3">}</span><span class="w">
+  </span><span class="p" data-group-id="1455765199-2">]</span><span class="w">
+</span><span class="k" data-group-id="1455765199-1">end</span></code></pre><blockquote><p>Most users should depend on <a href="https://hex.pm/packages/ex_pdf"><code class="inline">ex_pdf</code></a>
 instead, which bundles core, components, and the reader.</p></blockquote><h2 id="what-s-included" class="section-heading"><a href="#what-s-included" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">What's included</span></h2><ul><li><strong><a href="Pdf.html"><code class="inline">Pdf</code></a></strong> — main API: build documents, add pages, draw text, images,
-shapes, and manage graphics state</li><li><strong><code class="inline">Pdf.Document</code></strong> — document structure, page tree, fonts, objects</li><li><strong><code class="inline">Pdf.Page</code></strong> — individual page content streams</li><li><strong><code class="inline">Pdf.Export</code></strong> — serialize to PDF binary</li><li><strong><a href="Pdf.Layout.html"><code class="inline">Pdf.Layout</code></a></strong> — text measurement and wrapping</li><li><strong><code class="inline">Pdf.Font</code> / <code class="inline">Pdf.Fonts</code></strong> — built-in and external font handling</li><li><strong><a href="Pdf.Component.Box.html"><code class="inline">Pdf.Component.Box</code></a></strong> — box with border, background, padding</li><li><strong><a href="Pdf.Component.Row.html"><code class="inline">Pdf.Component.Row</code></a></strong> — horizontal column distribution by weight</li><li><strong><a href="Pdf.Component.Column.html"><code class="inline">Pdf.Component.Column</code></a></strong> — vertical row stacking with fixed heights</li></ul><h2 id="usage" class="section-heading"><a href="#usage" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Usage</span></h2><pre><code class="makeup elixir" translate="no"><span class="nc">Pdf</span><span class="o">.</span><span class="n">build</span><span class="p" data-group-id="1549610032-1">(</span><span class="p" data-group-id="1549610032-2">[</span><span class="ss">size</span><span class="p">:</span><span class="w"> </span><span class="ss">:a4</span><span class="p">,</span><span class="w"> </span><span class="ss">compress</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="1549610032-2">]</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="1549610032-3">fn</span><span class="w"> </span><span class="n">pdf</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+shapes, and manage graphics state</li><li><strong><code class="inline">Pdf.Document</code></strong> — document structure, page tree, fonts, objects</li><li><strong><code class="inline">Pdf.Page</code></strong> — individual page content streams</li><li><strong><code class="inline">Pdf.Export</code></strong> — serialize to PDF binary</li><li><strong><a href="Pdf.Layout.html"><code class="inline">Pdf.Layout</code></a></strong> — text measurement and wrapping</li><li><strong><code class="inline">Pdf.Font</code> / <code class="inline">Pdf.Fonts</code></strong> — built-in and external font handling</li><li><strong><a href="Pdf.Component.Box.html"><code class="inline">Pdf.Component.Box</code></a></strong> — box with border, background, padding</li><li><strong><a href="Pdf.Component.Row.html"><code class="inline">Pdf.Component.Row</code></a></strong> — horizontal column distribution by weight</li><li><strong><a href="Pdf.Component.Column.html"><code class="inline">Pdf.Component.Column</code></a></strong> — vertical row stacking with fixed heights</li></ul><h2 id="usage" class="section-heading"><a href="#usage" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Usage</span></h2><pre><code class="makeup elixir" translate="no"><span class="nc">Pdf</span><span class="o">.</span><span class="n">build</span><span class="p" data-group-id="5725444144-1">(</span><span class="p" data-group-id="5725444144-2">[</span><span class="ss">size</span><span class="p">:</span><span class="w"> </span><span class="ss">:a4</span><span class="p">,</span><span class="w"> </span><span class="ss">compress</span><span class="p">:</span><span class="w"> </span><span class="no">true</span><span class="p" data-group-id="5725444144-2">]</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="5725444144-3">fn</span><span class="w"> </span><span class="n">pdf</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
   </span><span class="n">pdf</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p" data-group-id="1549610032-4">(</span><span class="s">&quot;Helvetica&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p" data-group-id="1549610032-4">)</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="1549610032-5">(</span><span class="p" data-group-id="1549610032-6">{</span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p" data-group-id="1549610032-6">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Hello, world!&quot;</span><span class="p" data-group-id="1549610032-5">)</span><span class="w">
-  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">add_image</span><span class="p" data-group-id="1549610032-7">(</span><span class="p" data-group-id="1549610032-8">{</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="1549610032-8">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;logo.png&quot;</span><span class="p" data-group-id="1549610032-7">)</span><span class="w">
-</span><span class="k" data-group-id="1549610032-3">end</span><span class="p" data-group-id="1549610032-1">)</span><span class="w">
-</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">export</span><span class="p" data-group-id="1549610032-9">(</span><span class="p" data-group-id="1549610032-9">)</span></code></pre><h2 id="license" class="section-heading"><a href="#license" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">License</span></h2><p>MIT. See <a rel="nofollow" href="https://github.com/MisaelMa/ExPDF/blob/main/LICENSE.md">LICENSE.md</a>.</p>
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">set_font</span><span class="p" data-group-id="5725444144-4">(</span><span class="s">&quot;Helvetica&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p" data-group-id="5725444144-4">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">text_at</span><span class="p" data-group-id="5725444144-5">(</span><span class="p" data-group-id="5725444144-6">{</span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p" data-group-id="5725444144-6">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Hello, world!&quot;</span><span class="p" data-group-id="5725444144-5">)</span><span class="w">
+  </span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">add_image</span><span class="p" data-group-id="5725444144-7">(</span><span class="p" data-group-id="5725444144-8">{</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="5725444144-8">}</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;logo.png&quot;</span><span class="p" data-group-id="5725444144-7">)</span><span class="w">
+</span><span class="k" data-group-id="5725444144-3">end</span><span class="p" data-group-id="5725444144-1">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Pdf</span><span class="o">.</span><span class="n">export</span><span class="p" data-group-id="5725444144-9">(</span><span class="p" data-group-id="5725444144-9">)</span></code></pre><h2 id="license" class="section-heading"><a href="#license" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">License</span></h2><p>MIT. See <a rel="nofollow" href="https://github.com/MisaelMa/ExPDF/blob/main/LICENSE.md">LICENSE.md</a>.</p>
 
 </div>
 
@@ -141,11 +141,11 @@ shapes, and manage graphics state</li><li><strong><code class="inline">Pdf.Docum
         <p>
 
             <span class="line">
-              <a href="https://hex.pm/packages/ex_pdf_core/1.0.1">Hex Package</a>
+              <a href="https://hex.pm/packages/ex_pdf_core/1.0.2">Hex Package</a>
 
-              <a href="https://preview.hex.pm/preview/ex_pdf_core/1.0.1">Hex Preview</a>
+              <a href="https://preview.hex.pm/preview/ex_pdf_core/1.0.2">Hex Preview</a>
 
-                (<a href="https://preview.hex.pm/preview/ex_pdf_core/1.0.1/show/README.md">current file</a>)
+                (<a href="https://preview.hex.pm/preview/ex_pdf_core/1.0.2/show/README.md">current file</a>)
 
             </span>
 

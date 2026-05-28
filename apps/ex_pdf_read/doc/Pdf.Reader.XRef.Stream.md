@@ -1,5 +1,5 @@
 # `Pdf.Reader.XRef.Stream`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/xref/stream.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/xref/stream.ex#L1)
 
 Parses a PDF 1.5+ compressed cross-reference stream (`/Type /XRef`).
 

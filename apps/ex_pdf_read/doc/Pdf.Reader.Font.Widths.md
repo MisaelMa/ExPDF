@@ -1,5 +1,5 @@
 # `Pdf.Reader.Font.Widths`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/font/widths.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/font/widths.ex#L1)
 
 Per-font glyph-width lookup for text advance computation.
 

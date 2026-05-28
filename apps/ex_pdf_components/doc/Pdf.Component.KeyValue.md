@@ -1,5 +1,5 @@
 # `Pdf.Component.KeyValue`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/key_value.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/key_value.ex#L1)
 
 Key-value pair component for PDF documents.
 

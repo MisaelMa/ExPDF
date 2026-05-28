@@ -1,5 +1,5 @@
 # `Pdf.Reader.Encryption.StandardHandler`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/encryption/standard_handler.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/encryption/standard_handler.ex#L1)
 
 Parses the PDF `/Encrypt` dictionary into a `%StandardHandler{}` struct.
 

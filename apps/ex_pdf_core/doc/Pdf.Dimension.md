@@ -1,5 +1,5 @@
 # `Pdf.Dimension`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/dimension.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/dimension.ex#L1)
 
 Resolves relative dimensions against a parent reference.
 

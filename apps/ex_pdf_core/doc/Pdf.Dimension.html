@@ -5,10 +5,10 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.40.2">
-    <meta name="project" content="ex_pdf_core v1.0.1">
+    <meta name="project" content="ex_pdf_core v1.0.2">
 
 
-    <title>Pdf.Dimension — ex_pdf_core v1.0.1</title>
+    <title>Pdf.Dimension — ex_pdf_core v1.0.2</title>
 
     <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
 
@@ -37,7 +37,7 @@
 ex_pdf_core
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v1.0.1
+          v1.0.2
         </div>
       </div>
     </div>
@@ -94,7 +94,7 @@ ex_pdf_core
   <div class="heading-with-actions top-heading">
     <h1>
       <span translate="no">Pdf.<wbr />Dimension</span> 
-      <small class="app-vsn" translate="no">(ex_pdf_core v1.0.1)</small>
+      <small class="app-vsn" translate="no">(ex_pdf_core v1.0.2)</small>
 
     </h1>
 
@@ -105,7 +105,7 @@ ex_pdf_core
 
 
 
-      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/dimension.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/dimension.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -114,13 +114,13 @@ ex_pdf_core
 
 
     <section id="moduledoc">
-<p>Resolves relative dimensions against a parent reference.</p><p>Supports:</p><ul><li><code class="inline">:full</code> — 100% of the parent dimension</li><li><code class="inline">&quot;N%&quot;</code> — percentage of the parent dimension (e.g. <code class="inline">&quot;50%&quot;</code>)</li><li><code class="inline">number</code> — absolute value (pass-through)</li></ul><h2 id="module-examples" class="section-heading"><a href="#module-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Pdf.Dimension</span><span class="o">.</span><span class="n">resolve</span><span class="p" data-group-id="8969464890-1">(</span><span class="ss">:full</span><span class="p">,</span><span class="w"> </span><span class="mi">400</span><span class="p" data-group-id="8969464890-1">)</span><span class="w">
+<p>Resolves relative dimensions against a parent reference.</p><p>Supports:</p><ul><li><code class="inline">:full</code> — 100% of the parent dimension</li><li><code class="inline">&quot;N%&quot;</code> — percentage of the parent dimension (e.g. <code class="inline">&quot;50%&quot;</code>)</li><li><code class="inline">number</code> — absolute value (pass-through)</li></ul><h2 id="module-examples" class="section-heading"><a href="#module-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Pdf.Dimension</span><span class="o">.</span><span class="n">resolve</span><span class="p" data-group-id="0513496984-1">(</span><span class="ss">:full</span><span class="p">,</span><span class="w"> </span><span class="mi">400</span><span class="p" data-group-id="0513496984-1">)</span><span class="w">
 </span><span class="mi">400</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="nc">Pdf.Dimension</span><span class="o">.</span><span class="n">resolve</span><span class="p" data-group-id="8969464890-2">(</span><span class="s">&quot;50%&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">400</span><span class="p" data-group-id="8969464890-2">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Pdf.Dimension</span><span class="o">.</span><span class="n">resolve</span><span class="p" data-group-id="0513496984-2">(</span><span class="s">&quot;50%&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">400</span><span class="p" data-group-id="0513496984-2">)</span><span class="w">
 </span><span class="mf">200.0</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="nc">Pdf.Dimension</span><span class="o">.</span><span class="n">resolve</span><span class="p" data-group-id="8969464890-3">(</span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">400</span><span class="p" data-group-id="8969464890-3">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Pdf.Dimension</span><span class="o">.</span><span class="n">resolve</span><span class="p" data-group-id="0513496984-3">(</span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">400</span><span class="p" data-group-id="0513496984-3">)</span><span class="w">
 </span><span class="mi">200</span></code></pre>
     </section>
 
@@ -202,7 +202,7 @@ ex_pdf_core
       <h1 class="signature" translate="no">needs_resolution?(arg)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/dimension.ex#L59" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/dimension.ex#L59" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -230,7 +230,7 @@ ex_pdf_core
       <h1 class="signature" translate="no">relative?(v)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/dimension.ex#L51" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/dimension.ex#L51" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -258,7 +258,7 @@ ex_pdf_core
       <h1 class="signature" translate="no">resolve(pct, parent_dim)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/dimension.ex#L26" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/dimension.ex#L26" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -287,7 +287,7 @@ ex_pdf_core
       <h1 class="signature" translate="no">resolve_size(arg, map)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/dimension.ex#L43" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/dimension.ex#L43" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -317,9 +317,9 @@ ex_pdf_core
         <p>
 
             <span class="line">
-              <a href="https://hex.pm/packages/ex_pdf_core/1.0.1">Hex Package</a>
+              <a href="https://hex.pm/packages/ex_pdf_core/1.0.2">Hex Package</a>
 
-              <a href="https://preview.hex.pm/preview/ex_pdf_core/1.0.1">Hex Preview</a>
+              <a href="https://preview.hex.pm/preview/ex_pdf_core/1.0.2">Hex Preview</a>
 
             </span>
 

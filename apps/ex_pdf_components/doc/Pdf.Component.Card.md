@@ -1,5 +1,5 @@
 # `Pdf.Component.Card`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/card.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/card.ex#L1)
 
 Card component for PDF documents.
 

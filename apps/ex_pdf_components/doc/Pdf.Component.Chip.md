@@ -1,5 +1,5 @@
 # `Pdf.Component.Chip`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/chip.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/chip.ex#L1)
 
 Chip component for PDF documents.
 
@@ -44,6 +44,10 @@ Returns `{doc, width}` — the document and the rendered chip width.
 - `:height` — chip height in points (default `24`)
 - `:padding_h` — horizontal padding (default `10`)
 - `:border` — border width for outlined variant (default `1`)
+- `:opacity` — overall opacity 0.0–1.0 (default `1.0`, fully opaque)
+- `:background_opacity` — fill opacity only (default inherits `:opacity`)
+- `:text_opacity` — label opacity only (default inherits `:opacity`)
+- `:border_radius` — corner radius in points, or `:pill` for fully rounded (default `:pill`)
 
 ---
 

@@ -1,5 +1,5 @@
 # `Pdf.Reader.Page`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/page.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/page.ex#L1)
 
 Page tree walker for `Pdf.Reader`.
 

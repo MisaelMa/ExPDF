@@ -5,10 +5,10 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.40.2">
-    <meta name="project" content="ex_pdf_read v1.0.1">
+    <meta name="project" content="ex_pdf_read v1.0.2">
 
 
-    <title>Pdf.Reader.Lexer — ex_pdf_read v1.0.1</title>
+    <title>Pdf.Reader.Lexer — ex_pdf_read v1.0.2</title>
 
     <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
 
@@ -37,7 +37,7 @@
 ex_pdf_read
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v1.0.1
+          v1.0.2
         </div>
       </div>
     </div>
@@ -94,7 +94,7 @@ ex_pdf_read
   <div class="heading-with-actions top-heading">
     <h1>
       <span translate="no">Pdf.<wbr />Reader.<wbr />Lexer</span> 
-      <small class="app-vsn" translate="no">(ex_pdf_read v1.0.1)</small>
+      <small class="app-vsn" translate="no">(ex_pdf_read v1.0.2)</small>
 
     </h1>
 
@@ -105,7 +105,7 @@ ex_pdf_read
 
 
 
-      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/lexer.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/lexer.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -115,19 +115,19 @@ ex_pdf_read
 
     <section id="moduledoc">
 <p>PDF binary tokenizer.</p><h2 id="module-token-shapes" class="section-heading"><a href="#module-token-shapes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Token shapes</span></h2><pre><code class="makeup elixir" translate="no"><span class="ss">:eof</span><span class="w">
-</span><span class="p" data-group-id="4122496945-1">{</span><span class="ss">:integer</span><span class="p">,</span><span class="w"> </span><span class="n">integer</span><span class="p" data-group-id="4122496945-2">(</span><span class="p" data-group-id="4122496945-2">)</span><span class="p" data-group-id="4122496945-1">}</span><span class="w">
-</span><span class="p" data-group-id="4122496945-3">{</span><span class="ss">:real</span><span class="p">,</span><span class="w"> </span><span class="n">float</span><span class="p" data-group-id="4122496945-4">(</span><span class="p" data-group-id="4122496945-4">)</span><span class="p" data-group-id="4122496945-3">}</span><span class="w">
-</span><span class="p" data-group-id="4122496945-5">{</span><span class="ss">:boolean</span><span class="p">,</span><span class="w"> </span><span class="n">boolean</span><span class="p" data-group-id="4122496945-6">(</span><span class="p" data-group-id="4122496945-6">)</span><span class="p" data-group-id="4122496945-5">}</span><span class="w">
+</span><span class="p" data-group-id="6097801021-1">{</span><span class="ss">:integer</span><span class="p">,</span><span class="w"> </span><span class="n">integer</span><span class="p" data-group-id="6097801021-2">(</span><span class="p" data-group-id="6097801021-2">)</span><span class="p" data-group-id="6097801021-1">}</span><span class="w">
+</span><span class="p" data-group-id="6097801021-3">{</span><span class="ss">:real</span><span class="p">,</span><span class="w"> </span><span class="n">float</span><span class="p" data-group-id="6097801021-4">(</span><span class="p" data-group-id="6097801021-4">)</span><span class="p" data-group-id="6097801021-3">}</span><span class="w">
+</span><span class="p" data-group-id="6097801021-5">{</span><span class="ss">:boolean</span><span class="p">,</span><span class="w"> </span><span class="n">boolean</span><span class="p" data-group-id="6097801021-6">(</span><span class="p" data-group-id="6097801021-6">)</span><span class="p" data-group-id="6097801021-5">}</span><span class="w">
 </span><span class="ss">:null</span><span class="w">
-</span><span class="p" data-group-id="4122496945-7">{</span><span class="ss">:name</span><span class="p">,</span><span class="w"> </span><span class="n">binary</span><span class="p" data-group-id="4122496945-8">(</span><span class="p" data-group-id="4122496945-8">)</span><span class="p" data-group-id="4122496945-7">}</span><span class="w">          </span><span class="c1"># without leading /</span><span class="w">
-</span><span class="p" data-group-id="4122496945-9">{</span><span class="ss">:string</span><span class="p">,</span><span class="w"> </span><span class="n">binary</span><span class="p" data-group-id="4122496945-10">(</span><span class="p" data-group-id="4122496945-10">)</span><span class="p" data-group-id="4122496945-9">}</span><span class="w">        </span><span class="c1"># literal (...)</span><span class="w">
-</span><span class="p" data-group-id="4122496945-11">{</span><span class="ss">:hex_string</span><span class="p">,</span><span class="w"> </span><span class="n">binary</span><span class="p" data-group-id="4122496945-12">(</span><span class="p" data-group-id="4122496945-12">)</span><span class="p" data-group-id="4122496945-11">}</span><span class="w">    </span><span class="c1"># &lt;...&gt; decoded to bytes</span><span class="w">
+</span><span class="p" data-group-id="6097801021-7">{</span><span class="ss">:name</span><span class="p">,</span><span class="w"> </span><span class="n">binary</span><span class="p" data-group-id="6097801021-8">(</span><span class="p" data-group-id="6097801021-8">)</span><span class="p" data-group-id="6097801021-7">}</span><span class="w">          </span><span class="c1"># without leading /</span><span class="w">
+</span><span class="p" data-group-id="6097801021-9">{</span><span class="ss">:string</span><span class="p">,</span><span class="w"> </span><span class="n">binary</span><span class="p" data-group-id="6097801021-10">(</span><span class="p" data-group-id="6097801021-10">)</span><span class="p" data-group-id="6097801021-9">}</span><span class="w">        </span><span class="c1"># literal (...)</span><span class="w">
+</span><span class="p" data-group-id="6097801021-11">{</span><span class="ss">:hex_string</span><span class="p">,</span><span class="w"> </span><span class="n">binary</span><span class="p" data-group-id="6097801021-12">(</span><span class="p" data-group-id="6097801021-12">)</span><span class="p" data-group-id="6097801021-11">}</span><span class="w">    </span><span class="c1"># &lt;...&gt; decoded to bytes</span><span class="w">
 </span><span class="ss">:array_open</span><span class="w">  </span><span class="o">|</span><span class="w">  </span><span class="ss">:array_close</span><span class="w">
 </span><span class="ss">:dict_open</span><span class="w">   </span><span class="o">|</span><span class="w">  </span><span class="ss">:dict_close</span><span class="w">
-</span><span class="p" data-group-id="4122496945-13">{</span><span class="ss">:obj</span><span class="p">,</span><span class="w"> </span><span class="n">rest</span><span class="p" data-group-id="4122496945-13">}</span><span class="w">  </span><span class="o">|</span><span class="w">  </span><span class="p" data-group-id="4122496945-14">{</span><span class="ss">:endobj</span><span class="p">,</span><span class="w"> </span><span class="n">rest</span><span class="p" data-group-id="4122496945-14">}</span><span class="w">
-</span><span class="p" data-group-id="4122496945-15">{</span><span class="ss">:stream</span><span class="p">,</span><span class="w"> </span><span class="n">rest</span><span class="p" data-group-id="4122496945-15">}</span><span class="w">  </span><span class="o">|</span><span class="w">  </span><span class="p" data-group-id="4122496945-16">{</span><span class="ss">:endstream</span><span class="p">,</span><span class="w"> </span><span class="n">rest</span><span class="p" data-group-id="4122496945-16">}</span><span class="w">
-</span><span class="p" data-group-id="4122496945-17">{</span><span class="ss">:xref</span><span class="p">,</span><span class="w"> </span><span class="n">rest</span><span class="p" data-group-id="4122496945-17">}</span><span class="w">  </span><span class="o">|</span><span class="w">  </span><span class="p" data-group-id="4122496945-18">{</span><span class="ss">:trailer</span><span class="p">,</span><span class="w"> </span><span class="n">rest</span><span class="p" data-group-id="4122496945-18">}</span><span class="w">  </span><span class="o">|</span><span class="w">  </span><span class="p" data-group-id="4122496945-19">{</span><span class="ss">:startxref</span><span class="p">,</span><span class="w"> </span><span class="n">rest</span><span class="p" data-group-id="4122496945-19">}</span><span class="w">
-</span><span class="p" data-group-id="4122496945-20">{</span><span class="ss">:r</span><span class="p">,</span><span class="w"> </span><span class="n">rest</span><span class="p" data-group-id="4122496945-20">}</span><span class="w">  </span><span class="o">|</span><span class="w">  </span><span class="p" data-group-id="4122496945-21">{</span><span class="ss">:f</span><span class="p">,</span><span class="w"> </span><span class="n">rest</span><span class="p" data-group-id="4122496945-21">}</span><span class="w">  </span><span class="o">|</span><span class="w">  </span><span class="p" data-group-id="4122496945-22">{</span><span class="ss">:n</span><span class="p">,</span><span class="w"> </span><span class="n">rest</span><span class="p" data-group-id="4122496945-22">}</span></code></pre><p><a href="#next_token/1"><code class="inline">next_token/1</code></a> returns <code class="inline">{token, rest_binary}</code> or <code class="inline">:eof</code>.</p>
+</span><span class="p" data-group-id="6097801021-13">{</span><span class="ss">:obj</span><span class="p">,</span><span class="w"> </span><span class="n">rest</span><span class="p" data-group-id="6097801021-13">}</span><span class="w">  </span><span class="o">|</span><span class="w">  </span><span class="p" data-group-id="6097801021-14">{</span><span class="ss">:endobj</span><span class="p">,</span><span class="w"> </span><span class="n">rest</span><span class="p" data-group-id="6097801021-14">}</span><span class="w">
+</span><span class="p" data-group-id="6097801021-15">{</span><span class="ss">:stream</span><span class="p">,</span><span class="w"> </span><span class="n">rest</span><span class="p" data-group-id="6097801021-15">}</span><span class="w">  </span><span class="o">|</span><span class="w">  </span><span class="p" data-group-id="6097801021-16">{</span><span class="ss">:endstream</span><span class="p">,</span><span class="w"> </span><span class="n">rest</span><span class="p" data-group-id="6097801021-16">}</span><span class="w">
+</span><span class="p" data-group-id="6097801021-17">{</span><span class="ss">:xref</span><span class="p">,</span><span class="w"> </span><span class="n">rest</span><span class="p" data-group-id="6097801021-17">}</span><span class="w">  </span><span class="o">|</span><span class="w">  </span><span class="p" data-group-id="6097801021-18">{</span><span class="ss">:trailer</span><span class="p">,</span><span class="w"> </span><span class="n">rest</span><span class="p" data-group-id="6097801021-18">}</span><span class="w">  </span><span class="o">|</span><span class="w">  </span><span class="p" data-group-id="6097801021-19">{</span><span class="ss">:startxref</span><span class="p">,</span><span class="w"> </span><span class="n">rest</span><span class="p" data-group-id="6097801021-19">}</span><span class="w">
+</span><span class="p" data-group-id="6097801021-20">{</span><span class="ss">:r</span><span class="p">,</span><span class="w"> </span><span class="n">rest</span><span class="p" data-group-id="6097801021-20">}</span><span class="w">  </span><span class="o">|</span><span class="w">  </span><span class="p" data-group-id="6097801021-21">{</span><span class="ss">:f</span><span class="p">,</span><span class="w"> </span><span class="n">rest</span><span class="p" data-group-id="6097801021-21">}</span><span class="w">  </span><span class="o">|</span><span class="w">  </span><span class="p" data-group-id="6097801021-22">{</span><span class="ss">:n</span><span class="p">,</span><span class="w"> </span><span class="n">rest</span><span class="p" data-group-id="6097801021-22">}</span></code></pre><p><a href="#next_token/1"><code class="inline">next_token/1</code></a> returns <code class="inline">{token, rest_binary}</code> or <code class="inline">:eof</code>.</p>
     </section>
 
 </div>
@@ -188,7 +188,7 @@ ex_pdf_read
       <h1 class="signature" translate="no">next_token(binary)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/lexer.ex#L47" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/lexer.ex#L47" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -216,7 +216,7 @@ ex_pdf_read
       <h1 class="signature" translate="no">skip_whitespace(bin)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/lexer.ex#L57" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/lexer.ex#L57" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -243,9 +243,9 @@ ex_pdf_read
         <p>
 
             <span class="line">
-              <a href="https://hex.pm/packages/ex_pdf_read/1.0.1">Hex Package</a>
+              <a href="https://hex.pm/packages/ex_pdf_read/1.0.2">Hex Package</a>
 
-              <a href="https://preview.hex.pm/preview/ex_pdf_read/1.0.1">Hex Preview</a>
+              <a href="https://preview.hex.pm/preview/ex_pdf_read/1.0.2">Hex Preview</a>
 
             </span>
 

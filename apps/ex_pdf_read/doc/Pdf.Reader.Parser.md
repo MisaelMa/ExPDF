@@ -1,5 +1,5 @@
 # `Pdf.Reader.Parser`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/parser.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/parser.ex#L1)
 
 PDF recursive-descent parser.
 

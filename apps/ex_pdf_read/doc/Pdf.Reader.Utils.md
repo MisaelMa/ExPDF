@@ -1,5 +1,5 @@
 # `Pdf.Reader.Utils`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/utils.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/utils.ex#L1)
 
 Shared utility helpers for `Pdf.Reader` sub-modules.
 

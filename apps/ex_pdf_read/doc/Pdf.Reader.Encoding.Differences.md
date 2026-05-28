@@ -1,5 +1,5 @@
 # `Pdf.Reader.Encoding.Differences`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/encoding/differences.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/encoding/differences.ex#L1)
 
 Applies a PDF `/Differences` array on top of a base encoding override map.
 

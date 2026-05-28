@@ -1,5 +1,5 @@
 # `Pdf.Reader`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader.ex#L1)
 
 Native PDF reader — opens a PDF binary or file path and provides pure-functional
 access to text runs with positions, raster images, document metadata, interactive

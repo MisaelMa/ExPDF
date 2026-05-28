@@ -1,5 +1,5 @@
 # `Pdf.Reader.TextRun`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/text_run.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/text_run.ex#L1)
 
 Struct representing a single text run extracted from a PDF page.
 

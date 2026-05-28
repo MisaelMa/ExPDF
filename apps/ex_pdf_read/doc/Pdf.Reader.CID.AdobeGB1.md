@@ -1,5 +1,5 @@
 # `Pdf.Reader.CID.AdobeGB1`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/cid/adobe_gb1.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/cid/adobe_gb1.ex#L1)
 
 Adobe-GB1 CID to Unicode mapping (~28000 entries).
 

@@ -1,5 +1,5 @@
 # `Pdf.Component.Barcode`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/barcode.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/barcode.ex#L1)
 
 Barcode PDF component — renders Code 128 barcodes onto a PDF.
 

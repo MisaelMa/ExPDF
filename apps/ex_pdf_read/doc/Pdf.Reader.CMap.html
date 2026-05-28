@@ -5,10 +5,10 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.40.2">
-    <meta name="project" content="ex_pdf_read v1.0.1">
+    <meta name="project" content="ex_pdf_read v1.0.2">
 
 
-    <title>Pdf.Reader.CMap — ex_pdf_read v1.0.1</title>
+    <title>Pdf.Reader.CMap — ex_pdf_read v1.0.2</title>
 
     <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
 
@@ -37,7 +37,7 @@
 ex_pdf_read
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v1.0.1
+          v1.0.2
         </div>
       </div>
     </div>
@@ -94,7 +94,7 @@ ex_pdf_read
   <div class="heading-with-actions top-heading">
     <h1>
       <span translate="no">Pdf.<wbr />Reader.<wbr />CMap</span> 
-      <small class="app-vsn" translate="no">(ex_pdf_read v1.0.1)</small>
+      <small class="app-vsn" translate="no">(ex_pdf_read v1.0.2)</small>
 
     </h1>
 
@@ -105,7 +105,7 @@ ex_pdf_read
 
 
 
-      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/cmap.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/cmap.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -117,10 +117,10 @@ ex_pdf_read
 <p>Parser for the ToUnicode CMap subset used in PDF fonts.</p><p>Spec reference: PDF 1.7 § 9.10.3 and Adobe Tech Note 5099
 (CMap and CIDFont Files Specification).</p><h2 id="module-supported-subset" class="section-heading"><a href="#module-supported-subset" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Supported subset</span></h2><p>Only <code class="inline">beginbfchar</code>/<code class="inline">endbfchar</code> and <code class="inline">beginbfrange</code>/<code class="inline">endbfrange</code> sections
 are parsed. Everything else (codespacerange, cidchar, cidrange, notdefchar,
-notdefrange, and PostScript prologue/epilogue) is silently skipped.</p><h2 id="module-data-shape" class="section-heading"><a href="#module-data-shape" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Data shape</span></h2><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="3698620378-1">%</span><span class="nc" data-group-id="3698620378-1">Pdf.Reader.CMap</span><span class="p" data-group-id="3698620378-1">{</span><span class="w">
-  </span><span class="ss">bf_char</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3698620378-2">%{</span><span class="n">integer</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nc">String</span><span class="o">.</span><span class="n">t</span><span class="p" data-group-id="3698620378-3">(</span><span class="p" data-group-id="3698620378-3">)</span><span class="p" data-group-id="3698620378-2">}</span><span class="p">,</span><span class="w">       </span><span class="c1"># O(log n) map lookup</span><span class="w">
-  </span><span class="ss">bf_range</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3698620378-4">[</span><span class="p" data-group-id="3698620378-5">{</span><span class="n">lo</span><span class="p">,</span><span class="w"> </span><span class="n">hi</span><span class="p">,</span><span class="w"> </span><span class="n">dst</span><span class="p" data-group-id="3698620378-5">}</span><span class="p" data-group-id="3698620378-4">]</span><span class="w">                </span><span class="c1"># linear scan, dst is String.t() or [String.t()]</span><span class="w">
-</span><span class="p" data-group-id="3698620378-1">}</span></code></pre><h2 id="module-lookup-order" class="section-heading"><a href="#module-lookup-order" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Lookup order</span></h2><ol><li><code class="inline">bf_char</code> (O(log n) map) — checked first.</li><li><code class="inline">bf_range</code> (linear, typically &lt; 10 entries) — checked on miss.</li></ol><p>Returns <code class="inline">nil</code> if not mapped by either table.</p><h2 id="module-utf-16be-decoding" class="section-heading"><a href="#module-utf-16be-decoding" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">UTF-16BE decoding</span></h2><p>Hex strings in the CMap (<code class="inline">&lt;HHHH...&gt;</code>) are UTF-16BE encoded codepoint sequences.
+notdefrange, and PostScript prologue/epilogue) is silently skipped.</p><h2 id="module-data-shape" class="section-heading"><a href="#module-data-shape" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Data shape</span></h2><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="1579824297-1">%</span><span class="nc" data-group-id="1579824297-1">Pdf.Reader.CMap</span><span class="p" data-group-id="1579824297-1">{</span><span class="w">
+  </span><span class="ss">bf_char</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1579824297-2">%{</span><span class="n">integer</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nc">String</span><span class="o">.</span><span class="n">t</span><span class="p" data-group-id="1579824297-3">(</span><span class="p" data-group-id="1579824297-3">)</span><span class="p" data-group-id="1579824297-2">}</span><span class="p">,</span><span class="w">       </span><span class="c1"># O(log n) map lookup</span><span class="w">
+  </span><span class="ss">bf_range</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1579824297-4">[</span><span class="p" data-group-id="1579824297-5">{</span><span class="n">lo</span><span class="p">,</span><span class="w"> </span><span class="n">hi</span><span class="p">,</span><span class="w"> </span><span class="n">dst</span><span class="p" data-group-id="1579824297-5">}</span><span class="p" data-group-id="1579824297-4">]</span><span class="w">                </span><span class="c1"># linear scan, dst is String.t() or [String.t()]</span><span class="w">
+</span><span class="p" data-group-id="1579824297-1">}</span></code></pre><h2 id="module-lookup-order" class="section-heading"><a href="#module-lookup-order" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Lookup order</span></h2><ol><li><code class="inline">bf_char</code> (O(log n) map) — checked first.</li><li><code class="inline">bf_range</code> (linear, typically &lt; 10 entries) — checked on miss.</li></ol><p>Returns <code class="inline">nil</code> if not mapped by either table.</p><h2 id="module-utf-16be-decoding" class="section-heading"><a href="#module-utf-16be-decoding" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">UTF-16BE decoding</span></h2><p>Hex strings in the CMap (<code class="inline">&lt;HHHH...&gt;</code>) are UTF-16BE encoded codepoint sequences.
 Erlang's <a href="https://www.erlang.org/doc/apps/stdlib/unicode.html#characters_to_binary/3"><code class="inline">:unicode.characters_to_binary/3</code></a> converts them to UTF-8 (Elixir <code class="inline">String.t()</code>).</p>
     </section>
 
@@ -196,7 +196,7 @@ Erlang's <a href="https://www.erlang.org/doc/apps/stdlib/unicode.html#characters
       <h1 class="signature" translate="no">t()</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/cmap.ex#L34" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/cmap.ex#L34" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -240,7 +240,7 @@ Erlang's <a href="https://www.erlang.org/doc/apps/stdlib/unicode.html#characters
       <h1 class="signature" translate="no">lookup(c_map, code)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/cmap.ex#L63" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/cmap.ex#L63" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -269,7 +269,7 @@ Lookup order: <code class="inline">bf_char</code> first (O(log n)), then <code c
       <h1 class="signature" translate="no">parse(binary)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/cmap.ex#L52" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/cmap.ex#L52" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -297,9 +297,9 @@ All other PostScript CMap constructs are skipped silently.</p>
         <p>
 
             <span class="line">
-              <a href="https://hex.pm/packages/ex_pdf_read/1.0.1">Hex Package</a>
+              <a href="https://hex.pm/packages/ex_pdf_read/1.0.2">Hex Package</a>
 
-              <a href="https://preview.hex.pm/preview/ex_pdf_read/1.0.1">Hex Preview</a>
+              <a href="https://preview.hex.pm/preview/ex_pdf_read/1.0.2">Hex Preview</a>
 
             </span>
 

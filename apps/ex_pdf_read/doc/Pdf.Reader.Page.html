@@ -5,10 +5,10 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.40.2">
-    <meta name="project" content="ex_pdf_read v1.0.1">
+    <meta name="project" content="ex_pdf_read v1.0.2">
 
 
-    <title>Pdf.Reader.Page — ex_pdf_read v1.0.1</title>
+    <title>Pdf.Reader.Page — ex_pdf_read v1.0.2</title>
 
     <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
 
@@ -37,7 +37,7 @@
 ex_pdf_read
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v1.0.1
+          v1.0.2
         </div>
       </div>
     </div>
@@ -94,7 +94,7 @@ ex_pdf_read
   <div class="heading-with-actions top-heading">
     <h1>
       <span translate="no">Pdf.<wbr />Reader.<wbr />Page</span> 
-      <small class="app-vsn" translate="no">(ex_pdf_read v1.0.1)</small>
+      <small class="app-vsn" translate="no">(ex_pdf_read v1.0.2)</small>
 
     </h1>
 
@@ -105,7 +105,7 @@ ex_pdf_read
 
 
 
-      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/page.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/page.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -117,7 +117,7 @@ ex_pdf_read
 <p>Page tree walker for <a href="Pdf.Reader.html"><code class="inline">Pdf.Reader</code></a>.</p><p>Spec reference: PDF 1.7 § 7.7.3 (Page Tree), § 7.7.3.4 (Inheritance of Page Attributes).</p><h2 id="module-page-tree-structure" class="section-heading"><a href="#module-page-tree-structure" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Page tree structure</span></h2><p>The Catalog's <code class="inline">/Pages</code> entry points to the root of the page tree.
 A node with <code class="inline">/Type /Pages</code> is an intermediate node containing a <code class="inline">/Kids</code>
 array of refs to child nodes (either <code class="inline">/Pages</code> or <code class="inline">/Page</code>).
-A node with <code class="inline">/Type /Page</code> is a leaf — one actual page.</p><h2 id="module-api" class="section-heading"><a href="#module-api" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">API</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">list_refs</span><span class="p" data-group-id="2587912313-1">(</span><span class="n">doc</span><span class="p" data-group-id="2587912313-1">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="p" data-group-id="2587912313-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2587912313-3">[</span><span class="n">ref</span><span class="p" data-group-id="2587912313-3">]</span><span class="p">,</span><span class="w"> </span><span class="n">updated_doc</span><span class="p" data-group-id="2587912313-2">}</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="2587912313-4">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="n">reason</span><span class="p" data-group-id="2587912313-4">}</span></code></pre><p>Walks the tree recursively, collecting leaf <code class="inline">/Page</code> refs in document order.
+A node with <code class="inline">/Type /Page</code> is a leaf — one actual page.</p><h2 id="module-api" class="section-heading"><a href="#module-api" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">API</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">list_refs</span><span class="p" data-group-id="7290142288-1">(</span><span class="n">doc</span><span class="p" data-group-id="7290142288-1">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="p" data-group-id="7290142288-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7290142288-3">[</span><span class="n">ref</span><span class="p" data-group-id="7290142288-3">]</span><span class="p">,</span><span class="w"> </span><span class="n">updated_doc</span><span class="p" data-group-id="7290142288-2">}</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p" data-group-id="7290142288-4">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="n">reason</span><span class="p" data-group-id="7290142288-4">}</span></code></pre><p>Walks the tree recursively, collecting leaf <code class="inline">/Page</code> refs in document order.
 Threads <code class="inline">doc</code> forward so that resolved objects accumulate in the cache.</p><h2 id="module-catalog-pages-tree-fallback-r-4" class="section-heading"><a href="#module-catalog-pages-tree-fallback-r-4" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Catalog/Pages tree fallback (R-4)</span></h2><p>When <code class="inline">doc.recover_mode</code> is <code class="inline">true</code> and the normal tree walk fails (missing
 <code class="inline">/Root</code>, dangling <code class="inline">/Pages</code> ref, or other catalog resolution error), the
 recovery branch scans the xref table directly for objects that match ALL of:</p><ul><li><code class="inline">/Type /Page</code> in the object dict</li><li>Either <code class="inline">/Contents</code> OR <code class="inline">/Parent</code> present (disambiguates from Form XObjects
@@ -181,7 +181,7 @@ proceed and the PDF is non-decryptable even with <code class="inline">recover: t
       <h1 class="signature" translate="no">list_refs(doc)</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/page.ex#L80" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/page.ex#L80" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -211,9 +211,9 @@ and appends <code class="inline">{:page_tree_recovered, n}</code> to <code class
         <p>
 
             <span class="line">
-              <a href="https://hex.pm/packages/ex_pdf_read/1.0.1">Hex Package</a>
+              <a href="https://hex.pm/packages/ex_pdf_read/1.0.2">Hex Package</a>
 
-              <a href="https://preview.hex.pm/preview/ex_pdf_read/1.0.1">Hex Preview</a>
+              <a href="https://preview.hex.pm/preview/ex_pdf_read/1.0.2">Hex Preview</a>
 
             </span>
 

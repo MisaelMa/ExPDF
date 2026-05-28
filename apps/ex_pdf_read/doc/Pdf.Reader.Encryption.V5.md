@@ -1,5 +1,5 @@
 # `Pdf.Reader.Encryption.V5`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/encryption/v5.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/encryption/v5.ex#L1)
 
 Implements PDF Standard Security Handler algorithms for V5/R6 (AES-256,
 PDF 2.0).  R=5 (deprecated Acrobat X beta variant) is explicitly rejected.

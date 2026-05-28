@@ -1,5 +1,5 @@
 # `Pdf.Component.Footnote`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/footnote.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/footnote.ex#L1)
 
 Footnote component for PDF documents.
 

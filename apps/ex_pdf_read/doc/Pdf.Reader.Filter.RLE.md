@@ -1,5 +1,5 @@
 # `Pdf.Reader.Filter.RLE`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/filter/rle.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/filter/rle.ex#L1)
 
 RunLengthDecode filter — decodes PackBits-style run-length encoded data.
 

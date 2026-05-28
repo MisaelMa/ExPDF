@@ -1,5 +1,5 @@
 # `Pdf.Reader.Image`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/image.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/image.ex#L1)
 
 Struct representing an image extracted from a PDF page.
 

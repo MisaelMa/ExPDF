@@ -1,5 +1,5 @@
 # `Pdf.Reader.Filter.ASCIIHex`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/filter/ascii_hex.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/filter/ascii_hex.ex#L1)
 
 ASCIIHexDecode filter — decodes a sequence of hexadecimal digit pairs to
 a binary.

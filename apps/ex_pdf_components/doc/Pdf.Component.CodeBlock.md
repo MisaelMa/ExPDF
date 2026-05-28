@@ -1,5 +1,5 @@
 # `Pdf.Component.CodeBlock`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/code_block.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/code_block.ex#L1)
 
 Code block component for PDF documents.
 

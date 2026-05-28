@@ -1,5 +1,5 @@
 # `Pdf.Reader.Encryption.V4`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/encryption/v4.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/encryption/v4.ex#L1)
 
 Implements PDF Standard Security Handler algorithms for V4 (Crypt Filters +
 AES-128 CBC) — revision R=4.

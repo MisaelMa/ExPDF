@@ -1,5 +1,5 @@
 # `Pdf.Reader.Encryption`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/encryption.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/encryption.ex#L1)
 
 Facade module for PDF Standard Security Handler authentication and decryption.
 

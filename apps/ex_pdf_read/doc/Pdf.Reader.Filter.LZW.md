@@ -1,5 +1,5 @@
 # `Pdf.Reader.Filter.LZW`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/filter/lzw.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/filter/lzw.ex#L1)
 
 LZWDecode filter — decodes LZW compressed data as specified in PDF §7.4.4.
 

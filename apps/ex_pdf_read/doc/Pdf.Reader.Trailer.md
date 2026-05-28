@@ -1,5 +1,5 @@
 # `Pdf.Reader.Trailer`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/reader/trailer.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/reader/trailer.ex#L1)
 
 Locates the `startxref` byte offset in a PDF binary and parses the
 trailer dictionary at a given xref section offset.

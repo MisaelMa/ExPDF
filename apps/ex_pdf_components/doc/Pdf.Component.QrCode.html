@@ -5,10 +5,10 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.40.2">
-    <meta name="project" content="ex_pdf_components v1.0.1">
+    <meta name="project" content="ex_pdf_components v1.0.2">
 
 
-    <title>Pdf.Component.QrCode — ex_pdf_components v1.0.1</title>
+    <title>Pdf.Component.QrCode — ex_pdf_components v1.0.2</title>
 
     <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
 
@@ -37,7 +37,7 @@
 ex_pdf_components
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v1.0.1
+          v1.0.2
         </div>
       </div>
     </div>
@@ -94,7 +94,7 @@ ex_pdf_components
   <div class="heading-with-actions top-heading">
     <h1>
       <span translate="no">Pdf.<wbr />Component.<wbr />QrCode</span> 
-      <small class="app-vsn" translate="no">(ex_pdf_components v1.0.1)</small>
+      <small class="app-vsn" translate="no">(ex_pdf_components v1.0.2)</small>
 
     </h1>
 
@@ -105,7 +105,7 @@ ex_pdf_components
 
 
 
-      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/qr_code.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/qr_code.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -114,17 +114,17 @@ ex_pdf_components
 
 
     <section id="moduledoc">
-<p>QR Code PDF component — renders a QR code at a given position.</p><h2 id="module-usage-via-builder" class="section-heading"><a href="#module-usage-via-builder" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Usage via Builder</span></h2><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="6475758289-1">%{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="ss">:qr</span><span class="p">,</span><span class="w"> </span><span class="ss">props</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6475758289-2">%{</span><span class="w">
+<p>QR Code PDF component — renders a QR code at a given position.</p><h2 id="module-usage-via-builder" class="section-heading"><a href="#module-usage-via-builder" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Usage via Builder</span></h2><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="0256641116-1">%{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="ss">:qr</span><span class="p">,</span><span class="w"> </span><span class="ss">props</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0256641116-2">%{</span><span class="w">
   </span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://example.com&quot;</span><span class="p">,</span><span class="w">
-  </span><span class="ss">style</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6475758289-3">%{</span><span class="w">
-    </span><span class="ss">position</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6475758289-4">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="6475758289-4">}</span><span class="p">,</span><span class="w">
+  </span><span class="ss">style</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0256641116-3">%{</span><span class="w">
+    </span><span class="ss">position</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0256641116-4">{</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">700</span><span class="p" data-group-id="0256641116-4">}</span><span class="p">,</span><span class="w">
     </span><span class="ss">size</span><span class="p">:</span><span class="w"> </span><span class="mi">120</span><span class="p">,</span><span class="w">
     </span><span class="ss">ec_level</span><span class="p">:</span><span class="w"> </span><span class="ss">:h</span><span class="p">,</span><span class="w">
     </span><span class="ss">logo</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://example.com/icon.png&quot;</span><span class="p">,</span><span class="w">
     </span><span class="ss">logo_size</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w">
     </span><span class="ss">label</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Scan me&quot;</span><span class="w">
-  </span><span class="p" data-group-id="6475758289-3">}</span><span class="w">
-</span><span class="p" data-group-id="6475758289-2">}</span><span class="p" data-group-id="6475758289-1">}</span></code></pre><h2 id="module-style-options" class="section-heading"><a href="#module-style-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Style options</span></h2><h3 id="module-core" class="section-heading"><a href="#module-core" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Core</span></h3><ul><li><code class="inline">:data</code> — the string to encode (required)</li><li><code class="inline">:size</code> — QR code size in points, square (default <code class="inline">100</code>)</li><li><code class="inline">:ec_level</code> — error correction: <code class="inline">:l</code>, <code class="inline">:m</code> (default), <code class="inline">:q</code>, <code class="inline">:h</code></li><li><code class="inline">:color</code> — module (dark) color (default <code class="inline">{0, 0, 0}</code>)</li><li><code class="inline">:background</code> — light module color (default <code class="inline">{1, 1, 1}</code>)</li><li><code class="inline">:quiet_zone</code> — number of quiet zone modules (default <code class="inline">2</code>)</li></ul><h3 id="module-border-padding" class="section-heading"><a href="#module-border-padding" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Border &amp; padding</span></h3><ul><li><code class="inline">:border</code> — border width (default <code class="inline">0</code>)</li><li><code class="inline">:border_color</code> — border stroke color (default <code class="inline">{0.8, 0.8, 0.8}</code>)</li><li><code class="inline">:border_radius</code> — corner radius (default <code class="inline">0</code>)</li><li><code class="inline">:border_fill</code> — fill color for border area / card background (default <code class="inline">nil</code>)</li><li><code class="inline">:padding</code> — extra padding between border and QR (default <code class="inline">0</code>)</li></ul><h3 id="module-logo-icon-overlay-center-of-qr" class="section-heading"><a href="#module-logo-icon-overlay-center-of-qr" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Logo / icon overlay (center of QR)</span></h3><ul><li><code class="inline">:logo</code> — image path, URL, or <code class="inline">{:binary, data}</code> (default <code class="inline">nil</code>)</li><li><code class="inline">:logo_size</code> — logo width &amp; height in points (default 20% of <code class="inline">:size</code>)</li><li><code class="inline">:logo_background</code> — background behind logo (default <code class="inline">:background</code>)</li><li><code class="inline">:logo_padding</code> — padding around logo image (default <code class="inline">3</code>)</li><li><code class="inline">:logo_border_radius</code> — rounded clip for logo area (default <code class="inline">4</code>)</li></ul><h3 id="module-label" class="section-heading"><a href="#module-label" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Label</span></h3><ul><li><code class="inline">:label</code> — text rendered below the QR code (default <code class="inline">nil</code>)</li><li><code class="inline">:label_font</code> — font name (default <code class="inline">&quot;Helvetica&quot;</code>)</li><li><code class="inline">:label_font_size</code> — font size (default <code class="inline">8</code>)</li><li><code class="inline">:label_color</code> — text color (default same as <code class="inline">:color</code>)</li><li><code class="inline">:label_bold</code> — bold label (default <code class="inline">false</code>)</li></ul>
+  </span><span class="p" data-group-id="0256641116-3">}</span><span class="w">
+</span><span class="p" data-group-id="0256641116-2">}</span><span class="p" data-group-id="0256641116-1">}</span></code></pre><h2 id="module-style-options" class="section-heading"><a href="#module-style-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Style options</span></h2><h3 id="module-core" class="section-heading"><a href="#module-core" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Core</span></h3><ul><li><code class="inline">:data</code> — the string to encode (required)</li><li><code class="inline">:size</code> — QR code size in points, square (default <code class="inline">100</code>)</li><li><code class="inline">:ec_level</code> — error correction: <code class="inline">:l</code>, <code class="inline">:m</code> (default), <code class="inline">:q</code>, <code class="inline">:h</code></li><li><code class="inline">:color</code> — module (dark) color (default <code class="inline">{0, 0, 0}</code>)</li><li><code class="inline">:background</code> — light module color (default <code class="inline">{1, 1, 1}</code>)</li><li><code class="inline">:quiet_zone</code> — number of quiet zone modules (default <code class="inline">2</code>)</li></ul><h3 id="module-border-padding" class="section-heading"><a href="#module-border-padding" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Border &amp; padding</span></h3><ul><li><code class="inline">:border</code> — border width (default <code class="inline">0</code>)</li><li><code class="inline">:border_color</code> — border stroke color (default <code class="inline">{0.8, 0.8, 0.8}</code>)</li><li><code class="inline">:border_radius</code> — corner radius (default <code class="inline">0</code>)</li><li><code class="inline">:border_fill</code> — fill color for border area / card background (default <code class="inline">nil</code>)</li><li><code class="inline">:padding</code> — extra padding between border and QR (default <code class="inline">0</code>)</li></ul><h3 id="module-logo-icon-overlay-center-of-qr" class="section-heading"><a href="#module-logo-icon-overlay-center-of-qr" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Logo / icon overlay (center of QR)</span></h3><ul><li><code class="inline">:logo</code> — image path, URL, or <code class="inline">{:binary, data}</code> (default <code class="inline">nil</code>)</li><li><code class="inline">:logo_size</code> — logo width &amp; height in points (default 20% of <code class="inline">:size</code>)</li><li><code class="inline">:logo_background</code> — background behind logo (default <code class="inline">:background</code>)</li><li><code class="inline">:logo_padding</code> — padding around logo image (default <code class="inline">3</code>)</li><li><code class="inline">:logo_border_radius</code> — rounded clip for logo area (default <code class="inline">4</code>)</li></ul><h3 id="module-label" class="section-heading"><a href="#module-label" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Label</span></h3><ul><li><code class="inline">:label</code> — text rendered below the QR code (default <code class="inline">nil</code>)</li><li><code class="inline">:label_font</code> — font name (default <code class="inline">&quot;Helvetica&quot;</code>)</li><li><code class="inline">:label_font_size</code> — font size (default <code class="inline">8</code>)</li><li><code class="inline">:label_color</code> — text color (default same as <code class="inline">:color</code>)</li><li><code class="inline">:label_bold</code> — bold label (default <code class="inline">false</code>)</li></ul>
     </section>
 
 </div>
@@ -177,7 +177,7 @@ ex_pdf_components
       <h1 class="signature" translate="no">render(doc, arg, style \\ %{})</h1>
 
 
-        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.1/lib/pdf/component/qr_code.ex#L62" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/qr_code.ex#L62" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -198,9 +198,9 @@ ex_pdf_components
         <p>
 
             <span class="line">
-              <a href="https://hex.pm/packages/ex_pdf_components/1.0.1">Hex Package</a>
+              <a href="https://hex.pm/packages/ex_pdf_components/1.0.2">Hex Package</a>
 
-              <a href="https://preview.hex.pm/preview/ex_pdf_components/1.0.1">Hex Preview</a>
+              <a href="https://preview.hex.pm/preview/ex_pdf_components/1.0.2">Hex Preview</a>
 
             </span>
 
