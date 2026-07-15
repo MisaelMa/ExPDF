@@ -87,32 +87,19 @@ defmodule Pdf.StyledTable do
     cols = resolve_columns(data, opts, available_width)
     total_width = Enum.reduce(cols, 0, fn col, acc -> acc + col.width end)
 
-    # Calculate row heights
-    rows = prepare_rows(data, opts)
+    rows = prepare_rows(data, opts, cols, document)
     total_height = Enum.reduce(rows, 0, fn row, acc -> acc + row.height end)
 
     r = opts.border_radius
 
-    # 1) Draw row backgrounds (clipped to rounded rect when border_radius > 0)
-    document =
-      draw_clipped_backgrounds(
-        document,
-        rows,
-        cols,
-        {table_x, table_y},
-        {total_width, total_height},
-        r,
-        opts
-      )
+    document = draw_clipped_backgrounds(document, rows, cols, {table_x, table_y}, {total_width, total_height}, r, opts)
 
-    # 2) Draw row borders + text (not clipped)
     {document, _y} =
       Enum.reduce(rows, {document, table_y}, fn row, {doc, y} ->
         doc = draw_row_content(doc, row, cols, {table_x, y}, opts)
         {doc, y - row.height}
       end)
 
-    # 3) Draw outer border stroke on top
     document = draw_outer_border(document, {table_x, table_y}, {total_width, total_height}, opts)
 
     # Move cursor below table only when flowing at the cursor (not absolutely placed)
@@ -123,39 +110,24 @@ defmodule Pdf.StyledTable do
     end
   end
 
-  @doc """
-  Render a styled table on a Page struct (low-level).
-  """
   def render_on_page(page, {x, y}, data, opts \\ %{}) do
     opts = Map.merge(@default_opts, opts)
 
     cols = resolve_columns_with_total(data, opts)
     total_width = Enum.reduce(cols, 0, fn col, acc -> acc + col.width end)
 
-    rows = prepare_rows(data, opts)
+    rows = prepare_rows(data, opts, cols, page)
     total_height = Enum.reduce(rows, 0, fn row, acc -> acc + row.height end)
     r = opts.border_radius
 
-    # 1) Clipped backgrounds
-    page =
-      draw_clipped_backgrounds_page(
-        page,
-        rows,
-        cols,
-        {x, y},
-        {total_width, total_height},
-        r,
-        opts
-      )
+    page = draw_clipped_backgrounds_page(page, rows, cols, {x, y}, {total_width, total_height}, r, opts)
 
-    # 2) Row borders + text
     {page, _y} =
       Enum.reduce(rows, {page, y}, fn row, {pg, cy} ->
         pg = draw_row_content_page(pg, row, cols, {x, cy}, opts)
         {pg, cy - row.height}
       end)
 
-    # 3) Outer border on top
     draw_outer_border_page(page, {x, y}, {total_width, total_height}, opts)
   end
 
@@ -214,8 +186,7 @@ defmodule Pdf.StyledTable do
   end
 
   # ── Row preparation ────────────────────────────────────────────────
-
-  defp prepare_rows(data, opts) do
+  defp prepare_rows(data, opts, cols, doc \\ nil) do
     total = length(data)
     has_header = opts.header != nil
     has_footer = opts.footer != nil
@@ -235,17 +206,61 @@ defmodule Pdf.StyledTable do
 
       row_style = row_style_for(row_type, is_alt, opts)
       padding = Style.expand_shorthand(Map.get(row_style, :padding, opts.padding))
-      {pt, _pr, pb, _pl} = padding
+      {pt, pr, pb, pl} = padding
+
+      font = Map.get(row_style, :font, opts.font)
+      font_size = Map.get(row_style, :font_size, opts.font_size)
+      bold = Map.get(row_style, :bold, false)
+      italic = Map.get(row_style, :italic, false)
       line_h = Map.get(row_style, :line_height, opts.line_height)
+
+      wrapped_cells =
+        Enum.map(cols, fn col ->
+          cell_text = Enum.at(cells, col.index, "")
+          max_w = col.width - pl - pr
+          wrap_text(cell_text, max_w, font, font_size, bold, italic, doc)
+        end)
+
+      max_lines = Enum.map(wrapped_cells, &length/1) |> Enum.max(fn -> 1 end)
 
       %{
         cells: cells,
+        wrapped_cells: wrapped_cells,
         type: row_type,
         style: row_style,
-        height: pt + line_h + pb,
-        padding: padding
+        height: pt + (line_h * max_lines) + pb,
+        padding: padding,
+        line_height: line_h
       }
     end)
+  end
+
+  defp wrap_text(text, max_width, font, font_size, bold, italic, doc) do
+    text_str = to_string(text)
+
+    if text_str == "" do
+      [""]
+    else
+      text_str
+      |> String.split("\n")
+      |> Enum.flat_map(fn paragraph ->
+        paragraph
+        |> String.split(" ")
+        |> Enum.reduce([""], fn word, [current_line | rest] ->
+          if current_line == "" do
+            [word | rest]
+          else
+            test_line = current_line <> " " <> word
+            if estimate_text_width(test_line, font, font_size, bold, italic, doc) <= max_width do
+              [test_line | rest]
+            else
+              [word, current_line | rest]
+            end
+          end
+        end)
+        |> Enum.reverse()
+      end)
+    end
   end
 
   defp row_style_for(:header, _is_alt, opts), do: opts.header || %{}
@@ -343,7 +358,6 @@ defmodule Pdf.StyledTable do
     row_h = row.height
     row_y = y - row_h
 
-    # Row bottom border
     border_bottom = Map.get(row.style, :border_bottom, 0)
 
     document =
@@ -361,7 +375,6 @@ defmodule Pdf.StyledTable do
         document
       end
 
-    # Draw cells
     font = Map.get(row.style, :font, opts.font)
     font_size = Map.get(row.style, :font_size, opts.font_size)
     bold = Map.get(row.style, :bold, false)
@@ -373,27 +386,19 @@ defmodule Pdf.StyledTable do
 
     {document, _x} =
       Enum.reduce(cols, {document, table_x}, fn col, {doc, cx} ->
-        cell_text = Enum.at(row.cells, col.index, "")
+        lines = Enum.at(row.wrapped_cells, col.index, [])
         {_pt, pr, _pb, pl} = row.padding
+        line_h = row.line_height
+        
+        doc =
+          lines
+          |> Enum.with_index()
+          |> Enum.reduce(doc, fn {line, line_idx}, doc_acc ->
+            text_x = cell_text_x(cx, pl, pr, col.width, col.align, line, font, font_size, bold, italic, doc_acc)
+            text_y = y - pt - font_size - (line_idx * line_h)
+            Pdf.text_at(doc_acc, {text_x, text_y}, line)
+          end)
 
-        text_x =
-          cell_text_x(
-            cx,
-            pl,
-            pr,
-            col.width,
-            col.align,
-            cell_text,
-            font,
-            font_size,
-            bold,
-            italic,
-            doc
-          )
-
-        text_y = y - pt - font_size
-
-        doc = Pdf.text_at(doc, {text_x, text_y}, cell_text)
         {doc, cx + col.width}
       end)
 
@@ -416,8 +421,7 @@ defmodule Pdf.StyledTable do
   end
 
   defp estimate_text_width(text, _font, font_size, _bold, _italic, _doc) do
-    # Approximate: average char width ~0.5 * font_size for Helvetica
-    String.length(text) * font_size * 0.5
+    String.length(text) * font_size * 0.45
   end
 
   defp total_width(cols), do: Enum.reduce(cols, 0, fn c, acc -> acc + c.width end)
@@ -526,12 +530,19 @@ defmodule Pdf.StyledTable do
 
     {page, _x} =
       Enum.reduce(cols, {page, table_x}, fn col, {pg, cx} ->
-        cell_text = Enum.at(row.cells, col.index, "")
+        lines = Enum.at(row.wrapped_cells, col.index, [])
         {_pt, _pr, _pb, pl} = row.padding
+        line_h = row.line_height
         text_x = cx + pl
-        text_y = y - pt - font_size
 
-        pg = Page.text_at(pg, {text_x, text_y}, cell_text, font: font, size: font_size)
+        pg =
+          lines
+          |> Enum.with_index()
+          |> Enum.reduce(pg, fn {line, line_idx}, pg_acc ->
+            text_y = y - pt - font_size - (line_idx * line_h)
+            Page.text_at(pg_acc, {text_x, text_y}, line, font: font, size: font_size)
+          end)
+
         {pg, cx + col.width}
       end)
 
