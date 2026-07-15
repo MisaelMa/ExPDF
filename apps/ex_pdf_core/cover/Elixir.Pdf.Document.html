@@ -1,0 +1,2659 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>cover/Elixir.Pdf.Document.html</title>
+<style>body {
+  font: 14px/1.6 "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #000;
+  border-top: 2px solid #ddd;
+  background-color: #fff;
+
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+h1 {
+  width: 100%;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 0;
+  font-weight: 100;
+  font-size: 1.1em;
+  letter-spacing: 1px;
+}
+
+h1 code {
+  font-size: 0.96em;
+}
+
+code {
+  font: 12px monospace;
+}
+
+footer {
+  background: #eee;
+  width: 100%;
+  padding: 10px 0;
+  text-align: right;
+  border-top: 1px solid #ddd;
+  display: flex;
+  flex: 1;
+  order: 2;
+  justify-content: center;
+}
+
+table {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: collapse;
+  border: 1px solid #cbcbcb;
+  color: #000;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+}
+table thead {
+  display: none;
+}
+table td.line,
+table td.line a,
+table td.hits {
+  width: 20px;
+  background: #eaeaea;
+  text-align: center;
+  text-decoration: none;
+  font-size: 11px;
+  padding: 0 10px;
+  color: #949494;
+}
+table td.hits {
+  width: 10px;
+  text-align: right;
+  padding: 2px 5px;
+  color: rgba(0, 0, 0, 0.6);
+  background-color: #f0f0f0;
+}
+tr.miss td.line,
+tr.miss td.line a,
+tr.miss td.hits {
+  background-color: #ffdce0;
+  border-color: #fdaeb7;
+}
+tr.miss td {
+  background-color: #ffeef0;
+}
+tr.hit td.line,
+tr.hit td.line a,
+tr.hit td.hits {
+  background-color: #cdffd8;
+  border-color: #bef5cb;
+}
+tr.hit td {
+  background-color: #e6ffed;
+}
+td.source {
+  padding-left: 15px;
+  line-height: 15px;
+  white-space: pre;
+  font: 12px monospace;
+}
+</style>
+</head>
+<body>
+<h1><code>cover/Elixir.Pdf.Document.html</code></h1>
+<footer><p>File generated from <code>/Users/amir/Documents/proyectos/recreando/elixir-pdf/apps/ex_pdf_core/lib/pdf/document.ex</code> by <a href="http://erlang.org/doc/man/cover.html">cover</a> at 2026-05-27 at 22:52:50</p></footer>
+<table>
+<tbody>
+<tr>
+<td class="line" id="L1"><a href="#L1">1</a></td>
+<td class="hits"></td>
+<td class="source"><code>defmodule Pdf.Document do</code></td>
+</tr>
+<tr>
+<td class="line" id="L2"><a href="#L2">2</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @moduledoc false</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L3"><a href="#L3">3</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defstruct objects: nil,</code></td>
+</tr>
+<tr>
+<td class="line" id="L4"><a href="#L4">4</a></td>
+<td class="hits"></td>
+<td class="source"><code>            info: nil,</code></td>
+</tr>
+<tr>
+<td class="line" id="L5"><a href="#L5">5</a></td>
+<td class="hits"></td>
+<td class="source"><code>            fonts: nil,</code></td>
+</tr>
+<tr>
+<td class="line" id="L6"><a href="#L6">6</a></td>
+<td class="hits"></td>
+<td class="source"><code>            current: nil,</code></td>
+</tr>
+<tr>
+<td class="line" id="L7"><a href="#L7">7</a></td>
+<td class="hits"></td>
+<td class="source"><code>            current_font: nil,</code></td>
+</tr>
+<tr>
+<td class="line" id="L8"><a href="#L8">8</a></td>
+<td class="hits"></td>
+<td class="source"><code>            current_font_size: 0,</code></td>
+</tr>
+<tr>
+<td class="line" id="L9"><a href="#L9">9</a></td>
+<td class="hits"></td>
+<td class="source"><code>            pages: [],</code></td>
+</tr>
+<tr>
+<td class="line" id="L10"><a href="#L10">10</a></td>
+<td class="hits"></td>
+<td class="source"><code>            opts: [],</code></td>
+</tr>
+<tr>
+<td class="line" id="L11"><a href="#L11">11</a></td>
+<td class="hits"></td>
+<td class="source"><code>            action: nil,</code></td>
+</tr>
+<tr>
+<td class="line" id="L12"><a href="#L12">12</a></td>
+<td class="hits"></td>
+<td class="source"><code>            images: %{},</code></td>
+</tr>
+<tr>
+<td class="line" id="L13"><a href="#L13">13</a></td>
+<td class="hits"></td>
+<td class="source"><code>            ext_g_states: %{},</code></td>
+</tr>
+<tr>
+<td class="line" id="L14"><a href="#L14">14</a></td>
+<td class="hits"></td>
+<td class="source"><code>            margin: %{top: 0, right: 0, bottom: 0, left: 0},</code></td>
+</tr>
+<tr>
+<td class="line" id="L15"><a href="#L15">15</a></td>
+<td class="hits"></td>
+<td class="source"><code>            page_templates: %{},</code></td>
+</tr>
+<tr>
+<td class="line" id="L16"><a href="#L16">16</a></td>
+<td class="hits"></td>
+<td class="source"><code>            styles: %{}</code></td>
+</tr>
+<tr>
+<td class="line" id="L17"><a href="#L17">17</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L18"><a href="#L18">18</a></td>
+<td class="hits"></td>
+<td class="source"><code>  import Pdf.Utils</code></td>
+</tr>
+<tr>
+<td class="line" id="L19"><a href="#L19">19</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L20"><a href="#L20">20</a></td>
+<td class="hits"></td>
+<td class="source"><code>  alias Pdf.{</code></td>
+</tr>
+<tr>
+<td class="line" id="L21"><a href="#L21">21</a></td>
+<td class="hits"></td>
+<td class="source"><code>    Dictionary,</code></td>
+</tr>
+<tr>
+<td class="line" id="L22"><a href="#L22">22</a></td>
+<td class="hits"></td>
+<td class="source"><code>    Fonts,</code></td>
+</tr>
+<tr>
+<td class="line" id="L23"><a href="#L23">23</a></td>
+<td class="hits"></td>
+<td class="source"><code>    RefTable,</code></td>
+</tr>
+<tr>
+<td class="line" id="L24"><a href="#L24">24</a></td>
+<td class="hits"></td>
+<td class="source"><code>    Trailer,</code></td>
+</tr>
+<tr>
+<td class="line" id="L25"><a href="#L25">25</a></td>
+<td class="hits"></td>
+<td class="source"><code>    Array,</code></td>
+</tr>
+<tr>
+<td class="line" id="L26"><a href="#L26">26</a></td>
+<td class="hits"></td>
+<td class="source"><code>    ObjectCollection,</code></td>
+</tr>
+<tr>
+<td class="line" id="L27"><a href="#L27">27</a></td>
+<td class="hits"></td>
+<td class="source"><code>    Page,</code></td>
+</tr>
+<tr>
+<td class="line" id="L28"><a href="#L28">28</a></td>
+<td class="hits"></td>
+<td class="source"><code>    Paper,</code></td>
+</tr>
+<tr>
+<td class="line" id="L29"><a href="#L29">29</a></td>
+<td class="hits"></td>
+<td class="source"><code>    Image,</code></td>
+</tr>
+<tr>
+<td class="line" id="L30"><a href="#L30">30</a></td>
+<td class="hits"></td>
+<td class="source"><code>    Text</code></td>
+</tr>
+<tr>
+<td class="line" id="L31"><a href="#L31">31</a></td>
+<td class="hits"></td>
+<td class="source"><code>  }</code></td>
+</tr>
+<tr>
+<td class="line" id="L32"><a href="#L32">32</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L33"><a href="#L33">33</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @version Application.compile_env(:ex_pdf, :version, "1.7")</code></td>
+</tr>
+<tr>
+<td class="line" id="L34"><a href="#L34">34</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # 7.5.2 the header line shall be immediately followed by a comment line containing</code></td>
+</tr>
+<tr>
+<td class="line" id="L35"><a href="#L35">35</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # at least four binary characters-that is, characters whose codes are 128 or greater.</code></td>
+</tr>
+<tr>
+<td class="line" id="L36"><a href="#L36">36</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @header &lt;&lt;"%PDF-#{@version}\n%", 0xE2, 0xE3, 0xCF, 0xD3, "\r\n"&gt;&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L37"><a href="#L37">37</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @header_size byte_size(@header)</code></td>
+</tr>
+<tr>
+<td class="line" id="L38"><a href="#L38">38</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L39"><a href="#L39">39</a></td>
+<td class="hits">14</td>
+<td class="source"><code>  def new(opts \\ []) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L40"><a href="#L40">40</a></td>
+<td class="hits">37</td>
+<td class="source"><code>    collection = ObjectCollection.new()</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L41"><a href="#L41">41</a></td>
+<td class="hits">37</td>
+<td class="source"><code>    fonts = Fonts.new()</code></td>
+</tr>
+<tr>
+<td class="line" id="L42"><a href="#L42">42</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L43"><a href="#L43">43</a></td>
+<td class="hits">37</td>
+<td class="source"><code>    {info, collection} =</code></td>
+</tr>
+<tr>
+<td class="line" id="L44"><a href="#L44">44</a></td>
+<td class="hits"></td>
+<td class="source"><code>      ObjectCollection.create_object(</code></td>
+</tr>
+<tr>
+<td class="line" id="L45"><a href="#L45">45</a></td>
+<td class="hits"></td>
+<td class="source"><code>        collection,</code></td>
+</tr>
+<tr>
+<td class="line" id="L46"><a href="#L46">46</a></td>
+<td class="hits"></td>
+<td class="source"><code>        Dictionary.new(%{"Creator" =&gt; "Elixir", "Producer" =&gt; "Elixir-PDF"})</code></td>
+</tr>
+<tr>
+<td class="line" id="L47"><a href="#L47">47</a></td>
+<td class="hits"></td>
+<td class="source"><code>      )</code></td>
+</tr>
+<tr>
+<td class="line" id="L48"><a href="#L48">48</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L49"><a href="#L49">49</a></td>
+<td class="hits">37</td>
+<td class="source"><code>    margin = parse_margin(Keyword.get(opts, :margin, 0))</code></td>
+</tr>
+<tr>
+<td class="line" id="L50"><a href="#L50">50</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L51"><a href="#L51">51</a></td>
+<td class="hits">37</td>
+<td class="source"><code>    document = %__MODULE__{</code></td>
+</tr>
+<tr>
+<td class="line" id="L52"><a href="#L52">52</a></td>
+<td class="hits"></td>
+<td class="source"><code>      objects: collection,</code></td>
+</tr>
+<tr>
+<td class="line" id="L53"><a href="#L53">53</a></td>
+<td class="hits"></td>
+<td class="source"><code>      fonts: fonts,</code></td>
+</tr>
+<tr>
+<td class="line" id="L54"><a href="#L54">54</a></td>
+<td class="hits"></td>
+<td class="source"><code>      info: info,</code></td>
+</tr>
+<tr>
+<td class="line" id="L55"><a href="#L55">55</a></td>
+<td class="hits"></td>
+<td class="source"><code>      opts: opts,</code></td>
+</tr>
+<tr>
+<td class="line" id="L56"><a href="#L56">56</a></td>
+<td class="hits"></td>
+<td class="source"><code>      margin: margin</code></td>
+</tr>
+<tr>
+<td class="line" id="L57"><a href="#L57">57</a></td>
+<td class="hits"></td>
+<td class="source"><code>    }</code></td>
+</tr>
+<tr>
+<td class="line" id="L58"><a href="#L58">58</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L59"><a href="#L59">59</a></td>
+<td class="hits">37</td>
+<td class="source"><code>    add_page(document, opts)</code></td>
+</tr>
+<tr>
+<td class="line" id="L60"><a href="#L60">60</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L61"><a href="#L61">61</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L62"><a href="#L62">62</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def autoprint(document) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L63"><a href="#L63">63</a></td>
+<td class="hits">1</td>
+<td class="source"><code>    {action, objects} =</code></td>
+</tr>
+<tr>
+<td class="line" id="L64"><a href="#L64">64</a></td>
+<td class="hits"></td>
+<td class="source"><code>      ObjectCollection.create_object(</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L65"><a href="#L65">65</a></td>
+<td class="hits">1</td>
+<td class="source"><code>        document.objects,</code></td>
+</tr>
+<tr>
+<td class="line" id="L66"><a href="#L66">66</a></td>
+<td class="hits"></td>
+<td class="source"><code>        Dictionary.new(%{</code></td>
+</tr>
+<tr>
+<td class="line" id="L67"><a href="#L67">67</a></td>
+<td class="hits"></td>
+<td class="source"><code>          "S" =&gt; n("Named"),</code></td>
+</tr>
+<tr>
+<td class="line" id="L68"><a href="#L68">68</a></td>
+<td class="hits"></td>
+<td class="source"><code>          "Type" =&gt; n("Action"),</code></td>
+</tr>
+<tr>
+<td class="line" id="L69"><a href="#L69">69</a></td>
+<td class="hits"></td>
+<td class="source"><code>          "N" =&gt; n("Print")</code></td>
+</tr>
+<tr>
+<td class="line" id="L70"><a href="#L70">70</a></td>
+<td class="hits"></td>
+<td class="source"><code>        })</code></td>
+</tr>
+<tr>
+<td class="line" id="L71"><a href="#L71">71</a></td>
+<td class="hits"></td>
+<td class="source"><code>      )</code></td>
+</tr>
+<tr>
+<td class="line" id="L72"><a href="#L72">72</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L73"><a href="#L73">73</a></td>
+<td class="hits">1</td>
+<td class="source"><code>    %{document | action: action, objects: objects}</code></td>
+</tr>
+<tr>
+<td class="line" id="L74"><a href="#L74">74</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L75"><a href="#L75">75</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L76"><a href="#L76">76</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def get_object(document, ref) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L77"><a href="#L77">77</a></td>
+<td class="hits">1</td>
+<td class="source"><code>    ObjectCollection.get_object(document.objects, ref)</code></td>
+</tr>
+<tr>
+<td class="line" id="L78"><a href="#L78">78</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L79"><a href="#L79">79</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L80"><a href="#L80">80</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @info_map %{</code></td>
+</tr>
+<tr>
+<td class="line" id="L81"><a href="#L81">81</a></td>
+<td class="hits"></td>
+<td class="source"><code>    title: "Title",</code></td>
+</tr>
+<tr>
+<td class="line" id="L82"><a href="#L82">82</a></td>
+<td class="hits"></td>
+<td class="source"><code>    producer: "Producer",</code></td>
+</tr>
+<tr>
+<td class="line" id="L83"><a href="#L83">83</a></td>
+<td class="hits"></td>
+<td class="source"><code>    creator: "Creator",</code></td>
+</tr>
+<tr>
+<td class="line" id="L84"><a href="#L84">84</a></td>
+<td class="hits"></td>
+<td class="source"><code>    created: "CreationDate",</code></td>
+</tr>
+<tr>
+<td class="line" id="L85"><a href="#L85">85</a></td>
+<td class="hits"></td>
+<td class="source"><code>    modified: "ModDate",</code></td>
+</tr>
+<tr>
+<td class="line" id="L86"><a href="#L86">86</a></td>
+<td class="hits"></td>
+<td class="source"><code>    keywords: "Keywords",</code></td>
+</tr>
+<tr>
+<td class="line" id="L87"><a href="#L87">87</a></td>
+<td class="hits"></td>
+<td class="source"><code>    author: "Author",</code></td>
+</tr>
+<tr>
+<td class="line" id="L88"><a href="#L88">88</a></td>
+<td class="hits"></td>
+<td class="source"><code>    subject: "Subject"</code></td>
+</tr>
+<tr>
+<td class="line" id="L89"><a href="#L89">89</a></td>
+<td class="hits"></td>
+<td class="source"><code>  }</code></td>
+</tr>
+<tr>
+<td class="line" id="L90"><a href="#L90">90</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L91"><a href="#L91">91</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def put_info(document, info_list) when is_list(info_list) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L92"><a href="#L92">92</a></td>
+<td class="hits">4</td>
+<td class="source"><code>    info = ObjectCollection.get_object(document.objects, document.info)</code></td>
+</tr>
+<tr>
+<td class="line" id="L93"><a href="#L93">93</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L94"><a href="#L94">94</a></td>
+<td class="hits">4</td>
+<td class="source"><code>    info =</code></td>
+</tr>
+<tr>
+<td class="line" id="L95"><a href="#L95">95</a></td>
+<td class="hits"></td>
+<td class="source"><code>      info_list</code></td>
+</tr>
+<tr>
+<td class="line" id="L96"><a href="#L96">96</a></td>
+<td class="hits"></td>
+<td class="source"><code>      |&gt; Enum.reduce(info, fn {key, value}, info -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L97"><a href="#L97">97</a></td>
+<td class="hits">6</td>
+<td class="source"><code>        case @info_map[key] do</code></td>
+</tr>
+<tr>
+<td class="line" id="L98"><a href="#L98">98</a></td>
+<td class="hits"></td>
+<td class="source"><code>          nil -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L99"><a href="#L99">99</a></td>
+<td class="hits">1</td>
+<td class="source"><code>            raise ArgumentError, "Invalid info key #{inspect(key)}"</code></td>
+</tr>
+<tr>
+<td class="line" id="L100"><a href="#L100">100</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L101"><a href="#L101">101</a></td>
+<td class="hits"></td>
+<td class="source"><code>          info_key -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L102"><a href="#L102">102</a></td>
+<td class="hits">5</td>
+<td class="source"><code>            Dictionary.put(info, info_key, Text.escape(value))</code></td>
+</tr>
+<tr>
+<td class="line" id="L103"><a href="#L103">103</a></td>
+<td class="hits"></td>
+<td class="source"><code>        end</code></td>
+</tr>
+<tr>
+<td class="line" id="L104"><a href="#L104">104</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L105"><a href="#L105">105</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L106"><a href="#L106">106</a></td>
+<td class="hits">3</td>
+<td class="source"><code>    objects = ObjectCollection.update_object(document.objects, document.info, info)</code></td>
+</tr>
+<tr>
+<td class="line" id="L107"><a href="#L107">107</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L108"><a href="#L108">108</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # Also propagate into the current page's objects copy so that subsequent</code></td>
+</tr>
+<tr>
+<td class="line" id="L109"><a href="#L109">109</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # page mutations (set_font, text_at, …) which call sync_page/2 — and</code></td>
+</tr>
+<tr>
+<td class="line" id="L110"><a href="#L110">110</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # replace document.objects with page.objects — do not lose the info update.</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L111"><a href="#L111">111</a></td>
+<td class="hits">3</td>
+<td class="source"><code>    current =</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L112"><a href="#L112">112</a></td>
+<td class="hits">3</td>
+<td class="source"><code>      case document.current do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L113"><a href="#L113">113</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        nil -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L114"><a href="#L114">114</a></td>
+<td class="hits"></td>
+<td class="source"><code>          nil</code></td>
+</tr>
+<tr>
+<td class="line" id="L115"><a href="#L115">115</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L116"><a href="#L116">116</a></td>
+<td class="hits"></td>
+<td class="source"><code>        page -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L117"><a href="#L117">117</a></td>
+<td class="hits">3</td>
+<td class="source"><code>          %{page | objects: ObjectCollection.update_object(page.objects, document.info, info)}</code></td>
+</tr>
+<tr>
+<td class="line" id="L118"><a href="#L118">118</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end</code></td>
+</tr>
+<tr>
+<td class="line" id="L119"><a href="#L119">119</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L120"><a href="#L120">120</a></td>
+<td class="hits">3</td>
+<td class="source"><code>    %{document | objects: objects, current: current}</code></td>
+</tr>
+<tr>
+<td class="line" id="L121"><a href="#L121">121</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L122"><a href="#L122">122</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L123"><a href="#L123">123</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @info_map</code></td>
+</tr>
+<tr>
+<td class="line" id="L124"><a href="#L124">124</a></td>
+<td class="hits"></td>
+<td class="source"><code>  |&gt; Enum.each(fn {key, _value} -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L125"><a href="#L125">125</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    def put_info(document, unquote(key), value), do: put_info(document, [{unquote(key), value}])</code></td>
+</tr>
+<tr>
+<td class="line" id="L126"><a href="#L126">126</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L127"><a href="#L127">127</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L128"><a href="#L128">128</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Pass-through functions that update the current page</code></td>
+</tr>
+<tr>
+<td class="line" id="L129"><a href="#L129">129</a></td>
+<td class="hits"></td>
+<td class="source"><code>  [</code></td>
+</tr>
+<tr>
+<td class="line" id="L130"><a href="#L130">130</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:set_fill_color, quote(do: [color])},</code></td>
+</tr>
+<tr>
+<td class="line" id="L131"><a href="#L131">131</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:set_stroke_color, quote(do: [color])},</code></td>
+</tr>
+<tr>
+<td class="line" id="L132"><a href="#L132">132</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:set_line_width, quote(do: [width])},</code></td>
+</tr>
+<tr>
+<td class="line" id="L133"><a href="#L133">133</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:set_line_cap, quote(do: [style])},</code></td>
+</tr>
+<tr>
+<td class="line" id="L134"><a href="#L134">134</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:set_line_join, quote(do: [style])},</code></td>
+</tr>
+<tr>
+<td class="line" id="L135"><a href="#L135">135</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:set_dash, quote(do: [dash_array, phase])},</code></td>
+</tr>
+<tr>
+<td class="line" id="L136"><a href="#L136">136</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:rectangle, quote(do: [{x, y}, {w, h}])},</code></td>
+</tr>
+<tr>
+<td class="line" id="L137"><a href="#L137">137</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:line, quote(do: [{x, y}, {x2, y2}])},</code></td>
+</tr>
+<tr>
+<td class="line" id="L138"><a href="#L138">138</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:move_to, quote(do: [{x, y}])},</code></td>
+</tr>
+<tr>
+<td class="line" id="L139"><a href="#L139">139</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:line_append, quote(do: [{x, y}])},</code></td>
+</tr>
+<tr>
+<td class="line" id="L140"><a href="#L140">140</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:set_font, quote(do: [name, size, opts])},</code></td>
+</tr>
+<tr>
+<td class="line" id="L141"><a href="#L141">141</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:set_font_size, quote(do: [size])},</code></td>
+</tr>
+<tr>
+<td class="line" id="L142"><a href="#L142">142</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:set_text_leading, quote(do: [leading])},</code></td>
+</tr>
+<tr>
+<td class="line" id="L143"><a href="#L143">143</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:text_at, quote(do: [{x, y}, text, opts])},</code></td>
+</tr>
+<tr>
+<td class="line" id="L144"><a href="#L144">144</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:text_wrap!, quote(do: [{x, y}, {w, h}, text, opts])},</code></td>
+</tr>
+<tr>
+<td class="line" id="L145"><a href="#L145">145</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:table!, quote(do: [{x, y}, {w, h}, data, opts])},</code></td>
+</tr>
+<tr>
+<td class="line" id="L146"><a href="#L146">146</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:text_lines, quote(do: [{x, y}, lines, opts])},</code></td>
+</tr>
+<tr>
+<td class="line" id="L147"><a href="#L147">147</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:stroke, []},</code></td>
+</tr>
+<tr>
+<td class="line" id="L148"><a href="#L148">148</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:fill, []},</code></td>
+</tr>
+<tr>
+<td class="line" id="L149"><a href="#L149">149</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:fill_and_stroke, []},</code></td>
+</tr>
+<tr>
+<td class="line" id="L150"><a href="#L150">150</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:close_path, []},</code></td>
+</tr>
+<tr>
+<td class="line" id="L151"><a href="#L151">151</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:clip, []},</code></td>
+</tr>
+<tr>
+<td class="line" id="L152"><a href="#L152">152</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:curve_to, quote(do: [{x1, y1}, {x2, y2}, {x3, y3}])},</code></td>
+</tr>
+<tr>
+<td class="line" id="L153"><a href="#L153">153</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:rounded_rectangle, quote(do: [{x, y}, {w, h}, r])},</code></td>
+</tr>
+<tr>
+<td class="line" id="L154"><a href="#L154">154</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:move_down, quote(do: [amount])},</code></td>
+</tr>
+<tr>
+<td class="line" id="L155"><a href="#L155">155</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:move_right, quote(do: [amount])},</code></td>
+</tr>
+<tr>
+<td class="line" id="L156"><a href="#L156">156</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:set_cursor_x, quote(do: [x])},</code></td>
+</tr>
+<tr>
+<td class="line" id="L157"><a href="#L157">157</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:reset_x, []},</code></td>
+</tr>
+<tr>
+<td class="line" id="L158"><a href="#L158">158</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:set_fill_opacity, quote(do: [opacity])},</code></td>
+</tr>
+<tr>
+<td class="line" id="L159"><a href="#L159">159</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:set_stroke_opacity, quote(do: [opacity])},</code></td>
+</tr>
+<tr>
+<td class="line" id="L160"><a href="#L160">160</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:set_opacity, quote(do: [opacity])},</code></td>
+</tr>
+<tr>
+<td class="line" id="L161"><a href="#L161">161</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:rotate, quote(do: [angle])},</code></td>
+</tr>
+<tr>
+<td class="line" id="L162"><a href="#L162">162</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:translate, quote(do: [{tx, ty}])},</code></td>
+</tr>
+<tr>
+<td class="line" id="L163"><a href="#L163">163</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:scale, quote(do: [{sx, sy}])},</code></td>
+</tr>
+<tr>
+<td class="line" id="L164"><a href="#L164">164</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:transform, quote(do: [{a, b, c, d, e, f}])}</code></td>
+</tr>
+<tr>
+<td class="line" id="L165"><a href="#L165">165</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ]</code></td>
+</tr>
+<tr>
+<td class="line" id="L166"><a href="#L166">166</a></td>
+<td class="hits"></td>
+<td class="source"><code>  |&gt; Enum.map(fn {func_name, args} -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L167"><a href="#L167">167</a></td>
+<td class="hits"></td>
+<td class="source"><code>    def unquote(func_name)(%__MODULE__{current: page} = document, unquote_splicing(args)) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L168"><a href="#L168">168</a></td>
+<td class="hits">43</td>
+<td class="source"><code>      page = Page.unquote(func_name)(page, unquote_splicing(args))</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L169"><a href="#L169">169</a></td>
+<td class="hits">43</td>
+<td class="source"><code>      sync_page(document, page)</code></td>
+</tr>
+<tr>
+<td class="line" id="L170"><a href="#L170">170</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L171"><a href="#L171">171</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L172"><a href="#L172">172</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L173"><a href="#L173">173</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp sync_page(document, page) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L174"><a href="#L174">174</a></td>
+<td class="hits"></td>
+<td class="source"><code>    %{</code></td>
+</tr>
+<tr>
+<td class="line" id="L175"><a href="#L175">175</a></td>
+<td class="hits"></td>
+<td class="source"><code>      document</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L176"><a href="#L176">176</a></td>
+<td class="hits">51</td>
+<td class="source"><code>      | current: page,</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L177"><a href="#L177">177</a></td>
+<td class="hits">51</td>
+<td class="source"><code>        fonts: page.fonts,</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L178"><a href="#L178">178</a></td>
+<td class="hits">51</td>
+<td class="source"><code>        objects: page.objects,</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L179"><a href="#L179">179</a></td>
+<td class="hits">51</td>
+<td class="source"><code>        ext_g_states: Map.merge(document.ext_g_states, page.ext_g_states)</code></td>
+</tr>
+<tr>
+<td class="line" id="L180"><a href="#L180">180</a></td>
+<td class="hits"></td>
+<td class="source"><code>    }</code></td>
+</tr>
+<tr>
+<td class="line" id="L181"><a href="#L181">181</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L182"><a href="#L182">182</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L183"><a href="#L183">183</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  def text_at(document, xy, text), do: text_at(document, xy, text, [])</code></td>
+</tr>
+<tr>
+<td class="line" id="L184"><a href="#L184">184</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L185"><a href="#L185">185</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  def text_wrap!(document, xy, wh, text), do: text_wrap!(document, xy, wh, text, [])</code></td>
+</tr>
+<tr>
+<td class="line" id="L186"><a href="#L186">186</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L187"><a href="#L187">187</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  def text_wrap(document, xy, wh, text), do: text_wrap(document, xy, wh, text, [])</code></td>
+</tr>
+<tr>
+<td class="line" id="L188"><a href="#L188">188</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L189"><a href="#L189">189</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def text_wrap(%__MODULE__{current: page} = document, xy, wh, text, opts) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L190"><a href="#L190">190</a></td>
+<td class="hits">8</td>
+<td class="source"><code>    {page, remaining} = Page.text_wrap(page, xy, wh, text, opts)</code></td>
+</tr>
+<tr>
+<td class="line" id="L191"><a href="#L191">191</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {sync_page(document, page), remaining}</code></td>
+</tr>
+<tr>
+<td class="line" id="L192"><a href="#L192">192</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L193"><a href="#L193">193</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L194"><a href="#L194">194</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  def table!(document, xy, wh, data), do: table!(document, xy, wh, data, [])</code></td>
+</tr>
+<tr>
+<td class="line" id="L195"><a href="#L195">195</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L196"><a href="#L196">196</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  def table(document, xy, wh, data), do: table(document, xy, wh, data, [])</code></td>
+</tr>
+<tr>
+<td class="line" id="L197"><a href="#L197">197</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L198"><a href="#L198">198</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def table(%__MODULE__{current: page} = document, xy, wh, data, opts) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L199"><a href="#L199">199</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    {page, remaining} = Page.table(page, xy, wh, data, opts)</code></td>
+</tr>
+<tr>
+<td class="line" id="L200"><a href="#L200">200</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {sync_page(document, page), remaining}</code></td>
+</tr>
+<tr>
+<td class="line" id="L201"><a href="#L201">201</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L202"><a href="#L202">202</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L203"><a href="#L203">203</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  def text_lines(document, xy, lines), do: text_lines(document, xy, lines, [])</code></td>
+</tr>
+<tr>
+<td class="line" id="L204"><a href="#L204">204</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L205"><a href="#L205">205</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  def add_image(document, xy, image, opts \\ [])</code></td>
+</tr>
+<tr>
+<td class="line" id="L206"><a href="#L206">206</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L207"><a href="#L207">207</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def add_image(document, {x, y}, {:binary, image_data}, opts) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L208"><a href="#L208">208</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    md5 = :erlang.md5(image_data)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L209"><a href="#L209">209</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    add_or_create_image(document, {x, y}, md5, {:binary, image_data}, opts)</code></td>
+</tr>
+<tr>
+<td class="line" id="L210"><a href="#L210">210</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L211"><a href="#L211">211</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L212"><a href="#L212">212</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def add_image(document, {x, y}, "http" &lt;&gt; _ = url, opts) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L213"><a href="#L213">213</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    case fetch_url_image(url) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L214"><a href="#L214">214</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {:ok, data} -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L215"><a href="#L215">215</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        add_image(document, {x, y}, {:binary, data}, opts)</code></td>
+</tr>
+<tr>
+<td class="line" id="L216"><a href="#L216">216</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L217"><a href="#L217">217</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {:error, reason} -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L218"><a href="#L218">218</a></td>
+<td class="hits"></td>
+<td class="source"><code>        require Logger</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L219"><a href="#L219">219</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        Logger.warning("Failed to fetch image from URL: #{inspect(reason)}")</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L220"><a href="#L220">220</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        document</code></td>
+</tr>
+<tr>
+<td class="line" id="L221"><a href="#L221">221</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L222"><a href="#L222">222</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L223"><a href="#L223">223</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L224"><a href="#L224">224</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def add_image(document, {x, y}, image_path, opts) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L225"><a href="#L225">225</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    add_or_create_image(document, {x, y}, image_path, image_path, opts)</code></td>
+</tr>
+<tr>
+<td class="line" id="L226"><a href="#L226">226</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L227"><a href="#L227">227</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L228"><a href="#L228">228</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp fetch_url_image(url) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L229"><a href="#L229">229</a></td>
+<td class="hits"></td>
+<td class="source"><code>    require Logger</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L230"><a href="#L230">230</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    ensure_http_started()</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L231"><a href="#L231">231</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    url_charlist = String.to_charlist(url)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L232"><a href="#L232">232</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    headers = [{~c"user-agent", ~c"ExPDF/2.0"}]</code></td>
+</tr>
+<tr>
+<td class="line" id="L233"><a href="#L233">233</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L234"><a href="#L234">234</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    http_opts = [</code></td>
+</tr>
+<tr>
+<td class="line" id="L235"><a href="#L235">235</a></td>
+<td class="hits"></td>
+<td class="source"><code>      ssl: [verify: :verify_none],</code></td>
+</tr>
+<tr>
+<td class="line" id="L236"><a href="#L236">236</a></td>
+<td class="hits"></td>
+<td class="source"><code>      timeout: 15_000,</code></td>
+</tr>
+<tr>
+<td class="line" id="L237"><a href="#L237">237</a></td>
+<td class="hits"></td>
+<td class="source"><code>      autoredirect: true</code></td>
+</tr>
+<tr>
+<td class="line" id="L238"><a href="#L238">238</a></td>
+<td class="hits"></td>
+<td class="source"><code>    ]</code></td>
+</tr>
+<tr>
+<td class="line" id="L239"><a href="#L239">239</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L240"><a href="#L240">240</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    case :httpc.request(:get, {url_charlist, headers}, http_opts, body_format: :binary) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L241"><a href="#L241">241</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {:ok, {{_, 200, _}, resp_headers, body}} -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L242"><a href="#L242">242</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        ct = :proplists.get_value(~c"content-type", resp_headers, ~c"unknown")</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L243"><a href="#L243">243</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        Logger.info("Image fetched: #{byte_size(body)} bytes, content-type: #{ct}")</code></td>
+</tr>
+<tr>
+<td class="line" id="L244"><a href="#L244">244</a></td>
+<td class="hits"></td>
+<td class="source"><code>        {:ok, body}</code></td>
+</tr>
+<tr>
+<td class="line" id="L245"><a href="#L245">245</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L246"><a href="#L246">246</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {:ok, {{_, status, reason}, _, _}} -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L247"><a href="#L247">247</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        Logger.warning("Image fetch HTTP #{status}: #{reason}")</code></td>
+</tr>
+<tr>
+<td class="line" id="L248"><a href="#L248">248</a></td>
+<td class="hits"></td>
+<td class="source"><code>        {:error, {:http_status, status}}</code></td>
+</tr>
+<tr>
+<td class="line" id="L249"><a href="#L249">249</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L250"><a href="#L250">250</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {:error, reason} -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L251"><a href="#L251">251</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        Logger.warning("Image fetch error: #{inspect(reason)}")</code></td>
+</tr>
+<tr>
+<td class="line" id="L252"><a href="#L252">252</a></td>
+<td class="hits"></td>
+<td class="source"><code>        {:error, reason}</code></td>
+</tr>
+<tr>
+<td class="line" id="L253"><a href="#L253">253</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L254"><a href="#L254">254</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L255"><a href="#L255">255</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L256"><a href="#L256">256</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp ensure_http_started do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L257"><a href="#L257">257</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    :inets.start()</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L258"><a href="#L258">258</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    Application.ensure_all_started(:ssl)</code></td>
+</tr>
+<tr>
+<td class="line" id="L259"><a href="#L259">259</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L260"><a href="#L260">260</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L261"><a href="#L261">261</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp add_or_create_image(%__MODULE__{current: page} = document, {x, y}, image_key, image, opts) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L262"><a href="#L262">262</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    {image_ref, document} =</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L263"><a href="#L263">263</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      case Map.get(document.images, image_key) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L264"><a href="#L264">264</a></td>
+<td class="hits"></td>
+<td class="source"><code>        nil -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L265"><a href="#L265">265</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>          create_image(document, image)</code></td>
+</tr>
+<tr>
+<td class="line" id="L266"><a href="#L266">266</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L267"><a href="#L267">267</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        existing -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L268"><a href="#L268">268</a></td>
+<td class="hits"></td>
+<td class="source"><code>          {existing, document}</code></td>
+</tr>
+<tr>
+<td class="line" id="L269"><a href="#L269">269</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end</code></td>
+</tr>
+<tr>
+<td class="line" id="L270"><a href="#L270">270</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L271"><a href="#L271">271</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    page = %{page | objects: document.objects}</code></td>
+</tr>
+<tr>
+<td class="line" id="L272"><a href="#L272">272</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L273"><a href="#L273">273</a></td>
+<td class="hits"></td>
+<td class="source"><code>    %{</code></td>
+</tr>
+<tr>
+<td class="line" id="L274"><a href="#L274">274</a></td>
+<td class="hits"></td>
+<td class="source"><code>      document</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L275"><a href="#L275">275</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      | current: Page.add_image(page, {x, y}, image_ref, opts),</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L276"><a href="#L276">276</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        images: Map.put_new(document.images, image_key, image_ref)</code></td>
+</tr>
+<tr>
+<td class="line" id="L277"><a href="#L277">277</a></td>
+<td class="hits"></td>
+<td class="source"><code>    }</code></td>
+</tr>
+<tr>
+<td class="line" id="L278"><a href="#L278">278</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L279"><a href="#L279">279</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L280"><a href="#L280">280</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp create_image(%{objects: objects, images: images} = document, image_path) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L281"><a href="#L281">281</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    {image, objects} = Image.new(image_path, objects)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L282"><a href="#L282">282</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    {object, objects} = ObjectCollection.create_object(objects, image)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L283"><a href="#L283">283</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    name = n("I#{Kernel.map_size(images) + 1}")</code></td>
+</tr>
+<tr>
+<td class="line" id="L284"><a href="#L284">284</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {%{name: name, object: object, image: image}, %{document | objects: objects}}</code></td>
+</tr>
+<tr>
+<td class="line" id="L285"><a href="#L285">285</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L286"><a href="#L286">286</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L287"><a href="#L287">287</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def add_external_font(%{fonts: fonts, objects: objects, current: page} = document, path) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L288"><a href="#L288">288</a></td>
+<td class="hits">4</td>
+<td class="source"><code>    {_ref, fonts, objects} = Fonts.add_external_font(fonts, objects, path)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L289"><a href="#L289">289</a></td>
+<td class="hits">4</td>
+<td class="source"><code>    page = %{page | fonts: fonts, objects: objects}</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L290"><a href="#L290">290</a></td>
+<td class="hits">4</td>
+<td class="source"><code>    %{document | fonts: fonts, objects: objects, current: page}</code></td>
+</tr>
+<tr>
+<td class="line" id="L291"><a href="#L291">291</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L292"><a href="#L292">292</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L293"><a href="#L293">293</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def add_page(</code></td>
+</tr>
+<tr>
+<td class="line" id="L294"><a href="#L294">294</a></td>
+<td class="hits"></td>
+<td class="source"><code>        %__MODULE__{current: nil, fonts: fonts, objects: objects, opts: doc_opts} = document,</code></td>
+</tr>
+<tr>
+<td class="line" id="L295"><a href="#L295">295</a></td>
+<td class="hits"></td>
+<td class="source"><code>        opts</code></td>
+</tr>
+<tr>
+<td class="line" id="L296"><a href="#L296">296</a></td>
+<td class="hits"></td>
+<td class="source"><code>      ) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L297"><a href="#L297">297</a></td>
+<td class="hits">42</td>
+<td class="source"><code>    new_page =</code></td>
+</tr>
+<tr>
+<td class="line" id="L298"><a href="#L298">298</a></td>
+<td class="hits"></td>
+<td class="source"><code>      Page.new(Keyword.merge(Keyword.merge(doc_opts, opts), fonts: fonts, objects: objects))</code></td>
+</tr>
+<tr>
+<td class="line" id="L299"><a href="#L299">299</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L300"><a href="#L300">300</a></td>
+<td class="hits">42</td>
+<td class="source"><code>    document = %{document | current: new_page}</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L301"><a href="#L301">301</a></td>
+<td class="hits">42</td>
+<td class="source"><code>    document = apply_margin_cursor(document)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L302"><a href="#L302">302</a></td>
+<td class="hits">42</td>
+<td class="source"><code>    apply_templates(document, [:background, :watermark, :header])</code></td>
+</tr>
+<tr>
+<td class="line" id="L303"><a href="#L303">303</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L304"><a href="#L304">304</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L305"><a href="#L305">305</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def add_page(%__MODULE__{current: current_page, pages: pages} = document, opts) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L306"><a href="#L306">306</a></td>
+<td class="hits">5</td>
+<td class="source"><code>    document = apply_templates(document, [:footer])</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L307"><a href="#L307">307</a></td>
+<td class="hits">5</td>
+<td class="source"><code>    add_page(%{document | current: nil, pages: [current_page | pages]}, opts)</code></td>
+</tr>
+<tr>
+<td class="line" id="L308"><a href="#L308">308</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L309"><a href="#L309">309</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L310"><a href="#L310">310</a></td>
+<td class="hits">47</td>
+<td class="source"><code>  def page_number(%__MODULE__{pages: pages}), do: length(pages) + 1</code></td>
+</tr>
+<tr>
+<td class="line" id="L311"><a href="#L311">311</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L312"><a href="#L312">312</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def size(%__MODULE__{current: current_page}) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L313"><a href="#L313">313</a></td>
+<td class="hits">59</td>
+<td class="source"><code>    Page.size(current_page)</code></td>
+</tr>
+<tr>
+<td class="line" id="L314"><a href="#L314">314</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L315"><a href="#L315">315</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L316"><a href="#L316">316</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def cursor(%__MODULE__{current: current_page}) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L317"><a href="#L317">317</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    Page.cursor(current_page)</code></td>
+</tr>
+<tr>
+<td class="line" id="L318"><a href="#L318">318</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L319"><a href="#L319">319</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L320"><a href="#L320">320</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def cursor_xy(%__MODULE__{current: current_page}) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L321"><a href="#L321">321</a></td>
+<td class="hits">14</td>
+<td class="source"><code>    Page.cursor_xy(current_page)</code></td>
+</tr>
+<tr>
+<td class="line" id="L322"><a href="#L322">322</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L323"><a href="#L323">323</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L324"><a href="#L324">324</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def set_cursor(%__MODULE__{current: current_page} = document, y) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L325"><a href="#L325">325</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    %{document | current: Page.set_cursor(current_page, y)}</code></td>
+</tr>
+<tr>
+<td class="line" id="L326"><a href="#L326">326</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L327"><a href="#L327">327</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L328"><a href="#L328">328</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def to_iolist(document) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L329"><a href="#L329">329</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    objects = document.objects</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L330"><a href="#L330">330</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    pages = Enum.reverse([document.current | document.pages])</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L331"><a href="#L331">331</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    proc_set = [n("PDF"), n("Text")]</code></td>
+</tr>
+<tr>
+<td class="line" id="L332"><a href="#L332">332</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L333"><a href="#L333">333</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    proc_set =</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L334"><a href="#L334">334</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      if Kernel.map_size(document.images) &gt; 0,</code></td>
+</tr>
+<tr>
+<td class="line" id="L335"><a href="#L335">335</a></td>
+<td class="hits"></td>
+<td class="source"><code>        do: [n("ImageB"), n("ImageC"), n("ImageI") | proc_set],</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L336"><a href="#L336">336</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        else: proc_set</code></td>
+</tr>
+<tr>
+<td class="line" id="L337"><a href="#L337">337</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L338"><a href="#L338">338</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    resources =</code></td>
+</tr>
+<tr>
+<td class="line" id="L339"><a href="#L339">339</a></td>
+<td class="hits"></td>
+<td class="source"><code>      Dictionary.new(%{</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L340"><a href="#L340">340</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        "Font" =&gt; font_dictionary(document.fonts),</code></td>
+</tr>
+<tr>
+<td class="line" id="L341"><a href="#L341">341</a></td>
+<td class="hits"></td>
+<td class="source"><code>        "ProcSet" =&gt; Array.new(proc_set)</code></td>
+</tr>
+<tr>
+<td class="line" id="L342"><a href="#L342">342</a></td>
+<td class="hits"></td>
+<td class="source"><code>      })</code></td>
+</tr>
+<tr>
+<td class="line" id="L343"><a href="#L343">343</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L344"><a href="#L344">344</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    resources =</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L345"><a href="#L345">345</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      if Kernel.map_size(document.images) &gt; 0 do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L346"><a href="#L346">346</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        Dictionary.put(resources, "XObject", xobject_dictionary(document.images))</code></td>
+</tr>
+<tr>
+<td class="line" id="L347"><a href="#L347">347</a></td>
+<td class="hits"></td>
+<td class="source"><code>      else</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L348"><a href="#L348">348</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        resources</code></td>
+</tr>
+<tr>
+<td class="line" id="L349"><a href="#L349">349</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end</code></td>
+</tr>
+<tr>
+<td class="line" id="L350"><a href="#L350">350</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L351"><a href="#L351">351</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    resources =</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L352"><a href="#L352">352</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      if Kernel.map_size(document.ext_g_states) &gt; 0 do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L353"><a href="#L353">353</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        Dictionary.put(resources, "ExtGState", ext_g_state_dictionary(document.ext_g_states))</code></td>
+</tr>
+<tr>
+<td class="line" id="L354"><a href="#L354">354</a></td>
+<td class="hits"></td>
+<td class="source"><code>      else</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L355"><a href="#L355">355</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        resources</code></td>
+</tr>
+<tr>
+<td class="line" id="L356"><a href="#L356">356</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end</code></td>
+</tr>
+<tr>
+<td class="line" id="L357"><a href="#L357">357</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L358"><a href="#L358">358</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    page_collection =</code></td>
+</tr>
+<tr>
+<td class="line" id="L359"><a href="#L359">359</a></td>
+<td class="hits"></td>
+<td class="source"><code>      Dictionary.new(%{</code></td>
+</tr>
+<tr>
+<td class="line" id="L360"><a href="#L360">360</a></td>
+<td class="hits"></td>
+<td class="source"><code>        "Type" =&gt; n("Pages"),</code></td>
+</tr>
+<tr>
+<td class="line" id="L361"><a href="#L361">361</a></td>
+<td class="hits"></td>
+<td class="source"><code>        "Count" =&gt; length(pages),</code></td>
+</tr>
+<tr>
+<td class="line" id="L362"><a href="#L362">362</a></td>
+<td class="hits"></td>
+<td class="source"><code>        "MediaBox" =&gt; Array.new(Paper.size(default_page_size(document))),</code></td>
+</tr>
+<tr>
+<td class="line" id="L363"><a href="#L363">363</a></td>
+<td class="hits"></td>
+<td class="source"><code>        "Resources" =&gt; resources</code></td>
+</tr>
+<tr>
+<td class="line" id="L364"><a href="#L364">364</a></td>
+<td class="hits"></td>
+<td class="source"><code>      })</code></td>
+</tr>
+<tr>
+<td class="line" id="L365"><a href="#L365">365</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L366"><a href="#L366">366</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    {master_page, objects} = ObjectCollection.create_object(objects, page_collection)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L367"><a href="#L367">367</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    {page_objects, objects} = pages_to_objects(document, objects, pages, master_page)</code></td>
+</tr>
+<tr>
+<td class="line" id="L368"><a href="#L368">368</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L369"><a href="#L369">369</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    {_master_page, objects} =</code></td>
+</tr>
+<tr>
+<td class="line" id="L370"><a href="#L370">370</a></td>
+<td class="hits"></td>
+<td class="source"><code>      ObjectCollection.call(objects, master_page, :put, ["Kids", Array.new(page_objects)])</code></td>
+</tr>
+<tr>
+<td class="line" id="L371"><a href="#L371">371</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L372"><a href="#L372">372</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    {catalogue, objects} =</code></td>
+</tr>
+<tr>
+<td class="line" id="L373"><a href="#L373">373</a></td>
+<td class="hits"></td>
+<td class="source"><code>      ObjectCollection.create_object(</code></td>
+</tr>
+<tr>
+<td class="line" id="L374"><a href="#L374">374</a></td>
+<td class="hits"></td>
+<td class="source"><code>        objects,</code></td>
+</tr>
+<tr>
+<td class="line" id="L375"><a href="#L375">375</a></td>
+<td class="hits"></td>
+<td class="source"><code>        Dictionary.new(%{</code></td>
+</tr>
+<tr>
+<td class="line" id="L376"><a href="#L376">376</a></td>
+<td class="hits"></td>
+<td class="source"><code>          "Type" =&gt; n("Catalog"),</code></td>
+</tr>
+<tr>
+<td class="line" id="L377"><a href="#L377">377</a></td>
+<td class="hits"></td>
+<td class="source"><code>          "Pages" =&gt; master_page,</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L378"><a href="#L378">378</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>          "OpenAction" =&gt; document.action</code></td>
+</tr>
+<tr>
+<td class="line" id="L379"><a href="#L379">379</a></td>
+<td class="hits"></td>
+<td class="source"><code>        })</code></td>
+</tr>
+<tr>
+<td class="line" id="L380"><a href="#L380">380</a></td>
+<td class="hits"></td>
+<td class="source"><code>      )</code></td>
+</tr>
+<tr>
+<td class="line" id="L381"><a href="#L381">381</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L382"><a href="#L382">382</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    all_objects = Enum.sort_by(ObjectCollection.all(objects), &amp;sort_objects/1)</code></td>
+</tr>
+<tr>
+<td class="line" id="L383"><a href="#L383">383</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L384"><a href="#L384">384</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    {ref_table, offset} = RefTable.to_iolist(all_objects, @header_size)</code></td>
+</tr>
+<tr>
+<td class="line" id="L385"><a href="#L385">385</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L386"><a href="#L386">386</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    Pdf.Export.to_iolist([</code></td>
+</tr>
+<tr>
+<td class="line" id="L387"><a href="#L387">387</a></td>
+<td class="hits"></td>
+<td class="source"><code>      @header,</code></td>
+</tr>
+<tr>
+<td class="line" id="L388"><a href="#L388">388</a></td>
+<td class="hits"></td>
+<td class="source"><code>      all_objects,</code></td>
+</tr>
+<tr>
+<td class="line" id="L389"><a href="#L389">389</a></td>
+<td class="hits"></td>
+<td class="source"><code>      ref_table,</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L390"><a href="#L390">390</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      Trailer.new(all_objects, offset, catalogue, document.info)</code></td>
+</tr>
+<tr>
+<td class="line" id="L391"><a href="#L391">391</a></td>
+<td class="hits"></td>
+<td class="source"><code>    ])</code></td>
+</tr>
+<tr>
+<td class="line" id="L392"><a href="#L392">392</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L393"><a href="#L393">393</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L394"><a href="#L394">394</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp sort_objects(%{generation: g, number: n}) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L395"><a href="#L395">395</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    g = String.to_integer(g)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L396"><a href="#L396">396</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    n = String.to_integer(n)</code></td>
+</tr>
+<tr>
+<td class="line" id="L397"><a href="#L397">397</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {g, n}</code></td>
+</tr>
+<tr>
+<td class="line" id="L398"><a href="#L398">398</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L399"><a href="#L399">399</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L400"><a href="#L400">400</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp pages_to_objects(document, objects, pages, parent) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L401"><a href="#L401">401</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    Enum.reduce(pages, {[], objects}, fn page, {acc, objects} -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L402"><a href="#L402">402</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      {page_object, objects} = ObjectCollection.create_object(objects, page)</code></td>
+</tr>
+<tr>
+<td class="line" id="L403"><a href="#L403">403</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L404"><a href="#L404">404</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      dictionary =</code></td>
+</tr>
+<tr>
+<td class="line" id="L405"><a href="#L405">405</a></td>
+<td class="hits"></td>
+<td class="source"><code>        Dictionary.new(%{</code></td>
+</tr>
+<tr>
+<td class="line" id="L406"><a href="#L406">406</a></td>
+<td class="hits"></td>
+<td class="source"><code>          "Type" =&gt; n("Page"),</code></td>
+</tr>
+<tr>
+<td class="line" id="L407"><a href="#L407">407</a></td>
+<td class="hits"></td>
+<td class="source"><code>          "Parent" =&gt; parent,</code></td>
+</tr>
+<tr>
+<td class="line" id="L408"><a href="#L408">408</a></td>
+<td class="hits"></td>
+<td class="source"><code>          "Contents" =&gt; page_object</code></td>
+</tr>
+<tr>
+<td class="line" id="L409"><a href="#L409">409</a></td>
+<td class="hits"></td>
+<td class="source"><code>        })</code></td>
+</tr>
+<tr>
+<td class="line" id="L410"><a href="#L410">410</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L411"><a href="#L411">411</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      dictionary =</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L412"><a href="#L412">412</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        if page.size != default_page_size(document) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L413"><a href="#L413">413</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>          Dictionary.put(dictionary, "MediaBox", Array.new(Paper.size(page.size)))</code></td>
+</tr>
+<tr>
+<td class="line" id="L414"><a href="#L414">414</a></td>
+<td class="hits"></td>
+<td class="source"><code>        else</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L415"><a href="#L415">415</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>          dictionary</code></td>
+</tr>
+<tr>
+<td class="line" id="L416"><a href="#L416">416</a></td>
+<td class="hits"></td>
+<td class="source"><code>        end</code></td>
+</tr>
+<tr>
+<td class="line" id="L417"><a href="#L417">417</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L418"><a href="#L418">418</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      {dict_object, objects} = ObjectCollection.create_object(objects, dictionary)</code></td>
+</tr>
+<tr>
+<td class="line" id="L419"><a href="#L419">419</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {acc ++ [dict_object], objects}</code></td>
+</tr>
+<tr>
+<td class="line" id="L420"><a href="#L420">420</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L421"><a href="#L421">421</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L422"><a href="#L422">422</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L423"><a href="#L423">423</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp font_dictionary(fonts) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L424"><a href="#L424">424</a></td>
+<td class="hits"></td>
+<td class="source"><code>    fonts</code></td>
+</tr>
+<tr>
+<td class="line" id="L425"><a href="#L425">425</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Fonts.get_fonts()</code></td>
+</tr>
+<tr>
+<td class="line" id="L426"><a href="#L426">426</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Enum.reduce(%{}, fn {_name, %{name: name, object: reference}}, map -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L427"><a href="#L427">427</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      Map.put(map, name, reference)</code></td>
+</tr>
+<tr>
+<td class="line" id="L428"><a href="#L428">428</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L429"><a href="#L429">429</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    |&gt; Dictionary.new()</code></td>
+</tr>
+<tr>
+<td class="line" id="L430"><a href="#L430">430</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L431"><a href="#L431">431</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L432"><a href="#L432">432</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp xobject_dictionary(images) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L433"><a href="#L433">433</a></td>
+<td class="hits"></td>
+<td class="source"><code>    images</code></td>
+</tr>
+<tr>
+<td class="line" id="L434"><a href="#L434">434</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Enum.reduce(%{}, fn {_name, %{name: name, object: reference}}, map -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L435"><a href="#L435">435</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      Map.put(map, name, reference)</code></td>
+</tr>
+<tr>
+<td class="line" id="L436"><a href="#L436">436</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L437"><a href="#L437">437</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    |&gt; Dictionary.new()</code></td>
+</tr>
+<tr>
+<td class="line" id="L438"><a href="#L438">438</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L439"><a href="#L439">439</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L440"><a href="#L440">440</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp ext_g_state_dictionary(ext_g_states) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L441"><a href="#L441">441</a></td>
+<td class="hits"></td>
+<td class="source"><code>    ext_g_states</code></td>
+</tr>
+<tr>
+<td class="line" id="L442"><a href="#L442">442</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Enum.reduce(%{}, fn {_key, %{name: name, dict: dict}}, map -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L443"><a href="#L443">443</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      Map.put(map, name, dict)</code></td>
+</tr>
+<tr>
+<td class="line" id="L444"><a href="#L444">444</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L445"><a href="#L445">445</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    |&gt; Dictionary.new()</code></td>
+</tr>
+<tr>
+<td class="line" id="L446"><a href="#L446">446</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L447"><a href="#L447">447</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L448"><a href="#L448">448</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def on_page(%__MODULE__{} = document, name, func) when is_atom(name) and is_function(func, 2) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L449"><a href="#L449">449</a></td>
+<td class="hits">5</td>
+<td class="source"><code>    %{document | page_templates: Map.put(document.page_templates, name, func)}</code></td>
+</tr>
+<tr>
+<td class="line" id="L450"><a href="#L450">450</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L451"><a href="#L451">451</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L452"><a href="#L452">452</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def content_area(%__MODULE__{margin: margin} = document) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L453"><a href="#L453">453</a></td>
+<td class="hits">12</td>
+<td class="source"><code>    %{width: pw, height: ph} = size(document)</code></td>
+</tr>
+<tr>
+<td class="line" id="L454"><a href="#L454">454</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L455"><a href="#L455">455</a></td>
+<td class="hits">12</td>
+<td class="source"><code>    %{</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L456"><a href="#L456">456</a></td>
+<td class="hits">12</td>
+<td class="source"><code>      x: margin.left,</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L457"><a href="#L457">457</a></td>
+<td class="hits">12</td>
+<td class="source"><code>      y: ph - margin.top,</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L458"><a href="#L458">458</a></td>
+<td class="hits">12</td>
+<td class="source"><code>      width: pw - margin.left - margin.right,</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L459"><a href="#L459">459</a></td>
+<td class="hits">12</td>
+<td class="source"><code>      height: ph - margin.top - margin.bottom</code></td>
+</tr>
+<tr>
+<td class="line" id="L460"><a href="#L460">460</a></td>
+<td class="hits"></td>
+<td class="source"><code>    }</code></td>
+</tr>
+<tr>
+<td class="line" id="L461"><a href="#L461">461</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L462"><a href="#L462">462</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L463"><a href="#L463">463</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp apply_margin_cursor(%__MODULE__{margin: margin} = document) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L464"><a href="#L464">464</a></td>
+<td class="hits">42</td>
+<td class="source"><code>    %{height: ph} = size(document)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L465"><a href="#L465">465</a></td>
+<td class="hits">42</td>
+<td class="source"><code>    y = ph - margin.top</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L466"><a href="#L466">466</a></td>
+<td class="hits">42</td>
+<td class="source"><code>    x = margin.left</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L467"><a href="#L467">467</a></td>
+<td class="hits">42</td>
+<td class="source"><code>    page = document.current |&gt; Page.set_cursor(y) |&gt; Page.set_cursor_x(x)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L468"><a href="#L468">468</a></td>
+<td class="hits">42</td>
+<td class="source"><code>    %{document | current: page}</code></td>
+</tr>
+<tr>
+<td class="line" id="L469"><a href="#L469">469</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L470"><a href="#L470">470</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L471"><a href="#L471">471</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp apply_templates(document, template_names) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L472"><a href="#L472">472</a></td>
+<td class="hits">47</td>
+<td class="source"><code>    page_info = %{number: page_number(document)}</code></td>
+</tr>
+<tr>
+<td class="line" id="L473"><a href="#L473">473</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L474"><a href="#L474">474</a></td>
+<td class="hits">47</td>
+<td class="source"><code>    Enum.reduce(template_names, document, fn name, doc -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L475"><a href="#L475">475</a></td>
+<td class="hits">131</td>
+<td class="source"><code>      case Map.get(doc.page_templates, name) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L476"><a href="#L476">476</a></td>
+<td class="hits">126</td>
+<td class="source"><code>        nil -&gt; doc</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L477"><a href="#L477">477</a></td>
+<td class="hits">5</td>
+<td class="source"><code>        func -&gt; func.(doc, page_info)</code></td>
+</tr>
+<tr>
+<td class="line" id="L478"><a href="#L478">478</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end</code></td>
+</tr>
+<tr>
+<td class="line" id="L479"><a href="#L479">479</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L480"><a href="#L480">480</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L481"><a href="#L481">481</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L482"><a href="#L482">482</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp parse_margin(margin) when is_number(margin) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L483"><a href="#L483">483</a></td>
+<td class="hits">36</td>
+<td class="source"><code>    %{top: margin, right: margin, bottom: margin, left: margin}</code></td>
+</tr>
+<tr>
+<td class="line" id="L484"><a href="#L484">484</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L485"><a href="#L485">485</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L486"><a href="#L486">486</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp parse_margin(%{} = margin) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L487"><a href="#L487">487</a></td>
+<td class="hits">1</td>
+<td class="source"><code>    %{</code></td>
+</tr>
+<tr>
+<td class="line" id="L488"><a href="#L488">488</a></td>
+<td class="hits"></td>
+<td class="source"><code>      top: Map.get(margin, :top, 0),</code></td>
+</tr>
+<tr>
+<td class="line" id="L489"><a href="#L489">489</a></td>
+<td class="hits"></td>
+<td class="source"><code>      right: Map.get(margin, :right, 0),</code></td>
+</tr>
+<tr>
+<td class="line" id="L490"><a href="#L490">490</a></td>
+<td class="hits"></td>
+<td class="source"><code>      bottom: Map.get(margin, :bottom, 0),</code></td>
+</tr>
+<tr>
+<td class="line" id="L491"><a href="#L491">491</a></td>
+<td class="hits"></td>
+<td class="source"><code>      left: Map.get(margin, :left, 0)</code></td>
+</tr>
+<tr>
+<td class="line" id="L492"><a href="#L492">492</a></td>
+<td class="hits"></td>
+<td class="source"><code>    }</code></td>
+</tr>
+<tr>
+<td class="line" id="L493"><a href="#L493">493</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L494"><a href="#L494">494</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L495"><a href="#L495">495</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp parse_margin({v, h}) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L496"><a href="#L496">496</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    %{top: v, right: h, bottom: v, left: h}</code></td>
+</tr>
+<tr>
+<td class="line" id="L497"><a href="#L497">497</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L498"><a href="#L498">498</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L499"><a href="#L499">499</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp parse_margin({top, h, bottom}) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L500"><a href="#L500">500</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    %{top: top, right: h, bottom: bottom, left: h}</code></td>
+</tr>
+<tr>
+<td class="line" id="L501"><a href="#L501">501</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L502"><a href="#L502">502</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L503"><a href="#L503">503</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp parse_margin({top, right, bottom, left}) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L504"><a href="#L504">504</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    %{top: top, right: right, bottom: bottom, left: left}</code></td>
+</tr>
+<tr>
+<td class="line" id="L505"><a href="#L505">505</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L506"><a href="#L506">506</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L507"><a href="#L507">507</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp default_page_size(%__MODULE__{opts: opts}), do: Keyword.get(opts, :size, :a4)</code></td>
+</tr>
+<tr>
+<td class="line" id="L508"><a href="#L508">508</a></td>
+<td class="hits"></td>
+<td class="source"><code>end</code></td>
+</tr>
+</tbody>
+<thead>
+<tr>
+<th>Line</th>
+<th>Hits</th>
+<th>Source</th>
+</tr>
+</thead>
+</table>
+</body>
+</html>

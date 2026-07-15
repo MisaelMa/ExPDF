@@ -1,0 +1,1284 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>cover/Elixir.Pdf.Component.Avatar.html</title>
+<style>body {
+  font: 14px/1.6 "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #000;
+  border-top: 2px solid #ddd;
+  background-color: #fff;
+
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+h1 {
+  width: 100%;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 0;
+  font-weight: 100;
+  font-size: 1.1em;
+  letter-spacing: 1px;
+}
+
+h1 code {
+  font-size: 0.96em;
+}
+
+code {
+  font: 12px monospace;
+}
+
+footer {
+  background: #eee;
+  width: 100%;
+  padding: 10px 0;
+  text-align: right;
+  border-top: 1px solid #ddd;
+  display: flex;
+  flex: 1;
+  order: 2;
+  justify-content: center;
+}
+
+table {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: collapse;
+  border: 1px solid #cbcbcb;
+  color: #000;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+}
+table thead {
+  display: none;
+}
+table td.line,
+table td.line a,
+table td.hits {
+  width: 20px;
+  background: #eaeaea;
+  text-align: center;
+  text-decoration: none;
+  font-size: 11px;
+  padding: 0 10px;
+  color: #949494;
+}
+table td.hits {
+  width: 10px;
+  text-align: right;
+  padding: 2px 5px;
+  color: rgba(0, 0, 0, 0.6);
+  background-color: #f0f0f0;
+}
+tr.miss td.line,
+tr.miss td.line a,
+tr.miss td.hits {
+  background-color: #ffdce0;
+  border-color: #fdaeb7;
+}
+tr.miss td {
+  background-color: #ffeef0;
+}
+tr.hit td.line,
+tr.hit td.line a,
+tr.hit td.hits {
+  background-color: #cdffd8;
+  border-color: #bef5cb;
+}
+tr.hit td {
+  background-color: #e6ffed;
+}
+td.source {
+  padding-left: 15px;
+  line-height: 15px;
+  white-space: pre;
+  font: 12px monospace;
+}
+</style>
+</head>
+<body>
+<h1><code>cover/Elixir.Pdf.Component.Avatar.html</code></h1>
+<footer><p>File generated from <code>/Users/amir/Documents/proyectos/recreando/elixir-pdf/apps/ex_pdf_components/lib/pdf/component/avatar.ex</code> by <a href="http://erlang.org/doc/man/cover.html">cover</a> at 2026-05-27 at 22:52:55</p></footer>
+<table>
+<tbody>
+<tr>
+<td class="line" id="L1"><a href="#L1">1</a></td>
+<td class="hits"></td>
+<td class="source"><code>defmodule Pdf.Component.Avatar do</code></td>
+</tr>
+<tr>
+<td class="line" id="L2"><a href="#L2">2</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @moduledoc """</code></td>
+</tr>
+<tr>
+<td class="line" id="L3"><a href="#L3">3</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Avatar component for PDF documents.</code></td>
+</tr>
+<tr>
+<td class="line" id="L4"><a href="#L4">4</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L5"><a href="#L5">5</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Renders a circular (or rounded) container with an image or initials,</code></td>
+</tr>
+<tr>
+<td class="line" id="L6"><a href="#L6">6</a></td>
+<td class="hits"></td>
+<td class="source"><code>  with optional border and elevation (box-shadow simulation).</code></td>
+</tr>
+<tr>
+<td class="line" id="L7"><a href="#L7">7</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L8"><a href="#L8">8</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Inspired by Material UI's Avatar component.</code></td>
+</tr>
+<tr>
+<td class="line" id="L9"><a href="#L9">9</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L10"><a href="#L10">10</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Examples</code></td>
+</tr>
+<tr>
+<td class="line" id="L11"><a href="#L11">11</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L12"><a href="#L12">12</a></td>
+<td class="hits"></td>
+<td class="source"><code>      # Avatar with initials</code></td>
+</tr>
+<tr>
+<td class="line" id="L13"><a href="#L13">13</a></td>
+<td class="hits"></td>
+<td class="source"><code>      doc</code></td>
+</tr>
+<tr>
+<td class="line" id="L14"><a href="#L14">14</a></td>
+<td class="hits"></td>
+<td class="source"><code>      |&gt; Pdf.Component.Avatar.render({100, 700}, %{</code></td>
+</tr>
+<tr>
+<td class="line" id="L15"><a href="#L15">15</a></td>
+<td class="hits"></td>
+<td class="source"><code>        size: 48,</code></td>
+</tr>
+<tr>
+<td class="line" id="L16"><a href="#L16">16</a></td>
+<td class="hits"></td>
+<td class="source"><code>        initials: "AM",</code></td>
+</tr>
+<tr>
+<td class="line" id="L17"><a href="#L17">17</a></td>
+<td class="hits"></td>
+<td class="source"><code>        background: {0.3, 0.5, 0.9},</code></td>
+</tr>
+<tr>
+<td class="line" id="L18"><a href="#L18">18</a></td>
+<td class="hits"></td>
+<td class="source"><code>        color: :white,</code></td>
+</tr>
+<tr>
+<td class="line" id="L19"><a href="#L19">19</a></td>
+<td class="hits"></td>
+<td class="source"><code>        elevation: 2</code></td>
+</tr>
+<tr>
+<td class="line" id="L20"><a href="#L20">20</a></td>
+<td class="hits"></td>
+<td class="source"><code>      })</code></td>
+</tr>
+<tr>
+<td class="line" id="L21"><a href="#L21">21</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L22"><a href="#L22">22</a></td>
+<td class="hits"></td>
+<td class="source"><code>      # Avatar with image</code></td>
+</tr>
+<tr>
+<td class="line" id="L23"><a href="#L23">23</a></td>
+<td class="hits"></td>
+<td class="source"><code>      doc</code></td>
+</tr>
+<tr>
+<td class="line" id="L24"><a href="#L24">24</a></td>
+<td class="hits"></td>
+<td class="source"><code>      |&gt; Pdf.Component.Avatar.render({200, 700}, %{</code></td>
+</tr>
+<tr>
+<td class="line" id="L25"><a href="#L25">25</a></td>
+<td class="hits"></td>
+<td class="source"><code>        size: 64,</code></td>
+</tr>
+<tr>
+<td class="line" id="L26"><a href="#L26">26</a></td>
+<td class="hits"></td>
+<td class="source"><code>        image: "path/to/photo.jpg",</code></td>
+</tr>
+<tr>
+<td class="line" id="L27"><a href="#L27">27</a></td>
+<td class="hits"></td>
+<td class="source"><code>        border: 2,</code></td>
+</tr>
+<tr>
+<td class="line" id="L28"><a href="#L28">28</a></td>
+<td class="hits"></td>
+<td class="source"><code>        border_color: :white,</code></td>
+</tr>
+<tr>
+<td class="line" id="L29"><a href="#L29">29</a></td>
+<td class="hits"></td>
+<td class="source"><code>        elevation: 3</code></td>
+</tr>
+<tr>
+<td class="line" id="L30"><a href="#L30">30</a></td>
+<td class="hits"></td>
+<td class="source"><code>      })</code></td>
+</tr>
+<tr>
+<td class="line" id="L31"><a href="#L31">31</a></td>
+<td class="hits"></td>
+<td class="source"><code>  """</code></td>
+</tr>
+<tr>
+<td class="line" id="L32"><a href="#L32">32</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L33"><a href="#L33">33</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @default_size 40</code></td>
+</tr>
+<tr>
+<td class="line" id="L34"><a href="#L34">34</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @default_background {0.74, 0.74, 0.74}</code></td>
+</tr>
+<tr>
+<td class="line" id="L35"><a href="#L35">35</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @default_color {1.0, 1.0, 1.0}</code></td>
+</tr>
+<tr>
+<td class="line" id="L36"><a href="#L36">36</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @default_font "Helvetica"</code></td>
+</tr>
+<tr>
+<td class="line" id="L37"><a href="#L37">37</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L38"><a href="#L38">38</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @doc """</code></td>
+</tr>
+<tr>
+<td class="line" id="L39"><a href="#L39">39</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Render an avatar at `{x, y}` (top-left corner).</code></td>
+</tr>
+<tr>
+<td class="line" id="L40"><a href="#L40">40</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L41"><a href="#L41">41</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Style options</code></td>
+</tr>
+<tr>
+<td class="line" id="L42"><a href="#L42">42</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L43"><a href="#L43">43</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `:size` — single number or `{width, height}` tuple in points (default `40`)</code></td>
+</tr>
+<tr>
+<td class="line" id="L44"><a href="#L44">44</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `:initials` — 1-3 character string to display (default `nil`)</code></td>
+</tr>
+<tr>
+<td class="line" id="L45"><a href="#L45">45</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `:image` — path to JPEG/PNG image or `{:binary, data}` (default `nil`)</code></td>
+</tr>
+<tr>
+<td class="line" id="L46"><a href="#L46">46</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `:background` — fill color behind initials (default gray)</code></td>
+</tr>
+<tr>
+<td class="line" id="L47"><a href="#L47">47</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `:color` — text color for initials (default white)</code></td>
+</tr>
+<tr>
+<td class="line" id="L48"><a href="#L48">48</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `:font` — font name for initials (default `"Helvetica"`)</code></td>
+</tr>
+<tr>
+<td class="line" id="L49"><a href="#L49">49</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `:border` — border width (default `0`)</code></td>
+</tr>
+<tr>
+<td class="line" id="L50"><a href="#L50">50</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `:border_color` — border color (default `:black`)</code></td>
+</tr>
+<tr>
+<td class="line" id="L51"><a href="#L51">51</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `:border_radius` — `:circle` (default), `:rounded`, or number</code></td>
+</tr>
+<tr>
+<td class="line" id="L52"><a href="#L52">52</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `:elevation` — shadow level 0-5, like Material UI (default `0`)</code></td>
+</tr>
+<tr>
+<td class="line" id="L53"><a href="#L53">53</a></td>
+<td class="hits"></td>
+<td class="source"><code>  """</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L54"><a href="#L54">54</a></td>
+<td class="hits">1</td>
+<td class="source"><code>  def render(doc, {x, y}, style \\ %{}) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L55"><a href="#L55">55</a></td>
+<td class="hits">17</td>
+<td class="source"><code>    {w, h} = normalize_size(Map.get(style, :size, @default_size))</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L56"><a href="#L56">56</a></td>
+<td class="hits">17</td>
+<td class="source"><code>    bg = Map.get(style, :background, @default_background)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L57"><a href="#L57">57</a></td>
+<td class="hits">17</td>
+<td class="source"><code>    color = Map.get(style, :color, @default_color)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L58"><a href="#L58">58</a></td>
+<td class="hits">17</td>
+<td class="source"><code>    font = Map.get(style, :font, @default_font)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L59"><a href="#L59">59</a></td>
+<td class="hits">17</td>
+<td class="source"><code>    initials = Map.get(style, :initials)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L60"><a href="#L60">60</a></td>
+<td class="hits">17</td>
+<td class="source"><code>    image = Map.get(style, :image)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L61"><a href="#L61">61</a></td>
+<td class="hits">17</td>
+<td class="source"><code>    border_w = Map.get(style, :border, 0)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L62"><a href="#L62">62</a></td>
+<td class="hits">17</td>
+<td class="source"><code>    border_color = Map.get(style, :border_color, :black)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L63"><a href="#L63">63</a></td>
+<td class="hits">17</td>
+<td class="source"><code>    elevation = Map.get(style, :elevation, 0)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L64"><a href="#L64">64</a></td>
+<td class="hits">17</td>
+<td class="source"><code>    radius = resolve_radius(Map.get(style, :border_radius, :circle), min(w, h))</code></td>
+</tr>
+<tr>
+<td class="line" id="L65"><a href="#L65">65</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L66"><a href="#L66">66</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # Position: {x, y} is top-left, PDF coords have y going up</code></td>
+</tr>
+<tr>
+<td class="line" id="L67"><a href="#L67">67</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # So the box bottom-left is {x, y - h}</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L68"><a href="#L68">68</a></td>
+<td class="hits">17</td>
+<td class="source"><code>    bx = x</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L69"><a href="#L69">69</a></td>
+<td class="hits">17</td>
+<td class="source"><code>    by = y - h</code></td>
+</tr>
+<tr>
+<td class="line" id="L70"><a href="#L70">70</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L71"><a href="#L71">71</a></td>
+<td class="hits">17</td>
+<td class="source"><code>    doc = draw_shadow(doc, {bx, by}, {w, h}, radius, elevation)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L72"><a href="#L72">72</a></td>
+<td class="hits">17</td>
+<td class="source"><code>    doc = draw_background(doc, {bx, by}, {w, h}, radius, bg)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L73"><a href="#L73">73</a></td>
+<td class="hits">17</td>
+<td class="source"><code>    doc = draw_image_or_initials(doc, {bx, by}, {w, h}, radius, image, initials, color, font)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L74"><a href="#L74">74</a></td>
+<td class="hits">17</td>
+<td class="source"><code>    draw_border(doc, {bx, by}, {w, h}, radius, border_w, border_color)</code></td>
+</tr>
+<tr>
+<td class="line" id="L75"><a href="#L75">75</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L76"><a href="#L76">76</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L77"><a href="#L77">77</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ── Shadow / Elevation ──────────────────────────────────────────</code></td>
+</tr>
+<tr>
+<td class="line" id="L78"><a href="#L78">78</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L79"><a href="#L79">79</a></td>
+<td class="hits">12</td>
+<td class="source"><code>  defp draw_shadow(doc, _pos, _size, _radius, 0), do: doc</code></td>
+</tr>
+<tr>
+<td class="line" id="L80"><a href="#L80">80</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L81"><a href="#L81">81</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp draw_shadow(doc, {x, y}, {w, h}, radius, elevation) when elevation &gt; 0 do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L82"><a href="#L82">82</a></td>
+<td class="hits">5</td>
+<td class="source"><code>    layers = shadow_layers(elevation)</code></td>
+</tr>
+<tr>
+<td class="line" id="L83"><a href="#L83">83</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L84"><a href="#L84">84</a></td>
+<td class="hits">5</td>
+<td class="source"><code>    Enum.reduce(layers, doc, fn {offset_x, offset_y, spread, opacity}, doc -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L85"><a href="#L85">85</a></td>
+<td class="hits">17</td>
+<td class="source"><code>      sx = x + offset_x - spread</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L86"><a href="#L86">86</a></td>
+<td class="hits">17</td>
+<td class="source"><code>      sy = y + offset_y - spread</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L87"><a href="#L87">87</a></td>
+<td class="hits">17</td>
+<td class="source"><code>      sw = w + spread * 2</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L88"><a href="#L88">88</a></td>
+<td class="hits">17</td>
+<td class="source"><code>      sh = h + spread * 2</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L89"><a href="#L89">89</a></td>
+<td class="hits">17</td>
+<td class="source"><code>      sr = min(radius + spread, min(sw, sh) / 2)</code></td>
+</tr>
+<tr>
+<td class="line" id="L90"><a href="#L90">90</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L91"><a href="#L91">91</a></td>
+<td class="hits"></td>
+<td class="source"><code>      doc</code></td>
+</tr>
+<tr>
+<td class="line" id="L92"><a href="#L92">92</a></td>
+<td class="hits"></td>
+<td class="source"><code>      |&gt; Pdf.save_state()</code></td>
+</tr>
+<tr>
+<td class="line" id="L93"><a href="#L93">93</a></td>
+<td class="hits"></td>
+<td class="source"><code>      |&gt; Pdf.set_fill_color({0.0, 0.0, 0.0})</code></td>
+</tr>
+<tr>
+<td class="line" id="L94"><a href="#L94">94</a></td>
+<td class="hits"></td>
+<td class="source"><code>      |&gt; set_fill_opacity(opacity)</code></td>
+</tr>
+<tr>
+<td class="line" id="L95"><a href="#L95">95</a></td>
+<td class="hits"></td>
+<td class="source"><code>      |&gt; Pdf.rounded_rectangle({sx, sy}, {sw, sh}, sr)</code></td>
+</tr>
+<tr>
+<td class="line" id="L96"><a href="#L96">96</a></td>
+<td class="hits"></td>
+<td class="source"><code>      |&gt; Pdf.fill()</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L97"><a href="#L97">97</a></td>
+<td class="hits">17</td>
+<td class="source"><code>      |&gt; Pdf.restore_state()</code></td>
+</tr>
+<tr>
+<td class="line" id="L98"><a href="#L98">98</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L99"><a href="#L99">99</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L100"><a href="#L100">100</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L101"><a href="#L101">101</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Shadow layers: {offset_x, offset_y, spread, opacity}</code></td>
+</tr>
+<tr>
+<td class="line" id="L102"><a href="#L102">102</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # offset_y positive = shadow moves DOWN (subtract from PDF y)</code></td>
+</tr>
+<tr>
+<td class="line" id="L103"><a href="#L103">103</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Small spreads + low opacity = subtle, realistic shadows</code></td>
+</tr>
+<tr>
+<td class="line" id="L104"><a href="#L104">104</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L105"><a href="#L105">105</a></td>
+<td class="hits">1</td>
+<td class="source"><code>  defp shadow_layers(1) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L106"><a href="#L106">106</a></td>
+<td class="hits"></td>
+<td class="source"><code>    [</code></td>
+</tr>
+<tr>
+<td class="line" id="L107"><a href="#L107">107</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {0, -0.5, 1.0, 0.06},</code></td>
+</tr>
+<tr>
+<td class="line" id="L108"><a href="#L108">108</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {0, -0.3, 0.5, 0.04}</code></td>
+</tr>
+<tr>
+<td class="line" id="L109"><a href="#L109">109</a></td>
+<td class="hits"></td>
+<td class="source"><code>    ]</code></td>
+</tr>
+<tr>
+<td class="line" id="L110"><a href="#L110">110</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L111"><a href="#L111">111</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L112"><a href="#L112">112</a></td>
+<td class="hits">1</td>
+<td class="source"><code>  defp shadow_layers(2) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L113"><a href="#L113">113</a></td>
+<td class="hits"></td>
+<td class="source"><code>    [</code></td>
+</tr>
+<tr>
+<td class="line" id="L114"><a href="#L114">114</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {0, -1.0, 1.5, 0.07},</code></td>
+</tr>
+<tr>
+<td class="line" id="L115"><a href="#L115">115</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {0, -0.5, 1.0, 0.05},</code></td>
+</tr>
+<tr>
+<td class="line" id="L116"><a href="#L116">116</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {0, -0.2, 0.5, 0.03}</code></td>
+</tr>
+<tr>
+<td class="line" id="L117"><a href="#L117">117</a></td>
+<td class="hits"></td>
+<td class="source"><code>    ]</code></td>
+</tr>
+<tr>
+<td class="line" id="L118"><a href="#L118">118</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L119"><a href="#L119">119</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L120"><a href="#L120">120</a></td>
+<td class="hits">1</td>
+<td class="source"><code>  defp shadow_layers(3) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L121"><a href="#L121">121</a></td>
+<td class="hits"></td>
+<td class="source"><code>    [</code></td>
+</tr>
+<tr>
+<td class="line" id="L122"><a href="#L122">122</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {0, -1.5, 2.0, 0.08},</code></td>
+</tr>
+<tr>
+<td class="line" id="L123"><a href="#L123">123</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {0, -0.8, 1.5, 0.05},</code></td>
+</tr>
+<tr>
+<td class="line" id="L124"><a href="#L124">124</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {0, -0.3, 0.8, 0.03}</code></td>
+</tr>
+<tr>
+<td class="line" id="L125"><a href="#L125">125</a></td>
+<td class="hits"></td>
+<td class="source"><code>    ]</code></td>
+</tr>
+<tr>
+<td class="line" id="L126"><a href="#L126">126</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L127"><a href="#L127">127</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L128"><a href="#L128">128</a></td>
+<td class="hits">1</td>
+<td class="source"><code>  defp shadow_layers(4) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L129"><a href="#L129">129</a></td>
+<td class="hits"></td>
+<td class="source"><code>    [</code></td>
+</tr>
+<tr>
+<td class="line" id="L130"><a href="#L130">130</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {0, -2.0, 2.5, 0.09},</code></td>
+</tr>
+<tr>
+<td class="line" id="L131"><a href="#L131">131</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {0, -1.2, 2.0, 0.06},</code></td>
+</tr>
+<tr>
+<td class="line" id="L132"><a href="#L132">132</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {0, -0.5, 1.0, 0.04},</code></td>
+</tr>
+<tr>
+<td class="line" id="L133"><a href="#L133">133</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {0, -0.2, 0.5, 0.02}</code></td>
+</tr>
+<tr>
+<td class="line" id="L134"><a href="#L134">134</a></td>
+<td class="hits"></td>
+<td class="source"><code>    ]</code></td>
+</tr>
+<tr>
+<td class="line" id="L135"><a href="#L135">135</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L136"><a href="#L136">136</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L137"><a href="#L137">137</a></td>
+<td class="hits">1</td>
+<td class="source"><code>  defp shadow_layers(n) when n &gt;= 5 do</code></td>
+</tr>
+<tr>
+<td class="line" id="L138"><a href="#L138">138</a></td>
+<td class="hits"></td>
+<td class="source"><code>    [</code></td>
+</tr>
+<tr>
+<td class="line" id="L139"><a href="#L139">139</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {0, -3.0, 3.5, 0.10},</code></td>
+</tr>
+<tr>
+<td class="line" id="L140"><a href="#L140">140</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {0, -2.0, 2.5, 0.07},</code></td>
+</tr>
+<tr>
+<td class="line" id="L141"><a href="#L141">141</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {0, -1.0, 1.5, 0.05},</code></td>
+</tr>
+<tr>
+<td class="line" id="L142"><a href="#L142">142</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {0, -0.5, 1.0, 0.03},</code></td>
+</tr>
+<tr>
+<td class="line" id="L143"><a href="#L143">143</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {0, -0.2, 0.5, 0.02}</code></td>
+</tr>
+<tr>
+<td class="line" id="L144"><a href="#L144">144</a></td>
+<td class="hits"></td>
+<td class="source"><code>    ]</code></td>
+</tr>
+<tr>
+<td class="line" id="L145"><a href="#L145">145</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L146"><a href="#L146">146</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L147"><a href="#L147">147</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ── Background ──────────────────────────────────────────────────</code></td>
+</tr>
+<tr>
+<td class="line" id="L148"><a href="#L148">148</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L149"><a href="#L149">149</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp draw_background(doc, _pos, _size, _radius, nil), do: doc</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L150"><a href="#L150">150</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp draw_background(doc, _pos, _size, _radius, :none), do: doc</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L151"><a href="#L151">151</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp draw_background(doc, _pos, _size, _radius, :transparent), do: doc</code></td>
+</tr>
+<tr>
+<td class="line" id="L152"><a href="#L152">152</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L153"><a href="#L153">153</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp draw_background(doc, {x, y}, {w, h}, radius, bg) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L154"><a href="#L154">154</a></td>
+<td class="hits"></td>
+<td class="source"><code>    doc</code></td>
+</tr>
+<tr>
+<td class="line" id="L155"><a href="#L155">155</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Pdf.save_state()</code></td>
+</tr>
+<tr>
+<td class="line" id="L156"><a href="#L156">156</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Pdf.set_fill_color(bg)</code></td>
+</tr>
+<tr>
+<td class="line" id="L157"><a href="#L157">157</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Pdf.rounded_rectangle({x, y}, {w, h}, radius)</code></td>
+</tr>
+<tr>
+<td class="line" id="L158"><a href="#L158">158</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Pdf.fill()</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L159"><a href="#L159">159</a></td>
+<td class="hits">17</td>
+<td class="source"><code>    |&gt; Pdf.restore_state()</code></td>
+</tr>
+<tr>
+<td class="line" id="L160"><a href="#L160">160</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L161"><a href="#L161">161</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L162"><a href="#L162">162</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ── Image or Initials ───────────────────────────────────────────</code></td>
+</tr>
+<tr>
+<td class="line" id="L163"><a href="#L163">163</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L164"><a href="#L164">164</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp draw_image_or_initials(doc, {x, y}, {w, h}, radius, image, _initials, _color, _font)</code></td>
+</tr>
+<tr>
+<td class="line" id="L165"><a href="#L165">165</a></td>
+<td class="hits"></td>
+<td class="source"><code>       when not is_nil(image) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L166"><a href="#L166">166</a></td>
+<td class="hits"></td>
+<td class="source"><code>    doc</code></td>
+</tr>
+<tr>
+<td class="line" id="L167"><a href="#L167">167</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Pdf.save_state()</code></td>
+</tr>
+<tr>
+<td class="line" id="L168"><a href="#L168">168</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Pdf.rounded_rectangle({x, y}, {w, h}, radius)</code></td>
+</tr>
+<tr>
+<td class="line" id="L169"><a href="#L169">169</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Pdf.clip()</code></td>
+</tr>
+<tr>
+<td class="line" id="L170"><a href="#L170">170</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Pdf.add_image({x, y}, image, width: w, height: h)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L171"><a href="#L171">171</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    |&gt; Pdf.restore_state()</code></td>
+</tr>
+<tr>
+<td class="line" id="L172"><a href="#L172">172</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L173"><a href="#L173">173</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L174"><a href="#L174">174</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp draw_image_or_initials(doc, {x, y}, {w, h}, _radius, _image, initials, color, font)</code></td>
+</tr>
+<tr>
+<td class="line" id="L175"><a href="#L175">175</a></td>
+<td class="hits"></td>
+<td class="source"><code>       when is_binary(initials) and byte_size(initials) &gt; 0 do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L176"><a href="#L176">176</a></td>
+<td class="hits">16</td>
+<td class="source"><code>    font_size = font_size_for_initials(initials, min(w, h))</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L177"><a href="#L177">177</a></td>
+<td class="hits">16</td>
+<td class="source"><code>    text_w = String.length(initials) * font_size * 0.6</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L178"><a href="#L178">178</a></td>
+<td class="hits">16</td>
+<td class="source"><code>    text_h = font_size * 0.7</code></td>
+</tr>
+<tr>
+<td class="line" id="L179"><a href="#L179">179</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L180"><a href="#L180">180</a></td>
+<td class="hits">16</td>
+<td class="source"><code>    tx = x + (w - text_w) / 2</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L181"><a href="#L181">181</a></td>
+<td class="hits">16</td>
+<td class="source"><code>    ty = y + (h - text_h) / 2</code></td>
+</tr>
+<tr>
+<td class="line" id="L182"><a href="#L182">182</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L183"><a href="#L183">183</a></td>
+<td class="hits"></td>
+<td class="source"><code>    doc</code></td>
+</tr>
+<tr>
+<td class="line" id="L184"><a href="#L184">184</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Pdf.save_state()</code></td>
+</tr>
+<tr>
+<td class="line" id="L185"><a href="#L185">185</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Pdf.set_font(font, font_size)</code></td>
+</tr>
+<tr>
+<td class="line" id="L186"><a href="#L186">186</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Pdf.set_fill_color(color)</code></td>
+</tr>
+<tr>
+<td class="line" id="L187"><a href="#L187">187</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Pdf.text_at({tx, ty}, initials)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L188"><a href="#L188">188</a></td>
+<td class="hits">16</td>
+<td class="source"><code>    |&gt; Pdf.restore_state()</code></td>
+</tr>
+<tr>
+<td class="line" id="L189"><a href="#L189">189</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L190"><a href="#L190">190</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L191"><a href="#L191">191</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp draw_image_or_initials(doc, _pos, _size, _radius, _image, _initials, _color, _font) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L192"><a href="#L192">192</a></td>
+<td class="hits">1</td>
+<td class="source"><code>    doc</code></td>
+</tr>
+<tr>
+<td class="line" id="L193"><a href="#L193">193</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L194"><a href="#L194">194</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L195"><a href="#L195">195</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ── Border ──────────────────────────────────────────────────────</code></td>
+</tr>
+<tr>
+<td class="line" id="L196"><a href="#L196">196</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L197"><a href="#L197">197</a></td>
+<td class="hits">16</td>
+<td class="source"><code>  defp draw_border(doc, _pos, _size, _radius, 0, _color), do: doc</code></td>
+</tr>
+<tr>
+<td class="line" id="L198"><a href="#L198">198</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L199"><a href="#L199">199</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp draw_border(doc, {x, y}, {w, h}, radius, border_w, color) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L200"><a href="#L200">200</a></td>
+<td class="hits"></td>
+<td class="source"><code>    doc</code></td>
+</tr>
+<tr>
+<td class="line" id="L201"><a href="#L201">201</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Pdf.save_state()</code></td>
+</tr>
+<tr>
+<td class="line" id="L202"><a href="#L202">202</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Pdf.set_stroke_color(color)</code></td>
+</tr>
+<tr>
+<td class="line" id="L203"><a href="#L203">203</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Pdf.set_line_width(border_w)</code></td>
+</tr>
+<tr>
+<td class="line" id="L204"><a href="#L204">204</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Pdf.rounded_rectangle({x, y}, {w, h}, radius)</code></td>
+</tr>
+<tr>
+<td class="line" id="L205"><a href="#L205">205</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Pdf.stroke()</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L206"><a href="#L206">206</a></td>
+<td class="hits">1</td>
+<td class="source"><code>    |&gt; Pdf.restore_state()</code></td>
+</tr>
+<tr>
+<td class="line" id="L207"><a href="#L207">207</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L208"><a href="#L208">208</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L209"><a href="#L209">209</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ── Helpers ─────────────────────────────────────────────────────</code></td>
+</tr>
+<tr>
+<td class="line" id="L210"><a href="#L210">210</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L211"><a href="#L211">211</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp normalize_size({w, h}), do: {w, h}</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L212"><a href="#L212">212</a></td>
+<td class="hits">17</td>
+<td class="source"><code>  defp normalize_size(s) when is_number(s), do: {s, s}</code></td>
+</tr>
+<tr>
+<td class="line" id="L213"><a href="#L213">213</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L214"><a href="#L214">214</a></td>
+<td class="hits">15</td>
+<td class="source"><code>  defp resolve_radius(:circle, min_dim), do: min_dim / 2</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L215"><a href="#L215">215</a></td>
+<td class="hits">1</td>
+<td class="source"><code>  defp resolve_radius(:rounded, min_dim), do: min_dim * 0.2</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L216"><a href="#L216">216</a></td>
+<td class="hits">1</td>
+<td class="source"><code>  defp resolve_radius(r, _min_dim) when is_number(r), do: r</code></td>
+</tr>
+<tr>
+<td class="line" id="L217"><a href="#L217">217</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L218"><a href="#L218">218</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp font_size_for_initials(text, size) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L219"><a href="#L219">219</a></td>
+<td class="hits">16</td>
+<td class="source"><code>    len = String.length(text)</code></td>
+</tr>
+<tr>
+<td class="line" id="L220"><a href="#L220">220</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L221"><a href="#L221">221</a></td>
+<td class="hits">16</td>
+<td class="source"><code>    cond do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L222"><a href="#L222">222</a></td>
+<td class="hits">14</td>
+<td class="source"><code>      len &lt;= 1 -&gt; size * 0.5</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L223"><a href="#L223">223</a></td>
+<td class="hits">2</td>
+<td class="source"><code>      len == 2 -&gt; size * 0.38</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L224"><a href="#L224">224</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      true -&gt; size * 0.3</code></td>
+</tr>
+<tr>
+<td class="line" id="L225"><a href="#L225">225</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L226"><a href="#L226">226</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L227"><a href="#L227">227</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L228"><a href="#L228">228</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp set_fill_opacity(doc, opacity) when opacity &lt; 1.0 do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L229"><a href="#L229">229</a></td>
+<td class="hits">17</td>
+<td class="source"><code>    Pdf.set_fill_opacity(doc, opacity)</code></td>
+</tr>
+<tr>
+<td class="line" id="L230"><a href="#L230">230</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L231"><a href="#L231">231</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L232"><a href="#L232">232</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp set_fill_opacity(doc, _opacity), do: doc</code></td>
+</tr>
+<tr>
+<td class="line" id="L233"><a href="#L233">233</a></td>
+<td class="hits"></td>
+<td class="source"><code>end</code></td>
+</tr>
+</tbody>
+<thead>
+<tr>
+<th>Line</th>
+<th>Hits</th>
+<th>Source</th>
+</tr>
+</thead>
+</table>
+</body>
+</html>

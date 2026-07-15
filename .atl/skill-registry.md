@@ -63,6 +63,13 @@ Pre-digested rules per skill. Delegators copy matching blocks into sub-agent pro
 
 | File | Path | Notes |
 |------|------|-------|
-| (none) | — | No project-level convention files (`agents.md`, `CLAUDE.md`, `.cursorrules`, `GEMINI.md`, `copilot-instructions.md`) found in the project root |
+| Umbrella root | `mix.exs` | `apps_path: "apps"`, aliases `test.all`, `server` |
+| Formatter | `.formatter.exs` | `mix format` |
+| Linter | `.credo.exs` | `mix credo` |
+| CI | `.github/workflows/elixir.yml` | `mix test` on push/PR to master |
 
-Read the convention files listed above for project-specific patterns and rules. All referenced paths have been extracted — no need to read index files to discover more.
+### ExPDF-specific rules
+- Elixir umbrella: `ex_pdf_core` (writer), `ex_pdf_components` (Builder/components), `ex_pdf_read` (reader), `ex_pdf` (meta), `ex_pdf_dev` (examples/server)
+- Run tests from root: `mix test`; per-app: `mix test.all`
+- Declarative PDFs via `Pdf.Builder`; box reflow uses `break_text: true`, `row_threshold`, `Pdf.Builder.measure_box_height/4`
+- Minimal diffs; match existing component patterns; no runtime deps in core reader/writer

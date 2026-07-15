@@ -1,0 +1,829 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>cover/Elixir.Inspect.Pdf.Font.html</title>
+<style>body {
+  font: 14px/1.6 "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #000;
+  border-top: 2px solid #ddd;
+  background-color: #fff;
+
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+h1 {
+  width: 100%;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 0;
+  font-weight: 100;
+  font-size: 1.1em;
+  letter-spacing: 1px;
+}
+
+h1 code {
+  font-size: 0.96em;
+}
+
+code {
+  font: 12px monospace;
+}
+
+footer {
+  background: #eee;
+  width: 100%;
+  padding: 10px 0;
+  text-align: right;
+  border-top: 1px solid #ddd;
+  display: flex;
+  flex: 1;
+  order: 2;
+  justify-content: center;
+}
+
+table {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: collapse;
+  border: 1px solid #cbcbcb;
+  color: #000;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+}
+table thead {
+  display: none;
+}
+table td.line,
+table td.line a,
+table td.hits {
+  width: 20px;
+  background: #eaeaea;
+  text-align: center;
+  text-decoration: none;
+  font-size: 11px;
+  padding: 0 10px;
+  color: #949494;
+}
+table td.hits {
+  width: 10px;
+  text-align: right;
+  padding: 2px 5px;
+  color: rgba(0, 0, 0, 0.6);
+  background-color: #f0f0f0;
+}
+tr.miss td.line,
+tr.miss td.line a,
+tr.miss td.hits {
+  background-color: #ffdce0;
+  border-color: #fdaeb7;
+}
+tr.miss td {
+  background-color: #ffeef0;
+}
+tr.hit td.line,
+tr.hit td.line a,
+tr.hit td.hits {
+  background-color: #cdffd8;
+  border-color: #bef5cb;
+}
+tr.hit td {
+  background-color: #e6ffed;
+}
+td.source {
+  padding-left: 15px;
+  line-height: 15px;
+  white-space: pre;
+  font: 12px monospace;
+}
+</style>
+</head>
+<body>
+<h1><code>cover/Elixir.Inspect.Pdf.Font.html</code></h1>
+<footer><p>File generated from <code>/Users/amir/Documents/proyectos/recreando/elixir-pdf/apps/ex_pdf_core/lib/pdf/font.ex</code> by <a href="http://erlang.org/doc/man/cover.html">cover</a> at 2026-05-27 at 22:52:50</p></footer>
+<table>
+<tbody>
+<tr>
+<td class="line" id="L1"><a href="#L1">1</a></td>
+<td class="hits"></td>
+<td class="source"><code>defmodule Pdf.Font do</code></td>
+</tr>
+<tr>
+<td class="line" id="L2"><a href="#L2">2</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @moduledoc false</code></td>
+</tr>
+<tr>
+<td class="line" id="L3"><a href="#L3">3</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L4"><a href="#L4">4</a></td>
+<td class="hits"></td>
+<td class="source"><code>  import Pdf.Utils</code></td>
+</tr>
+<tr>
+<td class="line" id="L5"><a href="#L5">5</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # alias Pdf.Font.Metrics</code></td>
+</tr>
+<tr>
+<td class="line" id="L6"><a href="#L6">6</a></td>
+<td class="hits"></td>
+<td class="source"><code>  alias Pdf.{Array, Dictionary, Font}</code></td>
+</tr>
+<tr>
+<td class="line" id="L7"><a href="#L7">7</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L8"><a href="#L8">8</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @derive {Inspect, only: [:name, :family_name, :weight, :italic_angle]}</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L9"><a href="#L9">9</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defstruct name: nil,</code></td>
+</tr>
+<tr>
+<td class="line" id="L10"><a href="#L10">10</a></td>
+<td class="hits"></td>
+<td class="source"><code>            full_name: nil,</code></td>
+</tr>
+<tr>
+<td class="line" id="L11"><a href="#L11">11</a></td>
+<td class="hits"></td>
+<td class="source"><code>            family_name: nil,</code></td>
+</tr>
+<tr>
+<td class="line" id="L12"><a href="#L12">12</a></td>
+<td class="hits"></td>
+<td class="source"><code>            weight: nil,</code></td>
+</tr>
+<tr>
+<td class="line" id="L13"><a href="#L13">13</a></td>
+<td class="hits"></td>
+<td class="source"><code>            italic_angle: nil,</code></td>
+</tr>
+<tr>
+<td class="line" id="L14"><a href="#L14">14</a></td>
+<td class="hits"></td>
+<td class="source"><code>            encoding: nil,</code></td>
+</tr>
+<tr>
+<td class="line" id="L15"><a href="#L15">15</a></td>
+<td class="hits"></td>
+<td class="source"><code>            first_char: nil,</code></td>
+</tr>
+<tr>
+<td class="line" id="L16"><a href="#L16">16</a></td>
+<td class="hits"></td>
+<td class="source"><code>            last_char: nil,</code></td>
+</tr>
+<tr>
+<td class="line" id="L17"><a href="#L17">17</a></td>
+<td class="hits"></td>
+<td class="source"><code>            ascender: nil,</code></td>
+</tr>
+<tr>
+<td class="line" id="L18"><a href="#L18">18</a></td>
+<td class="hits"></td>
+<td class="source"><code>            descender: nil,</code></td>
+</tr>
+<tr>
+<td class="line" id="L19"><a href="#L19">19</a></td>
+<td class="hits"></td>
+<td class="source"><code>            cap_height: nil,</code></td>
+</tr>
+<tr>
+<td class="line" id="L20"><a href="#L20">20</a></td>
+<td class="hits"></td>
+<td class="source"><code>            x_height: nil,</code></td>
+</tr>
+<tr>
+<td class="line" id="L21"><a href="#L21">21</a></td>
+<td class="hits"></td>
+<td class="source"><code>            fixed_pitch: nil,</code></td>
+</tr>
+<tr>
+<td class="line" id="L22"><a href="#L22">22</a></td>
+<td class="hits"></td>
+<td class="source"><code>            bbox: nil,</code></td>
+</tr>
+<tr>
+<td class="line" id="L23"><a href="#L23">23</a></td>
+<td class="hits"></td>
+<td class="source"><code>            widths: nil,</code></td>
+</tr>
+<tr>
+<td class="line" id="L24"><a href="#L24">24</a></td>
+<td class="hits"></td>
+<td class="source"><code>            glyph_widths: nil,</code></td>
+</tr>
+<tr>
+<td class="line" id="L25"><a href="#L25">25</a></td>
+<td class="hits"></td>
+<td class="source"><code>            glyphs: nil,</code></td>
+</tr>
+<tr>
+<td class="line" id="L26"><a href="#L26">26</a></td>
+<td class="hits"></td>
+<td class="source"><code>            kern_pairs: nil</code></td>
+</tr>
+<tr>
+<td class="line" id="L27"><a href="#L27">27</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L28"><a href="#L28">28</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def to_dictionary(font, id) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L29"><a href="#L29">29</a></td>
+<td class="hits"></td>
+<td class="source"><code>    Dictionary.new()</code></td>
+</tr>
+<tr>
+<td class="line" id="L30"><a href="#L30">30</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Dictionary.put("Type", n("Font"))</code></td>
+</tr>
+<tr>
+<td class="line" id="L31"><a href="#L31">31</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Dictionary.put("Subtype", n("Type1"))</code></td>
+</tr>
+<tr>
+<td class="line" id="L32"><a href="#L32">32</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Dictionary.put("Name", n("F#{id}"))</code></td>
+</tr>
+<tr>
+<td class="line" id="L33"><a href="#L33">33</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Dictionary.put("BaseFont", n(font.name))</code></td>
+</tr>
+<tr>
+<td class="line" id="L34"><a href="#L34">34</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Dictionary.put("FirstChar", 32)</code></td>
+</tr>
+<tr>
+<td class="line" id="L35"><a href="#L35">35</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Dictionary.put("LastChar", font.last_char)</code></td>
+</tr>
+<tr>
+<td class="line" id="L36"><a href="#L36">36</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Dictionary.put("Widths", Array.new(Enum.drop(font.widths, 32)))</code></td>
+</tr>
+<tr>
+<td class="line" id="L37"><a href="#L37">37</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Dictionary.put("Encoding", n("WinAnsiEncoding"))</code></td>
+</tr>
+<tr>
+<td class="line" id="L38"><a href="#L38">38</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L39"><a href="#L39">39</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L40"><a href="#L40">40</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @doc """</code></td>
+</tr>
+<tr>
+<td class="line" id="L41"><a href="#L41">41</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Returns the width of the specific character</code></td>
+</tr>
+<tr>
+<td class="line" id="L42"><a href="#L42">42</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L43"><a href="#L43">43</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Examples:</code></td>
+</tr>
+<tr>
+<td class="line" id="L44"><a href="#L44">44</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L45"><a href="#L45">45</a></td>
+<td class="hits"></td>
+<td class="source"><code>    iex&gt; Font.width(font, "A")</code></td>
+</tr>
+<tr>
+<td class="line" id="L46"><a href="#L46">46</a></td>
+<td class="hits"></td>
+<td class="source"><code>    123</code></td>
+</tr>
+<tr>
+<td class="line" id="L47"><a href="#L47">47</a></td>
+<td class="hits"></td>
+<td class="source"><code>  """</code></td>
+</tr>
+<tr>
+<td class="line" id="L48"><a href="#L48">48</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def width(font, &lt;&lt;char_code::integer&gt;&gt; = str) when is_binary(str) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L49"><a href="#L49">49</a></td>
+<td class="hits"></td>
+<td class="source"><code>    width(font, char_code)</code></td>
+</tr>
+<tr>
+<td class="line" id="L50"><a href="#L50">50</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L51"><a href="#L51">51</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L52"><a href="#L52">52</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def width(font, char_code) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L53"><a href="#L53">53</a></td>
+<td class="hits"></td>
+<td class="source"><code>    font.glyph_widths[char_code] || 0</code></td>
+</tr>
+<tr>
+<td class="line" id="L54"><a href="#L54">54</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L55"><a href="#L55">55</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L56"><a href="#L56">56</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @doc ~S"""</code></td>
+</tr>
+<tr>
+<td class="line" id="L57"><a href="#L57">57</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Returns the width of the string in font units (1/1000 of font scale factor)</code></td>
+</tr>
+<tr>
+<td class="line" id="L58"><a href="#L58">58</a></td>
+<td class="hits"></td>
+<td class="source"><code>  """</code></td>
+</tr>
+<tr>
+<td class="line" id="L59"><a href="#L59">59</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def text_width(font, string), do: text_width(font, string, [])</code></td>
+</tr>
+<tr>
+<td class="line" id="L60"><a href="#L60">60</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L61"><a href="#L61">61</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def text_width(font, string, opts) when is_list(opts) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L62"><a href="#L62">62</a></td>
+<td class="hits"></td>
+<td class="source"><code>    normalized_string =</code></td>
+</tr>
+<tr>
+<td class="line" id="L63"><a href="#L63">63</a></td>
+<td class="hits"></td>
+<td class="source"><code>      Pdf.Text.normalize_string(</code></td>
+</tr>
+<tr>
+<td class="line" id="L64"><a href="#L64">64</a></td>
+<td class="hits"></td>
+<td class="source"><code>        string,</code></td>
+</tr>
+<tr>
+<td class="line" id="L65"><a href="#L65">65</a></td>
+<td class="hits"></td>
+<td class="source"><code>        Keyword.get(opts, :encoding_replacement_character, :raise)</code></td>
+</tr>
+<tr>
+<td class="line" id="L66"><a href="#L66">66</a></td>
+<td class="hits"></td>
+<td class="source"><code>      )</code></td>
+</tr>
+<tr>
+<td class="line" id="L67"><a href="#L67">67</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L68"><a href="#L68">68</a></td>
+<td class="hits"></td>
+<td class="source"><code>    string_width = calculate_string_width(font, normalized_string)</code></td>
+</tr>
+<tr>
+<td class="line" id="L69"><a href="#L69">69</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L70"><a href="#L70">70</a></td>
+<td class="hits"></td>
+<td class="source"><code>    kerning_adjustments =</code></td>
+</tr>
+<tr>
+<td class="line" id="L71"><a href="#L71">71</a></td>
+<td class="hits"></td>
+<td class="source"><code>      if Keyword.get(opts, :kerning, false) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L72"><a href="#L72">72</a></td>
+<td class="hits"></td>
+<td class="source"><code>        Font.kern_text(font, normalized_string)</code></td>
+</tr>
+<tr>
+<td class="line" id="L73"><a href="#L73">73</a></td>
+<td class="hits"></td>
+<td class="source"><code>        |&gt; Enum.reject(&amp;is_binary/1)</code></td>
+</tr>
+<tr>
+<td class="line" id="L74"><a href="#L74">74</a></td>
+<td class="hits"></td>
+<td class="source"><code>        |&gt; Enum.reduce(0, &amp;Kernel.+/2)</code></td>
+</tr>
+<tr>
+<td class="line" id="L75"><a href="#L75">75</a></td>
+<td class="hits"></td>
+<td class="source"><code>      else</code></td>
+</tr>
+<tr>
+<td class="line" id="L76"><a href="#L76">76</a></td>
+<td class="hits"></td>
+<td class="source"><code>        0</code></td>
+</tr>
+<tr>
+<td class="line" id="L77"><a href="#L77">77</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end</code></td>
+</tr>
+<tr>
+<td class="line" id="L78"><a href="#L78">78</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L79"><a href="#L79">79</a></td>
+<td class="hits"></td>
+<td class="source"><code>    string_width - kerning_adjustments</code></td>
+</tr>
+<tr>
+<td class="line" id="L80"><a href="#L80">80</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L81"><a href="#L81">81</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L82"><a href="#L82">82</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @doc ~S"""</code></td>
+</tr>
+<tr>
+<td class="line" id="L83"><a href="#L83">83</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Returns the width of a string in points (72 points = 1 inch)</code></td>
+</tr>
+<tr>
+<td class="line" id="L84"><a href="#L84">84</a></td>
+<td class="hits"></td>
+<td class="source"><code>  """</code></td>
+</tr>
+<tr>
+<td class="line" id="L85"><a href="#L85">85</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def text_width(font, string, font_size) when is_number(font_size) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L86"><a href="#L86">86</a></td>
+<td class="hits"></td>
+<td class="source"><code>    text_width(font, string, font_size, [])</code></td>
+</tr>
+<tr>
+<td class="line" id="L87"><a href="#L87">87</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L88"><a href="#L88">88</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L89"><a href="#L89">89</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def text_width(font, string, font_size, opts) when is_number(font_size) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L90"><a href="#L90">90</a></td>
+<td class="hits"></td>
+<td class="source"><code>    width = text_width(font, string, opts)</code></td>
+</tr>
+<tr>
+<td class="line" id="L91"><a href="#L91">91</a></td>
+<td class="hits"></td>
+<td class="source"><code>    width * font_size / 1000</code></td>
+</tr>
+<tr>
+<td class="line" id="L92"><a href="#L92">92</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L93"><a href="#L93">93</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L94"><a href="#L94">94</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp calculate_string_width(_font, ""), do: 0</code></td>
+</tr>
+<tr>
+<td class="line" id="L95"><a href="#L95">95</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L96"><a href="#L96">96</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp calculate_string_width(font, &lt;&lt;char::integer, rest::binary&gt;&gt;) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L97"><a href="#L97">97</a></td>
+<td class="hits"></td>
+<td class="source"><code>    Font.width(font, char) + calculate_string_width(font, rest)</code></td>
+</tr>
+<tr>
+<td class="line" id="L98"><a href="#L98">98</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L99"><a href="#L99">99</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L100"><a href="#L100">100</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def kern_text(_font, ""), do: [""]</code></td>
+</tr>
+<tr>
+<td class="line" id="L101"><a href="#L101">101</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L102"><a href="#L102">102</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def kern_text(font, &lt;&lt;first::integer, second::integer, rest::binary&gt;&gt;) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L103"><a href="#L103">103</a></td>
+<td class="hits"></td>
+<td class="source"><code>    font.kern_pairs</code></td>
+</tr>
+<tr>
+<td class="line" id="L104"><a href="#L104">104</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Enum.find(fn {f, s, _amount} -&gt; f == first &amp;&amp; s == second end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L105"><a href="#L105">105</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; case do</code></td>
+</tr>
+<tr>
+<td class="line" id="L106"><a href="#L106">106</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {f, _s, amount} -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L107"><a href="#L107">107</a></td>
+<td class="hits"></td>
+<td class="source"><code>        [&lt;&lt;f&gt;&gt;, -amount | kern_text(font, &lt;&lt;second::integer, rest::binary&gt;&gt;)]</code></td>
+</tr>
+<tr>
+<td class="line" id="L108"><a href="#L108">108</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L109"><a href="#L109">109</a></td>
+<td class="hits"></td>
+<td class="source"><code>      nil -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L110"><a href="#L110">110</a></td>
+<td class="hits"></td>
+<td class="source"><code>        [head | tail] = kern_text(font, &lt;&lt;second::integer, rest::binary&gt;&gt;)</code></td>
+</tr>
+<tr>
+<td class="line" id="L111"><a href="#L111">111</a></td>
+<td class="hits"></td>
+<td class="source"><code>        [&lt;&lt;first::integer, head::binary&gt;&gt; | tail]</code></td>
+</tr>
+<tr>
+<td class="line" id="L112"><a href="#L112">112</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L113"><a href="#L113">113</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L114"><a href="#L114">114</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L115"><a href="#L115">115</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def kern_text(_font, &lt;&lt;_::integer&gt;&gt; = char), do: [char]</code></td>
+</tr>
+<tr>
+<td class="line" id="L116"><a href="#L116">116</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L117"><a href="#L117">117</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def kern_text(_font, ""), do: [""]</code></td>
+</tr>
+<tr>
+<td class="line" id="L118"><a href="#L118">118</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L119"><a href="#L119">119</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def kern_text(%Pdf.ExternalFont{} = font, text) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L120"><a href="#L120">120</a></td>
+<td class="hits"></td>
+<td class="source"><code>    Pdf.ExternalFont.kern_text(font, text)</code></td>
+</tr>
+<tr>
+<td class="line" id="L121"><a href="#L121">121</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L122"><a href="#L122">122</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L123"><a href="#L123">123</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def kern_text(font, text) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L124"><a href="#L124">124</a></td>
+<td class="hits"></td>
+<td class="source"><code>    font.kern_text(text)</code></td>
+</tr>
+<tr>
+<td class="line" id="L125"><a href="#L125">125</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L126"><a href="#L126">126</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L127"><a href="#L127">127</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @doc """</code></td>
+</tr>
+<tr>
+<td class="line" id="L128"><a href="#L128">128</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Lookup a font by family name and attributes [bold: true, italic: true]</code></td>
+</tr>
+<tr>
+<td class="line" id="L129"><a href="#L129">129</a></td>
+<td class="hits"></td>
+<td class="source"><code>  """</code></td>
+</tr>
+<tr>
+<td class="line" id="L130"><a href="#L130">130</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def matches_attributes(font, attrs) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L131"><a href="#L131">131</a></td>
+<td class="hits"></td>
+<td class="source"><code>    bold = Keyword.get(attrs, :bold, false)</code></td>
+</tr>
+<tr>
+<td class="line" id="L132"><a href="#L132">132</a></td>
+<td class="hits"></td>
+<td class="source"><code>    italic = Keyword.get(attrs, :italic, false)</code></td>
+</tr>
+<tr>
+<td class="line" id="L133"><a href="#L133">133</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L134"><a href="#L134">134</a></td>
+<td class="hits"></td>
+<td class="source"><code>    cond do</code></td>
+</tr>
+<tr>
+<td class="line" id="L135"><a href="#L135">135</a></td>
+<td class="hits"></td>
+<td class="source"><code>      bold &amp;&amp; !italic &amp;&amp; font.weight == :bold &amp;&amp; font.italic_angle == 0 -&gt; true</code></td>
+</tr>
+<tr>
+<td class="line" id="L136"><a href="#L136">136</a></td>
+<td class="hits"></td>
+<td class="source"><code>      bold &amp;&amp; italic &amp;&amp; font.weight == :bold &amp;&amp; font.italic_angle != 0 -&gt; true</code></td>
+</tr>
+<tr>
+<td class="line" id="L137"><a href="#L137">137</a></td>
+<td class="hits"></td>
+<td class="source"><code>      !bold &amp;&amp; !italic &amp;&amp; font.weight != :bold &amp;&amp; font.italic_angle == 0 -&gt; true</code></td>
+</tr>
+<tr>
+<td class="line" id="L138"><a href="#L138">138</a></td>
+<td class="hits"></td>
+<td class="source"><code>      !bold &amp;&amp; italic &amp;&amp; font.weight != :bold &amp;&amp; font.italic_angle != 0 -&gt; true</code></td>
+</tr>
+<tr>
+<td class="line" id="L139"><a href="#L139">139</a></td>
+<td class="hits"></td>
+<td class="source"><code>      true -&gt; false</code></td>
+</tr>
+<tr>
+<td class="line" id="L140"><a href="#L140">140</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L141"><a href="#L141">141</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L142"><a href="#L142">142</a></td>
+<td class="hits"></td>
+<td class="source"><code>end</code></td>
+</tr>
+</tbody>
+<thead>
+<tr>
+<th>Line</th>
+<th>Hits</th>
+<th>Source</th>
+</tr>
+</thead>
+</table>
+</body>
+</html>

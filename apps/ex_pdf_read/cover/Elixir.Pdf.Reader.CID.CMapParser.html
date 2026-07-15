@@ -1,0 +1,2229 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>cover/Elixir.Pdf.Reader.CID.CMapParser.html</title>
+<style>body {
+  font: 14px/1.6 "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #000;
+  border-top: 2px solid #ddd;
+  background-color: #fff;
+
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+h1 {
+  width: 100%;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 0;
+  font-weight: 100;
+  font-size: 1.1em;
+  letter-spacing: 1px;
+}
+
+h1 code {
+  font-size: 0.96em;
+}
+
+code {
+  font: 12px monospace;
+}
+
+footer {
+  background: #eee;
+  width: 100%;
+  padding: 10px 0;
+  text-align: right;
+  border-top: 1px solid #ddd;
+  display: flex;
+  flex: 1;
+  order: 2;
+  justify-content: center;
+}
+
+table {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: collapse;
+  border: 1px solid #cbcbcb;
+  color: #000;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+}
+table thead {
+  display: none;
+}
+table td.line,
+table td.line a,
+table td.hits {
+  width: 20px;
+  background: #eaeaea;
+  text-align: center;
+  text-decoration: none;
+  font-size: 11px;
+  padding: 0 10px;
+  color: #949494;
+}
+table td.hits {
+  width: 10px;
+  text-align: right;
+  padding: 2px 5px;
+  color: rgba(0, 0, 0, 0.6);
+  background-color: #f0f0f0;
+}
+tr.miss td.line,
+tr.miss td.line a,
+tr.miss td.hits {
+  background-color: #ffdce0;
+  border-color: #fdaeb7;
+}
+tr.miss td {
+  background-color: #ffeef0;
+}
+tr.hit td.line,
+tr.hit td.line a,
+tr.hit td.hits {
+  background-color: #cdffd8;
+  border-color: #bef5cb;
+}
+tr.hit td {
+  background-color: #e6ffed;
+}
+td.source {
+  padding-left: 15px;
+  line-height: 15px;
+  white-space: pre;
+  font: 12px monospace;
+}
+</style>
+</head>
+<body>
+<h1><code>cover/Elixir.Pdf.Reader.CID.CMapParser.html</code></h1>
+<footer><p>File generated from <code>/Users/amir/Documents/proyectos/recreando/elixir-pdf/apps/ex_pdf_read/lib/pdf/reader/cid/cmap_parser.ex</code> by <a href="http://erlang.org/doc/man/cover.html">cover</a> at 2026-05-27 at 22:52:54</p></footer>
+<table>
+<tbody>
+<tr>
+<td class="line" id="L1"><a href="#L1">1</a></td>
+<td class="hits"></td>
+<td class="source"><code>defmodule Pdf.Reader.CID.CMapParser do</code></td>
+</tr>
+<tr>
+<td class="line" id="L2"><a href="#L2">2</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @moduledoc """</code></td>
+</tr>
+<tr>
+<td class="line" id="L3"><a href="#L3">3</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Minimal PostScript subset parser for Adobe predefined CMap files.</code></td>
+</tr>
+<tr>
+<td class="line" id="L4"><a href="#L4">4</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L5"><a href="#L5">5</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Handles only the operators required for CID lookup:</code></td>
+</tr>
+<tr>
+<td class="line" id="L6"><a href="#L6">6</a></td>
+<td class="hits"></td>
+<td class="source"><code>  `begin/endcodespacerange`, `begin/endcidchar`, `begin/endcidrange`,</code></td>
+</tr>
+<tr>
+<td class="line" id="L7"><a href="#L7">7</a></td>
+<td class="hits"></td>
+<td class="source"><code>  `begin/endnotdefchar`, `begin/endnotdefrange`, `usecmap`.</code></td>
+</tr>
+<tr>
+<td class="line" id="L8"><a href="#L8">8</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L9"><a href="#L9">9</a></td>
+<td class="hits"></td>
+<td class="source"><code>  All other PostScript content (comments, /CMapName, /CIDSystemInfo,</code></td>
+</tr>
+<tr>
+<td class="line" id="L10"><a href="#L10">10</a></td>
+<td class="hits"></td>
+<td class="source"><code>  /WMode, dict/array literals, dup/def/pop, etc.) is silently skipped.</code></td>
+</tr>
+<tr>
+<td class="line" id="L11"><a href="#L11">11</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L12"><a href="#L12">12</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Returns a parsed struct compatible with `Pdf.Reader.CID.PredefinedCMap`</code></td>
+</tr>
+<tr>
+<td class="line" id="L13"><a href="#L13">13</a></td>
+<td class="hits"></td>
+<td class="source"><code>  for caching and lookup.</code></td>
+</tr>
+<tr>
+<td class="line" id="L14"><a href="#L14">14</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L15"><a href="#L15">15</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Spec references</code></td>
+</tr>
+<tr>
+<td class="line" id="L16"><a href="#L16">16</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L17"><a href="#L17">17</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - PDF 1.7 (ISO 32000-1) § 9.7.5 — Predefined CMaps:</code></td>
+</tr>
+<tr>
+<td class="line" id="L18"><a href="#L18">18</a></td>
+<td class="hits"></td>
+<td class="source"><code>    https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf</code></td>
+</tr>
+<tr>
+<td class="line" id="L19"><a href="#L19">19</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - PDF 1.7 § 9.7.6 — Codespace ranges:</code></td>
+</tr>
+<tr>
+<td class="line" id="L20"><a href="#L20">20</a></td>
+<td class="hits"></td>
+<td class="source"><code>    https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf</code></td>
+</tr>
+<tr>
+<td class="line" id="L21"><a href="#L21">21</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - Adobe Tech Note #5099 — CMap and CIDFont Files Specification:</code></td>
+</tr>
+<tr>
+<td class="line" id="L22"><a href="#L22">22</a></td>
+<td class="hits"></td>
+<td class="source"><code>    https://adobe-type-tools.github.io/font-tech-notes/pdfs/5099.CMapResources.pdf</code></td>
+</tr>
+<tr>
+<td class="line" id="L23"><a href="#L23">23</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - Adobe Tech Note #5014 — CID-Keyed Font Technology Overview:</code></td>
+</tr>
+<tr>
+<td class="line" id="L24"><a href="#L24">24</a></td>
+<td class="hits"></td>
+<td class="source"><code>    https://adobe-type-tools.github.io/font-tech-notes/pdfs/5014.CIDFont_Spec.pdf</code></td>
+</tr>
+<tr>
+<td class="line" id="L25"><a href="#L25">25</a></td>
+<td class="hits"></td>
+<td class="source"><code>  """</code></td>
+</tr>
+<tr>
+<td class="line" id="L26"><a href="#L26">26</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L27"><a href="#L27">27</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @type cmap :: %{</code></td>
+</tr>
+<tr>
+<td class="line" id="L28"><a href="#L28">28</a></td>
+<td class="hits"></td>
+<td class="source"><code>          cidchar: %{non_neg_integer() =&gt; non_neg_integer()},</code></td>
+</tr>
+<tr>
+<td class="line" id="L29"><a href="#L29">29</a></td>
+<td class="hits"></td>
+<td class="source"><code>          cidrange: [{non_neg_integer(), non_neg_integer(), non_neg_integer()}],</code></td>
+</tr>
+<tr>
+<td class="line" id="L30"><a href="#L30">30</a></td>
+<td class="hits"></td>
+<td class="source"><code>          notdef_chars: %{non_neg_integer() =&gt; non_neg_integer()},</code></td>
+</tr>
+<tr>
+<td class="line" id="L31"><a href="#L31">31</a></td>
+<td class="hits"></td>
+<td class="source"><code>          notdef_ranges: [{non_neg_integer(), non_neg_integer(), non_neg_integer()}],</code></td>
+</tr>
+<tr>
+<td class="line" id="L32"><a href="#L32">32</a></td>
+<td class="hits"></td>
+<td class="source"><code>          codespaces: %{(1..4) =&gt; [{non_neg_integer(), non_neg_integer()}]},</code></td>
+</tr>
+<tr>
+<td class="line" id="L33"><a href="#L33">33</a></td>
+<td class="hits"></td>
+<td class="source"><code>          parent: String.t() | nil</code></td>
+</tr>
+<tr>
+<td class="line" id="L34"><a href="#L34">34</a></td>
+<td class="hits"></td>
+<td class="source"><code>        }</code></td>
+</tr>
+<tr>
+<td class="line" id="L35"><a href="#L35">35</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L36"><a href="#L36">36</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @empty_cmap %{</code></td>
+</tr>
+<tr>
+<td class="line" id="L37"><a href="#L37">37</a></td>
+<td class="hits"></td>
+<td class="source"><code>    cidchar: %{},</code></td>
+</tr>
+<tr>
+<td class="line" id="L38"><a href="#L38">38</a></td>
+<td class="hits"></td>
+<td class="source"><code>    cidrange: [],</code></td>
+</tr>
+<tr>
+<td class="line" id="L39"><a href="#L39">39</a></td>
+<td class="hits"></td>
+<td class="source"><code>    notdef_chars: %{},</code></td>
+</tr>
+<tr>
+<td class="line" id="L40"><a href="#L40">40</a></td>
+<td class="hits"></td>
+<td class="source"><code>    notdef_ranges: [],</code></td>
+</tr>
+<tr>
+<td class="line" id="L41"><a href="#L41">41</a></td>
+<td class="hits"></td>
+<td class="source"><code>    codespaces: %{},</code></td>
+</tr>
+<tr>
+<td class="line" id="L42"><a href="#L42">42</a></td>
+<td class="hits"></td>
+<td class="source"><code>    parent: nil</code></td>
+</tr>
+<tr>
+<td class="line" id="L43"><a href="#L43">43</a></td>
+<td class="hits"></td>
+<td class="source"><code>  }</code></td>
+</tr>
+<tr>
+<td class="line" id="L44"><a href="#L44">44</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L45"><a href="#L45">45</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @doc """</code></td>
+</tr>
+<tr>
+<td class="line" id="L46"><a href="#L46">46</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Parse a PostScript CMap text and return a plain map with the extracted</code></td>
+</tr>
+<tr>
+<td class="line" id="L47"><a href="#L47">47</a></td>
+<td class="hits"></td>
+<td class="source"><code>  CID mapping data.</code></td>
+</tr>
+<tr>
+<td class="line" id="L48"><a href="#L48">48</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L49"><a href="#L49">49</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Returns `{:ok, cmap_fields}` on success or `{:error, reason}` if the</code></td>
+</tr>
+<tr>
+<td class="line" id="L50"><a href="#L50">50</a></td>
+<td class="hits"></td>
+<td class="source"><code>  input is fundamentally unparseable. Unknown or irrelevant tokens are</code></td>
+</tr>
+<tr>
+<td class="line" id="L51"><a href="#L51">51</a></td>
+<td class="hits"></td>
+<td class="source"><code>  silently skipped — this function NEVER raises.</code></td>
+</tr>
+<tr>
+<td class="line" id="L52"><a href="#L52">52</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L53"><a href="#L53">53</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Return map keys</code></td>
+</tr>
+<tr>
+<td class="line" id="L54"><a href="#L54">54</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L55"><a href="#L55">55</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `:cidchar` — `%{code_integer =&gt; cid_integer}`</code></td>
+</tr>
+<tr>
+<td class="line" id="L56"><a href="#L56">56</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `:cidrange` — `[{lo, hi, base_cid}]`</code></td>
+</tr>
+<tr>
+<td class="line" id="L57"><a href="#L57">57</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `:notdef_chars` — `%{code_integer =&gt; cid_integer}`</code></td>
+</tr>
+<tr>
+<td class="line" id="L58"><a href="#L58">58</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `:notdef_ranges` — `[{lo, hi, base_cid}]`</code></td>
+</tr>
+<tr>
+<td class="line" id="L59"><a href="#L59">59</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `:codespaces` — `%{byte_length =&gt; [{lo, hi}]}`, grouped by byte width</code></td>
+</tr>
+<tr>
+<td class="line" id="L60"><a href="#L60">60</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `:parent` — `String.t() | nil` — name from `usecmap` directive</code></td>
+</tr>
+<tr>
+<td class="line" id="L61"><a href="#L61">61</a></td>
+<td class="hits"></td>
+<td class="source"><code>  """</code></td>
+</tr>
+<tr>
+<td class="line" id="L62"><a href="#L62">62</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @spec parse(text :: binary()) :: {:ok, cmap()} | {:error, term()}</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L63"><a href="#L63">63</a></td>
+<td class="hits">70</td>
+<td class="source"><code>  def parse(text) when is_binary(text) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L64"><a href="#L64">64</a></td>
+<td class="hits">70</td>
+<td class="source"><code>    tokens = tokenize(text)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L65"><a href="#L65">65</a></td>
+<td class="hits">70</td>
+<td class="source"><code>    acc = dispatch(tokens, @empty_cmap)</code></td>
+</tr>
+<tr>
+<td class="line" id="L66"><a href="#L66">66</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:ok, acc}</code></td>
+</tr>
+<tr>
+<td class="line" id="L67"><a href="#L67">67</a></td>
+<td class="hits"></td>
+<td class="source"><code>  rescue</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L68"><a href="#L68">68</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    e -&gt; {:error, e}</code></td>
+</tr>
+<tr>
+<td class="line" id="L69"><a href="#L69">69</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L70"><a href="#L70">70</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L71"><a href="#L71">71</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  def parse(_), do: {:error, :not_binary}</code></td>
+</tr>
+<tr>
+<td class="line" id="L72"><a href="#L72">72</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L73"><a href="#L73">73</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L74"><a href="#L74">74</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Tokenizer — produces a flat list of tagged tokens</code></td>
+</tr>
+<tr>
+<td class="line" id="L75"><a href="#L75">75</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L76"><a href="#L76">76</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L77"><a href="#L77">77</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Known keyword atoms mapped from their string forms</code></td>
+</tr>
+<tr>
+<td class="line" id="L78"><a href="#L78">78</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @keywords %{</code></td>
+</tr>
+<tr>
+<td class="line" id="L79"><a href="#L79">79</a></td>
+<td class="hits"></td>
+<td class="source"><code>    "begincodespacerange" =&gt; :begincodespacerange,</code></td>
+</tr>
+<tr>
+<td class="line" id="L80"><a href="#L80">80</a></td>
+<td class="hits"></td>
+<td class="source"><code>    "endcodespacerange" =&gt; :endcodespacerange,</code></td>
+</tr>
+<tr>
+<td class="line" id="L81"><a href="#L81">81</a></td>
+<td class="hits"></td>
+<td class="source"><code>    "begincidchar" =&gt; :begincidchar,</code></td>
+</tr>
+<tr>
+<td class="line" id="L82"><a href="#L82">82</a></td>
+<td class="hits"></td>
+<td class="source"><code>    "endcidchar" =&gt; :endcidchar,</code></td>
+</tr>
+<tr>
+<td class="line" id="L83"><a href="#L83">83</a></td>
+<td class="hits"></td>
+<td class="source"><code>    "begincidrange" =&gt; :begincidrange,</code></td>
+</tr>
+<tr>
+<td class="line" id="L84"><a href="#L84">84</a></td>
+<td class="hits"></td>
+<td class="source"><code>    "endcidrange" =&gt; :endcidrange,</code></td>
+</tr>
+<tr>
+<td class="line" id="L85"><a href="#L85">85</a></td>
+<td class="hits"></td>
+<td class="source"><code>    "beginnotdefchar" =&gt; :beginnotdefchar,</code></td>
+</tr>
+<tr>
+<td class="line" id="L86"><a href="#L86">86</a></td>
+<td class="hits"></td>
+<td class="source"><code>    "endnotdefchar" =&gt; :endnotdefchar,</code></td>
+</tr>
+<tr>
+<td class="line" id="L87"><a href="#L87">87</a></td>
+<td class="hits"></td>
+<td class="source"><code>    "beginnotdefrange" =&gt; :beginnotdefrange,</code></td>
+</tr>
+<tr>
+<td class="line" id="L88"><a href="#L88">88</a></td>
+<td class="hits"></td>
+<td class="source"><code>    "endnotdefrange" =&gt; :endnotdefrange,</code></td>
+</tr>
+<tr>
+<td class="line" id="L89"><a href="#L89">89</a></td>
+<td class="hits"></td>
+<td class="source"><code>    "usecmap" =&gt; :usecmap</code></td>
+</tr>
+<tr>
+<td class="line" id="L90"><a href="#L90">90</a></td>
+<td class="hits"></td>
+<td class="source"><code>  }</code></td>
+</tr>
+<tr>
+<td class="line" id="L91"><a href="#L91">91</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L92"><a href="#L92">92</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Tokens we can immediately discard (PostScript boilerplate)</code></td>
+</tr>
+<tr>
+<td class="line" id="L93"><a href="#L93">93</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # NOTE: bare identifiers that are NOT keywords and NOT in this list will be</code></td>
+</tr>
+<tr>
+<td class="line" id="L94"><a href="#L94">94</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # emitted as {:name, word} so they can participate in `/NAME usecmap` and</code></td>
+</tr>
+<tr>
+<td class="line" id="L95"><a href="#L95">95</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # `NAME usecmap` patterns. Only truly structural boilerplate is discarded.</code></td>
+</tr>
+<tr>
+<td class="line" id="L96"><a href="#L96">96</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @skip_words ~w(</code></td>
+</tr>
+<tr>
+<td class="line" id="L97"><a href="#L97">97</a></td>
+<td class="hits"></td>
+<td class="source"><code>    dup def pop begin end dict currentdict findresource defineresource</code></td>
+</tr>
+<tr>
+<td class="line" id="L98"><a href="#L98">98</a></td>
+<td class="hits"></td>
+<td class="source"><code>    begincmap endcmap</code></td>
+</tr>
+<tr>
+<td class="line" id="L99"><a href="#L99">99</a></td>
+<td class="hits"></td>
+<td class="source"><code>  )</code></td>
+</tr>
+<tr>
+<td class="line" id="L100"><a href="#L100">100</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L101"><a href="#L101">101</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @spec tokenize(binary()) :: list()</code></td>
+</tr>
+<tr>
+<td class="line" id="L102"><a href="#L102">102</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp tokenize(text) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L103"><a href="#L103">103</a></td>
+<td class="hits"></td>
+<td class="source"><code>    tokenize_loop(text, [])</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L104"><a href="#L104">104</a></td>
+<td class="hits">70</td>
+<td class="source"><code>    |&gt; Enum.reverse()</code></td>
+</tr>
+<tr>
+<td class="line" id="L105"><a href="#L105">105</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L106"><a href="#L106">106</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L107"><a href="#L107">107</a></td>
+<td class="hits">70</td>
+<td class="source"><code>  defp tokenize_loop(&lt;&lt;&gt;&gt;, acc), do: acc</code></td>
+</tr>
+<tr>
+<td class="line" id="L108"><a href="#L108">108</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L109"><a href="#L109">109</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Skip comments: % to end of line</code></td>
+</tr>
+<tr>
+<td class="line" id="L110"><a href="#L110">110</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp tokenize_loop(&lt;&lt;?%, rest::binary&gt;&gt;, acc) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L111"><a href="#L111">111</a></td>
+<td class="hits">2175</td>
+<td class="source"><code>    rest2 = skip_to_newline(rest)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L112"><a href="#L112">112</a></td>
+<td class="hits">2175</td>
+<td class="source"><code>    tokenize_loop(rest2, acc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L113"><a href="#L113">113</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L114"><a href="#L114">114</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L115"><a href="#L115">115</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Skip whitespace</code></td>
+</tr>
+<tr>
+<td class="line" id="L116"><a href="#L116">116</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp tokenize_loop(&lt;&lt;c, rest::binary&gt;&gt;, acc) when c in [?\s, ?\t, ?\n, ?\r] do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L117"><a href="#L117">117</a></td>
+<td class="hits">591284</td>
+<td class="source"><code>    tokenize_loop(rest, acc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L118"><a href="#L118">118</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L119"><a href="#L119">119</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L120"><a href="#L120">120</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Hex string &lt;HHHH&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L121"><a href="#L121">121</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp tokenize_loop(&lt;&lt;?&lt;, rest::binary&gt;&gt;, acc) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L122"><a href="#L122">122</a></td>
+<td class="hits">313191</td>
+<td class="source"><code>    case read_hex_string(rest) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L123"><a href="#L123">123</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {hex_bytes, rest2} -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L124"><a href="#L124">124</a></td>
+<td class="hits">313189</td>
+<td class="source"><code>        tokenize_loop(rest2, [{:hex, hex_bytes} | acc])</code></td>
+</tr>
+<tr>
+<td class="line" id="L125"><a href="#L125">125</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L126"><a href="#L126">126</a></td>
+<td class="hits"></td>
+<td class="source"><code>      :error -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L127"><a href="#L127">127</a></td>
+<td class="hits"></td>
+<td class="source"><code>        # skip malformed hex, advance one char</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L128"><a href="#L128">128</a></td>
+<td class="hits">2</td>
+<td class="source"><code>        tokenize_loop(rest, acc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L129"><a href="#L129">129</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L130"><a href="#L130">130</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L131"><a href="#L131">131</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L132"><a href="#L132">132</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Parenthesised string — skip entirely (track nesting depth)</code></td>
+</tr>
+<tr>
+<td class="line" id="L133"><a href="#L133">133</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp tokenize_loop(&lt;&lt;?(, rest::binary&gt;&gt;, acc) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L134"><a href="#L134">134</a></td>
+<td class="hits">103</td>
+<td class="source"><code>    rest2 = skip_paren_string(rest, 1)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L135"><a href="#L135">135</a></td>
+<td class="hits">103</td>
+<td class="source"><code>    tokenize_loop(rest2, acc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L136"><a href="#L136">136</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L137"><a href="#L137">137</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L138"><a href="#L138">138</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Array literal [...] — skip</code></td>
+</tr>
+<tr>
+<td class="line" id="L139"><a href="#L139">139</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp tokenize_loop(&lt;&lt;?[, rest::binary&gt;&gt;, acc) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L140"><a href="#L140">140</a></td>
+<td class="hits">51</td>
+<td class="source"><code>    rest2 = skip_bracket(rest, ?[, ?])</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L141"><a href="#L141">141</a></td>
+<td class="hits">51</td>
+<td class="source"><code>    tokenize_loop(rest2, acc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L142"><a href="#L142">142</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L143"><a href="#L143">143</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L144"><a href="#L144">144</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Dict literal &lt;&lt;...&gt;&gt; — skip (the &lt; is already consumed above for hex)</code></td>
+</tr>
+<tr>
+<td class="line" id="L145"><a href="#L145">145</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # This path handles bare { ... } — PS procedure body</code></td>
+</tr>
+<tr>
+<td class="line" id="L146"><a href="#L146">146</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp tokenize_loop(&lt;&lt;?{, rest::binary&gt;&gt;, acc) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L147"><a href="#L147">147</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    rest2 = skip_bracket(rest, ?{, ?})</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L148"><a href="#L148">148</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    tokenize_loop(rest2, acc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L149"><a href="#L149">149</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L150"><a href="#L150">150</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L151"><a href="#L151">151</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Name token: /IDENT</code></td>
+</tr>
+<tr>
+<td class="line" id="L152"><a href="#L152">152</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp tokenize_loop(&lt;&lt;?/, rest::binary&gt;&gt;, acc) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L153"><a href="#L153">153</a></td>
+<td class="hits">687</td>
+<td class="source"><code>    {name, rest2} = read_identifier(rest)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L154"><a href="#L154">154</a></td>
+<td class="hits">687</td>
+<td class="source"><code>    tokenize_loop(rest2, [{:name, name} | acc])</code></td>
+</tr>
+<tr>
+<td class="line" id="L155"><a href="#L155">155</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L156"><a href="#L156">156</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L157"><a href="#L157">157</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Integer or identifier</code></td>
+</tr>
+<tr>
+<td class="line" id="L158"><a href="#L158">158</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp tokenize_loop(&lt;&lt;c, _::binary&gt;&gt; = input, acc) when c in ?0..?9 or c == ?- do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L159"><a href="#L159">159</a></td>
+<td class="hits">266190</td>
+<td class="source"><code>    {word, rest} = read_word(input)</code></td>
+</tr>
+<tr>
+<td class="line" id="L160"><a href="#L160">160</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L161"><a href="#L161">161</a></td>
+<td class="hits">266190</td>
+<td class="source"><code>    token =</code></td>
+</tr>
+<tr>
+<td class="line" id="L162"><a href="#L162">162</a></td>
+<td class="hits"></td>
+<td class="source"><code>      case Integer.parse(word) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L163"><a href="#L163">163</a></td>
+<td class="hits">266140</td>
+<td class="source"><code>        {n, ""} -&gt; {:int, n}</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L164"><a href="#L164">164</a></td>
+<td class="hits">50</td>
+<td class="source"><code>        _ -&gt; classify_word(word)</code></td>
+</tr>
+<tr>
+<td class="line" id="L165"><a href="#L165">165</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end</code></td>
+</tr>
+<tr>
+<td class="line" id="L166"><a href="#L166">166</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L167"><a href="#L167">167</a></td>
+<td class="hits">266190</td>
+<td class="source"><code>    case token do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L168"><a href="#L168">168</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      :skip -&gt; tokenize_loop(rest, acc)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L169"><a href="#L169">169</a></td>
+<td class="hits">266190</td>
+<td class="source"><code>      t -&gt; tokenize_loop(rest, [t | acc])</code></td>
+</tr>
+<tr>
+<td class="line" id="L170"><a href="#L170">170</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L171"><a href="#L171">171</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L172"><a href="#L172">172</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L173"><a href="#L173">173</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp tokenize_loop(&lt;&lt;_c, _::binary&gt;&gt; = input, acc) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L174"><a href="#L174">174</a></td>
+<td class="hits">6856</td>
+<td class="source"><code>    {word, rest} = read_word(input)</code></td>
+</tr>
+<tr>
+<td class="line" id="L175"><a href="#L175">175</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L176"><a href="#L176">176</a></td>
+<td class="hits">6856</td>
+<td class="source"><code>    token = classify_word(word)</code></td>
+</tr>
+<tr>
+<td class="line" id="L177"><a href="#L177">177</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L178"><a href="#L178">178</a></td>
+<td class="hits">6856</td>
+<td class="source"><code>    case token do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L179"><a href="#L179">179</a></td>
+<td class="hits">1264</td>
+<td class="source"><code>      :skip -&gt; tokenize_loop(rest, acc)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L180"><a href="#L180">180</a></td>
+<td class="hits">5592</td>
+<td class="source"><code>      t -&gt; tokenize_loop(rest, [t | acc])</code></td>
+</tr>
+<tr>
+<td class="line" id="L181"><a href="#L181">181</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L182"><a href="#L182">182</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L183"><a href="#L183">183</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L184"><a href="#L184">184</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Read characters up to (but not including) the next newline</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L185"><a href="#L185">185</a></td>
+<td class="hits">2175</td>
+<td class="source"><code>  defp skip_to_newline(&lt;&lt;?\n, rest::binary&gt;&gt;), do: rest</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L186"><a href="#L186">186</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp skip_to_newline(&lt;&lt;?\r, rest::binary&gt;&gt;), do: rest</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L187"><a href="#L187">187</a></td>
+<td class="hits">109142</td>
+<td class="source"><code>  defp skip_to_newline(&lt;&lt;_c, rest::binary&gt;&gt;), do: skip_to_newline(rest)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L188"><a href="#L188">188</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp skip_to_newline(&lt;&lt;&gt;&gt;), do: &lt;&lt;&gt;&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L189"><a href="#L189">189</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L190"><a href="#L190">190</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Read hex digits inside &lt;...&gt;, return decoded binary</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L191"><a href="#L191">191</a></td>
+<td class="hits">313191</td>
+<td class="source"><code>  defp read_hex_string(bin), do: read_hex_string(bin, &lt;&lt;&gt;&gt;)</code></td>
+</tr>
+<tr>
+<td class="line" id="L192"><a href="#L192">192</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L193"><a href="#L193">193</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp read_hex_string(&lt;&lt;?&gt;, rest::binary&gt;&gt;, hex_acc) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L194"><a href="#L194">194</a></td>
+<td class="hits">313189</td>
+<td class="source"><code>    hex_str = String.trim(hex_acc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L195"><a href="#L195">195</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L196"><a href="#L196">196</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # Pad to even length</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L197"><a href="#L197">197</a></td>
+<td class="hits">313189</td>
+<td class="source"><code>    hex_str =</code></td>
+</tr>
+<tr>
+<td class="line" id="L198"><a href="#L198">198</a></td>
+<td class="hits"></td>
+<td class="source"><code>      if rem(byte_size(hex_str), 2) == 1,</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L199"><a href="#L199">199</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        do: hex_str &lt;&gt; "0",</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L200"><a href="#L200">200</a></td>
+<td class="hits">313189</td>
+<td class="source"><code>        else: hex_str</code></td>
+</tr>
+<tr>
+<td class="line" id="L201"><a href="#L201">201</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L202"><a href="#L202">202</a></td>
+<td class="hits">313189</td>
+<td class="source"><code>    case Base.decode16(hex_str, case: :mixed) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L203"><a href="#L203">203</a></td>
+<td class="hits">313189</td>
+<td class="source"><code>      {:ok, decoded} -&gt; {decoded, rest}</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L204"><a href="#L204">204</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      :error -&gt; :error</code></td>
+</tr>
+<tr>
+<td class="line" id="L205"><a href="#L205">205</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L206"><a href="#L206">206</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L207"><a href="#L207">207</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L208"><a href="#L208">208</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp read_hex_string(&lt;&lt;?\n, rest::binary&gt;&gt;, acc), do: read_hex_string(rest, acc)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L209"><a href="#L209">209</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp read_hex_string(&lt;&lt;?\r, rest::binary&gt;&gt;, acc), do: read_hex_string(rest, acc)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L210"><a href="#L210">210</a></td>
+<td class="hits">4</td>
+<td class="source"><code>  defp read_hex_string(&lt;&lt;?\s, rest::binary&gt;&gt;, acc), do: read_hex_string(rest, acc)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L211"><a href="#L211">211</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp read_hex_string(&lt;&lt;?\t, rest::binary&gt;&gt;, acc), do: read_hex_string(rest, acc)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L212"><a href="#L212">212</a></td>
+<td class="hits">1280619</td>
+<td class="source"><code>  defp read_hex_string(&lt;&lt;c, rest::binary&gt;&gt;, acc), do: read_hex_string(rest, &lt;&lt;acc::binary, c&gt;&gt;)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L213"><a href="#L213">213</a></td>
+<td class="hits">2</td>
+<td class="source"><code>  defp read_hex_string(&lt;&lt;&gt;&gt;, _acc), do: :error</code></td>
+</tr>
+<tr>
+<td class="line" id="L214"><a href="#L214">214</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L215"><a href="#L215">215</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Skip a parenthesised string, tracking nesting</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L216"><a href="#L216">216</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp skip_paren_string(&lt;&lt;&gt;&gt;, _depth), do: &lt;&lt;&gt;&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L217"><a href="#L217">217</a></td>
+<td class="hits">103</td>
+<td class="source"><code>  defp skip_paren_string(&lt;&lt;?), rest::binary&gt;&gt;, 1), do: rest</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L218"><a href="#L218">218</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp skip_paren_string(&lt;&lt;?), rest::binary&gt;&gt;, depth), do: skip_paren_string(rest, depth - 1)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L219"><a href="#L219">219</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp skip_paren_string(&lt;&lt;?(, rest::binary&gt;&gt;, depth), do: skip_paren_string(rest, depth + 1)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L220"><a href="#L220">220</a></td>
+<td class="hits">558</td>
+<td class="source"><code>  defp skip_paren_string(&lt;&lt;_c, rest::binary&gt;&gt;, depth), do: skip_paren_string(rest, depth)</code></td>
+</tr>
+<tr>
+<td class="line" id="L221"><a href="#L221">221</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L222"><a href="#L222">222</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Skip matched bracket pair, with nesting</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L223"><a href="#L223">223</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp skip_bracket(&lt;&lt;&gt;&gt;, _open, _close), do: &lt;&lt;&gt;&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L224"><a href="#L224">224</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L225"><a href="#L225">225</a></td>
+<td class="hits">51</td>
+<td class="source"><code>  defp skip_bracket(&lt;&lt;c, rest::binary&gt;&gt;, _open, close) when c == close, do: rest</code></td>
+</tr>
+<tr>
+<td class="line" id="L226"><a href="#L226">226</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L227"><a href="#L227">227</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp skip_bracket(&lt;&lt;c, rest::binary&gt;&gt;, open, close) when c == open do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L228"><a href="#L228">228</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    rest2 = skip_bracket(rest, open, close)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L229"><a href="#L229">229</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    skip_bracket(rest2, open, close)</code></td>
+</tr>
+<tr>
+<td class="line" id="L230"><a href="#L230">230</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L231"><a href="#L231">231</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L232"><a href="#L232">232</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp skip_bracket(&lt;&lt;_c, rest::binary&gt;&gt;, open, close),</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L233"><a href="#L233">233</a></td>
+<td class="hits">510</td>
+<td class="source"><code>    do: skip_bracket(rest, open, close)</code></td>
+</tr>
+<tr>
+<td class="line" id="L234"><a href="#L234">234</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L235"><a href="#L235">235</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Read word: run of non-whitespace, non-special chars</code></td>
+</tr>
+<tr>
+<td class="line" id="L236"><a href="#L236">236</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @word_stop [?\s, ?\t, ?\n, ?\r, ?&lt;, ?&gt;, ?/, ?(, ?), ?[, ?], ?{, ?}, ?%]</code></td>
+</tr>
+<tr>
+<td class="line" id="L237"><a href="#L237">237</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L238"><a href="#L238">238</a></td>
+<td class="hits">273733</td>
+<td class="source"><code>  defp read_word(bin), do: read_word(bin, &lt;&lt;&gt;&gt;)</code></td>
+</tr>
+<tr>
+<td class="line" id="L239"><a href="#L239">239</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L240"><a href="#L240">240</a></td>
+<td class="hits">1</td>
+<td class="source"><code>  defp read_word(&lt;&lt;&gt;&gt;, acc), do: {acc, &lt;&lt;&gt;&gt;}</code></td>
+</tr>
+<tr>
+<td class="line" id="L241"><a href="#L241">241</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L242"><a href="#L242">242</a></td>
+<td class="hits">273732</td>
+<td class="source"><code>  defp read_word(&lt;&lt;c, _::binary&gt;&gt; = rest, acc) when c in @word_stop, do: {acc, rest}</code></td>
+</tr>
+<tr>
+<td class="line" id="L243"><a href="#L243">243</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L244"><a href="#L244">244</a></td>
+<td class="hits">1252449</td>
+<td class="source"><code>  defp read_word(&lt;&lt;c, rest::binary&gt;&gt;, acc), do: read_word(rest, &lt;&lt;acc::binary, c&gt;&gt;)</code></td>
+</tr>
+<tr>
+<td class="line" id="L245"><a href="#L245">245</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L246"><a href="#L246">246</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Read an identifier (after /)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L247"><a href="#L247">247</a></td>
+<td class="hits">687</td>
+<td class="source"><code>  defp read_identifier(bin), do: read_word(bin)</code></td>
+</tr>
+<tr>
+<td class="line" id="L248"><a href="#L248">248</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L249"><a href="#L249">249</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Classify a bare word</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L250"><a href="#L250">250</a></td>
+<td class="hits">1264</td>
+<td class="source"><code>  defp classify_word(word) when word in @skip_words, do: :skip</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L251"><a href="#L251">251</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp classify_word(""), do: :skip</code></td>
+</tr>
+<tr>
+<td class="line" id="L252"><a href="#L252">252</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L253"><a href="#L253">253</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp classify_word(word) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L254"><a href="#L254">254</a></td>
+<td class="hits">5642</td>
+<td class="source"><code>    case Map.get(@keywords, word) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L255"><a href="#L255">255</a></td>
+<td class="hits">103</td>
+<td class="source"><code>      nil -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L256"><a href="#L256">256</a></td>
+<td class="hits"></td>
+<td class="source"><code>        # Emit unknown identifiers as {:name, word} — required for bare</code></td>
+</tr>
+<tr>
+<td class="line" id="L257"><a href="#L257">257</a></td>
+<td class="hits"></td>
+<td class="source"><code>        # `NAME usecmap` patterns (usecmap without a leading slash).</code></td>
+</tr>
+<tr>
+<td class="line" id="L258"><a href="#L258">258</a></td>
+<td class="hits"></td>
+<td class="source"><code>        {:name, word}</code></td>
+</tr>
+<tr>
+<td class="line" id="L259"><a href="#L259">259</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L260"><a href="#L260">260</a></td>
+<td class="hits">5539</td>
+<td class="source"><code>      kw -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L261"><a href="#L261">261</a></td>
+<td class="hits"></td>
+<td class="source"><code>        {:keyword, kw}</code></td>
+</tr>
+<tr>
+<td class="line" id="L262"><a href="#L262">262</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L263"><a href="#L263">263</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L264"><a href="#L264">264</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L265"><a href="#L265">265</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L266"><a href="#L266">266</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Dispatcher — walks token list and calls handlers when keywords are found</code></td>
+</tr>
+<tr>
+<td class="line" id="L267"><a href="#L267">267</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L268"><a href="#L268">268</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L269"><a href="#L269">269</a></td>
+<td class="hits">70</td>
+<td class="source"><code>  defp dispatch([], acc), do: acc</code></td>
+</tr>
+<tr>
+<td class="line" id="L270"><a href="#L270">270</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L271"><a href="#L271">271</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # usecmap — look-ahead: NAME usecmap or /NAME usecmap</code></td>
+</tr>
+<tr>
+<td class="line" id="L272"><a href="#L272">272</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Both produce {:name, name} in the token stream; match the pair.</code></td>
+</tr>
+<tr>
+<td class="line" id="L273"><a href="#L273">273</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp dispatch([{:name, name}, {:keyword, :usecmap} | rest], acc) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L274"><a href="#L274">274</a></td>
+<td class="hits">14</td>
+<td class="source"><code>    dispatch(rest, %{acc | parent: name})</code></td>
+</tr>
+<tr>
+<td class="line" id="L275"><a href="#L275">275</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L276"><a href="#L276">276</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L277"><a href="#L277">277</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Bare usecmap without a preceding name token (malformed or unparseable context) — skip</code></td>
+</tr>
+<tr>
+<td class="line" id="L278"><a href="#L278">278</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp dispatch([{:keyword, :usecmap} | rest], acc) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L279"><a href="#L279">279</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    dispatch(rest, acc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L280"><a href="#L280">280</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L281"><a href="#L281">281</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L282"><a href="#L282">282</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # begincodespacerange</code></td>
+</tr>
+<tr>
+<td class="line" id="L283"><a href="#L283">283</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp dispatch([{:keyword, :begincodespacerange} | rest], acc) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L284"><a href="#L284">284</a></td>
+<td class="hits">44</td>
+<td class="source"><code>    {entries, rest2} = collect_until(rest, :endcodespacerange)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L285"><a href="#L285">285</a></td>
+<td class="hits">44</td>
+<td class="source"><code>    new_codespaces = handle_codespacerange(entries, acc.codespaces)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L286"><a href="#L286">286</a></td>
+<td class="hits">44</td>
+<td class="source"><code>    dispatch(rest2, %{acc | codespaces: new_codespaces})</code></td>
+</tr>
+<tr>
+<td class="line" id="L287"><a href="#L287">287</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L288"><a href="#L288">288</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L289"><a href="#L289">289</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # begincidchar</code></td>
+</tr>
+<tr>
+<td class="line" id="L290"><a href="#L290">290</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp dispatch([{:keyword, :begincidchar} | rest], acc) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L291"><a href="#L291">291</a></td>
+<td class="hits">2157</td>
+<td class="source"><code>    {entries, rest2} = collect_until(rest, :endcidchar)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L292"><a href="#L292">292</a></td>
+<td class="hits">2157</td>
+<td class="source"><code>    new_cidchar = handle_cidchar(entries, acc.cidchar)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L293"><a href="#L293">293</a></td>
+<td class="hits">2157</td>
+<td class="source"><code>    dispatch(rest2, %{acc | cidchar: new_cidchar})</code></td>
+</tr>
+<tr>
+<td class="line" id="L294"><a href="#L294">294</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L295"><a href="#L295">295</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L296"><a href="#L296">296</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # begincidrange</code></td>
+</tr>
+<tr>
+<td class="line" id="L297"><a href="#L297">297</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp dispatch([{:keyword, :begincidrange} | rest], acc) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L298"><a href="#L298">298</a></td>
+<td class="hits">522</td>
+<td class="source"><code>    {entries, rest2} = collect_until(rest, :endcidrange)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L299"><a href="#L299">299</a></td>
+<td class="hits">522</td>
+<td class="source"><code>    new_cidrange = handle_cidrange(entries, acc.cidrange)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L300"><a href="#L300">300</a></td>
+<td class="hits">522</td>
+<td class="source"><code>    dispatch(rest2, %{acc | cidrange: new_cidrange})</code></td>
+</tr>
+<tr>
+<td class="line" id="L301"><a href="#L301">301</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L302"><a href="#L302">302</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L303"><a href="#L303">303</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # beginnotdefchar</code></td>
+</tr>
+<tr>
+<td class="line" id="L304"><a href="#L304">304</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp dispatch([{:keyword, :beginnotdefchar} | rest], acc) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L305"><a href="#L305">305</a></td>
+<td class="hits">1</td>
+<td class="source"><code>    {entries, rest2} = collect_until(rest, :endnotdefchar)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L306"><a href="#L306">306</a></td>
+<td class="hits">1</td>
+<td class="source"><code>    new_notdef = handle_cidchar(entries, acc.notdef_chars)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L307"><a href="#L307">307</a></td>
+<td class="hits">1</td>
+<td class="source"><code>    dispatch(rest2, %{acc | notdef_chars: new_notdef})</code></td>
+</tr>
+<tr>
+<td class="line" id="L308"><a href="#L308">308</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L309"><a href="#L309">309</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L310"><a href="#L310">310</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # beginnotdefrange</code></td>
+</tr>
+<tr>
+<td class="line" id="L311"><a href="#L311">311</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp dispatch([{:keyword, :beginnotdefrange} | rest], acc) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L312"><a href="#L312">312</a></td>
+<td class="hits">39</td>
+<td class="source"><code>    {entries, rest2} = collect_until(rest, :endnotdefrange)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L313"><a href="#L313">313</a></td>
+<td class="hits">39</td>
+<td class="source"><code>    new_notdef_ranges = handle_cidrange(entries, acc.notdef_ranges)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L314"><a href="#L314">314</a></td>
+<td class="hits">39</td>
+<td class="source"><code>    dispatch(rest2, %{acc | notdef_ranges: new_notdef_ranges})</code></td>
+</tr>
+<tr>
+<td class="line" id="L315"><a href="#L315">315</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L316"><a href="#L316">316</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L317"><a href="#L317">317</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # int token before a begin* — count; skip it</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L318"><a href="#L318">318</a></td>
+<td class="hits">3030</td>
+<td class="source"><code>  defp dispatch([{:int, _n} | rest], acc), do: dispatch(rest, acc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L319"><a href="#L319">319</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L320"><a href="#L320">320</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # lone name token without usecmap following — skip</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L321"><a href="#L321">321</a></td>
+<td class="hits">776</td>
+<td class="source"><code>  defp dispatch([{:name, _} | rest], acc), do: dispatch(rest, acc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L322"><a href="#L322">322</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L323"><a href="#L323">323</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # anything else — skip</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L324"><a href="#L324">324</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp dispatch([_token | rest], acc), do: dispatch(rest, acc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L325"><a href="#L325">325</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L326"><a href="#L326">326</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L327"><a href="#L327">327</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Collect tokens between begin* and end* keywords</code></td>
+</tr>
+<tr>
+<td class="line" id="L328"><a href="#L328">328</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L329"><a href="#L329">329</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L330"><a href="#L330">330</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp collect_until(tokens, end_keyword) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L331"><a href="#L331">331</a></td>
+<td class="hits">2763</td>
+<td class="source"><code>    collect_until(tokens, end_keyword, [])</code></td>
+</tr>
+<tr>
+<td class="line" id="L332"><a href="#L332">332</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L333"><a href="#L333">333</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L334"><a href="#L334">334</a></td>
+<td class="hits">1</td>
+<td class="source"><code>  defp collect_until([], _end_kw, acc), do: {Enum.reverse(acc), []}</code></td>
+</tr>
+<tr>
+<td class="line" id="L335"><a href="#L335">335</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L336"><a href="#L336">336</a></td>
+<td class="hits">2762</td>
+<td class="source"><code>  defp collect_until([{:keyword, end_kw} | rest], end_kw, acc) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L337"><a href="#L337">337</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {Enum.reverse(acc), rest}</code></td>
+</tr>
+<tr>
+<td class="line" id="L338"><a href="#L338">338</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L339"><a href="#L339">339</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L340"><a href="#L340">340</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp collect_until([token | rest], end_kw, acc) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L341"><a href="#L341">341</a></td>
+<td class="hits">576299</td>
+<td class="source"><code>    collect_until(rest, end_kw, [token | acc])</code></td>
+</tr>
+<tr>
+<td class="line" id="L342"><a href="#L342">342</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L343"><a href="#L343">343</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L344"><a href="#L344">344</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L345"><a href="#L345">345</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Operator handlers</code></td>
+</tr>
+<tr>
+<td class="line" id="L346"><a href="#L346">346</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L347"><a href="#L347">347</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L348"><a href="#L348">348</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # codespacerange: pairs of hex lo/hi, grouped by byte length of lo</code></td>
+</tr>
+<tr>
+<td class="line" id="L349"><a href="#L349">349</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp handle_codespacerange(tokens, codespaces) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L350"><a href="#L350">350</a></td>
+<td class="hits">44</td>
+<td class="source"><code>    pairs = collect_hex_pairs(tokens)</code></td>
+</tr>
+<tr>
+<td class="line" id="L351"><a href="#L351">351</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L352"><a href="#L352">352</a></td>
+<td class="hits">44</td>
+<td class="source"><code>    Enum.reduce(pairs, codespaces, fn {lo_bytes, hi_bytes}, cs -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L353"><a href="#L353">353</a></td>
+<td class="hits">117</td>
+<td class="source"><code>      len = byte_size(lo_bytes)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L354"><a href="#L354">354</a></td>
+<td class="hits">117</td>
+<td class="source"><code>      lo = bytes_to_integer(lo_bytes)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L355"><a href="#L355">355</a></td>
+<td class="hits">117</td>
+<td class="source"><code>      hi = bytes_to_integer(hi_bytes)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L356"><a href="#L356">356</a></td>
+<td class="hits">117</td>
+<td class="source"><code>      Map.update(cs, len, [{lo, hi}], fn existing -&gt; existing ++ [{lo, hi}] end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L357"><a href="#L357">357</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L358"><a href="#L358">358</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L359"><a href="#L359">359</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L360"><a href="#L360">360</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # cidchar: pairs of hex_code, int_cid</code></td>
+</tr>
+<tr>
+<td class="line" id="L361"><a href="#L361">361</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp handle_cidchar(tokens, cidchar) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L362"><a href="#L362">362</a></td>
+<td class="hits"></td>
+<td class="source"><code>    collect_hex_int_pairs(tokens)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L363"><a href="#L363">363</a></td>
+<td class="hits">2158</td>
+<td class="source"><code>    |&gt; Enum.reduce(cidchar, fn {code_bytes, cid}, map -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L364"><a href="#L364">364</a></td>
+<td class="hits">213265</td>
+<td class="source"><code>      code = bytes_to_integer(code_bytes)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L365"><a href="#L365">365</a></td>
+<td class="hits">213265</td>
+<td class="source"><code>      Map.put(map, code, cid)</code></td>
+</tr>
+<tr>
+<td class="line" id="L366"><a href="#L366">366</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L367"><a href="#L367">367</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L368"><a href="#L368">368</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L369"><a href="#L369">369</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # cidrange: triples of hex_lo, hex_hi, int_base_cid</code></td>
+</tr>
+<tr>
+<td class="line" id="L370"><a href="#L370">370</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp handle_cidrange(tokens, cidrange) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L371"><a href="#L371">371</a></td>
+<td class="hits"></td>
+<td class="source"><code>    collect_hex_hex_int_triples(tokens)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L372"><a href="#L372">372</a></td>
+<td class="hits">561</td>
+<td class="source"><code>    |&gt; Enum.reduce(cidrange, fn {lo_bytes, hi_bytes, base_cid}, list -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L373"><a href="#L373">373</a></td>
+<td class="hits">49845</td>
+<td class="source"><code>      lo = bytes_to_integer(lo_bytes)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L374"><a href="#L374">374</a></td>
+<td class="hits">49845</td>
+<td class="source"><code>      hi = bytes_to_integer(hi_bytes)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L375"><a href="#L375">375</a></td>
+<td class="hits">49845</td>
+<td class="source"><code>      list ++ [{lo, hi, base_cid}]</code></td>
+</tr>
+<tr>
+<td class="line" id="L376"><a href="#L376">376</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L377"><a href="#L377">377</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L378"><a href="#L378">378</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L379"><a href="#L379">379</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L380"><a href="#L380">380</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Token collection helpers</code></td>
+</tr>
+<tr>
+<td class="line" id="L381"><a href="#L381">381</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L382"><a href="#L382">382</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L383"><a href="#L383">383</a></td>
+<td class="hits">44</td>
+<td class="source"><code>  defp collect_hex_pairs(tokens), do: collect_hex_pairs(tokens, [])</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L384"><a href="#L384">384</a></td>
+<td class="hits">44</td>
+<td class="source"><code>  defp collect_hex_pairs([], acc), do: Enum.reverse(acc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L385"><a href="#L385">385</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L386"><a href="#L386">386</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp collect_hex_pairs([{:hex, lo}, {:hex, hi} | rest], acc) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L387"><a href="#L387">387</a></td>
+<td class="hits">117</td>
+<td class="source"><code>    collect_hex_pairs(rest, [{lo, hi} | acc])</code></td>
+</tr>
+<tr>
+<td class="line" id="L388"><a href="#L388">388</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L389"><a href="#L389">389</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L390"><a href="#L390">390</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Skip stray int tokens (the N count leaks here sometimes)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L391"><a href="#L391">391</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp collect_hex_pairs([{:int, _} | rest], acc), do: collect_hex_pairs(rest, acc)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L392"><a href="#L392">392</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp collect_hex_pairs([_other | rest], acc), do: collect_hex_pairs(rest, acc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L393"><a href="#L393">393</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L394"><a href="#L394">394</a></td>
+<td class="hits">2158</td>
+<td class="source"><code>  defp collect_hex_int_pairs(tokens), do: collect_hex_int_pairs(tokens, [])</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L395"><a href="#L395">395</a></td>
+<td class="hits">2158</td>
+<td class="source"><code>  defp collect_hex_int_pairs([], acc), do: Enum.reverse(acc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L396"><a href="#L396">396</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L397"><a href="#L397">397</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp collect_hex_int_pairs([{:hex, code}, {:int, cid} | rest], acc) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L398"><a href="#L398">398</a></td>
+<td class="hits">213265</td>
+<td class="source"><code>    collect_hex_int_pairs(rest, [{code, cid} | acc])</code></td>
+</tr>
+<tr>
+<td class="line" id="L399"><a href="#L399">399</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L400"><a href="#L400">400</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L401"><a href="#L401">401</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp collect_hex_int_pairs([_other | rest], acc), do: collect_hex_int_pairs(rest, acc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L402"><a href="#L402">402</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L403"><a href="#L403">403</a></td>
+<td class="hits">561</td>
+<td class="source"><code>  defp collect_hex_hex_int_triples(tokens), do: collect_hex_hex_int_triples(tokens, [])</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L404"><a href="#L404">404</a></td>
+<td class="hits">561</td>
+<td class="source"><code>  defp collect_hex_hex_int_triples([], acc), do: Enum.reverse(acc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L405"><a href="#L405">405</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L406"><a href="#L406">406</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp collect_hex_hex_int_triples([{:hex, lo}, {:hex, hi}, {:int, base} | rest], acc) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L407"><a href="#L407">407</a></td>
+<td class="hits">49845</td>
+<td class="source"><code>    collect_hex_hex_int_triples(rest, [{lo, hi, base} | acc])</code></td>
+</tr>
+<tr>
+<td class="line" id="L408"><a href="#L408">408</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L409"><a href="#L409">409</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L410"><a href="#L410">410</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp collect_hex_hex_int_triples([_other | rest], acc),</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L411"><a href="#L411">411</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    do: collect_hex_hex_int_triples(rest, acc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L412"><a href="#L412">412</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L413"><a href="#L413">413</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L414"><a href="#L414">414</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Byte helpers</code></td>
+</tr>
+<tr>
+<td class="line" id="L415"><a href="#L415">415</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L416"><a href="#L416">416</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L417"><a href="#L417">417</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp bytes_to_integer(bytes) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L418"><a href="#L418">418</a></td>
+<td class="hits"></td>
+<td class="source"><code>    bytes</code></td>
+</tr>
+<tr>
+<td class="line" id="L419"><a href="#L419">419</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; :binary.bin_to_list()</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L420"><a href="#L420">420</a></td>
+<td class="hits">313189</td>
+<td class="source"><code>    |&gt; Enum.reduce(0, fn byte, acc -&gt; acc * 256 + byte end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L421"><a href="#L421">421</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L422"><a href="#L422">422</a></td>
+<td class="hits"></td>
+<td class="source"><code>end</code></td>
+</tr>
+</tbody>
+<thead>
+<tr>
+<th>Line</th>
+<th>Hits</th>
+<th>Source</th>
+</tr>
+</thead>
+</table>
+</body>
+</html>

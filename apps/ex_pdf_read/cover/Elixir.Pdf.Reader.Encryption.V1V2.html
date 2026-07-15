@@ -1,0 +1,1899 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>cover/Elixir.Pdf.Reader.Encryption.V1V2.html</title>
+<style>body {
+  font: 14px/1.6 "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #000;
+  border-top: 2px solid #ddd;
+  background-color: #fff;
+
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+h1 {
+  width: 100%;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 0;
+  font-weight: 100;
+  font-size: 1.1em;
+  letter-spacing: 1px;
+}
+
+h1 code {
+  font-size: 0.96em;
+}
+
+code {
+  font: 12px monospace;
+}
+
+footer {
+  background: #eee;
+  width: 100%;
+  padding: 10px 0;
+  text-align: right;
+  border-top: 1px solid #ddd;
+  display: flex;
+  flex: 1;
+  order: 2;
+  justify-content: center;
+}
+
+table {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: collapse;
+  border: 1px solid #cbcbcb;
+  color: #000;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+}
+table thead {
+  display: none;
+}
+table td.line,
+table td.line a,
+table td.hits {
+  width: 20px;
+  background: #eaeaea;
+  text-align: center;
+  text-decoration: none;
+  font-size: 11px;
+  padding: 0 10px;
+  color: #949494;
+}
+table td.hits {
+  width: 10px;
+  text-align: right;
+  padding: 2px 5px;
+  color: rgba(0, 0, 0, 0.6);
+  background-color: #f0f0f0;
+}
+tr.miss td.line,
+tr.miss td.line a,
+tr.miss td.hits {
+  background-color: #ffdce0;
+  border-color: #fdaeb7;
+}
+tr.miss td {
+  background-color: #ffeef0;
+}
+tr.hit td.line,
+tr.hit td.line a,
+tr.hit td.hits {
+  background-color: #cdffd8;
+  border-color: #bef5cb;
+}
+tr.hit td {
+  background-color: #e6ffed;
+}
+td.source {
+  padding-left: 15px;
+  line-height: 15px;
+  white-space: pre;
+  font: 12px monospace;
+}
+</style>
+</head>
+<body>
+<h1><code>cover/Elixir.Pdf.Reader.Encryption.V1V2.html</code></h1>
+<footer><p>File generated from <code>/Users/amir/Documents/proyectos/recreando/elixir-pdf/apps/ex_pdf_read/lib/pdf/reader/encryption/v1v2.ex</code> by <a href="http://erlang.org/doc/man/cover.html">cover</a> at 2026-05-27 at 22:52:54</p></footer>
+<table>
+<tbody>
+<tr>
+<td class="line" id="L1"><a href="#L1">1</a></td>
+<td class="hits"></td>
+<td class="source"><code>defmodule Pdf.Reader.Encryption.V1V2 do</code></td>
+</tr>
+<tr>
+<td class="line" id="L2"><a href="#L2">2</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @moduledoc """</code></td>
+</tr>
+<tr>
+<td class="line" id="L3"><a href="#L3">3</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Implements PDF Standard Security Handler algorithms for V1 (RC4-40) and</code></td>
+</tr>
+<tr>
+<td class="line" id="L4"><a href="#L4">4</a></td>
+<td class="hits"></td>
+<td class="source"><code>  V2 (RC4-128) — revisions R=2 and R=3/4.</code></td>
+</tr>
+<tr>
+<td class="line" id="L5"><a href="#L5">5</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L6"><a href="#L6">6</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Algorithms implemented</code></td>
+</tr>
+<tr>
+<td class="line" id="L7"><a href="#L7">7</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L8"><a href="#L8">8</a></td>
+<td class="hits"></td>
+<td class="source"><code>  | Algorithm | Description                                              | Function             |</code></td>
+</tr>
+<tr>
+<td class="line" id="L9"><a href="#L9">9</a></td>
+<td class="hits"></td>
+<td class="source"><code>  |-----------|----------------------------------------------------------|----------------------|</code></td>
+</tr>
+<tr>
+<td class="line" id="L10"><a href="#L10">10</a></td>
+<td class="hits"></td>
+<td class="source"><code>  | Alg 2     | File encryption key derivation (MD5 + optional 50×)     | `derive_file_key/2`  |</code></td>
+</tr>
+<tr>
+<td class="line" id="L11"><a href="#L11">11</a></td>
+<td class="hits"></td>
+<td class="source"><code>  | Alg 4     | User password auth for R=2 (RC4 of pad constant)        | `authenticate_user/2`|</code></td>
+</tr>
+<tr>
+<td class="line" id="L12"><a href="#L12">12</a></td>
+<td class="hits"></td>
+<td class="source"><code>  | Alg 5     | User password auth for R≥3 (RC4 with 19-step iterations)| `authenticate_user/2`|</code></td>
+</tr>
+<tr>
+<td class="line" id="L13"><a href="#L13">13</a></td>
+<td class="hits"></td>
+<td class="source"><code>  | Alg 7     | Owner → user password derivation                        | `derive_user_from_owner/2` |</code></td>
+</tr>
+<tr>
+<td class="line" id="L14"><a href="#L14">14</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L15"><a href="#L15">15</a></td>
+<td class="hits"></td>
+<td class="source"><code>  All public functions perform an RC4 availability check first.  On systems</code></td>
+</tr>
+<tr>
+<td class="line" id="L16"><a href="#L16">16</a></td>
+<td class="hits"></td>
+<td class="source"><code>  where `:rc4` is not in `:crypto.supports(:ciphers)` (e.g. OpenSSL 3.x with</code></td>
+</tr>
+<tr>
+<td class="line" id="L17"><a href="#L17">17</a></td>
+<td class="hits"></td>
+<td class="source"><code>  FIPS mode), every function returns `{:error, :encrypted_unsupported_handler}`</code></td>
+</tr>
+<tr>
+<td class="line" id="L18"><a href="#L18">18</a></td>
+<td class="hits"></td>
+<td class="source"><code>  rather than crashing.</code></td>
+</tr>
+<tr>
+<td class="line" id="L19"><a href="#L19">19</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L20"><a href="#L20">20</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Algorithm 2 — File Encryption Key (PDF 1.7 § 7.6.3.3, step a–h)</code></td>
+</tr>
+<tr>
+<td class="line" id="L21"><a href="#L21">21</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L22"><a href="#L22">22</a></td>
+<td class="hits"></td>
+<td class="source"><code>  1. Pad the user password to 32 bytes via `PasswordPad.pad/1`.</code></td>
+</tr>
+<tr>
+<td class="line" id="L23"><a href="#L23">23</a></td>
+<td class="hits"></td>
+<td class="source"><code>  2. MD5 streaming: hash(padded_pw ++ /O ++ &lt;&lt;P::little-32&gt;&gt; ++ /ID[0]).</code></td>
+</tr>
+<tr>
+<td class="line" id="L24"><a href="#L24">24</a></td>
+<td class="hits"></td>
+<td class="source"><code>  3. If R ≥ 4 and `encrypt_metadata == false`, append `&lt;&lt;0xFF,0xFF,0xFF,0xFF&gt;&gt;`.</code></td>
+</tr>
+<tr>
+<td class="line" id="L25"><a href="#L25">25</a></td>
+<td class="hits"></td>
+<td class="source"><code>  4. If R ≥ 3, iterate MD5 × 50 on the first `key_len` bytes of the digest.</code></td>
+</tr>
+<tr>
+<td class="line" id="L26"><a href="#L26">26</a></td>
+<td class="hits"></td>
+<td class="source"><code>  5. Truncate to first `key_len = Length / 8` bytes (min 5 for V1).</code></td>
+</tr>
+<tr>
+<td class="line" id="L27"><a href="#L27">27</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L28"><a href="#L28">28</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Algorithm 4 — User Auth for R=2</code></td>
+</tr>
+<tr>
+<td class="line" id="L29"><a href="#L29">29</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L30"><a href="#L30">30</a></td>
+<td class="hits"></td>
+<td class="source"><code>  1. Derive file key via Algorithm 2.</code></td>
+</tr>
+<tr>
+<td class="line" id="L31"><a href="#L31">31</a></td>
+<td class="hits"></td>
+<td class="source"><code>  2. RC4-encrypt the 32-byte padding constant with the file key.</code></td>
+</tr>
+<tr>
+<td class="line" id="L32"><a href="#L32">32</a></td>
+<td class="hits"></td>
+<td class="source"><code>  3. Compare result byte-for-byte with /U (32 bytes).</code></td>
+</tr>
+<tr>
+<td class="line" id="L33"><a href="#L33">33</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L34"><a href="#L34">34</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Algorithm 5 — User Auth for R≥3</code></td>
+</tr>
+<tr>
+<td class="line" id="L35"><a href="#L35">35</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L36"><a href="#L36">36</a></td>
+<td class="hits"></td>
+<td class="source"><code>  1. Derive file key via Algorithm 2.</code></td>
+</tr>
+<tr>
+<td class="line" id="L37"><a href="#L37">37</a></td>
+<td class="hits"></td>
+<td class="source"><code>  2. MD5(padding_constant ++ /ID[0]) → 16 bytes.</code></td>
+</tr>
+<tr>
+<td class="line" id="L38"><a href="#L38">38</a></td>
+<td class="hits"></td>
+<td class="source"><code>  3. RC4-encrypt those 16 bytes with the file key.</code></td>
+</tr>
+<tr>
+<td class="line" id="L39"><a href="#L39">39</a></td>
+<td class="hits"></td>
+<td class="source"><code>  4. For i in 1..19: XOR each byte of file_key with i → RC4-encrypt previous result.</code></td>
+</tr>
+<tr>
+<td class="line" id="L40"><a href="#L40">40</a></td>
+<td class="hits"></td>
+<td class="source"><code>  5. Compare final 16 bytes to the first 16 bytes of /U.</code></td>
+</tr>
+<tr>
+<td class="line" id="L41"><a href="#L41">41</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L42"><a href="#L42">42</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Algorithm 7 — Owner → User Password</code></td>
+</tr>
+<tr>
+<td class="line" id="L43"><a href="#L43">43</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L44"><a href="#L44">44</a></td>
+<td class="hits"></td>
+<td class="source"><code>  1. Pad the owner password to 32 bytes.</code></td>
+</tr>
+<tr>
+<td class="line" id="L45"><a href="#L45">45</a></td>
+<td class="hits"></td>
+<td class="source"><code>  2. MD5 it; if R ≥ 3, iterate MD5 × 50 on the full 16 bytes.</code></td>
+</tr>
+<tr>
+<td class="line" id="L46"><a href="#L46">46</a></td>
+<td class="hits"></td>
+<td class="source"><code>  3. Truncate to `key_len` bytes → this becomes the RC4 key.</code></td>
+</tr>
+<tr>
+<td class="line" id="L47"><a href="#L47">47</a></td>
+<td class="hits"></td>
+<td class="source"><code>  4. For R=2: RC4-decrypt /O once.</code></td>
+</tr>
+<tr>
+<td class="line" id="L48"><a href="#L48">48</a></td>
+<td class="hits"></td>
+<td class="source"><code>  5. For R≥3: 20 iterative RC4 passes in reverse order (i=19 down to 0),</code></td>
+</tr>
+<tr>
+<td class="line" id="L49"><a href="#L49">49</a></td>
+<td class="hits"></td>
+<td class="source"><code>     XORing each key byte with i.</code></td>
+</tr>
+<tr>
+<td class="line" id="L50"><a href="#L50">50</a></td>
+<td class="hits"></td>
+<td class="source"><code>  6. The result is the padded user password.  Feed it to `authenticate_user/2`.</code></td>
+</tr>
+<tr>
+<td class="line" id="L51"><a href="#L51">51</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L52"><a href="#L52">52</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Spec references</code></td>
+</tr>
+<tr>
+<td class="line" id="L53"><a href="#L53">53</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - PDF 1.7 (ISO 32000-1) § 7.6.3.3 — Algorithms 2, 4, 5, 7:</code></td>
+</tr>
+<tr>
+<td class="line" id="L54"><a href="#L54">54</a></td>
+<td class="hits"></td>
+<td class="source"><code>    https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf</code></td>
+</tr>
+<tr>
+<td class="line" id="L55"><a href="#L55">55</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - RFC 1321 (MD5):</code></td>
+</tr>
+<tr>
+<td class="line" id="L56"><a href="#L56">56</a></td>
+<td class="hits"></td>
+<td class="source"><code>    https://www.rfc-editor.org/rfc/rfc1321.html</code></td>
+</tr>
+<tr>
+<td class="line" id="L57"><a href="#L57">57</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - Mozilla pdf.js src/core/crypto.js (Apache-2.0 reference implementation):</code></td>
+</tr>
+<tr>
+<td class="line" id="L58"><a href="#L58">58</a></td>
+<td class="hits"></td>
+<td class="source"><code>    https://github.com/mozilla/pdf.js/blob/master/src/core/crypto.js</code></td>
+</tr>
+<tr>
+<td class="line" id="L59"><a href="#L59">59</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - Erlang OTP `:crypto` algorithm details:</code></td>
+</tr>
+<tr>
+<td class="line" id="L60"><a href="#L60">60</a></td>
+<td class="hits"></td>
+<td class="source"><code>    https://www.erlang.org/docs/27/apps/crypto/algorithm_details</code></td>
+</tr>
+<tr>
+<td class="line" id="L61"><a href="#L61">61</a></td>
+<td class="hits"></td>
+<td class="source"><code>  """</code></td>
+</tr>
+<tr>
+<td class="line" id="L62"><a href="#L62">62</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L63"><a href="#L63">63</a></td>
+<td class="hits"></td>
+<td class="source"><code>  alias Pdf.Reader.Encryption.{ObjectKey, PasswordPad, StandardHandler}</code></td>
+</tr>
+<tr>
+<td class="line" id="L64"><a href="#L64">64</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L65"><a href="#L65">65</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L66"><a href="#L66">66</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Public API</code></td>
+</tr>
+<tr>
+<td class="line" id="L67"><a href="#L67">67</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L68"><a href="#L68">68</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L69"><a href="#L69">69</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @doc """</code></td>
+</tr>
+<tr>
+<td class="line" id="L70"><a href="#L70">70</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Decrypts a stream ciphertext blob using the V1/V2 RC4 algorithm.</code></td>
+</tr>
+<tr>
+<td class="line" id="L71"><a href="#L71">71</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L72"><a href="#L72">72</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Derives a per-object key from `handler.file_key`, `obj_num`, and `gen_num`</code></td>
+</tr>
+<tr>
+<td class="line" id="L73"><a href="#L73">73</a></td>
+<td class="hits"></td>
+<td class="source"><code>  using `ObjectKey.derive/4`, then applies RC4 decryption.</code></td>
+</tr>
+<tr>
+<td class="line" id="L74"><a href="#L74">74</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L75"><a href="#L75">75</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Parameters</code></td>
+</tr>
+<tr>
+<td class="line" id="L76"><a href="#L76">76</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L77"><a href="#L77">77</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `bytes` — the raw stream bytes (RC4 ciphertext).</code></td>
+</tr>
+<tr>
+<td class="line" id="L78"><a href="#L78">78</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `_stream_dict` — the stream dictionary (unused for V1/V2; kept for API symmetry with V4/V5).</code></td>
+</tr>
+<tr>
+<td class="line" id="L79"><a href="#L79">79</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `obj_num` — the PDF object number.</code></td>
+</tr>
+<tr>
+<td class="line" id="L80"><a href="#L80">80</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `gen_num` — the PDF generation number.</code></td>
+</tr>
+<tr>
+<td class="line" id="L81"><a href="#L81">81</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `handler` — a `%StandardHandler{}` with `:file_key` populated.</code></td>
+</tr>
+<tr>
+<td class="line" id="L82"><a href="#L82">82</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L83"><a href="#L83">83</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Returns</code></td>
+</tr>
+<tr>
+<td class="line" id="L84"><a href="#L84">84</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L85"><a href="#L85">85</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `{:ok, plaintext}` — successfully decrypted.</code></td>
+</tr>
+<tr>
+<td class="line" id="L86"><a href="#L86">86</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `{:error, :encrypted_unsupported_handler}` — RC4 not available at runtime.</code></td>
+</tr>
+<tr>
+<td class="line" id="L87"><a href="#L87">87</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L88"><a href="#L88">88</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Spec references</code></td>
+</tr>
+<tr>
+<td class="line" id="L89"><a href="#L89">89</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - PDF 1.7 (ISO 32000-1) § 7.6.2 — General Encryption Algorithm:</code></td>
+</tr>
+<tr>
+<td class="line" id="L90"><a href="#L90">90</a></td>
+<td class="hits"></td>
+<td class="source"><code>    https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf</code></td>
+</tr>
+<tr>
+<td class="line" id="L91"><a href="#L91">91</a></td>
+<td class="hits"></td>
+<td class="source"><code>  """</code></td>
+</tr>
+<tr>
+<td class="line" id="L92"><a href="#L92">92</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @spec decrypt_stream(binary(), map(), non_neg_integer(), non_neg_integer(), StandardHandler.t()) ::</code></td>
+</tr>
+<tr>
+<td class="line" id="L93"><a href="#L93">93</a></td>
+<td class="hits"></td>
+<td class="source"><code>          {:ok, binary()} | {:error, :encrypted_unsupported_handler}</code></td>
+</tr>
+<tr>
+<td class="line" id="L94"><a href="#L94">94</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def decrypt_stream(bytes, _stream_dict, obj_num, gen_num, %StandardHandler{} = handler)</code></td>
+</tr>
+<tr>
+<td class="line" id="L95"><a href="#L95">95</a></td>
+<td class="hits"></td>
+<td class="source"><code>      when is_binary(bytes) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L96"><a href="#L96">96</a></td>
+<td class="hits">2</td>
+<td class="source"><code>    with :ok &lt;- check_rc4() do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L97"><a href="#L97">97</a></td>
+<td class="hits">2</td>
+<td class="source"><code>      key = ObjectKey.derive(handler.file_key, obj_num, gen_num, :rc4)</code></td>
+</tr>
+<tr>
+<td class="line" id="L98"><a href="#L98">98</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {:ok, :crypto.crypto_one_time(:rc4, key, bytes, false)}</code></td>
+</tr>
+<tr>
+<td class="line" id="L99"><a href="#L99">99</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L100"><a href="#L100">100</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L101"><a href="#L101">101</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L102"><a href="#L102">102</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @doc """</code></td>
+</tr>
+<tr>
+<td class="line" id="L103"><a href="#L103">103</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Decrypts a string ciphertext using the V1/V2 RC4 algorithm.</code></td>
+</tr>
+<tr>
+<td class="line" id="L104"><a href="#L104">104</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L105"><a href="#L105">105</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Derives a per-object key from `handler.file_key`, `obj_num`, and `gen_num`</code></td>
+</tr>
+<tr>
+<td class="line" id="L106"><a href="#L106">106</a></td>
+<td class="hits"></td>
+<td class="source"><code>  using `ObjectKey.derive/4`, then applies RC4 decryption.</code></td>
+</tr>
+<tr>
+<td class="line" id="L107"><a href="#L107">107</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L108"><a href="#L108">108</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Parameters</code></td>
+</tr>
+<tr>
+<td class="line" id="L109"><a href="#L109">109</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L110"><a href="#L110">110</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `bytes` — the raw string bytes (RC4 ciphertext).</code></td>
+</tr>
+<tr>
+<td class="line" id="L111"><a href="#L111">111</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `obj_num` — the PDF object number.</code></td>
+</tr>
+<tr>
+<td class="line" id="L112"><a href="#L112">112</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `gen_num` — the PDF generation number.</code></td>
+</tr>
+<tr>
+<td class="line" id="L113"><a href="#L113">113</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `handler` — a `%StandardHandler{}` with `:file_key` populated.</code></td>
+</tr>
+<tr>
+<td class="line" id="L114"><a href="#L114">114</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L115"><a href="#L115">115</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Returns</code></td>
+</tr>
+<tr>
+<td class="line" id="L116"><a href="#L116">116</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L117"><a href="#L117">117</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `{:ok, plaintext}` — successfully decrypted.</code></td>
+</tr>
+<tr>
+<td class="line" id="L118"><a href="#L118">118</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `{:error, :encrypted_unsupported_handler}` — RC4 not available at runtime.</code></td>
+</tr>
+<tr>
+<td class="line" id="L119"><a href="#L119">119</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L120"><a href="#L120">120</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Spec references</code></td>
+</tr>
+<tr>
+<td class="line" id="L121"><a href="#L121">121</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - PDF 1.7 (ISO 32000-1) § 7.6.2 — General Encryption Algorithm:</code></td>
+</tr>
+<tr>
+<td class="line" id="L122"><a href="#L122">122</a></td>
+<td class="hits"></td>
+<td class="source"><code>    https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf</code></td>
+</tr>
+<tr>
+<td class="line" id="L123"><a href="#L123">123</a></td>
+<td class="hits"></td>
+<td class="source"><code>  """</code></td>
+</tr>
+<tr>
+<td class="line" id="L124"><a href="#L124">124</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @spec decrypt_string(binary(), non_neg_integer(), non_neg_integer(), StandardHandler.t()) ::</code></td>
+</tr>
+<tr>
+<td class="line" id="L125"><a href="#L125">125</a></td>
+<td class="hits"></td>
+<td class="source"><code>          {:ok, binary()} | {:error, :encrypted_unsupported_handler}</code></td>
+</tr>
+<tr>
+<td class="line" id="L126"><a href="#L126">126</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def decrypt_string(bytes, obj_num, gen_num, %StandardHandler{} = handler)</code></td>
+</tr>
+<tr>
+<td class="line" id="L127"><a href="#L127">127</a></td>
+<td class="hits"></td>
+<td class="source"><code>      when is_binary(bytes) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L128"><a href="#L128">128</a></td>
+<td class="hits">1</td>
+<td class="source"><code>    with :ok &lt;- check_rc4() do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L129"><a href="#L129">129</a></td>
+<td class="hits">1</td>
+<td class="source"><code>      key = ObjectKey.derive(handler.file_key, obj_num, gen_num, :rc4)</code></td>
+</tr>
+<tr>
+<td class="line" id="L130"><a href="#L130">130</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {:ok, :crypto.crypto_one_time(:rc4, key, bytes, false)}</code></td>
+</tr>
+<tr>
+<td class="line" id="L131"><a href="#L131">131</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L132"><a href="#L132">132</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L133"><a href="#L133">133</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L134"><a href="#L134">134</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @doc """</code></td>
+</tr>
+<tr>
+<td class="line" id="L135"><a href="#L135">135</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Derives the file encryption key for V1/V2/V4 using Algorithm 2.</code></td>
+</tr>
+<tr>
+<td class="line" id="L136"><a href="#L136">136</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L137"><a href="#L137">137</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Parameters</code></td>
+</tr>
+<tr>
+<td class="line" id="L138"><a href="#L138">138</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L139"><a href="#L139">139</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `password` — the plaintext user password (any length; padded/truncated internally).</code></td>
+</tr>
+<tr>
+<td class="line" id="L140"><a href="#L140">140</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `handler` — a `%StandardHandler{}` with `:revision`, `:length`, `:o`, `:p`,</code></td>
+</tr>
+<tr>
+<td class="line" id="L141"><a href="#L141">141</a></td>
+<td class="hits"></td>
+<td class="source"><code>    `:id`, and `:encrypt_metadata` populated.</code></td>
+</tr>
+<tr>
+<td class="line" id="L142"><a href="#L142">142</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L143"><a href="#L143">143</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Returns</code></td>
+</tr>
+<tr>
+<td class="line" id="L144"><a href="#L144">144</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L145"><a href="#L145">145</a></td>
+<td class="hits"></td>
+<td class="source"><code>  A binary of `handler.length / 8` bytes (e.g. 5 bytes for V1/R=2, 16 bytes for</code></td>
+</tr>
+<tr>
+<td class="line" id="L146"><a href="#L146">146</a></td>
+<td class="hits"></td>
+<td class="source"><code>  V2/R=3 with Length=128).</code></td>
+</tr>
+<tr>
+<td class="line" id="L147"><a href="#L147">147</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L148"><a href="#L148">148</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Does NOT check RC4 availability — the caller (`authenticate_user/2`) guards</code></td>
+</tr>
+<tr>
+<td class="line" id="L149"><a href="#L149">149</a></td>
+<td class="hits"></td>
+<td class="source"><code>  that.  Safe to call from tests or other modules that already checked.</code></td>
+</tr>
+<tr>
+<td class="line" id="L150"><a href="#L150">150</a></td>
+<td class="hits"></td>
+<td class="source"><code>  """</code></td>
+</tr>
+<tr>
+<td class="line" id="L151"><a href="#L151">151</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @spec derive_file_key(binary(), StandardHandler.t()) :: binary()</code></td>
+</tr>
+<tr>
+<td class="line" id="L152"><a href="#L152">152</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def derive_file_key(password, %StandardHandler{} = handler) when is_binary(password) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L153"><a href="#L153">153</a></td>
+<td class="hits">23</td>
+<td class="source"><code>    key_len = key_length(handler)</code></td>
+</tr>
+<tr>
+<td class="line" id="L154"><a href="#L154">154</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L155"><a href="#L155">155</a></td>
+<td class="hits">23</td>
+<td class="source"><code>    padded_pw = PasswordPad.pad(password)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L156"><a href="#L156">156</a></td>
+<td class="hits">23</td>
+<td class="source"><code>    p_le = &lt;&lt;handler.p::little-32&gt;&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L157"><a href="#L157">157</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L158"><a href="#L158">158</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # Streaming MD5: padded_pw ++ /O ++ P_le ++ /ID[0]</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L159"><a href="#L159">159</a></td>
+<td class="hits">23</td>
+<td class="source"><code>    hash =</code></td>
+</tr>
+<tr>
+<td class="line" id="L160"><a href="#L160">160</a></td>
+<td class="hits"></td>
+<td class="source"><code>      :crypto.hash_init(:md5)</code></td>
+</tr>
+<tr>
+<td class="line" id="L161"><a href="#L161">161</a></td>
+<td class="hits"></td>
+<td class="source"><code>      |&gt; :crypto.hash_update(padded_pw)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L162"><a href="#L162">162</a></td>
+<td class="hits">23</td>
+<td class="source"><code>      |&gt; :crypto.hash_update(handler.o)</code></td>
+</tr>
+<tr>
+<td class="line" id="L163"><a href="#L163">163</a></td>
+<td class="hits"></td>
+<td class="source"><code>      |&gt; :crypto.hash_update(p_le)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L164"><a href="#L164">164</a></td>
+<td class="hits">23</td>
+<td class="source"><code>      |&gt; :crypto.hash_update(handler.id)</code></td>
+</tr>
+<tr>
+<td class="line" id="L165"><a href="#L165">165</a></td>
+<td class="hits"></td>
+<td class="source"><code>      |&gt; maybe_append_metadata_flag(handler)</code></td>
+</tr>
+<tr>
+<td class="line" id="L166"><a href="#L166">166</a></td>
+<td class="hits"></td>
+<td class="source"><code>      |&gt; :crypto.hash_final()</code></td>
+</tr>
+<tr>
+<td class="line" id="L167"><a href="#L167">167</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L168"><a href="#L168">168</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # R &gt;= 3: iterate MD5 × 50 on first key_len bytes</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L169"><a href="#L169">169</a></td>
+<td class="hits">23</td>
+<td class="source"><code>    key = maybe_iterate(hash, handler.revision, key_len)</code></td>
+</tr>
+<tr>
+<td class="line" id="L170"><a href="#L170">170</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L171"><a href="#L171">171</a></td>
+<td class="hits">23</td>
+<td class="source"><code>    binary_part(key, 0, key_len)</code></td>
+</tr>
+<tr>
+<td class="line" id="L172"><a href="#L172">172</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L173"><a href="#L173">173</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L174"><a href="#L174">174</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @doc """</code></td>
+</tr>
+<tr>
+<td class="line" id="L175"><a href="#L175">175</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Authenticates a user password against the `/U` value in the handler.</code></td>
+</tr>
+<tr>
+<td class="line" id="L176"><a href="#L176">176</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L177"><a href="#L177">177</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Uses Algorithm 4 for R=2 and Algorithm 5 for R≥3.</code></td>
+</tr>
+<tr>
+<td class="line" id="L178"><a href="#L178">178</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L179"><a href="#L179">179</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Returns</code></td>
+</tr>
+<tr>
+<td class="line" id="L180"><a href="#L180">180</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L181"><a href="#L181">181</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `{:ok, file_key}` — password authenticated; `file_key` is the derived</code></td>
+</tr>
+<tr>
+<td class="line" id="L182"><a href="#L182">182</a></td>
+<td class="hits"></td>
+<td class="source"><code>    file encryption key (5 bytes for V1, up to 16 bytes for V2/V4).</code></td>
+</tr>
+<tr>
+<td class="line" id="L183"><a href="#L183">183</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `:error` — authentication failed (wrong password).</code></td>
+</tr>
+<tr>
+<td class="line" id="L184"><a href="#L184">184</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `{:error, :encrypted_unsupported_handler}` — RC4 not available on this</code></td>
+</tr>
+<tr>
+<td class="line" id="L185"><a href="#L185">185</a></td>
+<td class="hits"></td>
+<td class="source"><code>    runtime (per R-ENC29 / S-ENC14).</code></td>
+</tr>
+<tr>
+<td class="line" id="L186"><a href="#L186">186</a></td>
+<td class="hits"></td>
+<td class="source"><code>  """</code></td>
+</tr>
+<tr>
+<td class="line" id="L187"><a href="#L187">187</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @spec authenticate_user(binary(), StandardHandler.t()) ::</code></td>
+</tr>
+<tr>
+<td class="line" id="L188"><a href="#L188">188</a></td>
+<td class="hits"></td>
+<td class="source"><code>          {:ok, binary()} | :error | {:error, :encrypted_unsupported_handler}</code></td>
+</tr>
+<tr>
+<td class="line" id="L189"><a href="#L189">189</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def authenticate_user(password, %StandardHandler{} = handler) when is_binary(password) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L190"><a href="#L190">190</a></td>
+<td class="hits">18</td>
+<td class="source"><code>    with :ok &lt;- check_rc4() do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L191"><a href="#L191">191</a></td>
+<td class="hits">18</td>
+<td class="source"><code>      file_key = derive_file_key(password, handler)</code></td>
+</tr>
+<tr>
+<td class="line" id="L192"><a href="#L192">192</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L193"><a href="#L193">193</a></td>
+<td class="hits">18</td>
+<td class="source"><code>      if verify_user(file_key, handler) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L194"><a href="#L194">194</a></td>
+<td class="hits"></td>
+<td class="source"><code>        {:ok, file_key}</code></td>
+</tr>
+<tr>
+<td class="line" id="L195"><a href="#L195">195</a></td>
+<td class="hits"></td>
+<td class="source"><code>      else</code></td>
+</tr>
+<tr>
+<td class="line" id="L196"><a href="#L196">196</a></td>
+<td class="hits"></td>
+<td class="source"><code>        :error</code></td>
+</tr>
+<tr>
+<td class="line" id="L197"><a href="#L197">197</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end</code></td>
+</tr>
+<tr>
+<td class="line" id="L198"><a href="#L198">198</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L199"><a href="#L199">199</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L200"><a href="#L200">200</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L201"><a href="#L201">201</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @doc """</code></td>
+</tr>
+<tr>
+<td class="line" id="L202"><a href="#L202">202</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Derives the padded user password from the owner password using Algorithm 7,</code></td>
+</tr>
+<tr>
+<td class="line" id="L203"><a href="#L203">203</a></td>
+<td class="hits"></td>
+<td class="source"><code>  then authenticates via `authenticate_user/2`.</code></td>
+</tr>
+<tr>
+<td class="line" id="L204"><a href="#L204">204</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L205"><a href="#L205">205</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Returns</code></td>
+</tr>
+<tr>
+<td class="line" id="L206"><a href="#L206">206</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L207"><a href="#L207">207</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `{:ok, file_key}` — owner password authenticated.</code></td>
+</tr>
+<tr>
+<td class="line" id="L208"><a href="#L208">208</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `:error` — owner password authentication failed.</code></td>
+</tr>
+<tr>
+<td class="line" id="L209"><a href="#L209">209</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `{:error, :encrypted_unsupported_handler}` — RC4 not available.</code></td>
+</tr>
+<tr>
+<td class="line" id="L210"><a href="#L210">210</a></td>
+<td class="hits"></td>
+<td class="source"><code>  """</code></td>
+</tr>
+<tr>
+<td class="line" id="L211"><a href="#L211">211</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @spec authenticate_owner(binary(), StandardHandler.t()) ::</code></td>
+</tr>
+<tr>
+<td class="line" id="L212"><a href="#L212">212</a></td>
+<td class="hits"></td>
+<td class="source"><code>          {:ok, binary()} | :error | {:error, :encrypted_unsupported_handler}</code></td>
+</tr>
+<tr>
+<td class="line" id="L213"><a href="#L213">213</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def authenticate_owner(password, %StandardHandler{} = handler) when is_binary(password) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L214"><a href="#L214">214</a></td>
+<td class="hits">7</td>
+<td class="source"><code>    with :ok &lt;- check_rc4(),</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L215"><a href="#L215">215</a></td>
+<td class="hits">7</td>
+<td class="source"><code>         {:ok, derived_padded_user} &lt;- derive_user_from_owner(password, handler) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L216"><a href="#L216">216</a></td>
+<td class="hits"></td>
+<td class="source"><code>      # Feed derived padded user password directly to authenticate_user.</code></td>
+</tr>
+<tr>
+<td class="line" id="L217"><a href="#L217">217</a></td>
+<td class="hits"></td>
+<td class="source"><code>      # PasswordPad.pad/1 truncates to first 32 bytes, so this is safe.</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L218"><a href="#L218">218</a></td>
+<td class="hits">7</td>
+<td class="source"><code>      authenticate_user(derived_padded_user, handler)</code></td>
+</tr>
+<tr>
+<td class="line" id="L219"><a href="#L219">219</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L220"><a href="#L220">220</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L221"><a href="#L221">221</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L222"><a href="#L222">222</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @doc """</code></td>
+</tr>
+<tr>
+<td class="line" id="L223"><a href="#L223">223</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Derives the padded user password from the owner password using Algorithm 7.</code></td>
+</tr>
+<tr>
+<td class="line" id="L224"><a href="#L224">224</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L225"><a href="#L225">225</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Steps</code></td>
+</tr>
+<tr>
+<td class="line" id="L226"><a href="#L226">226</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L227"><a href="#L227">227</a></td>
+<td class="hits"></td>
+<td class="source"><code>  1. Pad owner password to 32 bytes.</code></td>
+</tr>
+<tr>
+<td class="line" id="L228"><a href="#L228">228</a></td>
+<td class="hits"></td>
+<td class="source"><code>  2. MD5; for R≥3, iterate 50 times.</code></td>
+</tr>
+<tr>
+<td class="line" id="L229"><a href="#L229">229</a></td>
+<td class="hits"></td>
+<td class="source"><code>  3. Truncate to `key_len` bytes → RC4 key.</code></td>
+</tr>
+<tr>
+<td class="line" id="L230"><a href="#L230">230</a></td>
+<td class="hits"></td>
+<td class="source"><code>  4. For R=2: RC4-decrypt /O once.</code></td>
+</tr>
+<tr>
+<td class="line" id="L231"><a href="#L231">231</a></td>
+<td class="hits"></td>
+<td class="source"><code>  5. For R≥3: 20 iterative passes in reverse order (i=19 down to 0),</code></td>
+</tr>
+<tr>
+<td class="line" id="L232"><a href="#L232">232</a></td>
+<td class="hits"></td>
+<td class="source"><code>     XOR each byte of RC4 key with i before each pass.</code></td>
+</tr>
+<tr>
+<td class="line" id="L233"><a href="#L233">233</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L234"><a href="#L234">234</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Returns</code></td>
+</tr>
+<tr>
+<td class="line" id="L235"><a href="#L235">235</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L236"><a href="#L236">236</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `{:ok, padded_user_password}` — a 32-byte binary that is the padded user</code></td>
+</tr>
+<tr>
+<td class="line" id="L237"><a href="#L237">237</a></td>
+<td class="hits"></td>
+<td class="source"><code>    password (as if `PasswordPad.pad(user_password)` had been called).</code></td>
+</tr>
+<tr>
+<td class="line" id="L238"><a href="#L238">238</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `{:error, :encrypted_unsupported_handler}` — RC4 not available.</code></td>
+</tr>
+<tr>
+<td class="line" id="L239"><a href="#L239">239</a></td>
+<td class="hits"></td>
+<td class="source"><code>  """</code></td>
+</tr>
+<tr>
+<td class="line" id="L240"><a href="#L240">240</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @spec derive_user_from_owner(binary(), StandardHandler.t()) ::</code></td>
+</tr>
+<tr>
+<td class="line" id="L241"><a href="#L241">241</a></td>
+<td class="hits"></td>
+<td class="source"><code>          {:ok, binary()} | {:error, :encrypted_unsupported_handler}</code></td>
+</tr>
+<tr>
+<td class="line" id="L242"><a href="#L242">242</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def derive_user_from_owner(owner_password, %StandardHandler{} = handler)</code></td>
+</tr>
+<tr>
+<td class="line" id="L243"><a href="#L243">243</a></td>
+<td class="hits"></td>
+<td class="source"><code>      when is_binary(owner_password) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L244"><a href="#L244">244</a></td>
+<td class="hits">9</td>
+<td class="source"><code>    with :ok &lt;- check_rc4() do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L245"><a href="#L245">245</a></td>
+<td class="hits">9</td>
+<td class="source"><code>      key_len = key_length(handler)</code></td>
+</tr>
+<tr>
+<td class="line" id="L246"><a href="#L246">246</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L247"><a href="#L247">247</a></td>
+<td class="hits">9</td>
+<td class="source"><code>      padded_owner = PasswordPad.pad(owner_password)</code></td>
+</tr>
+<tr>
+<td class="line" id="L248"><a href="#L248">248</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L249"><a href="#L249">249</a></td>
+<td class="hits"></td>
+<td class="source"><code>      # MD5(padded_owner); iterate 50x for R &gt;= 3</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L250"><a href="#L250">250</a></td>
+<td class="hits">9</td>
+<td class="source"><code>      init_hash = :crypto.hash(:md5, padded_owner)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L251"><a href="#L251">251</a></td>
+<td class="hits">9</td>
+<td class="source"><code>      rc4_key = maybe_iterate_full(init_hash, handler.revision, key_len)</code></td>
+</tr>
+<tr>
+<td class="line" id="L252"><a href="#L252">252</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L253"><a href="#L253">253</a></td>
+<td class="hits"></td>
+<td class="source"><code>      # Decrypt /O</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L254"><a href="#L254">254</a></td>
+<td class="hits">9</td>
+<td class="source"><code>      derived = decrypt_owner_entry(handler.o, rc4_key, handler.revision)</code></td>
+</tr>
+<tr>
+<td class="line" id="L255"><a href="#L255">255</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {:ok, derived}</code></td>
+</tr>
+<tr>
+<td class="line" id="L256"><a href="#L256">256</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L257"><a href="#L257">257</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L258"><a href="#L258">258</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L259"><a href="#L259">259</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L260"><a href="#L260">260</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Private helpers</code></td>
+</tr>
+<tr>
+<td class="line" id="L261"><a href="#L261">261</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L262"><a href="#L262">262</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L263"><a href="#L263">263</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # R-ENC29: guard RC4 availability before any V1/V2 operation</code></td>
+</tr>
+<tr>
+<td class="line" id="L264"><a href="#L264">264</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp check_rc4 do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L265"><a href="#L265">265</a></td>
+<td class="hits">37</td>
+<td class="source"><code>    if :rc4 in :crypto.supports(:ciphers) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L266"><a href="#L266">266</a></td>
+<td class="hits"></td>
+<td class="source"><code>      :ok</code></td>
+</tr>
+<tr>
+<td class="line" id="L267"><a href="#L267">267</a></td>
+<td class="hits"></td>
+<td class="source"><code>    else</code></td>
+</tr>
+<tr>
+<td class="line" id="L268"><a href="#L268">268</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {:error, :encrypted_unsupported_handler}</code></td>
+</tr>
+<tr>
+<td class="line" id="L269"><a href="#L269">269</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L270"><a href="#L270">270</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L271"><a href="#L271">271</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L272"><a href="#L272">272</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Compute key_len from handler.length; default to 16 if missing</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L273"><a href="#L273">273</a></td>
+<td class="hits">3</td>
+<td class="source"><code>  defp key_length(%StandardHandler{version: 1}), do: 5</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L274"><a href="#L274">274</a></td>
+<td class="hits">29</td>
+<td class="source"><code>  defp key_length(%StandardHandler{length: len}) when is_integer(len), do: div(len, 8)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L275"><a href="#L275">275</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp key_length(_), do: 16</code></td>
+</tr>
+<tr>
+<td class="line" id="L276"><a href="#L276">276</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L277"><a href="#L277">277</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Append the EncryptMetadata flag for R &gt;= 4 when encrypt_metadata == false</code></td>
+</tr>
+<tr>
+<td class="line" id="L278"><a href="#L278">278</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp maybe_append_metadata_flag(md5_ctx, %StandardHandler{</code></td>
+</tr>
+<tr>
+<td class="line" id="L279"><a href="#L279">279</a></td>
+<td class="hits"></td>
+<td class="source"><code>         revision: r,</code></td>
+</tr>
+<tr>
+<td class="line" id="L280"><a href="#L280">280</a></td>
+<td class="hits"></td>
+<td class="source"><code>         encrypt_metadata: false</code></td>
+</tr>
+<tr>
+<td class="line" id="L281"><a href="#L281">281</a></td>
+<td class="hits"></td>
+<td class="source"><code>       })</code></td>
+</tr>
+<tr>
+<td class="line" id="L282"><a href="#L282">282</a></td>
+<td class="hits"></td>
+<td class="source"><code>       when r &gt;= 4 do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L283"><a href="#L283">283</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    :crypto.hash_update(md5_ctx, &lt;&lt;0xFF, 0xFF, 0xFF, 0xFF&gt;&gt;)</code></td>
+</tr>
+<tr>
+<td class="line" id="L284"><a href="#L284">284</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L285"><a href="#L285">285</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L286"><a href="#L286">286</a></td>
+<td class="hits">23</td>
+<td class="source"><code>  defp maybe_append_metadata_flag(md5_ctx, _handler), do: md5_ctx</code></td>
+</tr>
+<tr>
+<td class="line" id="L287"><a href="#L287">287</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L288"><a href="#L288">288</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # For R &gt;= 3: iterate MD5 × 50 on first key_len bytes of the hash</code></td>
+</tr>
+<tr>
+<td class="line" id="L289"><a href="#L289">289</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp maybe_iterate(hash, revision, key_len) when revision &gt;= 3 do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L290"><a href="#L290">290</a></td>
+<td class="hits">20</td>
+<td class="source"><code>    Enum.reduce(1..50, hash, fn _i, acc -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L291"><a href="#L291">291</a></td>
+<td class="hits">1000</td>
+<td class="source"><code>      :crypto.hash(:md5, binary_part(acc, 0, key_len))</code></td>
+</tr>
+<tr>
+<td class="line" id="L292"><a href="#L292">292</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L293"><a href="#L293">293</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L294"><a href="#L294">294</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L295"><a href="#L295">295</a></td>
+<td class="hits">3</td>
+<td class="source"><code>  defp maybe_iterate(hash, _revision, _key_len), do: hash</code></td>
+</tr>
+<tr>
+<td class="line" id="L296"><a href="#L296">296</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L297"><a href="#L297">297</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # For Algorithm 7 step 2: iterate on full 16-byte hash (not truncated)</code></td>
+</tr>
+<tr>
+<td class="line" id="L298"><a href="#L298">298</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp maybe_iterate_full(hash, revision, key_len) when revision &gt;= 3 do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L299"><a href="#L299">299</a></td>
+<td class="hits">9</td>
+<td class="source"><code>    full_iterated =</code></td>
+</tr>
+<tr>
+<td class="line" id="L300"><a href="#L300">300</a></td>
+<td class="hits"></td>
+<td class="source"><code>      Enum.reduce(1..50, hash, fn _i, acc -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L301"><a href="#L301">301</a></td>
+<td class="hits">450</td>
+<td class="source"><code>        :crypto.hash(:md5, acc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L302"><a href="#L302">302</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L303"><a href="#L303">303</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L304"><a href="#L304">304</a></td>
+<td class="hits">9</td>
+<td class="source"><code>    binary_part(full_iterated, 0, key_len)</code></td>
+</tr>
+<tr>
+<td class="line" id="L305"><a href="#L305">305</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L306"><a href="#L306">306</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L307"><a href="#L307">307</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp maybe_iterate_full(hash, _revision, key_len) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L308"><a href="#L308">308</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    binary_part(hash, 0, key_len)</code></td>
+</tr>
+<tr>
+<td class="line" id="L309"><a href="#L309">309</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L310"><a href="#L310">310</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L311"><a href="#L311">311</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Verify user password hash against /U (Algorithm 4 for R=2, Algorithm 5 for R&gt;=3)</code></td>
+</tr>
+<tr>
+<td class="line" id="L312"><a href="#L312">312</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp verify_user(file_key, %StandardHandler{revision: 2, u: u}) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L313"><a href="#L313">313</a></td>
+<td class="hits">2</td>
+<td class="source"><code>    pad_const = PasswordPad.constant()</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L314"><a href="#L314">314</a></td>
+<td class="hits">2</td>
+<td class="source"><code>    expected = :crypto.crypto_one_time(:rc4, file_key, pad_const, true)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L315"><a href="#L315">315</a></td>
+<td class="hits">2</td>
+<td class="source"><code>    expected == u</code></td>
+</tr>
+<tr>
+<td class="line" id="L316"><a href="#L316">316</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L317"><a href="#L317">317</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L318"><a href="#L318">318</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp verify_user(file_key, %StandardHandler{revision: r, u: u, id: id}) when r &gt;= 3 do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L319"><a href="#L319">319</a></td>
+<td class="hits">16</td>
+<td class="source"><code>    pad_const = PasswordPad.constant()</code></td>
+</tr>
+<tr>
+<td class="line" id="L320"><a href="#L320">320</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L321"><a href="#L321">321</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # MD5(pad_const ++ ID[0])</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L322"><a href="#L322">322</a></td>
+<td class="hits">16</td>
+<td class="source"><code>    md5_16 = :crypto.hash(:md5, pad_const &lt;&gt; id)</code></td>
+</tr>
+<tr>
+<td class="line" id="L323"><a href="#L323">323</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L324"><a href="#L324">324</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # RC4-encrypt 16 bytes with file_key (pass 0)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L325"><a href="#L325">325</a></td>
+<td class="hits">16</td>
+<td class="source"><code>    step0 = :crypto.crypto_one_time(:rc4, file_key, md5_16, true)</code></td>
+</tr>
+<tr>
+<td class="line" id="L326"><a href="#L326">326</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L327"><a href="#L327">327</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # 19 more passes: i=1..19, key XOR i</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L328"><a href="#L328">328</a></td>
+<td class="hits">16</td>
+<td class="source"><code>    result =</code></td>
+</tr>
+<tr>
+<td class="line" id="L329"><a href="#L329">329</a></td>
+<td class="hits"></td>
+<td class="source"><code>      Enum.reduce(1..19, step0, fn i, acc -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L330"><a href="#L330">330</a></td>
+<td class="hits">304</td>
+<td class="source"><code>        xor_key = xor_key_with_i(file_key, i)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L331"><a href="#L331">331</a></td>
+<td class="hits">304</td>
+<td class="source"><code>        :crypto.crypto_one_time(:rc4, xor_key, acc, true)</code></td>
+</tr>
+<tr>
+<td class="line" id="L332"><a href="#L332">332</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L333"><a href="#L333">333</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L334"><a href="#L334">334</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # Compare to first 16 bytes of /U</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L335"><a href="#L335">335</a></td>
+<td class="hits">16</td>
+<td class="source"><code>    result == binary_part(u, 0, 16)</code></td>
+</tr>
+<tr>
+<td class="line" id="L336"><a href="#L336">336</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L337"><a href="#L337">337</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L338"><a href="#L338">338</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Decrypt /O for Algorithm 7</code></td>
+</tr>
+<tr>
+<td class="line" id="L339"><a href="#L339">339</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # R=2: single RC4 decrypt</code></td>
+</tr>
+<tr>
+<td class="line" id="L340"><a href="#L340">340</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp decrypt_owner_entry(o_bytes, rc4_key, 2) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L341"><a href="#L341">341</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    :crypto.crypto_one_time(:rc4, rc4_key, o_bytes, true)</code></td>
+</tr>
+<tr>
+<td class="line" id="L342"><a href="#L342">342</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L343"><a href="#L343">343</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L344"><a href="#L344">344</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # R&gt;=3: 20 iterative passes in reverse order (i=19 down to 0)</code></td>
+</tr>
+<tr>
+<td class="line" id="L345"><a href="#L345">345</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp decrypt_owner_entry(o_bytes, rc4_key, _r) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L346"><a href="#L346">346</a></td>
+<td class="hits">9</td>
+<td class="source"><code>    Enum.reduce(19..0//-1, o_bytes, fn i, acc -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L347"><a href="#L347">347</a></td>
+<td class="hits">180</td>
+<td class="source"><code>      xor_key = xor_key_with_i(rc4_key, i)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L348"><a href="#L348">348</a></td>
+<td class="hits">180</td>
+<td class="source"><code>      :crypto.crypto_one_time(:rc4, xor_key, acc, true)</code></td>
+</tr>
+<tr>
+<td class="line" id="L349"><a href="#L349">349</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L350"><a href="#L350">350</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L351"><a href="#L351">351</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L352"><a href="#L352">352</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # XOR every byte of key with the integer i</code></td>
+</tr>
+<tr>
+<td class="line" id="L353"><a href="#L353">353</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp xor_key_with_i(key, i) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L354"><a href="#L354">354</a></td>
+<td class="hits">484</td>
+<td class="source"><code>    for &lt;&lt;b &lt;- key&gt;&gt;, into: &lt;&lt;&gt;&gt;, do: &lt;&lt;Bitwise.bxor(b, i)&gt;&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L355"><a href="#L355">355</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L356"><a href="#L356">356</a></td>
+<td class="hits"></td>
+<td class="source"><code>end</code></td>
+</tr>
+</tbody>
+<thead>
+<tr>
+<th>Line</th>
+<th>Hits</th>
+<th>Source</th>
+</tr>
+</thead>
+</table>
+</body>
+</html>

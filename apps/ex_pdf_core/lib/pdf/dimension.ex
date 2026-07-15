@@ -25,6 +25,8 @@ defmodule Pdf.Dimension do
   @spec resolve(value :: number | :full | String.t(), parent_dim :: number) :: number
   def resolve(:full, parent_dim), do: parent_dim
 
+  def resolve(value, _parent_dim) when value in [:auto, "auto"], do: :auto
+
   def resolve(pct, parent_dim) when is_binary(pct) do
     case Float.parse(String.trim_trailing(pct, "%")) do
       {n, ""} -> parent_dim * (n / 100)
@@ -49,7 +51,8 @@ defmodule Pdf.Dimension do
   """
   @spec relative?(any) :: boolean
   def relative?(:full), do: true
-  def relative?(v) when is_binary(v), do: String.ends_with?(v, "%")
+  def relative?(:auto), do: true
+  def relative?(v) when is_binary(v), do: String.ends_with?(v, "%") or v == "auto"
   def relative?(_), do: false
 
   @doc """

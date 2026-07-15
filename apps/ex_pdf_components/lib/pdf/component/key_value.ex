@@ -40,8 +40,27 @@ defmodule Pdf.Component.KeyValue do
   - `:label_bold` — bold labels (default `true`)
   - `:value_bold` — bold values (default `false`)
   """
-  def render(doc, {x, y}, style \\ %{}, pairs) do
-    width = Map.get(style, :width, 300)
+  @doc """
+  Resolve the content width for a key-value block inside a containing block.
+
+  `container_width` is the inner width of the parent. `x_offset` is the
+  component's horizontal inset from that edge (same semantics as `width: :full`
+  on text inside a box).
+  """
+  @spec content_width(map, number | nil, number) :: number
+  def content_width(style, container_width, x_offset \\ 0)
+
+  def content_width(style, nil, _x_offset) do
+    fallback_width(Map.get(style, :width, 300))
+  end
+
+  def content_width(style, container_width, x_offset) do
+    avail_w = Pdf.Layout.ContainingBlock.text_width(%{width: container_width}, x_offset)
+    Pdf.Dimension.resolve(Map.get(style, :width, 300), avail_w)
+  end
+
+  def render(doc, {x, y}, style \\ %{}, pairs, container_width \\ nil) do
+    width = effective_width(style, container_width)
     font = Map.get(style, :font, @default_font)
     font_size = Map.get(style, :font_size, @default_font_size)
     label_color = Map.get(style, :label_color, @default_label_color)
@@ -56,10 +75,11 @@ defmodule Pdf.Component.KeyValue do
     label_bold = Map.get(style, :label_bold, true)
     value_bold = Map.get(style, :value_bold, false)
 
-    font_struct = Pdf.Fonts.get_internal_font(font, if(value_bold, do: [bold: true], else: []))
-
+    label_font = Pdf.Fonts.get_internal_font(font, if(label_bold, do: [bold: true], else: []))
+    value_font = Pdf.Fonts.get_internal_font(font, if(value_bold, do: [bold: true], else: []))
+    label_font = label_font || Pdf.Fonts.get_internal_font(font)
     value_w = width - label_w
-    vf = font_struct || Pdf.Fonts.get_internal_font(font)
+    vf = value_font || Pdf.Fonts.get_internal_font(font)
 
     ctx = %{
       x: x, width: width, font: font, font_size: font_size,
@@ -68,7 +88,7 @@ defmodule Pdf.Component.KeyValue do
       divider: divider, divider_color: divider_color,
       striped: striped, stripe_color: stripe_color,
       value_align: value_align, label_bold: label_bold, value_bold: value_bold,
-      vf: vf
+      label_font: label_font, vf: vf
     }
 
     {doc, _cy} =
@@ -104,27 +124,38 @@ defmodule Pdf.Component.KeyValue do
             d
           end
 
-        # Wrap value into lines
-        lines = wrap_value(value, vf, font_size, value_w)
+        label_lines = wrap_label(label, ctx.label_font, font_size, label_w)
+        value_lines = wrap_value(value, vf, font_size, value_w)
+        row_count = max(max(length(label_lines), length(value_lines)), 1)
 
-        # Render label on first line
-        d =
-          d
-          |> Pdf.text_at({x, row_y}, label, %{
-            font: ctx.font,
-            bold: ctx.label_bold,
-            font_size: ctx.font_size,
-            color: ctx.label_color
-          })
-
-        # Render value lines
         {d, _ly} =
-          Enum.reduce(lines, {d, row_y}, fn line, {d_acc, ly} ->
-            d_acc = render_value_line(d_acc, line, ly, ctx)
+          Enum.reduce(0..(row_count - 1), {d, row_y}, fn i, {d_acc, ly} ->
+            label_line = Enum.at(label_lines, i, "")
+            value_line = Enum.at(value_lines, i, "")
+
+            d_acc =
+              if label_line != "" do
+                Pdf.text_at(d_acc, {x, ly}, label_line, %{
+                  font: ctx.font,
+                  bold: ctx.label_bold,
+                  font_size: ctx.font_size,
+                  color: ctx.label_color
+                })
+              else
+                d_acc
+              end
+
+            d_acc =
+              if value_line != "" do
+                render_value_line(d_acc, value_line, ly, ctx)
+              else
+                d_acc
+              end
+
             {d_acc, ly - line_height}
           end)
 
-        next_y = current_y - line_height * max(length(lines), 1)
+        next_y = current_y - line_height * row_count
         {d, next_y}
       end)
 
@@ -138,21 +169,27 @@ defmodule Pdf.Component.KeyValue do
   Takes the same `style` map as `render/4` plus the `pairs` list.
   Returns the height in points.
   """
-  def measure_height(style \\ %{}, pairs) do
+  def measure_height(style \\ %{}, pairs, container_width \\ nil, opts \\ []) do
+    x_offset = Keyword.get(opts, :x_offset, 0)
     font = Map.get(style, :font, @default_font)
     font_size = Map.get(style, :font_size, @default_font_size)
     line_height = Map.get(style, :line_height, @default_line_height)
-    width = Map.get(style, :width, 300)
+    width = effective_width(style, container_width, x_offset)
     label_w = trunc(width * Map.get(style, :label_width, @default_label_width))
+    label_bold = Map.get(style, :label_bold, true)
     value_bold = Map.get(style, :value_bold, false)
 
-    font_struct = Pdf.Fonts.get_internal_font(font, if(value_bold, do: [bold: true], else: []))
-    vf = font_struct || Pdf.Fonts.get_internal_font(font)
+    label_font = Pdf.Fonts.get_internal_font(font, if(label_bold, do: [bold: true], else: []))
+    value_font = Pdf.Fonts.get_internal_font(font, if(value_bold, do: [bold: true], else: []))
+    label_font = label_font || Pdf.Fonts.get_internal_font(font)
+    vf = value_font || Pdf.Fonts.get_internal_font(font)
     value_w = width - label_w
 
-    Enum.reduce(pairs, 0, fn {_label, value}, total ->
-      lines = wrap_value(value, vf, font_size, value_w)
-      total + line_height * max(length(lines), 1)
+    Enum.reduce(pairs, 0, fn {label, value}, total ->
+      label_lines = wrap_label(label, label_font, font_size, label_w)
+      value_lines = wrap_value(value, vf, font_size, value_w)
+      row_count = max(max(length(label_lines), length(value_lines)), 1)
+      total + line_height * row_count
     end)
   end
 
@@ -223,7 +260,33 @@ defmodule Pdf.Component.KeyValue do
     end
   end
 
+  # ── Width helpers ────────────────────────────────────────────────
+
+  defp effective_width(style, container_width, x_offset \\ 0) do
+    case Map.get(style, :width) do
+      w when is_number(w) ->
+        w
+
+      _ when is_number(container_width) ->
+        content_width(style, container_width, x_offset)
+
+      _ ->
+        fallback_width(Map.get(style, :width, 300))
+    end
+  end
+
+  defp fallback_width(value) when is_number(value), do: value
+  defp fallback_width(:full), do: 300
+  defp fallback_width("100%"), do: 300
+  defp fallback_width(value) do
+    if Pdf.Dimension.relative?(value), do: 300, else: value
+  end
+
   # ── Wrap dispatcher ──────────────────────────────────────────────
+
+  defp wrap_label(text, font_struct, font_size, max_width) do
+    wrap_plain_text(to_string(text || ""), font_struct, font_size, max_width)
+  end
 
   # Plain string → list of strings
   defp wrap_value(text, font_struct, font_size, max_width) when is_binary(text) do
@@ -315,4 +378,5 @@ defmodule Pdf.Component.KeyValue do
     end)
     |> Enum.reverse()
   end
+
 end

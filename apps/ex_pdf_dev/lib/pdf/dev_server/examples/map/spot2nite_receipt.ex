@@ -61,9 +61,8 @@ defmodule Pdf.DevServer.Examples.Map.Receipt do
 
     pad = 10
     kv_line_h = 14
-    alq_gap = 8
+    alq_gap = 14
     col_gap = 5
-    resort_header_h = 65
     date_strip_h = 40
     kv_lh = 18
     kv_fs = 10
@@ -71,14 +70,21 @@ defmodule Pdf.DevServer.Examples.Map.Receipt do
     heading_y = 28
 
     page_w = 595
-    col_inner_w = div(page_w - margin.left - margin.right - col_gap, 2) - pad * 2
+    column_w = div(page_w - margin.left - margin.right - col_gap, 2)
+    col_inner_w = column_w - pad * 2
 
-    box_style = %{border: 0.8, border_color: border, border_radius: 5, padding: pad}
+    box_style = %{
+      border: 0.8,
+      border_color: border,
+      border_radius: 5,
+      padding: pad,
+      clip: false
+    }
     kv_base = %{font_size: 10, label_color: dark, value_color: dark, value_align: :right}
     kv_style =
       Map.merge(kv_base, %{
         font: font_r,
-        width: col_inner_w,
+        width: :full,
         line_height: kv_line_h,
         label_width: 0.27,
         label_bold: true
@@ -87,44 +93,72 @@ defmodule Pdf.DevServer.Examples.Map.Receipt do
     # ── Left column: stacked reservation cards ──────────────────────────────────
     {reservation_children, total_left_h} =
       Enum.reduce(reservations, {[], 0}, fn res, {acc, y_off} ->
-        kv_h = Pdf.Component.KeyValue.measure_height(kv_style, res.details_reservation)
-        box_h = resort_header_h + date_strip_h + 16 + kv_h + 4
         half_w = div(col_inner_w, 2)
-        strip_top = resort_header_h
-        strip_label_y = strip_top + 9
-        strip_date_y = strip_top + 19
-        strip_time_y = strip_top + 29
+        base_strip_top = 65
+        card_inner_w = Pdf.Layout.Flow.inner_width(column_w, box_style)
+        box_border = Map.get(box_style, :border, 0.8)
+        chip_h = 16
+        chip_w_est = 72
+
+        # Chip straddles the top-right border; nudged left so it sits on the corner.
+        chip_inset_left = 56
+        chip_x = card_inner_w + pad + box_border / 2 - chip_w_est / 2 - chip_inset_left
+        chip_y = pad + box_border / 2 + chip_h / 2
 
         status_chip =
           if Map.get(res, :cancelled, false) do
-            chip_x = col_inner_w - 65
             [%{type: :chip, props: %{
               label: "CANCELLED",
               style: %{
-                position: {chip_x, 4},
-                background: {0.85, 0.20, 0.20},
-                color: :black,
+                position: {chip_x, chip_y},
+                background: {0.98, 0.90, 0.90},
+                color: {0.62, 0.10, 0.10},
                 font_size: 8,
-                height: 16,
-                border_radius: 5,
-                opacity: 0.4
+                height: chip_h,
+                border_radius: 5
               }
             }}]
           else
-            chip_x = col_inner_w - 65
             [%{type: :chip, props: %{
               label: "CONFIRMED",
               style: %{
-                position: {chip_x, 4},
-                background: {0.18, 0.65, 0.35},
-                color: :black,
+                position: {chip_x, chip_y},
+                background: {0.88, 0.97, 0.91},
+                color: {0.05, 0.40, 0.20},
                 font_size: 8,
-                height: 16,
-                border_radius: 5,
-                opacity: 0.4
+                height: chip_h,
+                border_radius: 5
               }
             }}]
           end
+
+        avatar_w = 75
+        header_gap = 10
+        stack_x = avatar_w + header_gap
+        stack_inner_w = card_inner_w - stack_x
+
+        header_stack_style = %{
+          position: {stack_x, 0},
+          gap: 3,
+          width: stack_inner_w
+        }
+
+        header_stack_children = [
+          %{text: res.details.name, font_size: 10, font: font_r, bold: true, color: dark},
+          %{text: res.details.city, font_size: 9, font: font_r, color: gray},
+          %{text: res.details.phone, font_size: 9, font: font_r, color: gray},
+          %{text: res.details.support_email, font_size: 9, font: font_r, color: gray}
+        ]
+
+        stack_h =
+          Pdf.Layout.Stack.measure(header_stack_children, stack_inner_w, header_stack_style)
+
+        header_h = max(55, stack_h)
+        strip_top = max(base_strip_top, header_h + 16)
+
+        strip_label_y = strip_top + 9
+        strip_date_y = strip_top + 19
+        strip_time_y = strip_top + 29
 
         date_strip = [
           %{type: :line_segment, props: %{style: %{
@@ -171,37 +205,25 @@ defmodule Pdf.DevServer.Examples.Map.Receipt do
           }}}
         ]
 
+        layout_children =
+          [
+            %{avatar: {0, 0}, image: res.image, size: {avatar_w, 55}, border_radius: 5},
+            %{stack: {stack_x, 0}, gap: 3, width: stack_inner_w, children: header_stack_children}
+          ] ++ date_strip ++ [
+            %{type: :key_value, props: %{
+              pairs: res.details_reservation,
+              style: Map.put(kv_style, :position, {0, -(strip_top + date_strip_h + 16)})
+            }}
+          ]
+
+        box_children = layout_children ++ status_chip
+
+        box_h = Pdf.Builder.measure_box_height_absolute(box_style, layout_children, column_w)
+
         box = %{
           type: :box,
           props: %{
-            children: [
-              %{type: :avatar, props: %{
-                image: res.image,
-                style: %{position: {0, 0}, size: {75, 55}, border_radius: 5}
-              }},
-              %{type: :text, props: %{
-                content: res.details.name,
-                style: %{position: {85, -8}, font_size: 10, font: font_r, bold: true, color: dark}
-              }},
-              %{type: :text, props: %{
-                content: res.details.city,
-                style: %{position: {85, -20}, font_size: 9, font: font_r, color: gray}
-              }},
-              %{type: :text, props: %{
-                content: res.details.phone,
-                style: %{position: {85, -31}, font_size: 9, font: font_r, color: gray}
-              }},
-              %{type: :text, props: %{
-                content: res.details.support_email,
-                style: %{position: {85, -42}, font_size: 9, font: font_r, color: gray}
-              }}
-              | date_strip ++ [
-                %{type: :key_value, props: %{
-                  pairs: res.details_reservation,
-                  style: Map.put(kv_style, :position, {0, -(resort_header_h + date_strip_h + 16)})
-                }}
-              ] ++ status_chip
-            ],
+            children: box_children,
             style: Map.merge(box_style, %{position: {0, -y_off}, size: {:full, box_h}})
           }
         }
@@ -210,9 +232,12 @@ defmodule Pdf.DevServer.Examples.Map.Receipt do
       end)
 
     # ── Right column: price breakdown + payment ─────────────────────────────────
+    price_inner_w = Pdf.Layout.Flow.inner_width(column_w, box_style)
+
     kv_right = %{
       font: font_r,
-      width: col_inner_w,
+      label_width: 0.85,
+      width: :full,
       font_size: 10,
       label_color: dark,
       value_color: dark,
@@ -247,7 +272,7 @@ defmodule Pdf.DevServer.Examples.Map.Receipt do
           end
 
         style = if demibold?, do: kv_right_demibold, else: kv_right
-        group_h = Pdf.Component.KeyValue.measure_height(style, group)
+        group_h = Pdf.Component.KeyValue.measure_height(style, group, price_inner_w, x_offset: 2)
         kv = %{type: :key_value, props: %{
           pairs: group,
           style: Map.put(style, :position, {2, -(heading_y + cum_h)})
@@ -256,23 +281,33 @@ defmodule Pdf.DevServer.Examples.Map.Receipt do
       end)
     end
 
-    {price_kv_children, price_kv_h} = build_kv_groups.(price_groups, false)
-    {payment_kv_children, payment_kv_h} = build_kv_groups.(payment_groups, true)
+    {price_kv_children, _price_kv_h} = build_kv_groups.(price_groups, false)
+    {payment_kv_children, _payment_kv_h} = build_kv_groups.(payment_groups, true)
 
-    price_box_h = 30 + price_kv_h + 4
-    pay_box_h = 30 + payment_kv_h + 4
+    price_box_children = [
+      %{type: :text, props: %{
+        content: "Price breakdown",
+        style: %{position: {2, -6}, font_size: 13, font: font_r, bold: true, color: dark}
+      }}
+      | price_kv_children
+    ]
+
+    payment_box_children = [
+      %{type: :text, props: %{
+        content: "Payment",
+        style: %{position: {2, -6}, font_size: 13, font: font_r, bold: true, color: dark}
+      }}
+      | payment_kv_children
+    ]
+
+    price_box_h = Pdf.Builder.measure_box_height_absolute(box_style, price_box_children, column_w)
+    pay_box_h = Pdf.Builder.measure_box_height_absolute(box_style, payment_box_children, column_w)
     box_gap = 15
 
     price_box = %{
       type: :box,
       props: %{
-        children: [
-          %{type: :text, props: %{
-            content: "Price breakdown",
-            style: %{position: {2, -6}, font_size: 13, font: font_r, bold: true, color: dark}
-          }}
-          | price_kv_children
-        ],
+        children: price_box_children,
         style: Map.merge(box_style, %{position: {0, 0}, size: {:full, price_box_h}})
       }
     }
@@ -280,13 +315,7 @@ defmodule Pdf.DevServer.Examples.Map.Receipt do
     payment_box = %{
       type: :box,
       props: %{
-        children: [
-          %{type: :text, props: %{
-            content: "Payment",
-            style: %{position: {2, -6}, font_size: 13, font: font_r, bold: true, color: dark}
-          }}
-          | payment_kv_children
-        ],
+        children: payment_box_children,
         style: Map.merge(box_style, %{
           position: {0, -(price_box_h + box_gap)},
           size: {:full, pay_box_h}
