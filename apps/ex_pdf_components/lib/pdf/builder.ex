@@ -63,6 +63,43 @@ defmodule Pdf.Builder do
   end
 
   @doc """
+  Measure the outer height of a box using flow layout (`layout: :flow`).
+
+  Useful when building templates with `size: {:full, :auto}`.
+  """
+  def measure_box_height(style, children, outer_width, doc \\ nil)
+      when is_map(style) and is_list(children) do
+    gap = Map.get(style, :gap, 0)
+    threshold = Map.get(style, :row_threshold, 12)
+    inner_w = Pdf.Layout.Flow.inner_width(outer_width, style)
+
+    inner_h =
+      Pdf.Layout.Reflow.measure(children, inner_w, doc, gap: gap, row_threshold: threshold)
+
+    Pdf.Layout.Flow.outer_height(inner_h, style)
+  end
+
+  @doc """
+  Measure the outer height of a box with absolutely-positioned children.
+
+  Resolves `:full` widths against the inner area and accounts for wrapped
+  key-value rows. Use with `size: {:full, :auto}` on reservation-style cards.
+  """
+  def measure_box_height_absolute(style, children, outer_width, doc \\ nil)
+      when is_map(style) and is_list(children) do
+    inner_w = Pdf.Layout.Flow.inner_width(outer_width, style)
+
+    inner_h =
+      if Map.get(style, :reflow, false) do
+        Pdf.Layout.AbsoluteReflow.measure(children, inner_w, style, doc)
+      else
+        Pdf.Layout.AbsoluteMeasure.measure(children, inner_w, doc)
+      end
+
+    Pdf.Layout.Flow.outer_height(inner_h, style)
+  end
+
+  @doc """
   Render a template list into an existing document.
   Nested lists are automatically flattened.
 
@@ -130,23 +167,22 @@ defmodule Pdf.Builder do
     {x, y, width} = resolve_cursor(doc, w)
     children = Map.get(el, :children, [])
     style = Map.drop(el, [:box, :size, :children])
+    height = resolve_box_height(h, style, children, width, doc)
 
     ca = Pdf.content_area(doc)
 
-    if is_number(h) and h > ca.height do
-      area = %{x: x, y: y, width: width, height: h}
-      {doc, last_bottom} = render_children_paged(doc, children, area)
+    if is_number(height) and height > ca.height do
+      area = %{x: x, y: y, width: width, height: height}
+      {doc, last_bottom} = render_box_children_paged(doc, children, area, style)
       Pdf.set_cursor(doc, last_bottom)
     else
-      doc = maybe_page_break(doc, h)
+      doc = maybe_page_break(doc, height)
       {x, y, width} = resolve_cursor(doc, w)
 
       doc =
-        Pdf.Component.Box.render(doc, {x, y}, {width, h}, style, fn doc, area ->
-          render_children(doc, children, area)
-        end)
+        Pdf.Component.Box.render(doc, {x, y}, {width, height}, style, box_children_callback(style, children))
 
-      Pdf.move_down(doc, h)
+      Pdf.move_down(doc, height)
     end
   end
 
@@ -241,10 +277,9 @@ defmodule Pdf.Builder do
   defp render_element(%{box: {x, y}, size: {w, h}} = el, doc) do
     children = Map.get(el, :children, [])
     style = Map.drop(el, [:box, :size, :children])
+    height = resolve_box_height(h, style, children, w, doc)
 
-    Pdf.Component.Box.render(doc, {x, y}, {w, h}, style, fn doc, area ->
-      render_children(doc, children, area)
-    end)
+    Pdf.Component.Box.render(doc, {x, y}, {w, height}, style, box_children_callback(style, children))
   end
 
   defp render_element(%{row: {x, y}, size: {w, h}} = el, doc) do
@@ -318,9 +353,35 @@ defmodule Pdf.Builder do
     Pdf.Component.KeyValue.render(doc, {x, y}, style, pairs)
   end
 
+  defp render_element(%{stack: {x, y}, children: children} = el, doc) do
+    gap = Map.get(el, :gap, 0)
+    inner_w = Map.get(el, :inner_width, 300)
+    style = Map.drop(el, [:stack, :children, :gap, :inner_width, :position])
+
+    stack_style =
+      style
+      |> Map.put(:position, {x, y})
+      |> Map.put(:gap, gap)
+      |> Map.put(:inner_width, inner_w)
+
+    Pdf.Layout.Stack.render(doc, {x, y}, stack_style, children, fn doc, child, area ->
+      render_stack_item(doc, child, area)
+    end)
+  end
+
   defp render_element(%{text: string} = el, doc) do
     style = Map.drop(el, [:text])
-    if map_size(style) == 0, do: Pdf.text(doc, string), else: Pdf.text(doc, string, style)
+
+    cond do
+      Map.get(el, :break_text, false) ->
+        render_flow_text(doc, string, el)
+
+      map_size(style) == 0 ->
+        Pdf.text(doc, string)
+
+      true ->
+        Pdf.text(doc, string, style)
+    end
   end
 
   defp render_element(%{custom: func}, doc) when is_function(func, 1) do
@@ -474,11 +535,16 @@ defmodule Pdf.Builder do
   end
 
   defp render_element({:image, path, style}, doc) do
-    pos = Pdf.cursor_xy(doc)
+    {x, y} =
+      case style do
+        %{x: x, y: y} when is_number(x) and is_number(y) -> {x, y}
+        _ -> pos = Pdf.cursor_xy(doc); {pos.x, pos.y}
+      end
+
     opts = []
     opts = if Map.has_key?(style, :width), do: [{:width, style.width} | opts], else: opts
     opts = if Map.has_key?(style, :height), do: [{:height, style.height} | opts], else: opts
-    Pdf.add_image(doc, {pos.x, pos.y}, path, opts)
+    Pdf.add_image(doc, {x, y}, path, opts)
   end
 
   defp render_element({:image, path}, doc) do
@@ -620,18 +686,31 @@ defmodule Pdf.Builder do
   defp render_typed(:text, props, doc) do
     content = Map.get(props, :content, "")
     style = Map.get(props, :style, %{})
-    {pos, visual} = Map.pop(style, :position)
-    visual = Map.drop(visual, [:size])
 
-    text_style =
-      case pos do
-        {x, y} -> Map.merge(visual, %{x: x, y: y})
-        _ -> visual
-      end
+    if Map.get(style, :break_text, false) do
+      {x, y} = Map.get(style, :position, {0, 0})
+      width = Map.get(style, :wrap_width, 100)
+      visual = Map.drop(style, [:position, :size, :break_text, :wrap_width])
 
-    if map_size(text_style) == 0,
-      do: Pdf.text(doc, content),
-      else: Pdf.text(doc, content, text_style)
+      render_flow_text(
+        doc,
+        content,
+        Map.merge(visual, %{x: x, y: y, wrap_width: width})
+      )
+    else
+      {pos, visual} = Map.pop(style, :position)
+      visual = Map.drop(visual, [:size])
+
+      text_style =
+        case pos do
+          {x, y} -> Map.merge(visual, %{x: x, y: y})
+          _ -> visual
+        end
+
+      if map_size(text_style) == 0,
+        do: Pdf.text(doc, content),
+        else: Pdf.text(doc, content, text_style)
+    end
   end
 
   defp render_typed(:spacer, props, doc) do
@@ -651,7 +730,13 @@ defmodule Pdf.Builder do
 
   defp render_typed(:avatar, props, doc) do
     e = extract_typed_props(props)
-    style = if e.size, do: Map.put(e.style, :size, e.size), else: e.style
+    image = Map.get(props, :image)
+
+    style =
+      e.style
+      |> then(fn s -> if image, do: Map.put(s, :image, image), else: s end)
+      |> then(fn s -> if e.size, do: Map.put(s, :size, e.size), else: s end)
+
     Pdf.Component.Avatar.render(doc, e.position, style)
   end
 
@@ -680,6 +765,88 @@ defmodule Pdf.Builder do
     e = extract_typed_props(props)
     pairs = Map.get(props, :pairs, [])
     Pdf.Component.KeyValue.render(doc, e.position, e.style, pairs)
+  end
+
+  defp render_typed(:stack, props, doc) do
+    e = extract_typed_props(props)
+    gap = Map.get(e.style, :gap, 0)
+    width_spec = Map.get(e.style, :width, :full)
+    inner_w = Map.get(e.style, :inner_width, width_spec)
+
+    case e.position do
+      :cursor ->
+        {_x, _y, w} = resolve_cursor(doc, width_spec)
+
+        stack_style =
+          e.style
+          |> Map.put(:inner_width, w)
+          |> Map.put(:gap, gap)
+          |> Map.put(:position, {0, 0})
+
+        h = Pdf.Layout.Stack.measure(e.children, w, stack_style, doc)
+        doc = maybe_page_break(doc, h)
+        {x, y, w} = resolve_cursor(doc, width_spec)
+
+        stack_style = Map.put(stack_style, :inner_width, w)
+
+        doc =
+          Pdf.Layout.Stack.render(doc, {x, y}, stack_style, e.children, fn doc, child, area ->
+            render_stack_item(doc, child, area)
+          end)
+
+        Pdf.move_down(doc, h)
+
+      position ->
+        inner_w = ensure_number(inner_w, Pdf.content_area(doc).width)
+
+        stack_style =
+          e.style
+          |> Map.put(:inner_width, inner_w)
+          |> Map.put(:gap, gap)
+          |> Map.put(:position, position)
+
+        Pdf.Layout.Stack.render(doc, position, stack_style, e.children, fn doc, child, area ->
+          render_stack_item(doc, child, area)
+        end)
+    end
+  end
+
+  defp render_stack_item(doc, %{type: :text, props: props}, area) do
+    content = Map.get(props, :content, "")
+    style = Map.get(props, :style, %{})
+    visual = Map.drop(style, [:position, :size, :break_text, :wrap_width])
+
+    render_flow_text(
+      doc,
+      content,
+      Map.merge(visual, %{
+        x: area.x,
+        y: area.y,
+        wrap_width: area.width,
+        break_text: true
+      })
+    )
+  end
+
+  defp render_stack_item(doc, %{text: text} = child, area) do
+    style = Map.drop(child, [:text, :x, :y, :position])
+
+    render_flow_text(
+      doc,
+      text,
+      Map.merge(style, %{
+        x: area.x,
+        y: area.y,
+        wrap_width: area.width,
+        break_text: true
+      })
+    )
+  end
+
+  defp render_stack_item(doc, child, area) do
+    child
+    |> Map.put(:position, :absolute)
+    |> render_element(doc)
   end
 
   defp render_typed(:box, props, doc) do
@@ -720,7 +887,9 @@ defmodule Pdf.Builder do
         end
 
       {x, y} ->
-        {w, h} = e.size
+        {w, h_spec} = e.size
+        w = ensure_number(w, Pdf.content_area(doc).width)
+        h = resolve_row_height(h_spec, e, w, doc)
 
         columns =
           Enum.map(e.children, fn {weight, child_elements} ->
@@ -730,6 +899,23 @@ defmodule Pdf.Builder do
         Pdf.Component.Row.render(doc, {x, y}, {w, h}, columns, gap: gap)
     end
   end
+
+  defp resolve_row_height(:auto, e, w, doc) do
+    Pdf.Layout.AbsoluteMeasure.row_height(Map.get(e, :children, []), w, Map.get(e.style, :gap, 0), doc)
+  end
+
+  defp resolve_row_height(h, _e, w, doc) do
+    parent_h =
+      case doc do
+        %{current: _} -> Pdf.content_area(doc).height
+        _ -> w
+      end
+
+    Pdf.Dimension.resolve(h, parent_h)
+  end
+
+  defp ensure_number(w, parent) when is_number(w), do: w
+  defp ensure_number(w, parent), do: Pdf.Dimension.resolve(w, parent)
 
   defp render_typed(:column, props, doc) do
     e = extract_typed_props(props)
@@ -906,6 +1092,24 @@ defmodule Pdf.Builder do
     if is_function(func, 1), do: func.(doc), else: doc
   end
 
+  defp render_typed(:header, props, doc),
+    do: render_sized_component(Pdf.Component.Header, props, doc)
+
+  defp render_typed(:nav, props, doc),
+    do: render_sized_component(Pdf.Component.Nav, props, doc)
+
+  defp render_typed(:meter, props, doc),
+    do: render_sized_component(Pdf.Component.Meter, props, doc)
+
+  defp render_typed(:table, props, doc),
+    do: render_sized_component(Pdf.Component.Table, props, doc)
+
+  defp render_typed(:aside, props, doc),
+    do: render_sized_component(Pdf.Component.Aside, props, doc)
+
+  defp render_typed(:figure, props, doc),
+    do: render_sized_component(Pdf.Component.Figure, props, doc)
+
   # `:page_footer` — registers a footer that fires on every page break AND on the
   # last page (via the `render_into/2` hook above).
   #
@@ -942,26 +1146,28 @@ defmodule Pdf.Builder do
   defp render_typed_container(module, %{position: pos, size: size, style: style, children: children}, doc) do
     case pos do
       :cursor ->
-        {w_spec, h} = size
+        {w_spec, h_spec} = size
         {x, y, w} = resolve_cursor(doc, w_spec)
+        h = resolve_box_height(h_spec, style, children, w, doc)
 
         ca = Pdf.content_area(doc)
 
         if is_number(h) and h > ca.height do
           area = %{x: x, y: y, width: w, height: h}
-          {doc, last_bottom} = render_children_paged(doc, children, area)
+          {doc, last_bottom} = render_box_children_paged(doc, children, area, style)
           Pdf.set_cursor(doc, last_bottom)
         else
           doc = maybe_page_break(doc, h)
           {x, y, w} = resolve_cursor(doc, w_spec)
-          callback = fn doc, area -> render_children(doc, children, area) end
+          callback = box_children_callback(style, children)
           doc = module.render(doc, {x, y}, {w, h}, style, callback)
           Pdf.move_down(doc, h)
         end
 
       {x, y} ->
-        {w, h} = size
-        callback = fn doc, area -> render_children(doc, children, area) end
+        {w, h_spec} = size
+        h = resolve_box_height(h_spec, style, children, w, doc)
+        callback = box_children_callback(style, children)
         module.render(doc, {x, y}, {w, h}, style, callback)
     end
   end
@@ -977,6 +1183,37 @@ defmodule Pdf.Builder do
     merged = Map.merge(data, style)
 
     %{position: position, size: size, style: merged, children: children}
+  end
+
+  defp render_sized_component(module, props, doc) do
+    e = extract_typed_props(props)
+    data = Map.drop(props, [:style, :children])
+    style = Map.merge(e.style, data)
+    width_spec = Map.get(style, :width, :full)
+
+    case e.position do
+      :cursor ->
+        h = module.measure(style)
+        doc = maybe_page_break(doc, h)
+        {x, y, w} = resolve_cursor(doc, width_spec)
+
+        style =
+          style
+          |> Map.put(:width, w)
+          |> Map.put(:size, {w, h})
+
+        doc = module.render(doc, {x, y}, style)
+        Pdf.move_down(doc, h)
+
+      {x, y} ->
+        w =
+          case Map.get(style, :size) do
+            {ww, _} when is_number(ww) -> ww
+            _ -> resolve_width(Map.get(style, :width, :full), Pdf.content_area(doc).width)
+          end
+
+        module.render(doc, {x, y}, Map.put(style, :width, w))
+    end
   end
 
   # ── Child positioning helpers ──────────────────────────────────────
@@ -999,6 +1236,28 @@ defmodule Pdf.Builder do
     x = Map.get(child, :x, 0) + area.x
     y = Map.get(child, :y, 0) + area.y
     Map.merge(child, %{x: x, y: y})
+  end
+
+  defp offset_child({:image, path, style}, area) when is_map(style) do
+    h = Map.get(style, :height, 0)
+    {:image, path, Map.merge(style, %{x: area.x, y: area.y - h})}
+  end
+
+  defp offset_child({:image, path}, area) do
+    {:image, path, %{x: area.x, y: area.y}}
+  end
+
+  defp offset_child({:table, data, opts}, area) when is_map(opts) do
+    opts =
+      opts
+      |> Map.put(:at, {area.x, area.y})
+      |> Map.put_new(:table_width, area.width)
+
+    {:table, data, opts}
+  end
+
+  defp offset_child({:table, data}, area) do
+    {:table, data, %{at: {area.x, area.y}, table_width: area.width}}
   end
 
   defp offset_child(%{rect: {rx, ry}, size: _} = child, area) do
@@ -1025,8 +1284,21 @@ defmodule Pdf.Builder do
     %{child | chip: {cx + area.x, cy + area.y}}
   end
 
+  defp offset_child(%{stack: {sx, sy}} = child, area) do
+    child
+    |> Map.put(:stack, {sx + area.x, sy + area.y})
+    |> Map.put(:inner_width, area.width)
+  end
+
   defp offset_child(%{key_value: {kx, ky}} = child, area) do
-    %{child | key_value: {kx + area.x, ky + area.y}}
+    style =
+      child
+      |> Map.drop([:key_value, :pairs])
+      |> resolve_kv_style(area, kx)
+
+    child
+    |> Map.put(:key_value, {kx + area.x, ky + area.y})
+    |> Map.merge(style)
   end
 
   defp offset_child(%{progress: {px, py}} = child, area) do
@@ -1067,25 +1339,77 @@ defmodule Pdf.Builder do
     %{child | props: %{props | style: new_style}}
   end
 
+  defp offset_child(%{type: :stack, props: props} = child, area) do
+    style = Map.get(props, :style, %{})
+    {px, py} = Map.get(style, :position, {0, 0})
+
+    new_style =
+      style
+      |> Map.put(:position, {px + area.x, py + area.y})
+      |> Map.put(:inner_width, area.width)
+      |> Pdf.Layout.ContainingBlock.resolve_style(area)
+
+    %{child | props: Map.put(props, :style, new_style)}
+  end
+
+  defp offset_child(%{type: :key_value, props: props} = child, area) do
+    style = Map.get(props, :style, %{})
+    {px, py} = Map.get(style, :position, {0, 0})
+
+    new_style =
+      style
+      |> Map.put(:position, {px + area.x, py + area.y})
+      |> resolve_kv_style(area, px)
+
+    %{child | props: Map.put(props, :style, new_style)}
+  end
+
+  defp offset_child(%{type: :text, props: props} = child, area) do
+    style = Map.get(props, :style, %{})
+    {px, py} = Map.get(style, :position, {0, 0})
+
+    new_style =
+      style
+      |> Map.put(:position, {px + area.x, py + area.y})
+      |> Pdf.Layout.ContainingBlock.resolve_style(area)
+      |> maybe_set_text_wrap(area, px)
+
+    %{child | props: Map.put(props, :style, new_style)}
+  end
+
+  defp offset_child(%{type: :row, props: props} = child, area) do
+    style = Map.get(props, :style, %{})
+    {px, py} = Map.get(style, :position, {0, 0})
+
+    new_style =
+      style
+      |> Map.put(:position, {px + area.x, py + area.y})
+      |> resolve_container_style(area)
+
+    %{child | props: Map.put(props, :style, new_style)}
+  end
+
   defp offset_child(%{type: _, props: props} = child, area) do
     style = Map.get(props, :style, %{})
 
     case Map.get(style, :position) do
       {px, py} ->
-        new_style = Map.put(style, :position, {px + area.x, py + area.y})
-
         new_style =
-          case Map.get(new_style, :size) do
-            {_, _} = size -> Map.put(new_style, :size, Pdf.Dimension.resolve_size(size, area))
-            _ -> new_style
-          end
-
-        new_style = resolve_style_dims(new_style, area)
+          style
+          |> Map.put(:position, {px + area.x, py + area.y})
+          |> resolve_container_style(area)
 
         %{child | props: Map.put(props, :style, new_style)}
 
       _ ->
-        child
+        case Map.get(style, :size) do
+          {_, _} = _size ->
+            new_style = resolve_container_style(style, area)
+            %{child | props: Map.put(props, :style, new_style)}
+
+          _ ->
+            child
+        end
     end
   end
 
@@ -1094,15 +1418,34 @@ defmodule Pdf.Builder do
   # ── Dimension resolution helpers ───────────────────────────────
 
   defp resolve_style_dims(style, area) do
-    style
-    |> resolve_dim(:width, area.width)
-    |> resolve_dim(:height, area.height)
+    Pdf.Layout.ContainingBlock.resolve_style(style, area)
   end
 
-  defp resolve_dim(style, key, parent_dim) do
-    case Map.get(style, key) do
-      nil -> style
-      val -> Map.put(style, key, Pdf.Dimension.resolve(val, parent_dim))
+  defp resolve_container_style(style, area) do
+    style =
+      case Map.get(style, :size) do
+        {_, _} = size -> Map.put(style, :size, Pdf.Dimension.resolve_size(size, area))
+        _ -> style
+      end
+
+    resolve_style_dims(style, area)
+  end
+
+  defp resolve_kv_style(style, area, x_offset) do
+    avail_w = Pdf.Layout.ContainingBlock.text_width(area, x_offset)
+    width = Pdf.Component.KeyValue.content_width(style, area.width, x_offset)
+
+    style
+    |> Map.put(:width, width)
+    |> Pdf.Layout.ContainingBlock.resolve_style(%{area | width: avail_w})
+  end
+
+  defp maybe_set_text_wrap(style, area, x_offset) do
+    if Map.get(style, :break_text, false) do
+      wrap_w = Pdf.Layout.ContainingBlock.text_width(area, x_offset)
+      Map.put(style, :wrap_width, wrap_w)
+    else
+      style
     end
   end
 
@@ -1269,4 +1612,126 @@ defmodule Pdf.Builder do
 
   defp resolve_width(:full, area_width), do: area_width
   defp resolve_width(w, _area_width) when is_number(w), do: w
+
+  # ── Box layout modes ─────────────────────────────────────────────
+  # `:layout` — `:absolute` (default) or `:flow` (vertical stack, HTML block-like)
+  # `:reflow` — wrap text and push lower blocks down (HTML-like, keeps x positions)
+  # `:break_text` — wrap text at render using parent width minus x offset
+
+  defp flow_layout?(style), do: Map.get(style, :layout) == :flow
+  defp reflow_layout?(style), do: Map.get(style, :reflow, false)
+
+  defp box_children_callback(style, children) do
+    cond do
+      flow_layout?(style) ->
+        fn doc, area ->
+          Pdf.Layout.Reflow.render(doc, area, style, children, &render_flow_child/3)
+        end
+
+      reflow_layout?(style) ->
+        fn doc, area ->
+          prepared =
+            Pdf.Layout.AbsoluteReflow.prepare(children, area.width, style, doc)
+
+          render_children(doc, prepared, area)
+        end
+
+      true ->
+        fn doc, area ->
+          render_children(doc, children, area)
+        end
+    end
+  end
+
+  defp render_box_children_paged(doc, children, area, _style) do
+    render_children_paged(doc, children, area)
+  end
+
+  defp resolve_box_height(h, _style, _children, _width, _doc) when is_number(h), do: h
+
+  defp resolve_box_height(:auto, style, children, width, doc) do
+    cond do
+      flow_layout?(style) ->
+        measure_box_height(style, children, width, doc)
+
+      true ->
+        measure_box_height_absolute(style, children, width, doc)
+    end
+  end
+
+  defp resolve_box_height(h, _style, _children, width, _doc) do
+    Pdf.Dimension.resolve(h, width)
+  end
+
+  defp render_flow_child(doc, %{position: :absolute} = child, _area) do
+    render_element(child, doc)
+  end
+
+  defp render_flow_child(doc, %{type: :text, props: props} = child, area) do
+    style =
+      props
+      |> Map.get(:style, %{})
+      |> Map.put(:position, {0, 0})
+      |> Map.put(:break_text, true)
+      |> Map.put(:wrap_width, area.width)
+
+    child
+    |> put_in([:props, :style], style)
+    |> offset_child(area)
+    |> render_element(doc)
+  end
+
+  defp render_flow_child(doc, %{type: _, props: props} = child, area) do
+    style = Map.get(props, :style, %{}) |> Map.put(:position, {0, 0})
+
+    child
+    |> put_in([:props, :style], style)
+    |> offset_child(area)
+    |> render_element(doc)
+  end
+
+  defp render_flow_child(doc, %{text: _} = child, area) do
+    child
+    |> Map.put(:x, 0)
+    |> Map.put(:y, 0)
+    |> Map.put(:break_text, true)
+    |> Map.put(:wrap_width, area.width)
+    |> offset_child(area)
+    |> render_element(doc)
+  end
+
+  defp render_flow_child(doc, child, area) do
+    child
+    |> Map.put(:x, 0)
+    |> Map.put(:y, 0)
+    |> offset_child(area)
+    |> render_element(doc)
+  end
+
+  defp render_flow_text(doc, string, attrs) do
+    x = Map.get(attrs, :x, 0)
+    y = Map.get(attrs, :y, 0)
+    width = Map.get(attrs, :wrap_width, 100)
+
+    style =
+      doc
+      |> Pdf.resolve_style(Map.drop(attrs, [:x, :y, :wrap_width, :break_text]))
+      |> Pdf.Style.new()
+
+    doc =
+      doc
+      |> Pdf.set_font(style.font, style.font_size, bold: style.bold, italic: style.italic)
+      |> Pdf.set_fill_color(style.color)
+
+    {doc, _remaining} =
+      Pdf.text_wrap(
+        doc,
+        {x, y},
+        {width, 10_000},
+        string,
+        Pdf.Style.to_opts(style)
+      )
+
+    doc
+  end
 end

@@ -1,0 +1,2569 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>cover/Elixir.Pdf.Reader.AcroForm.html</title>
+<style>body {
+  font: 14px/1.6 "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #000;
+  border-top: 2px solid #ddd;
+  background-color: #fff;
+
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+h1 {
+  width: 100%;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 0;
+  font-weight: 100;
+  font-size: 1.1em;
+  letter-spacing: 1px;
+}
+
+h1 code {
+  font-size: 0.96em;
+}
+
+code {
+  font: 12px monospace;
+}
+
+footer {
+  background: #eee;
+  width: 100%;
+  padding: 10px 0;
+  text-align: right;
+  border-top: 1px solid #ddd;
+  display: flex;
+  flex: 1;
+  order: 2;
+  justify-content: center;
+}
+
+table {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: collapse;
+  border: 1px solid #cbcbcb;
+  color: #000;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+}
+table thead {
+  display: none;
+}
+table td.line,
+table td.line a,
+table td.hits {
+  width: 20px;
+  background: #eaeaea;
+  text-align: center;
+  text-decoration: none;
+  font-size: 11px;
+  padding: 0 10px;
+  color: #949494;
+}
+table td.hits {
+  width: 10px;
+  text-align: right;
+  padding: 2px 5px;
+  color: rgba(0, 0, 0, 0.6);
+  background-color: #f0f0f0;
+}
+tr.miss td.line,
+tr.miss td.line a,
+tr.miss td.hits {
+  background-color: #ffdce0;
+  border-color: #fdaeb7;
+}
+tr.miss td {
+  background-color: #ffeef0;
+}
+tr.hit td.line,
+tr.hit td.line a,
+tr.hit td.hits {
+  background-color: #cdffd8;
+  border-color: #bef5cb;
+}
+tr.hit td {
+  background-color: #e6ffed;
+}
+td.source {
+  padding-left: 15px;
+  line-height: 15px;
+  white-space: pre;
+  font: 12px monospace;
+}
+</style>
+</head>
+<body>
+<h1><code>cover/Elixir.Pdf.Reader.AcroForm.html</code></h1>
+<footer><p>File generated from <code>/Users/amir/Documents/proyectos/recreando/elixir-pdf/apps/ex_pdf_read/lib/pdf/reader/acroform.ex</code> by <a href="http://erlang.org/doc/man/cover.html">cover</a> at 2026-05-27 at 22:52:54</p></footer>
+<table>
+<tbody>
+<tr>
+<td class="line" id="L1"><a href="#L1">1</a></td>
+<td class="hits"></td>
+<td class="source"><code>defmodule Pdf.Reader.AcroForm do</code></td>
+</tr>
+<tr>
+<td class="line" id="L2"><a href="#L2">2</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @moduledoc """</code></td>
+</tr>
+<tr>
+<td class="line" id="L3"><a href="#L3">3</a></td>
+<td class="hits"></td>
+<td class="source"><code>  AcroForm field walker for `Pdf.Reader`.</code></td>
+</tr>
+<tr>
+<td class="line" id="L4"><a href="#L4">4</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L5"><a href="#L5">5</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Extracts interactive form fields from a PDF's AcroForm field tree, returning</code></td>
+</tr>
+<tr>
+<td class="line" id="L6"><a href="#L6">6</a></td>
+<td class="hits"></td>
+<td class="source"><code>  a flat list of leaf `%Pdf.Reader.FormField{}` structs with decoded names, types,</code></td>
+</tr>
+<tr>
+<td class="line" id="L7"><a href="#L7">7</a></td>
+<td class="hits"></td>
+<td class="source"><code>  values, flags, and rectangles.</code></td>
+</tr>
+<tr>
+<td class="line" id="L8"><a href="#L8">8</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L9"><a href="#L9">9</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Spec references</code></td>
+</tr>
+<tr>
+<td class="line" id="L10"><a href="#L10">10</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L11"><a href="#L11">11</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - PDF 1.7 (ISO 32000-1) § 12.7 — Interactive Forms:</code></td>
+</tr>
+<tr>
+<td class="line" id="L12"><a href="#L12">12</a></td>
+<td class="hits"></td>
+<td class="source"><code>    https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf</code></td>
+</tr>
+<tr>
+<td class="line" id="L13"><a href="#L13">13</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - § 12.7.3 — Field Dictionaries</code></td>
+</tr>
+<tr>
+<td class="line" id="L14"><a href="#L14">14</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - § 12.7.3.1 — Field Flags</code></td>
+</tr>
+<tr>
+<td class="line" id="L15"><a href="#L15">15</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - § 12.7.4 — Field Types</code></td>
+</tr>
+<tr>
+<td class="line" id="L16"><a href="#L16">16</a></td>
+<td class="hits"></td>
+<td class="source"><code>  """</code></td>
+</tr>
+<tr>
+<td class="line" id="L17"><a href="#L17">17</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L18"><a href="#L18">18</a></td>
+<td class="hits"></td>
+<td class="source"><code>  alias Pdf.Reader.{Document, FormField, ObjectResolver, Utils}</code></td>
+</tr>
+<tr>
+<td class="line" id="L19"><a href="#L19">19</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L20"><a href="#L20">20</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @max_field_depth 8</code></td>
+</tr>
+<tr>
+<td class="line" id="L21"><a href="#L21">21</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L22"><a href="#L22">22</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @doc """</code></td>
+</tr>
+<tr>
+<td class="line" id="L23"><a href="#L23">23</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Reads all AcroForm leaf fields from a document.</code></td>
+</tr>
+<tr>
+<td class="line" id="L24"><a href="#L24">24</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L25"><a href="#L25">25</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Returns `{:ok, [FormField.t()], Document.t()}` with a flat list of leaf fields.</code></td>
+</tr>
+<tr>
+<td class="line" id="L26"><a href="#L26">26</a></td>
+<td class="hits"></td>
+<td class="source"><code>  When no `/AcroForm` is present, or `/Fields` is empty, returns `{:ok, [], doc}`.</code></td>
+</tr>
+<tr>
+<td class="line" id="L27"><a href="#L27">27</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Never returns `{:error, _}` for absent or empty AcroForms.</code></td>
+</tr>
+<tr>
+<td class="line" id="L28"><a href="#L28">28</a></td>
+<td class="hits"></td>
+<td class="source"><code>  """</code></td>
+</tr>
+<tr>
+<td class="line" id="L29"><a href="#L29">29</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @spec read(Document.t()) ::</code></td>
+</tr>
+<tr>
+<td class="line" id="L30"><a href="#L30">30</a></td>
+<td class="hits"></td>
+<td class="source"><code>          {:ok, [FormField.t()], Document.t()} | {:error, term()}</code></td>
+</tr>
+<tr>
+<td class="line" id="L31"><a href="#L31">31</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def read(doc) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L32"><a href="#L32">32</a></td>
+<td class="hits">25</td>
+<td class="source"><code>    with {:ok, catalog, doc2} &lt;- resolve_catalog(doc),</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L33"><a href="#L33">33</a></td>
+<td class="hits">24</td>
+<td class="source"><code>         {:ok, acroform, doc3} &lt;- resolve_acroform_dict(doc2, catalog) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L34"><a href="#L34">34</a></td>
+<td class="hits">24</td>
+<td class="source"><code>      case acroform do</code></td>
+</tr>
+<tr>
+<td class="line" id="L35"><a href="#L35">35</a></td>
+<td class="hits"></td>
+<td class="source"><code>        nil -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L36"><a href="#L36">36</a></td>
+<td class="hits">3</td>
+<td class="source"><code>          {:ok, [], doc3}</code></td>
+</tr>
+<tr>
+<td class="line" id="L37"><a href="#L37">37</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L38"><a href="#L38">38</a></td>
+<td class="hits"></td>
+<td class="source"><code>        acroform_dict when is_map(acroform_dict) -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L39"><a href="#L39">39</a></td>
+<td class="hits">21</td>
+<td class="source"><code>          fields_array = Map.get(acroform_dict, "Fields", [])</code></td>
+</tr>
+<tr>
+<td class="line" id="L40"><a href="#L40">40</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L41"><a href="#L41">41</a></td>
+<td class="hits">21</td>
+<td class="source"><code>          case fields_array do</code></td>
+</tr>
+<tr>
+<td class="line" id="L42"><a href="#L42">42</a></td>
+<td class="hits"></td>
+<td class="source"><code>            [] -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L43"><a href="#L43">43</a></td>
+<td class="hits">1</td>
+<td class="source"><code>              {:ok, [], doc3}</code></td>
+</tr>
+<tr>
+<td class="line" id="L44"><a href="#L44">44</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L45"><a href="#L45">45</a></td>
+<td class="hits"></td>
+<td class="source"><code>            fields when is_list(fields) -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L46"><a href="#L46">46</a></td>
+<td class="hits">20</td>
+<td class="source"><code>              {leaf_fields, doc4} =</code></td>
+</tr>
+<tr>
+<td class="line" id="L47"><a href="#L47">47</a></td>
+<td class="hits"></td>
+<td class="source"><code>                walk_fields(fields, doc3, "", nil, MapSet.new(), 0, [])</code></td>
+</tr>
+<tr>
+<td class="line" id="L48"><a href="#L48">48</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L49"><a href="#L49">49</a></td>
+<td class="hits">20</td>
+<td class="source"><code>              {:ok, Enum.reverse(leaf_fields), doc4}</code></td>
+</tr>
+<tr>
+<td class="line" id="L50"><a href="#L50">50</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L51"><a href="#L51">51</a></td>
+<td class="hits"></td>
+<td class="source"><code>            _ -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L52"><a href="#L52">52</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>              {:ok, [], doc3}</code></td>
+</tr>
+<tr>
+<td class="line" id="L53"><a href="#L53">53</a></td>
+<td class="hits"></td>
+<td class="source"><code>          end</code></td>
+</tr>
+<tr>
+<td class="line" id="L54"><a href="#L54">54</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end</code></td>
+</tr>
+<tr>
+<td class="line" id="L55"><a href="#L55">55</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L56"><a href="#L56">56</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L57"><a href="#L57">57</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L58"><a href="#L58">58</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L59"><a href="#L59">59</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Catalog + AcroForm resolution</code></td>
+</tr>
+<tr>
+<td class="line" id="L60"><a href="#L60">60</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L61"><a href="#L61">61</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L62"><a href="#L62">62</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp resolve_catalog(%Document{trailer: trailer} = doc) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L63"><a href="#L63">63</a></td>
+<td class="hits">25</td>
+<td class="source"><code>    case Map.get(trailer, "Root") do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L64"><a href="#L64">64</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      nil -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L65"><a href="#L65">65</a></td>
+<td class="hits"></td>
+<td class="source"><code>        {:error, :no_root}</code></td>
+</tr>
+<tr>
+<td class="line" id="L66"><a href="#L66">66</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L67"><a href="#L67">67</a></td>
+<td class="hits"></td>
+<td class="source"><code>      root_ref -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L68"><a href="#L68">68</a></td>
+<td class="hits">25</td>
+<td class="source"><code>        case ObjectResolver.resolve(doc, root_ref) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L69"><a href="#L69">69</a></td>
+<td class="hits">24</td>
+<td class="source"><code>          {:ok, catalog, doc2} when is_map(catalog) -&gt; {:ok, catalog, doc2}</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L70"><a href="#L70">70</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>          {:ok, _other, _doc2} -&gt; {:error, {:malformed, :catalog, %{not_a_dict: true}}}</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L71"><a href="#L71">71</a></td>
+<td class="hits">1</td>
+<td class="source"><code>          {:error, _} = err -&gt; err</code></td>
+</tr>
+<tr>
+<td class="line" id="L72"><a href="#L72">72</a></td>
+<td class="hits"></td>
+<td class="source"><code>        end</code></td>
+</tr>
+<tr>
+<td class="line" id="L73"><a href="#L73">73</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L74"><a href="#L74">74</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L75"><a href="#L75">75</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L76"><a href="#L76">76</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp resolve_acroform_dict(doc, catalog) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L77"><a href="#L77">77</a></td>
+<td class="hits">24</td>
+<td class="source"><code>    case Map.get(catalog, "AcroForm") do</code></td>
+</tr>
+<tr>
+<td class="line" id="L78"><a href="#L78">78</a></td>
+<td class="hits"></td>
+<td class="source"><code>      nil -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L79"><a href="#L79">79</a></td>
+<td class="hits">3</td>
+<td class="source"><code>        {:ok, nil, doc}</code></td>
+</tr>
+<tr>
+<td class="line" id="L80"><a href="#L80">80</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L81"><a href="#L81">81</a></td>
+<td class="hits"></td>
+<td class="source"><code>      :null -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L82"><a href="#L82">82</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        {:ok, nil, doc}</code></td>
+</tr>
+<tr>
+<td class="line" id="L83"><a href="#L83">83</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L84"><a href="#L84">84</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {:ref, _n, _g} = ref -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L85"><a href="#L85">85</a></td>
+<td class="hits">21</td>
+<td class="source"><code>        case ObjectResolver.resolve(doc, ref) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L86"><a href="#L86">86</a></td>
+<td class="hits">21</td>
+<td class="source"><code>          {:ok, dict, doc2} when is_map(dict) -&gt; {:ok, dict, doc2}</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L87"><a href="#L87">87</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>          {:ok, _other, doc2} -&gt; {:ok, nil, doc2}</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L88"><a href="#L88">88</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>          {:error, _} -&gt; {:ok, nil, doc}</code></td>
+</tr>
+<tr>
+<td class="line" id="L89"><a href="#L89">89</a></td>
+<td class="hits"></td>
+<td class="source"><code>        end</code></td>
+</tr>
+<tr>
+<td class="line" id="L90"><a href="#L90">90</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L91"><a href="#L91">91</a></td>
+<td class="hits"></td>
+<td class="source"><code>      dict when is_map(dict) -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L92"><a href="#L92">92</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        {:ok, dict, doc}</code></td>
+</tr>
+<tr>
+<td class="line" id="L93"><a href="#L93">93</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L94"><a href="#L94">94</a></td>
+<td class="hits"></td>
+<td class="source"><code>      _other -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L95"><a href="#L95">95</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        {:ok, nil, doc}</code></td>
+</tr>
+<tr>
+<td class="line" id="L96"><a href="#L96">96</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L97"><a href="#L97">97</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L98"><a href="#L98">98</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L99"><a href="#L99">99</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L100"><a href="#L100">100</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Field tree walker</code></td>
+</tr>
+<tr>
+<td class="line" id="L101"><a href="#L101">101</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # walk_fields(refs_or_dicts, doc, name_prefix, inherited_ft, visited, depth, acc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L102"><a href="#L102">102</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Returns {accumulated_leaf_fields, doc}</code></td>
+</tr>
+<tr>
+<td class="line" id="L103"><a href="#L103">103</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L104"><a href="#L104">104</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L105"><a href="#L105">105</a></td>
+<td class="hits">31</td>
+<td class="source"><code>  defp walk_fields([], doc, _prefix, _inherited_ft, _visited, _depth, acc) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L106"><a href="#L106">106</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {acc, doc}</code></td>
+</tr>
+<tr>
+<td class="line" id="L107"><a href="#L107">107</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L108"><a href="#L108">108</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L109"><a href="#L109">109</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp walk_fields([entry | rest], doc, prefix, inherited_ft, visited, depth, acc) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L110"><a href="#L110">110</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # Check depth cap — skip this entry if at or over limit</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L111"><a href="#L111">111</a></td>
+<td class="hits">31</td>
+<td class="source"><code>    if depth &gt;= @max_field_depth do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L112"><a href="#L112">112</a></td>
+<td class="hits">1</td>
+<td class="source"><code>      walk_fields(rest, doc, prefix, inherited_ft, visited, depth, acc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L113"><a href="#L113">113</a></td>
+<td class="hits"></td>
+<td class="source"><code>    else</code></td>
+</tr>
+<tr>
+<td class="line" id="L114"><a href="#L114">114</a></td>
+<td class="hits"></td>
+<td class="source"><code>      # Cycle detection for indirect references</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L115"><a href="#L115">115</a></td>
+<td class="hits">30</td>
+<td class="source"><code>      case entry do</code></td>
+</tr>
+<tr>
+<td class="line" id="L116"><a href="#L116">116</a></td>
+<td class="hits"></td>
+<td class="source"><code>        {:ref, n, g} -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L117"><a href="#L117">117</a></td>
+<td class="hits">30</td>
+<td class="source"><code>          key = {n, g}</code></td>
+</tr>
+<tr>
+<td class="line" id="L118"><a href="#L118">118</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L119"><a href="#L119">119</a></td>
+<td class="hits">30</td>
+<td class="source"><code>          if MapSet.member?(visited, key) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L120"><a href="#L120">120</a></td>
+<td class="hits"></td>
+<td class="source"><code>            # Cycle detected — skip this kid</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L121"><a href="#L121">121</a></td>
+<td class="hits">1</td>
+<td class="source"><code>            walk_fields(rest, doc, prefix, inherited_ft, visited, depth, acc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L122"><a href="#L122">122</a></td>
+<td class="hits"></td>
+<td class="source"><code>          else</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L123"><a href="#L123">123</a></td>
+<td class="hits">29</td>
+<td class="source"><code>            new_visited = MapSet.put(visited, key)</code></td>
+</tr>
+<tr>
+<td class="line" id="L124"><a href="#L124">124</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L125"><a href="#L125">125</a></td>
+<td class="hits">29</td>
+<td class="source"><code>            case ObjectResolver.resolve(doc, {:ref, n, g}) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L126"><a href="#L126">126</a></td>
+<td class="hits"></td>
+<td class="source"><code>              {:ok, field_dict, doc2} when is_map(field_dict) -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L127"><a href="#L127">127</a></td>
+<td class="hits">29</td>
+<td class="source"><code>                {new_acc, doc3} =</code></td>
+</tr>
+<tr>
+<td class="line" id="L128"><a href="#L128">128</a></td>
+<td class="hits"></td>
+<td class="source"><code>                  process_field(field_dict, doc2, prefix, inherited_ft, new_visited, depth, acc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L129"><a href="#L129">129</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L130"><a href="#L130">130</a></td>
+<td class="hits">29</td>
+<td class="source"><code>                walk_fields(rest, doc3, prefix, inherited_ft, new_visited, depth, new_acc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L131"><a href="#L131">131</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L132"><a href="#L132">132</a></td>
+<td class="hits"></td>
+<td class="source"><code>              {:ok, _other, doc2} -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L133"><a href="#L133">133</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>                walk_fields(rest, doc2, prefix, inherited_ft, new_visited, depth, acc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L134"><a href="#L134">134</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L135"><a href="#L135">135</a></td>
+<td class="hits"></td>
+<td class="source"><code>              {:error, _} -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L136"><a href="#L136">136</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>                walk_fields(rest, doc, prefix, inherited_ft, new_visited, depth, acc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L137"><a href="#L137">137</a></td>
+<td class="hits"></td>
+<td class="source"><code>            end</code></td>
+</tr>
+<tr>
+<td class="line" id="L138"><a href="#L138">138</a></td>
+<td class="hits"></td>
+<td class="source"><code>          end</code></td>
+</tr>
+<tr>
+<td class="line" id="L139"><a href="#L139">139</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L140"><a href="#L140">140</a></td>
+<td class="hits"></td>
+<td class="source"><code>        field_dict when is_map(field_dict) -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L141"><a href="#L141">141</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>          {new_acc, doc2} =</code></td>
+</tr>
+<tr>
+<td class="line" id="L142"><a href="#L142">142</a></td>
+<td class="hits"></td>
+<td class="source"><code>            process_field(field_dict, doc, prefix, inherited_ft, visited, depth, acc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L143"><a href="#L143">143</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L144"><a href="#L144">144</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>          walk_fields(rest, doc2, prefix, inherited_ft, visited, depth, new_acc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L145"><a href="#L145">145</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L146"><a href="#L146">146</a></td>
+<td class="hits"></td>
+<td class="source"><code>        _other -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L147"><a href="#L147">147</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>          walk_fields(rest, doc, prefix, inherited_ft, visited, depth, acc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L148"><a href="#L148">148</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end</code></td>
+</tr>
+<tr>
+<td class="line" id="L149"><a href="#L149">149</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L150"><a href="#L150">150</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L151"><a href="#L151">151</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L152"><a href="#L152">152</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Process a single resolved field dictionary</code></td>
+</tr>
+<tr>
+<td class="line" id="L153"><a href="#L153">153</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp process_field(field_dict, doc, prefix, inherited_ft, visited, depth, acc) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L154"><a href="#L154">154</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # Skip pure widget annotations that are not field nodes</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L155"><a href="#L155">155</a></td>
+<td class="hits">29</td>
+<td class="source"><code>    if widget_only?(field_dict) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L156"><a href="#L156">156</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {acc, doc}</code></td>
+</tr>
+<tr>
+<td class="line" id="L157"><a href="#L157">157</a></td>
+<td class="hits"></td>
+<td class="source"><code>    else</code></td>
+</tr>
+<tr>
+<td class="line" id="L158"><a href="#L158">158</a></td>
+<td class="hits"></td>
+<td class="source"><code>      # Extract partial name (/T) and build full name</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L159"><a href="#L159">159</a></td>
+<td class="hits">29</td>
+<td class="source"><code>      partial_name = extract_partial_name(field_dict)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L160"><a href="#L160">160</a></td>
+<td class="hits">29</td>
+<td class="source"><code>      full_name = join_name(prefix, partial_name)</code></td>
+</tr>
+<tr>
+<td class="line" id="L161"><a href="#L161">161</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L162"><a href="#L162">162</a></td>
+<td class="hits"></td>
+<td class="source"><code>      # Determine effective /FT (own takes precedence over inherited)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L163"><a href="#L163">163</a></td>
+<td class="hits">29</td>
+<td class="source"><code>      own_ft = Map.get(field_dict, "FT")</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L164"><a href="#L164">164</a></td>
+<td class="hits">29</td>
+<td class="source"><code>      effective_ft = own_ft || inherited_ft</code></td>
+</tr>
+<tr>
+<td class="line" id="L165"><a href="#L165">165</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L166"><a href="#L166">166</a></td>
+<td class="hits"></td>
+<td class="source"><code>      # Get /Kids array (may be nil or list)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L167"><a href="#L167">167</a></td>
+<td class="hits">29</td>
+<td class="source"><code>      kids = resolve_kids(field_dict)</code></td>
+</tr>
+<tr>
+<td class="line" id="L168"><a href="#L168">168</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L169"><a href="#L169">169</a></td>
+<td class="hits"></td>
+<td class="source"><code>      # Determine if this is a leaf: no kids, or all kids are widget-only</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L170"><a href="#L170">170</a></td>
+<td class="hits">29</td>
+<td class="source"><code>      if leaf_node?(kids, doc) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L171"><a href="#L171">171</a></td>
+<td class="hits"></td>
+<td class="source"><code>        # Emit leaf field</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L172"><a href="#L172">172</a></td>
+<td class="hits">18</td>
+<td class="source"><code>        {field, doc2} = emit_leaf(field_dict, full_name, partial_name, effective_ft, doc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L173"><a href="#L173">173</a></td>
+<td class="hits"></td>
+<td class="source"><code>        {[field | acc], doc2}</code></td>
+</tr>
+<tr>
+<td class="line" id="L174"><a href="#L174">174</a></td>
+<td class="hits"></td>
+<td class="source"><code>      else</code></td>
+</tr>
+<tr>
+<td class="line" id="L175"><a href="#L175">175</a></td>
+<td class="hits"></td>
+<td class="source"><code>        # Intermediate node: recurse into kids</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L176"><a href="#L176">176</a></td>
+<td class="hits">11</td>
+<td class="source"><code>        walk_fields(kids, doc, full_name, effective_ft, visited, depth + 1, acc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L177"><a href="#L177">177</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end</code></td>
+</tr>
+<tr>
+<td class="line" id="L178"><a href="#L178">178</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L179"><a href="#L179">179</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L180"><a href="#L180">180</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L181"><a href="#L181">181</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Get kids array from field dict (normalise to list or [])</code></td>
+</tr>
+<tr>
+<td class="line" id="L182"><a href="#L182">182</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp resolve_kids(field_dict) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L183"><a href="#L183">183</a></td>
+<td class="hits">29</td>
+<td class="source"><code>    case Map.get(field_dict, "Kids") do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L184"><a href="#L184">184</a></td>
+<td class="hits">17</td>
+<td class="source"><code>      nil -&gt; []</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L185"><a href="#L185">185</a></td>
+<td class="hits">12</td>
+<td class="source"><code>      kids when is_list(kids) -&gt; kids</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L186"><a href="#L186">186</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      _ -&gt; []</code></td>
+</tr>
+<tr>
+<td class="line" id="L187"><a href="#L187">187</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L188"><a href="#L188">188</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L189"><a href="#L189">189</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L190"><a href="#L190">190</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # A node is a leaf if it has no kids, or all kids are widget-only annotations</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L191"><a href="#L191">191</a></td>
+<td class="hits">17</td>
+<td class="source"><code>  defp leaf_node?([], _doc), do: true</code></td>
+</tr>
+<tr>
+<td class="line" id="L192"><a href="#L192">192</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L193"><a href="#L193">193</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp leaf_node?(kids, doc) when is_list(kids) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L194"><a href="#L194">194</a></td>
+<td class="hits">12</td>
+<td class="source"><code>    only_widgets?(kids, doc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L195"><a href="#L195">195</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L196"><a href="#L196">196</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L197"><a href="#L197">197</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Check if all kids are widget-only annotations (not logical field nodes)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L198"><a href="#L198">198</a></td>
+<td class="hits">1</td>
+<td class="source"><code>  defp only_widgets?([], _doc), do: true</code></td>
+</tr>
+<tr>
+<td class="line" id="L199"><a href="#L199">199</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L200"><a href="#L200">200</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp only_widgets?([kid | rest], doc) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L201"><a href="#L201">201</a></td>
+<td class="hits">12</td>
+<td class="source"><code>    dict =</code></td>
+</tr>
+<tr>
+<td class="line" id="L202"><a href="#L202">202</a></td>
+<td class="hits"></td>
+<td class="source"><code>      case kid do</code></td>
+</tr>
+<tr>
+<td class="line" id="L203"><a href="#L203">203</a></td>
+<td class="hits"></td>
+<td class="source"><code>        {:ref, n, g} -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L204"><a href="#L204">204</a></td>
+<td class="hits">12</td>
+<td class="source"><code>          case ObjectResolver.resolve(doc, {:ref, n, g}) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L205"><a href="#L205">205</a></td>
+<td class="hits">12</td>
+<td class="source"><code>            {:ok, d, _doc2} when is_map(d) -&gt; d</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L206"><a href="#L206">206</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>            _ -&gt; nil</code></td>
+</tr>
+<tr>
+<td class="line" id="L207"><a href="#L207">207</a></td>
+<td class="hits"></td>
+<td class="source"><code>          end</code></td>
+</tr>
+<tr>
+<td class="line" id="L208"><a href="#L208">208</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L209"><a href="#L209">209</a></td>
+<td class="hits"></td>
+<td class="source"><code>        d when is_map(d) -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L210"><a href="#L210">210</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>          d</code></td>
+</tr>
+<tr>
+<td class="line" id="L211"><a href="#L211">211</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L212"><a href="#L212">212</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        _ -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L213"><a href="#L213">213</a></td>
+<td class="hits"></td>
+<td class="source"><code>          nil</code></td>
+</tr>
+<tr>
+<td class="line" id="L214"><a href="#L214">214</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end</code></td>
+</tr>
+<tr>
+<td class="line" id="L215"><a href="#L215">215</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L216"><a href="#L216">216</a></td>
+<td class="hits">12</td>
+<td class="source"><code>    if dict == nil do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L217"><a href="#L217">217</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      only_widgets?(rest, doc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L218"><a href="#L218">218</a></td>
+<td class="hits"></td>
+<td class="source"><code>    else</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L219"><a href="#L219">219</a></td>
+<td class="hits">12</td>
+<td class="source"><code>      if widget_only?(dict) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L220"><a href="#L220">220</a></td>
+<td class="hits">1</td>
+<td class="source"><code>        only_widgets?(rest, doc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L221"><a href="#L221">221</a></td>
+<td class="hits"></td>
+<td class="source"><code>      else</code></td>
+</tr>
+<tr>
+<td class="line" id="L222"><a href="#L222">222</a></td>
+<td class="hits"></td>
+<td class="source"><code>        false</code></td>
+</tr>
+<tr>
+<td class="line" id="L223"><a href="#L223">223</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end</code></td>
+</tr>
+<tr>
+<td class="line" id="L224"><a href="#L224">224</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L225"><a href="#L225">225</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L226"><a href="#L226">226</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L227"><a href="#L227">227</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # A dict is a widget-only annotation (not a logical field) if:</code></td>
+</tr>
+<tr>
+<td class="line" id="L228"><a href="#L228">228</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # - It has /Subtype /Widget (or name "Widget")</code></td>
+</tr>
+<tr>
+<td class="line" id="L229"><a href="#L229">229</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # - AND has neither /T nor /FT</code></td>
+</tr>
+<tr>
+<td class="line" id="L230"><a href="#L230">230</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp widget_only?(dict) when is_map(dict) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L231"><a href="#L231">231</a></td>
+<td class="hits">41</td>
+<td class="source"><code>    subtype =</code></td>
+</tr>
+<tr>
+<td class="line" id="L232"><a href="#L232">232</a></td>
+<td class="hits"></td>
+<td class="source"><code>      case Map.get(dict, "Subtype") do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L233"><a href="#L233">233</a></td>
+<td class="hits">1</td>
+<td class="source"><code>        {:name, name} -&gt; name</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L234"><a href="#L234">234</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        name when is_binary(name) -&gt; name</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L235"><a href="#L235">235</a></td>
+<td class="hits">40</td>
+<td class="source"><code>        _ -&gt; nil</code></td>
+</tr>
+<tr>
+<td class="line" id="L236"><a href="#L236">236</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end</code></td>
+</tr>
+<tr>
+<td class="line" id="L237"><a href="#L237">237</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L238"><a href="#L238">238</a></td>
+<td class="hits">41</td>
+<td class="source"><code>    has_t = Map.has_key?(dict, "T")</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L239"><a href="#L239">239</a></td>
+<td class="hits">41</td>
+<td class="source"><code>    has_ft = Map.has_key?(dict, "FT")</code></td>
+</tr>
+<tr>
+<td class="line" id="L240"><a href="#L240">240</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L241"><a href="#L241">241</a></td>
+<td class="hits">41</td>
+<td class="source"><code>    subtype == "Widget" and not has_t and not has_ft</code></td>
+</tr>
+<tr>
+<td class="line" id="L242"><a href="#L242">242</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L243"><a href="#L243">243</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L244"><a href="#L244">244</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp widget_only?(_), do: false</code></td>
+</tr>
+<tr>
+<td class="line" id="L245"><a href="#L245">245</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L246"><a href="#L246">246</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Extract partial name from /T</code></td>
+</tr>
+<tr>
+<td class="line" id="L247"><a href="#L247">247</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp extract_partial_name(field_dict) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L248"><a href="#L248">248</a></td>
+<td class="hits">29</td>
+<td class="source"><code>    case Map.get(field_dict, "T") do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L249"><a href="#L249">249</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      nil -&gt; nil</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L250"><a href="#L250">250</a></td>
+<td class="hits">29</td>
+<td class="source"><code>      {:string, bin} -&gt; Utils.decode_pdf_string(bin)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L251"><a href="#L251">251</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      {:hex_string, bin} -&gt; bin</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L252"><a href="#L252">252</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      bin when is_binary(bin) -&gt; Utils.decode_pdf_string(bin)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L253"><a href="#L253">253</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      _ -&gt; nil</code></td>
+</tr>
+<tr>
+<td class="line" id="L254"><a href="#L254">254</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L255"><a href="#L255">255</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L256"><a href="#L256">256</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L257"><a href="#L257">257</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Join prefix + partial_name with "." separator</code></td>
+</tr>
+<tr>
+<td class="line" id="L258"><a href="#L258">258</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Rules: nil partial → prefix unchanged; empty prefix → partial only</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L259"><a href="#L259">259</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp join_name("", nil), do: nil</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L260"><a href="#L260">260</a></td>
+<td class="hits">20</td>
+<td class="source"><code>  defp join_name("", partial) when is_binary(partial), do: partial</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L261"><a href="#L261">261</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp join_name(prefix, nil) when is_binary(prefix), do: prefix</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L262"><a href="#L262">262</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp join_name(nil, partial), do: partial</code></td>
+</tr>
+<tr>
+<td class="line" id="L263"><a href="#L263">263</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L264"><a href="#L264">264</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp join_name(prefix, partial) when is_binary(prefix) and is_binary(partial) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L265"><a href="#L265">265</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    prefix &lt;&gt; "." &lt;&gt; partial</code></td>
+</tr>
+<tr>
+<td class="line" id="L266"><a href="#L266">266</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L267"><a href="#L267">267</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L268"><a href="#L268">268</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L269"><a href="#L269">269</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Leaf emission</code></td>
+</tr>
+<tr>
+<td class="line" id="L270"><a href="#L270">270</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L271"><a href="#L271">271</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L272"><a href="#L272">272</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp emit_leaf(field_dict, full_name, partial_name, effective_ft, doc) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L273"><a href="#L273">273</a></td>
+<td class="hits">18</td>
+<td class="source"><code>    type = ft_to_atom(effective_ft)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L274"><a href="#L274">274</a></td>
+<td class="hits">18</td>
+<td class="source"><code>    ff_int = Map.get(field_dict, "Ff")</code></td>
+</tr>
+<tr>
+<td class="line" id="L275"><a href="#L275">275</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L276"><a href="#L276">276</a></td>
+<td class="hits">18</td>
+<td class="source"><code>    flags = decode_flags(ff_int)</code></td>
+</tr>
+<tr>
+<td class="line" id="L277"><a href="#L277">277</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L278"><a href="#L278">278</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # Decode /V (value)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L279"><a href="#L279">279</a></td>
+<td class="hits">18</td>
+<td class="source"><code>    {value, doc2} = resolve_and_decode_value(Map.get(field_dict, "V"), type, ff_int, doc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L280"><a href="#L280">280</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L281"><a href="#L281">281</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # Decode /DV (default value)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L282"><a href="#L282">282</a></td>
+<td class="hits">18</td>
+<td class="source"><code>    {default_val, doc3} = resolve_and_decode_value(Map.get(field_dict, "DV"), type, ff_int, doc2)</code></td>
+</tr>
+<tr>
+<td class="line" id="L283"><a href="#L283">283</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L284"><a href="#L284">284</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # Decode /TU (tooltip)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L285"><a href="#L285">285</a></td>
+<td class="hits">18</td>
+<td class="source"><code>    tooltip =</code></td>
+</tr>
+<tr>
+<td class="line" id="L286"><a href="#L286">286</a></td>
+<td class="hits"></td>
+<td class="source"><code>      case Map.get(field_dict, "TU") do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L287"><a href="#L287">287</a></td>
+<td class="hits">18</td>
+<td class="source"><code>        nil -&gt; nil</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L288"><a href="#L288">288</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        {:string, bin} -&gt; Utils.decode_pdf_string(bin)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L289"><a href="#L289">289</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        {:hex_string, bin} -&gt; bin</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L290"><a href="#L290">290</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        bin when is_binary(bin) -&gt; Utils.decode_pdf_string(bin)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L291"><a href="#L291">291</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        _ -&gt; nil</code></td>
+</tr>
+<tr>
+<td class="line" id="L292"><a href="#L292">292</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end</code></td>
+</tr>
+<tr>
+<td class="line" id="L293"><a href="#L293">293</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L294"><a href="#L294">294</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # Parse /Rect</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L295"><a href="#L295">295</a></td>
+<td class="hits">18</td>
+<td class="source"><code>    rect = Utils.parse_rect(Map.get(field_dict, "Rect"))</code></td>
+</tr>
+<tr>
+<td class="line" id="L296"><a href="#L296">296</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L297"><a href="#L297">297</a></td>
+<td class="hits">18</td>
+<td class="source"><code>    field = %FormField{</code></td>
+</tr>
+<tr>
+<td class="line" id="L298"><a href="#L298">298</a></td>
+<td class="hits"></td>
+<td class="source"><code>      name: full_name,</code></td>
+</tr>
+<tr>
+<td class="line" id="L299"><a href="#L299">299</a></td>
+<td class="hits"></td>
+<td class="source"><code>      partial_name: partial_name,</code></td>
+</tr>
+<tr>
+<td class="line" id="L300"><a href="#L300">300</a></td>
+<td class="hits"></td>
+<td class="source"><code>      type: type,</code></td>
+</tr>
+<tr>
+<td class="line" id="L301"><a href="#L301">301</a></td>
+<td class="hits"></td>
+<td class="source"><code>      value: value,</code></td>
+</tr>
+<tr>
+<td class="line" id="L302"><a href="#L302">302</a></td>
+<td class="hits"></td>
+<td class="source"><code>      default: default_val,</code></td>
+</tr>
+<tr>
+<td class="line" id="L303"><a href="#L303">303</a></td>
+<td class="hits"></td>
+<td class="source"><code>      tooltip: tooltip,</code></td>
+</tr>
+<tr>
+<td class="line" id="L304"><a href="#L304">304</a></td>
+<td class="hits"></td>
+<td class="source"><code>      flags: flags,</code></td>
+</tr>
+<tr>
+<td class="line" id="L305"><a href="#L305">305</a></td>
+<td class="hits"></td>
+<td class="source"><code>      rect: rect</code></td>
+</tr>
+<tr>
+<td class="line" id="L306"><a href="#L306">306</a></td>
+<td class="hits"></td>
+<td class="source"><code>    }</code></td>
+</tr>
+<tr>
+<td class="line" id="L307"><a href="#L307">307</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L308"><a href="#L308">308</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {field, doc3}</code></td>
+</tr>
+<tr>
+<td class="line" id="L309"><a href="#L309">309</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L310"><a href="#L310">310</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L311"><a href="#L311">311</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L312"><a href="#L312">312</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ft_to_atom/1 — map /FT name to type atom (R-AF10)</code></td>
+</tr>
+<tr>
+<td class="line" id="L313"><a href="#L313">313</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L314"><a href="#L314">314</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L315"><a href="#L315">315</a></td>
+<td class="hits">11</td>
+<td class="source"><code>  defp ft_to_atom({:name, "Tx"}), do: :text</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L316"><a href="#L316">316</a></td>
+<td class="hits">4</td>
+<td class="source"><code>  defp ft_to_atom({:name, "Btn"}), do: :button</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L317"><a href="#L317">317</a></td>
+<td class="hits">2</td>
+<td class="source"><code>  defp ft_to_atom({:name, "Ch"}), do: :choice</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L318"><a href="#L318">318</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp ft_to_atom({:name, "Sig"}), do: :signature</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L319"><a href="#L319">319</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp ft_to_atom("Tx"), do: :text</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L320"><a href="#L320">320</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp ft_to_atom("Btn"), do: :button</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L321"><a href="#L321">321</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp ft_to_atom("Ch"), do: :choice</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L322"><a href="#L322">322</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp ft_to_atom("Sig"), do: :signature</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L323"><a href="#L323">323</a></td>
+<td class="hits">1</td>
+<td class="source"><code>  defp ft_to_atom(nil), do: :unknown</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L324"><a href="#L324">324</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp ft_to_atom(_), do: :unknown</code></td>
+</tr>
+<tr>
+<td class="line" id="L325"><a href="#L325">325</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L326"><a href="#L326">326</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L327"><a href="#L327">327</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # button_subtype/1 — disambiguate button subtypes from /Ff bits (R-AF13)</code></td>
+</tr>
+<tr>
+<td class="line" id="L328"><a href="#L328">328</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # bit 17 (0x10000) = pushbutton; bit 16 (0x8000) = radio; else = checkbox</code></td>
+</tr>
+<tr>
+<td class="line" id="L329"><a href="#L329">329</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Note: bits are 0-indexed from LSB per PDF spec.</code></td>
+</tr>
+<tr>
+<td class="line" id="L330"><a href="#L330">330</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L331"><a href="#L331">331</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L332"><a href="#L332">332</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp button_subtype(ff_int) when is_integer(ff_int) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L333"><a href="#L333">333</a></td>
+<td class="hits">4</td>
+<td class="source"><code>    cond do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L334"><a href="#L334">334</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      Bitwise.band(ff_int, 0x10000) != 0 -&gt; :pushbutton</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L335"><a href="#L335">335</a></td>
+<td class="hits">4</td>
+<td class="source"><code>      Bitwise.band(ff_int, 0x8000) != 0 -&gt; :radio</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L336"><a href="#L336">336</a></td>
+<td class="hits">3</td>
+<td class="source"><code>      true -&gt; :checkbox</code></td>
+</tr>
+<tr>
+<td class="line" id="L337"><a href="#L337">337</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L338"><a href="#L338">338</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L339"><a href="#L339">339</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L340"><a href="#L340">340</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp button_subtype(_), do: :checkbox</code></td>
+</tr>
+<tr>
+<td class="line" id="L341"><a href="#L341">341</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L342"><a href="#L342">342</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L343"><a href="#L343">343</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # resolve_and_decode_value/4 (R-AF11, R-AF12)</code></td>
+</tr>
+<tr>
+<td class="line" id="L344"><a href="#L344">344</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L345"><a href="#L345">345</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L346"><a href="#L346">346</a></td>
+<td class="hits">19</td>
+<td class="source"><code>  defp resolve_and_decode_value(nil, _type, _ff_int, doc), do: {nil, doc}</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L347"><a href="#L347">347</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp resolve_and_decode_value(:null, _type, _ff_int, doc), do: {nil, doc}</code></td>
+</tr>
+<tr>
+<td class="line" id="L348"><a href="#L348">348</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L349"><a href="#L349">349</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp resolve_and_decode_value({:ref, _n, _g} = ref, type, ff_int, doc) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L350"><a href="#L350">350</a></td>
+<td class="hits">1</td>
+<td class="source"><code>    case ObjectResolver.resolve(doc, ref) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L351"><a href="#L351">351</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {:ok, resolved, doc2} -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L352"><a href="#L352">352</a></td>
+<td class="hits">1</td>
+<td class="source"><code>        resolve_and_decode_value(resolved, type, ff_int, doc2)</code></td>
+</tr>
+<tr>
+<td class="line" id="L353"><a href="#L353">353</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L354"><a href="#L354">354</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      {:error, _} -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L355"><a href="#L355">355</a></td>
+<td class="hits"></td>
+<td class="source"><code>        {nil, doc}</code></td>
+</tr>
+<tr>
+<td class="line" id="L356"><a href="#L356">356</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L357"><a href="#L357">357</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L358"><a href="#L358">358</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L359"><a href="#L359">359</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp resolve_and_decode_value(value, :text, _ff_int, doc) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L360"><a href="#L360">360</a></td>
+<td class="hits">11</td>
+<td class="source"><code>    decoded = decode_value_as_string(value)</code></td>
+</tr>
+<tr>
+<td class="line" id="L361"><a href="#L361">361</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {decoded, doc}</code></td>
+</tr>
+<tr>
+<td class="line" id="L362"><a href="#L362">362</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L363"><a href="#L363">363</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L364"><a href="#L364">364</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp resolve_and_decode_value(value, :button, ff_int, doc) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L365"><a href="#L365">365</a></td>
+<td class="hits">4</td>
+<td class="source"><code>    subtype = button_subtype(ff_int)</code></td>
+</tr>
+<tr>
+<td class="line" id="L366"><a href="#L366">366</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L367"><a href="#L367">367</a></td>
+<td class="hits">4</td>
+<td class="source"><code>    result =</code></td>
+</tr>
+<tr>
+<td class="line" id="L368"><a href="#L368">368</a></td>
+<td class="hits"></td>
+<td class="source"><code>      case subtype do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L369"><a href="#L369">369</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        :pushbutton -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L370"><a href="#L370">370</a></td>
+<td class="hits"></td>
+<td class="source"><code>          nil</code></td>
+</tr>
+<tr>
+<td class="line" id="L371"><a href="#L371">371</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L372"><a href="#L372">372</a></td>
+<td class="hits"></td>
+<td class="source"><code>        :radio -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L373"><a href="#L373">373</a></td>
+<td class="hits">1</td>
+<td class="source"><code>          case value do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L374"><a href="#L374">374</a></td>
+<td class="hits">1</td>
+<td class="source"><code>            {:name, opt} -&gt; {:selected, opt}</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L375"><a href="#L375">375</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>            opt when is_binary(opt) -&gt; {:selected, opt}</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L376"><a href="#L376">376</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>            _ -&gt; nil</code></td>
+</tr>
+<tr>
+<td class="line" id="L377"><a href="#L377">377</a></td>
+<td class="hits"></td>
+<td class="source"><code>          end</code></td>
+</tr>
+<tr>
+<td class="line" id="L378"><a href="#L378">378</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L379"><a href="#L379">379</a></td>
+<td class="hits"></td>
+<td class="source"><code>        :checkbox -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L380"><a href="#L380">380</a></td>
+<td class="hits">3</td>
+<td class="source"><code>          case value do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L381"><a href="#L381">381</a></td>
+<td class="hits">1</td>
+<td class="source"><code>            {:name, "Off"} -&gt; false</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L382"><a href="#L382">382</a></td>
+<td class="hits">2</td>
+<td class="source"><code>            {:name, _other} -&gt; true</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L383"><a href="#L383">383</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>            "Off" -&gt; false</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L384"><a href="#L384">384</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>            _ when is_binary(value) -&gt; true</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L385"><a href="#L385">385</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>            _ -&gt; nil</code></td>
+</tr>
+<tr>
+<td class="line" id="L386"><a href="#L386">386</a></td>
+<td class="hits"></td>
+<td class="source"><code>          end</code></td>
+</tr>
+<tr>
+<td class="line" id="L387"><a href="#L387">387</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end</code></td>
+</tr>
+<tr>
+<td class="line" id="L388"><a href="#L388">388</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L389"><a href="#L389">389</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {result, doc}</code></td>
+</tr>
+<tr>
+<td class="line" id="L390"><a href="#L390">390</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L391"><a href="#L391">391</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L392"><a href="#L392">392</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp resolve_and_decode_value(value, :choice, ff_int, doc) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L393"><a href="#L393">393</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # Multi-select: /Ff bit 22 (0x200000) set → array of strings</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L394"><a href="#L394">394</a></td>
+<td class="hits">2</td>
+<td class="source"><code>    is_multi =</code></td>
+</tr>
+<tr>
+<td class="line" id="L395"><a href="#L395">395</a></td>
+<td class="hits"></td>
+<td class="source"><code>      case ff_int do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L396"><a href="#L396">396</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        n when is_integer(n) -&gt; Bitwise.band(n, 0x200000) != 0</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L397"><a href="#L397">397</a></td>
+<td class="hits">2</td>
+<td class="source"><code>        _ -&gt; false</code></td>
+</tr>
+<tr>
+<td class="line" id="L398"><a href="#L398">398</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end</code></td>
+</tr>
+<tr>
+<td class="line" id="L399"><a href="#L399">399</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L400"><a href="#L400">400</a></td>
+<td class="hits">2</td>
+<td class="source"><code>    result =</code></td>
+</tr>
+<tr>
+<td class="line" id="L401"><a href="#L401">401</a></td>
+<td class="hits"></td>
+<td class="source"><code>      if is_multi do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L402"><a href="#L402">402</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        case value do</code></td>
+</tr>
+<tr>
+<td class="line" id="L403"><a href="#L403">403</a></td>
+<td class="hits"></td>
+<td class="source"><code>          list when is_list(list) -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L404"><a href="#L404">404</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>            Enum.map(list, &amp;decode_value_as_string/1)</code></td>
+</tr>
+<tr>
+<td class="line" id="L405"><a href="#L405">405</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L406"><a href="#L406">406</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>          other -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L407"><a href="#L407">407</a></td>
+<td class="hits"></td>
+<td class="source"><code>            [decode_value_as_string(other)]</code></td>
+</tr>
+<tr>
+<td class="line" id="L408"><a href="#L408">408</a></td>
+<td class="hits"></td>
+<td class="source"><code>        end</code></td>
+</tr>
+<tr>
+<td class="line" id="L409"><a href="#L409">409</a></td>
+<td class="hits"></td>
+<td class="source"><code>      else</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L410"><a href="#L410">410</a></td>
+<td class="hits">2</td>
+<td class="source"><code>        case value do</code></td>
+</tr>
+<tr>
+<td class="line" id="L411"><a href="#L411">411</a></td>
+<td class="hits"></td>
+<td class="source"><code>          list when is_list(list) -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L412"><a href="#L412">412</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>            list |&gt; Enum.map(&amp;decode_value_as_string/1) |&gt; List.first()</code></td>
+</tr>
+<tr>
+<td class="line" id="L413"><a href="#L413">413</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L414"><a href="#L414">414</a></td>
+<td class="hits"></td>
+<td class="source"><code>          other -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L415"><a href="#L415">415</a></td>
+<td class="hits">2</td>
+<td class="source"><code>            decode_value_as_string(other)</code></td>
+</tr>
+<tr>
+<td class="line" id="L416"><a href="#L416">416</a></td>
+<td class="hits"></td>
+<td class="source"><code>        end</code></td>
+</tr>
+<tr>
+<td class="line" id="L417"><a href="#L417">417</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end</code></td>
+</tr>
+<tr>
+<td class="line" id="L418"><a href="#L418">418</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L419"><a href="#L419">419</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {result, doc}</code></td>
+</tr>
+<tr>
+<td class="line" id="L420"><a href="#L420">420</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L421"><a href="#L421">421</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L422"><a href="#L422">422</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp resolve_and_decode_value(value, :signature, _ff_int, doc) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L423"><a href="#L423">423</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    result =</code></td>
+</tr>
+<tr>
+<td class="line" id="L424"><a href="#L424">424</a></td>
+<td class="hits"></td>
+<td class="source"><code>      case value do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L425"><a href="#L425">425</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        dict when is_map(dict) -&gt; :present</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L426"><a href="#L426">426</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        :null -&gt; nil</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L427"><a href="#L427">427</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        nil -&gt; nil</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L428"><a href="#L428">428</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        _ -&gt; nil</code></td>
+</tr>
+<tr>
+<td class="line" id="L429"><a href="#L429">429</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end</code></td>
+</tr>
+<tr>
+<td class="line" id="L430"><a href="#L430">430</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L431"><a href="#L431">431</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {result, doc}</code></td>
+</tr>
+<tr>
+<td class="line" id="L432"><a href="#L432">432</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L433"><a href="#L433">433</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L434"><a href="#L434">434</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp resolve_and_decode_value(_value, :unknown, _ff_int, doc) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L435"><a href="#L435">435</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {nil, doc}</code></td>
+</tr>
+<tr>
+<td class="line" id="L436"><a href="#L436">436</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L437"><a href="#L437">437</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L438"><a href="#L438">438</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp resolve_and_decode_value(value, _type, _ff_int, doc) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L439"><a href="#L439">439</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {decode_value_as_string(value), doc}</code></td>
+</tr>
+<tr>
+<td class="line" id="L440"><a href="#L440">440</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L441"><a href="#L441">441</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L442"><a href="#L442">442</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Decode a raw PDF value to a string (for text fields, tooltip, etc.)</code></td>
+</tr>
+<tr>
+<td class="line" id="L443"><a href="#L443">443</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp decode_value_as_string({:string, bin}) when is_binary(bin),</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L444"><a href="#L444">444</a></td>
+<td class="hits">12</td>
+<td class="source"><code>    do: Utils.decode_pdf_string(bin)</code></td>
+</tr>
+<tr>
+<td class="line" id="L445"><a href="#L445">445</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L446"><a href="#L446">446</a></td>
+<td class="hits">1</td>
+<td class="source"><code>  defp decode_value_as_string({:hex_string, bin}) when is_binary(bin), do: decode_hex_string(bin)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L447"><a href="#L447">447</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp decode_value_as_string(bin) when is_binary(bin), do: Utils.decode_pdf_string(bin)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L448"><a href="#L448">448</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp decode_value_as_string(_), do: nil</code></td>
+</tr>
+<tr>
+<td class="line" id="L449"><a href="#L449">449</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L450"><a href="#L450">450</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Decode hex string bytes — may carry UTF-16BE BOM</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L451"><a href="#L451">451</a></td>
+<td class="hits">1</td>
+<td class="source"><code>  defp decode_hex_string(bin) when is_binary(bin), do: Utils.decode_pdf_string(bin)</code></td>
+</tr>
+<tr>
+<td class="line" id="L452"><a href="#L452">452</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L453"><a href="#L453">453</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L454"><a href="#L454">454</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # decode_flags/1 — /Ff bitmask → %{atom =&gt; boolean} (R-AF14)</code></td>
+</tr>
+<tr>
+<td class="line" id="L455"><a href="#L455">455</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # All 17 flag atoms per PDF 1.7 § 12.7.3.1 Table 227</code></td>
+</tr>
+<tr>
+<td class="line" id="L456"><a href="#L456">456</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Bit positions are 0-indexed from LSB.</code></td>
+</tr>
+<tr>
+<td class="line" id="L457"><a href="#L457">457</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L458"><a href="#L458">458</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L459"><a href="#L459">459</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @flag_bits [</code></td>
+</tr>
+<tr>
+<td class="line" id="L460"><a href="#L460">460</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:read_only, 0},</code></td>
+</tr>
+<tr>
+<td class="line" id="L461"><a href="#L461">461</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:required, 1},</code></td>
+</tr>
+<tr>
+<td class="line" id="L462"><a href="#L462">462</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:no_export, 2},</code></td>
+</tr>
+<tr>
+<td class="line" id="L463"><a href="#L463">463</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:multiline, 12},</code></td>
+</tr>
+<tr>
+<td class="line" id="L464"><a href="#L464">464</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:password, 13},</code></td>
+</tr>
+<tr>
+<td class="line" id="L465"><a href="#L465">465</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:radio, 15},</code></td>
+</tr>
+<tr>
+<td class="line" id="L466"><a href="#L466">466</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:pushbutton, 16},</code></td>
+</tr>
+<tr>
+<td class="line" id="L467"><a href="#L467">467</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:combo, 17},</code></td>
+</tr>
+<tr>
+<td class="line" id="L468"><a href="#L468">468</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:edit, 18},</code></td>
+</tr>
+<tr>
+<td class="line" id="L469"><a href="#L469">469</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:sort, 19},</code></td>
+</tr>
+<tr>
+<td class="line" id="L470"><a href="#L470">470</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:file_select, 20},</code></td>
+</tr>
+<tr>
+<td class="line" id="L471"><a href="#L471">471</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:multi_select, 21},</code></td>
+</tr>
+<tr>
+<td class="line" id="L472"><a href="#L472">472</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:do_not_spell_check, 22},</code></td>
+</tr>
+<tr>
+<td class="line" id="L473"><a href="#L473">473</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:do_not_scroll, 23},</code></td>
+</tr>
+<tr>
+<td class="line" id="L474"><a href="#L474">474</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:comb, 24},</code></td>
+</tr>
+<tr>
+<td class="line" id="L475"><a href="#L475">475</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:rich_text, 25},</code></td>
+</tr>
+<tr>
+<td class="line" id="L476"><a href="#L476">476</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {:radios_in_unison, 25}</code></td>
+</tr>
+<tr>
+<td class="line" id="L477"><a href="#L477">477</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ]</code></td>
+</tr>
+<tr>
+<td class="line" id="L478"><a href="#L478">478</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L479"><a href="#L479">479</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp decode_flags(nil) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L480"><a href="#L480">480</a></td>
+<td class="hits">9</td>
+<td class="source"><code>    Map.new(@flag_bits, fn {atom, _bit} -&gt; {atom, false} end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L481"><a href="#L481">481</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L482"><a href="#L482">482</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L483"><a href="#L483">483</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp decode_flags(ff) when is_integer(ff) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L484"><a href="#L484">484</a></td>
+<td class="hits">9</td>
+<td class="source"><code>    Map.new(@flag_bits, fn {atom, bit} -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L485"><a href="#L485">485</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {atom, Bitwise.band(ff, Bitwise.bsl(1, bit)) != 0}</code></td>
+</tr>
+<tr>
+<td class="line" id="L486"><a href="#L486">486</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L487"><a href="#L487">487</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L488"><a href="#L488">488</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L489"><a href="#L489">489</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp decode_flags(_), do: decode_flags(nil)</code></td>
+</tr>
+<tr>
+<td class="line" id="L490"><a href="#L490">490</a></td>
+<td class="hits"></td>
+<td class="source"><code>end</code></td>
+</tr>
+</tbody>
+<thead>
+<tr>
+<th>Line</th>
+<th>Hits</th>
+<th>Source</th>
+</tr>
+</thead>
+</table>
+</body>
+</html>

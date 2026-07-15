@@ -365,6 +365,102 @@ defmodule Pdf.BuilderTest do
       assert output =~ "Deep nested"
     end
 
+    test "row with :full width inside box resolves before render" do
+      template = [
+        %{box: {50, 700}, size: {200, :auto}, padding: 5, border: 1, children: [
+          %{type: :row, props: %{
+            style: %{size: {:full, :auto}, gap: 10},
+            children: [
+              {0, [%{type: :text, props: %{content: "Left", style: %{font_size: 10}}}]},
+              {1, [%{type: :text, props: %{content: "Right side text", style: %{font_size: 10}}}]}
+            ]
+          }}
+        ]}
+      ]
+
+      doc = Builder.render(template, %{compress: false})
+      output = export(doc.current)
+      assert output =~ "Left"
+      assert output =~ "Right side"
+    end
+
+    test "box with stack flows text without fixed y positions" do
+      long_text =
+        "Very Long Resort Name That Should Wrap And Push The Next Line Down Below Tampa"
+
+      template = [
+        %{box: {50, 700}, size: {180, :auto}, padding: 5, border: 1, children: [
+          %{stack: {10, -8}, gap: 0, children: [
+            %{text: long_text, font_size: 10, bold: true},
+            %{text: "Tampa, FL", font_size: 9}
+          ]}
+        ]}
+      ]
+
+      doc = Builder.render(template, %{compress: false})
+      output = export(doc.current)
+      assert output =~ "Tampa, FL"
+      assert output =~ "Very Long Resort"
+    end
+
+    test "box with layout :flow wraps long text and grows with :auto height" do
+      long_text =
+        "This is a very long line of text that should wrap inside the box and push the next element down below it."
+
+      template = [
+        %{box: {50, 700}, size: {150, :auto}, layout: :flow, gap: 4, padding: 5, border: 1, children: [
+          %{text: long_text, font_size: 10},
+          %{text: "Second line", font_size: 10}
+        ]}
+      ]
+
+      height =
+        Builder.measure_box_height(
+          %{layout: :flow, gap: 4, padding: 5, border: 1},
+          [
+            %{text: long_text, font_size: 10},
+            %{text: "Second line", font_size: 10}
+          ],
+          150
+        )
+
+      assert height > 40
+
+      doc = Builder.render(template, %{compress: false})
+      output = export(doc.current)
+      assert output =~ "Second line"
+      assert output =~ "wrap inside the box"
+    end
+
+    test "box with reflow wraps text and pushes content below anchor" do
+      long_name =
+        "Very Long Resort Name That Should Wrap And Push The Date Strip Down Below The Header"
+
+      template = [
+        %{box: {50, 700}, size: {150, :auto}, reflow: true, reflow_anchor: 40, padding: 5, border: 1, children: [
+          %{text: long_name, x: 0, y: -5, font_size: 10},
+          %{text: "Below anchor", x: 0, y: -45, font_size: 10}
+        ]}
+      ]
+
+      height =
+        Builder.measure_box_height_absolute(
+          %{reflow: true, reflow_anchor: 40, padding: 5, border: 1},
+          [
+            %{text: long_name, x: 0, y: -5, font_size: 10},
+            %{text: "Below anchor", x: 0, y: -45, font_size: 10}
+          ],
+          150
+        )
+
+      assert height > 55
+
+      doc = Builder.render(template, %{compress: false})
+      output = export(doc.current)
+      assert output =~ "Below anchor"
+      assert output =~ "Resort Name"
+    end
+
     test "top-level box ignores relative sizing (no parent)" do
       template = [
         %{box: {50, 700}, size: {300, 200}, border: 1, children: [

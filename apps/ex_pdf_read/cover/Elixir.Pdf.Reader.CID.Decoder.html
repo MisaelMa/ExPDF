@@ -1,0 +1,1889 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>cover/Elixir.Pdf.Reader.CID.Decoder.html</title>
+<style>body {
+  font: 14px/1.6 "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #000;
+  border-top: 2px solid #ddd;
+  background-color: #fff;
+
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+h1 {
+  width: 100%;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 0;
+  font-weight: 100;
+  font-size: 1.1em;
+  letter-spacing: 1px;
+}
+
+h1 code {
+  font-size: 0.96em;
+}
+
+code {
+  font: 12px monospace;
+}
+
+footer {
+  background: #eee;
+  width: 100%;
+  padding: 10px 0;
+  text-align: right;
+  border-top: 1px solid #ddd;
+  display: flex;
+  flex: 1;
+  order: 2;
+  justify-content: center;
+}
+
+table {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: collapse;
+  border: 1px solid #cbcbcb;
+  color: #000;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+}
+table thead {
+  display: none;
+}
+table td.line,
+table td.line a,
+table td.hits {
+  width: 20px;
+  background: #eaeaea;
+  text-align: center;
+  text-decoration: none;
+  font-size: 11px;
+  padding: 0 10px;
+  color: #949494;
+}
+table td.hits {
+  width: 10px;
+  text-align: right;
+  padding: 2px 5px;
+  color: rgba(0, 0, 0, 0.6);
+  background-color: #f0f0f0;
+}
+tr.miss td.line,
+tr.miss td.line a,
+tr.miss td.hits {
+  background-color: #ffdce0;
+  border-color: #fdaeb7;
+}
+tr.miss td {
+  background-color: #ffeef0;
+}
+tr.hit td.line,
+tr.hit td.line a,
+tr.hit td.hits {
+  background-color: #cdffd8;
+  border-color: #bef5cb;
+}
+tr.hit td {
+  background-color: #e6ffed;
+}
+td.source {
+  padding-left: 15px;
+  line-height: 15px;
+  white-space: pre;
+  font: 12px monospace;
+}
+</style>
+</head>
+<body>
+<h1><code>cover/Elixir.Pdf.Reader.CID.Decoder.html</code></h1>
+<footer><p>File generated from <code>/Users/amir/Documents/proyectos/recreando/elixir-pdf/apps/ex_pdf_read/lib/pdf/reader/cid/decoder.ex</code> by <a href="http://erlang.org/doc/man/cover.html">cover</a> at 2026-05-27 at 22:52:54</p></footer>
+<table>
+<tbody>
+<tr>
+<td class="line" id="L1"><a href="#L1">1</a></td>
+<td class="hits"></td>
+<td class="source"><code>defmodule Pdf.Reader.CID.Decoder do</code></td>
+</tr>
+<tr>
+<td class="line" id="L2"><a href="#L2">2</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @moduledoc """</code></td>
+</tr>
+<tr>
+<td class="line" id="L3"><a href="#L3">3</a></td>
+<td class="hits"></td>
+<td class="source"><code>  CID font decoder for Type0/Identity-H and Identity-V composite fonts.</code></td>
+</tr>
+<tr>
+<td class="line" id="L4"><a href="#L4">4</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L5"><a href="#L5">5</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Returns a `decoder_fn()` closure with the same contract as the simple-font</code></td>
+</tr>
+<tr>
+<td class="line" id="L6"><a href="#L6">6</a></td>
+<td class="hits"></td>
+<td class="source"><code>  decoder: `(binary() -&gt; {String.t(), [{non_neg_integer(), binary()}]})`.</code></td>
+</tr>
+<tr>
+<td class="line" id="L7"><a href="#L7">7</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L8"><a href="#L8">8</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Resolution cascade (per CID)</code></td>
+</tr>
+<tr>
+<td class="line" id="L9"><a href="#L9">9</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L10"><a href="#L10">10</a></td>
+<td class="hits"></td>
+<td class="source"><code>  1. **ToUnicode CMap** — if the font has a `/ToUnicode` stream, its `bf_char`/</code></td>
+</tr>
+<tr>
+<td class="line" id="L11"><a href="#L11">11</a></td>
+<td class="hits"></td>
+<td class="source"><code>     `bf_range` entries are checked first (most specific).</code></td>
+</tr>
+<tr>
+<td class="line" id="L12"><a href="#L12">12</a></td>
+<td class="hits"></td>
+<td class="source"><code>  2. **Adobe registry table** — `/CIDSystemInfo /Ordering` maps to one of the four</code></td>
+</tr>
+<tr>
+<td class="line" id="L13"><a href="#L13">13</a></td>
+<td class="hits"></td>
+<td class="source"><code>     bundled collection modules (`AdobeJapan1`, `AdobeCNS1`, `AdobeKorea1`,</code></td>
+</tr>
+<tr>
+<td class="line" id="L14"><a href="#L14">14</a></td>
+<td class="hits"></td>
+<td class="source"><code>     `AdobeGB1`). O(1) pattern-match dispatch.</code></td>
+</tr>
+<tr>
+<td class="line" id="L15"><a href="#L15">15</a></td>
+<td class="hits"></td>
+<td class="source"><code>  3. **U+FFFD fallback** — unresolved CIDs yield `U+FFFD` plus a sentinel tuple</code></td>
+</tr>
+<tr>
+<td class="line" id="L16"><a href="#L16">16</a></td>
+<td class="hits"></td>
+<td class="source"><code>     `{idx, "cid:0xHHHH"}` appended to the unresolved list.</code></td>
+</tr>
+<tr>
+<td class="line" id="L17"><a href="#L17">17</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L18"><a href="#L18">18</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## `__test_cmap__` shortcut</code></td>
+</tr>
+<tr>
+<td class="line" id="L19"><a href="#L19">19</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L20"><a href="#L20">20</a></td>
+<td class="hits"></td>
+<td class="source"><code>  For unit tests, a pre-parsed `%Pdf.Reader.CMap{}` can be injected by storing</code></td>
+</tr>
+<tr>
+<td class="line" id="L21"><a href="#L21">21</a></td>
+<td class="hits"></td>
+<td class="source"><code>  it in the font dict under the key `"__test_cmap__"`. This bypasses stream</code></td>
+</tr>
+<tr>
+<td class="line" id="L22"><a href="#L22">22</a></td>
+<td class="hits"></td>
+<td class="source"><code>  resolution. (Mirrors the same shortcut in `Pdf.Reader.Font`.)</code></td>
+</tr>
+<tr>
+<td class="line" id="L23"><a href="#L23">23</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L24"><a href="#L24">24</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Width / advance computation</code></td>
+</tr>
+<tr>
+<td class="line" id="L25"><a href="#L25">25</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L26"><a href="#L26">26</a></td>
+<td class="hits"></td>
+<td class="source"><code>  This module handles **character decoding only** (bytes → Unicode text). Glyph</code></td>
+</tr>
+<tr>
+<td class="line" id="L27"><a href="#L27">27</a></td>
+<td class="hits"></td>
+<td class="source"><code>  advance widths (`/W` and `/DW` entries on the DescendantFonts[0] dict) are read</code></td>
+</tr>
+<tr>
+<td class="line" id="L28"><a href="#L28">28</a></td>
+<td class="hits"></td>
+<td class="source"><code>  separately by `Pdf.Reader.Font.Widths` (§ 9.7.4.3). The two concerns are</code></td>
+</tr>
+<tr>
+<td class="line" id="L29"><a href="#L29">29</a></td>
+<td class="hits"></td>
+<td class="source"><code>  intentionally kept in separate modules: decoding and advance computation are</code></td>
+</tr>
+<tr>
+<td class="line" id="L30"><a href="#L30">30</a></td>
+<td class="hits"></td>
+<td class="source"><code>  independent of each other.</code></td>
+</tr>
+<tr>
+<td class="line" id="L31"><a href="#L31">31</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L32"><a href="#L32">32</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Spec references</code></td>
+</tr>
+<tr>
+<td class="line" id="L33"><a href="#L33">33</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L34"><a href="#L34">34</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - PDF 1.7 (ISO 32000-1) § 9.7 — Composite Fonts:</code></td>
+</tr>
+<tr>
+<td class="line" id="L35"><a href="#L35">35</a></td>
+<td class="hits"></td>
+<td class="source"><code>    https://opensource.adobe.com/dc-acrobat-sdk-docs/standards/pdfstandards/pdf/PDF32000_2008.pdf</code></td>
+</tr>
+<tr>
+<td class="line" id="L36"><a href="#L36">36</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - PDF 1.7 § 9.7.4 — CIDFonts</code></td>
+</tr>
+<tr>
+<td class="line" id="L37"><a href="#L37">37</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - PDF 1.7 § 9.7.4.3 — /W and /DW arrays (handled by `Pdf.Reader.Font.Widths`)</code></td>
+</tr>
+<tr>
+<td class="line" id="L38"><a href="#L38">38</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - PDF 1.7 § 9.7.5 — CMaps (Identity-H, Identity-V predefined)</code></td>
+</tr>
+<tr>
+<td class="line" id="L39"><a href="#L39">39</a></td>
+<td class="hits"></td>
+<td class="source"><code>  """</code></td>
+</tr>
+<tr>
+<td class="line" id="L40"><a href="#L40">40</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L41"><a href="#L41">41</a></td>
+<td class="hits"></td>
+<td class="source"><code>  alias Pdf.Reader.CID.{</code></td>
+</tr>
+<tr>
+<td class="line" id="L42"><a href="#L42">42</a></td>
+<td class="hits"></td>
+<td class="source"><code>    AdobeCNS1,</code></td>
+</tr>
+<tr>
+<td class="line" id="L43"><a href="#L43">43</a></td>
+<td class="hits"></td>
+<td class="source"><code>    AdobeGB1,</code></td>
+</tr>
+<tr>
+<td class="line" id="L44"><a href="#L44">44</a></td>
+<td class="hits"></td>
+<td class="source"><code>    AdobeJapan1,</code></td>
+</tr>
+<tr>
+<td class="line" id="L45"><a href="#L45">45</a></td>
+<td class="hits"></td>
+<td class="source"><code>    AdobeKorea1,</code></td>
+</tr>
+<tr>
+<td class="line" id="L46"><a href="#L46">46</a></td>
+<td class="hits"></td>
+<td class="source"><code>    CIDToGIDMap,</code></td>
+</tr>
+<tr>
+<td class="line" id="L47"><a href="#L47">47</a></td>
+<td class="hits"></td>
+<td class="source"><code>    Codespace,</code></td>
+</tr>
+<tr>
+<td class="line" id="L48"><a href="#L48">48</a></td>
+<td class="hits"></td>
+<td class="source"><code>    PredefinedCMap</code></td>
+</tr>
+<tr>
+<td class="line" id="L49"><a href="#L49">49</a></td>
+<td class="hits"></td>
+<td class="source"><code>  }</code></td>
+</tr>
+<tr>
+<td class="line" id="L50"><a href="#L50">50</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L51"><a href="#L51">51</a></td>
+<td class="hits"></td>
+<td class="source"><code>  alias Pdf.Reader.{CMap, Document, Filter, ObjectResolver}</code></td>
+</tr>
+<tr>
+<td class="line" id="L52"><a href="#L52">52</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L53"><a href="#L53">53</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @type decoder_fn :: (binary() -&gt; {String.t(), [{non_neg_integer(), binary()}]})</code></td>
+</tr>
+<tr>
+<td class="line" id="L54"><a href="#L54">54</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L55"><a href="#L55">55</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @unresolved_char "�"</code></td>
+</tr>
+<tr>
+<td class="line" id="L56"><a href="#L56">56</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L57"><a href="#L57">57</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @doc """</code></td>
+</tr>
+<tr>
+<td class="line" id="L58"><a href="#L58">58</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Build a CID decoder closure from a Type0 font dict.</code></td>
+</tr>
+<tr>
+<td class="line" id="L59"><a href="#L59">59</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L60"><a href="#L60">60</a></td>
+<td class="hits"></td>
+<td class="source"><code>  `font_dict` is the top-level Type0 font dictionary (already resolved).</code></td>
+</tr>
+<tr>
+<td class="line" id="L61"><a href="#L61">61</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Reads `DescendantFonts`, `CIDSystemInfo`, `CIDToGIDMap`, and `ToUnicode`.</code></td>
+</tr>
+<tr>
+<td class="line" id="L62"><a href="#L62">62</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L63"><a href="#L63">63</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Returns `{:ok, decoder_fn, updated_doc}`.</code></td>
+</tr>
+<tr>
+<td class="line" id="L64"><a href="#L64">64</a></td>
+<td class="hits"></td>
+<td class="source"><code>  """</code></td>
+</tr>
+<tr>
+<td class="line" id="L65"><a href="#L65">65</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @spec build(map(), Document.t()) :: {:ok, decoder_fn(), Document.t()} | {:error, term()}</code></td>
+</tr>
+<tr>
+<td class="line" id="L66"><a href="#L66">66</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def build(font_dict, doc) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L67"><a href="#L67">67</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # Step 1: Resolve ToUnicode CMap (may be nil).</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L68"><a href="#L68">68</a></td>
+<td class="hits">57</td>
+<td class="source"><code>    {cmap, doc1} = resolve_cmap(font_dict, doc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L69"><a href="#L69">69</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L70"><a href="#L70">70</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # Step 2: Resolve DescendantFonts array → first descendant CIDFont dict.</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L71"><a href="#L71">71</a></td>
+<td class="hits">57</td>
+<td class="source"><code>    {descendant, doc2} = resolve_descendant(font_dict, doc1)</code></td>
+</tr>
+<tr>
+<td class="line" id="L72"><a href="#L72">72</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L73"><a href="#L73">73</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # Step 3: Extract registry atom from CIDSystemInfo.Ordering.</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L74"><a href="#L74">74</a></td>
+<td class="hits">57</td>
+<td class="source"><code>    registry_atom = parse_registry(descendant)</code></td>
+</tr>
+<tr>
+<td class="line" id="L75"><a href="#L75">75</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L76"><a href="#L76">76</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # Step 4: Parse CIDToGIDMap (stored for completeness; not used in Unicode cascade).</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L77"><a href="#L77">77</a></td>
+<td class="hits">57</td>
+<td class="source"><code>    {_cid_to_gid, doc3} =</code></td>
+</tr>
+<tr>
+<td class="line" id="L78"><a href="#L78">78</a></td>
+<td class="hits"></td>
+<td class="source"><code>      case Map.get(descendant, "CIDToGIDMap") do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L79"><a href="#L79">79</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        nil -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L80"><a href="#L80">80</a></td>
+<td class="hits"></td>
+<td class="source"><code>          {:identity, doc2}</code></td>
+</tr>
+<tr>
+<td class="line" id="L81"><a href="#L81">81</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L82"><a href="#L82">82</a></td>
+<td class="hits"></td>
+<td class="source"><code>        cid_to_gid_value -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L83"><a href="#L83">83</a></td>
+<td class="hits">57</td>
+<td class="source"><code>          case CIDToGIDMap.parse(cid_to_gid_value, doc2) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L84"><a href="#L84">84</a></td>
+<td class="hits">57</td>
+<td class="source"><code>            {:ok, map, doc_out} -&gt; {map, doc_out}</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L85"><a href="#L85">85</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>            {:error, _} -&gt; {:identity, doc2}</code></td>
+</tr>
+<tr>
+<td class="line" id="L86"><a href="#L86">86</a></td>
+<td class="hits"></td>
+<td class="source"><code>          end</code></td>
+</tr>
+<tr>
+<td class="line" id="L87"><a href="#L87">87</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end</code></td>
+</tr>
+<tr>
+<td class="line" id="L88"><a href="#L88">88</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L89"><a href="#L89">89</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # Step 5: Build and return the closure.</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L90"><a href="#L90">90</a></td>
+<td class="hits">57</td>
+<td class="source"><code>    decoder = build_closure(cmap, registry_atom)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L91"><a href="#L91">91</a></td>
+<td class="hits">57</td>
+<td class="source"><code>    {:ok, decoder, doc3}</code></td>
+</tr>
+<tr>
+<td class="line" id="L92"><a href="#L92">92</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L93"><a href="#L93">93</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L94"><a href="#L94">94</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @doc """</code></td>
+</tr>
+<tr>
+<td class="line" id="L95"><a href="#L95">95</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Build a predefined CMap decoder closure from a Type0 font dict whose</code></td>
+</tr>
+<tr>
+<td class="line" id="L96"><a href="#L96">96</a></td>
+<td class="hits"></td>
+<td class="source"><code>  `/Encoding` names a bundled predefined CMap (e.g. `UniJIS-UTF16-H`).</code></td>
+</tr>
+<tr>
+<td class="line" id="L97"><a href="#L97">97</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L98"><a href="#L98">98</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Resolution cascade per code token (PDF 1.7 § 9.7.5, D9):</code></td>
+</tr>
+<tr>
+<td class="line" id="L99"><a href="#L99">99</a></td>
+<td class="hits"></td>
+<td class="source"><code>  1. **ToUnicode CMap** — if present, checked first (most specific).</code></td>
+</tr>
+<tr>
+<td class="line" id="L100"><a href="#L100">100</a></td>
+<td class="hits"></td>
+<td class="source"><code>  2. **Predefined CMap** — `cidchar` → `cidrange` → `notdef` lookup.</code></td>
+</tr>
+<tr>
+<td class="line" id="L101"><a href="#L101">101</a></td>
+<td class="hits"></td>
+<td class="source"><code>  3. **Adobe registry table** — CID → Unicode via AdobeJapan1/CNS1/Korea1/GB1.</code></td>
+</tr>
+<tr>
+<td class="line" id="L102"><a href="#L102">102</a></td>
+<td class="hits"></td>
+<td class="source"><code>  4. **U+FFFD fallback** — unresolved codes yield `U+FFFD` + sentinel.</code></td>
+</tr>
+<tr>
+<td class="line" id="L103"><a href="#L103">103</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L104"><a href="#L104">104</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Returns `{:ok, decoder_fn, updated_doc}`.</code></td>
+</tr>
+<tr>
+<td class="line" id="L105"><a href="#L105">105</a></td>
+<td class="hits"></td>
+<td class="source"><code>  """</code></td>
+</tr>
+<tr>
+<td class="line" id="L106"><a href="#L106">106</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @spec build_predefined(map(), Document.t()) ::</code></td>
+</tr>
+<tr>
+<td class="line" id="L107"><a href="#L107">107</a></td>
+<td class="hits"></td>
+<td class="source"><code>          {:ok, decoder_fn(), Document.t()} | {:error, term()}</code></td>
+</tr>
+<tr>
+<td class="line" id="L108"><a href="#L108">108</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def build_predefined(font_dict, doc) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L109"><a href="#L109">109</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # Step 1: Resolve ToUnicode CMap (may be nil).</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L110"><a href="#L110">110</a></td>
+<td class="hits">15</td>
+<td class="source"><code>    {to_unicode, doc1} = resolve_cmap(font_dict, doc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L111"><a href="#L111">111</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L112"><a href="#L112">112</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # Step 2: Extract predefined CMap name and load it.</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L113"><a href="#L113">113</a></td>
+<td class="hits">15</td>
+<td class="source"><code>    predefined_name =</code></td>
+</tr>
+<tr>
+<td class="line" id="L114"><a href="#L114">114</a></td>
+<td class="hits"></td>
+<td class="source"><code>      case Map.get(font_dict, "Encoding") do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L115"><a href="#L115">115</a></td>
+<td class="hits">15</td>
+<td class="source"><code>        {:name, name} -&gt; name</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L116"><a href="#L116">116</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        _ -&gt; nil</code></td>
+</tr>
+<tr>
+<td class="line" id="L117"><a href="#L117">117</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end</code></td>
+</tr>
+<tr>
+<td class="line" id="L118"><a href="#L118">118</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L119"><a href="#L119">119</a></td>
+<td class="hits">15</td>
+<td class="source"><code>    with {:ok, predefined, doc2} &lt;- PredefinedCMap.load_by_name(predefined_name, doc1) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L120"><a href="#L120">120</a></td>
+<td class="hits"></td>
+<td class="source"><code>      # Step 3: Resolve DescendantFonts → CIDSystemInfo registry atom.</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L121"><a href="#L121">121</a></td>
+<td class="hits">15</td>
+<td class="source"><code>      {descendant, doc3} = resolve_descendant(font_dict, doc2)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L122"><a href="#L122">122</a></td>
+<td class="hits">15</td>
+<td class="source"><code>      registry_atom = parse_registry(descendant)</code></td>
+</tr>
+<tr>
+<td class="line" id="L123"><a href="#L123">123</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L124"><a href="#L124">124</a></td>
+<td class="hits"></td>
+<td class="source"><code>      # Step 4: Build the predefined closure.</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L125"><a href="#L125">125</a></td>
+<td class="hits">15</td>
+<td class="source"><code>      decoder = build_predefined_closure(predefined, registry_atom, to_unicode)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L126"><a href="#L126">126</a></td>
+<td class="hits">15</td>
+<td class="source"><code>      {:ok, decoder, doc3}</code></td>
+</tr>
+<tr>
+<td class="line" id="L127"><a href="#L127">127</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L128"><a href="#L128">128</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L129"><a href="#L129">129</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L130"><a href="#L130">130</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L131"><a href="#L131">131</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Predefined CMap closure builder</code></td>
+</tr>
+<tr>
+<td class="line" id="L132"><a href="#L132">132</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L133"><a href="#L133">133</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L134"><a href="#L134">134</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp build_predefined_closure(predefined, registry_atom, to_unicode) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L135"><a href="#L135">135</a></td>
+<td class="hits">15</td>
+<td class="source"><code>    fn bytes -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L136"><a href="#L136">136</a></td>
+<td class="hits">12</td>
+<td class="source"><code>      codes = Codespace.tokenize(bytes, predefined.codespaces)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L137"><a href="#L137">137</a></td>
+<td class="hits">12</td>
+<td class="source"><code>      decode_predefined_codes(codes, predefined, registry_atom, to_unicode, [], [], 0)</code></td>
+</tr>
+<tr>
+<td class="line" id="L138"><a href="#L138">138</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L139"><a href="#L139">139</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L140"><a href="#L140">140</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L141"><a href="#L141">141</a></td>
+<td class="hits">12</td>
+<td class="source"><code>  defp decode_predefined_codes([], _pred, _reg, _tou, text_acc, unresolved_acc, _idx) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L142"><a href="#L142">142</a></td>
+<td class="hits"></td>
+<td class="source"><code>    {IO.iodata_to_binary(Enum.reverse(text_acc)), Enum.reverse(unresolved_acc)}</code></td>
+</tr>
+<tr>
+<td class="line" id="L143"><a href="#L143">143</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L144"><a href="#L144">144</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L145"><a href="#L145">145</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp decode_predefined_codes([code | rest], pred, reg, tou, text_acc, unresolved_acc, idx) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L146"><a href="#L146">146</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # 1. ToUnicode CMap takes precedence (R-PCM17, D9)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L147"><a href="#L147">147</a></td>
+<td class="hits">13</td>
+<td class="source"><code>    case to_unicode_lookup(tou, code) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L148"><a href="#L148">148</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {:ok, string} -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L149"><a href="#L149">149</a></td>
+<td class="hits">1</td>
+<td class="source"><code>        decode_predefined_codes(</code></td>
+</tr>
+<tr>
+<td class="line" id="L150"><a href="#L150">150</a></td>
+<td class="hits"></td>
+<td class="source"><code>          rest,</code></td>
+</tr>
+<tr>
+<td class="line" id="L151"><a href="#L151">151</a></td>
+<td class="hits"></td>
+<td class="source"><code>          pred,</code></td>
+</tr>
+<tr>
+<td class="line" id="L152"><a href="#L152">152</a></td>
+<td class="hits"></td>
+<td class="source"><code>          reg,</code></td>
+</tr>
+<tr>
+<td class="line" id="L153"><a href="#L153">153</a></td>
+<td class="hits"></td>
+<td class="source"><code>          tou,</code></td>
+</tr>
+<tr>
+<td class="line" id="L154"><a href="#L154">154</a></td>
+<td class="hits"></td>
+<td class="source"><code>          [string | text_acc],</code></td>
+</tr>
+<tr>
+<td class="line" id="L155"><a href="#L155">155</a></td>
+<td class="hits"></td>
+<td class="source"><code>          unresolved_acc,</code></td>
+</tr>
+<tr>
+<td class="line" id="L156"><a href="#L156">156</a></td>
+<td class="hits"></td>
+<td class="source"><code>          idx + 1</code></td>
+</tr>
+<tr>
+<td class="line" id="L157"><a href="#L157">157</a></td>
+<td class="hits"></td>
+<td class="source"><code>        )</code></td>
+</tr>
+<tr>
+<td class="line" id="L158"><a href="#L158">158</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L159"><a href="#L159">159</a></td>
+<td class="hits"></td>
+<td class="source"><code>      :error -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L160"><a href="#L160">160</a></td>
+<td class="hits"></td>
+<td class="source"><code>        # 2. Predefined CMap lookup → CID</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L161"><a href="#L161">161</a></td>
+<td class="hits">12</td>
+<td class="source"><code>        case PredefinedCMap.lookup(pred, code) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L162"><a href="#L162">162</a></td>
+<td class="hits"></td>
+<td class="source"><code>          {:ok, cid} -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L163"><a href="#L163">163</a></td>
+<td class="hits"></td>
+<td class="source"><code>            # 3. Registry lookup → Unicode codepoint</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L164"><a href="#L164">164</a></td>
+<td class="hits">12</td>
+<td class="source"><code>            case registry_lookup(cid, reg) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L165"><a href="#L165">165</a></td>
+<td class="hits"></td>
+<td class="source"><code>              {:ok, codepoint} -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L166"><a href="#L166">166</a></td>
+<td class="hits">11</td>
+<td class="source"><code>                decode_predefined_codes(</code></td>
+</tr>
+<tr>
+<td class="line" id="L167"><a href="#L167">167</a></td>
+<td class="hits"></td>
+<td class="source"><code>                  rest,</code></td>
+</tr>
+<tr>
+<td class="line" id="L168"><a href="#L168">168</a></td>
+<td class="hits"></td>
+<td class="source"><code>                  pred,</code></td>
+</tr>
+<tr>
+<td class="line" id="L169"><a href="#L169">169</a></td>
+<td class="hits"></td>
+<td class="source"><code>                  reg,</code></td>
+</tr>
+<tr>
+<td class="line" id="L170"><a href="#L170">170</a></td>
+<td class="hits"></td>
+<td class="source"><code>                  tou,</code></td>
+</tr>
+<tr>
+<td class="line" id="L171"><a href="#L171">171</a></td>
+<td class="hits"></td>
+<td class="source"><code>                  [&lt;&lt;codepoint::utf8&gt;&gt; | text_acc],</code></td>
+</tr>
+<tr>
+<td class="line" id="L172"><a href="#L172">172</a></td>
+<td class="hits"></td>
+<td class="source"><code>                  unresolved_acc,</code></td>
+</tr>
+<tr>
+<td class="line" id="L173"><a href="#L173">173</a></td>
+<td class="hits"></td>
+<td class="source"><code>                  idx + 1</code></td>
+</tr>
+<tr>
+<td class="line" id="L174"><a href="#L174">174</a></td>
+<td class="hits"></td>
+<td class="source"><code>                )</code></td>
+</tr>
+<tr>
+<td class="line" id="L175"><a href="#L175">175</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L176"><a href="#L176">176</a></td>
+<td class="hits"></td>
+<td class="source"><code>              :error -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L177"><a href="#L177">177</a></td>
+<td class="hits">1</td>
+<td class="source"><code>                hex = String.pad_leading(Integer.to_string(cid, 16), 4, "0")</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L178"><a href="#L178">178</a></td>
+<td class="hits">1</td>
+<td class="source"><code>                sentinel = {idx, "cid:0x" &lt;&gt; hex}</code></td>
+</tr>
+<tr>
+<td class="line" id="L179"><a href="#L179">179</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L180"><a href="#L180">180</a></td>
+<td class="hits">1</td>
+<td class="source"><code>                decode_predefined_codes(</code></td>
+</tr>
+<tr>
+<td class="line" id="L181"><a href="#L181">181</a></td>
+<td class="hits"></td>
+<td class="source"><code>                  rest,</code></td>
+</tr>
+<tr>
+<td class="line" id="L182"><a href="#L182">182</a></td>
+<td class="hits"></td>
+<td class="source"><code>                  pred,</code></td>
+</tr>
+<tr>
+<td class="line" id="L183"><a href="#L183">183</a></td>
+<td class="hits"></td>
+<td class="source"><code>                  reg,</code></td>
+</tr>
+<tr>
+<td class="line" id="L184"><a href="#L184">184</a></td>
+<td class="hits"></td>
+<td class="source"><code>                  tou,</code></td>
+</tr>
+<tr>
+<td class="line" id="L185"><a href="#L185">185</a></td>
+<td class="hits"></td>
+<td class="source"><code>                  [@unresolved_char | text_acc],</code></td>
+</tr>
+<tr>
+<td class="line" id="L186"><a href="#L186">186</a></td>
+<td class="hits"></td>
+<td class="source"><code>                  [sentinel | unresolved_acc],</code></td>
+</tr>
+<tr>
+<td class="line" id="L187"><a href="#L187">187</a></td>
+<td class="hits"></td>
+<td class="source"><code>                  idx + 1</code></td>
+</tr>
+<tr>
+<td class="line" id="L188"><a href="#L188">188</a></td>
+<td class="hits"></td>
+<td class="source"><code>                )</code></td>
+</tr>
+<tr>
+<td class="line" id="L189"><a href="#L189">189</a></td>
+<td class="hits"></td>
+<td class="source"><code>            end</code></td>
+</tr>
+<tr>
+<td class="line" id="L190"><a href="#L190">190</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L191"><a href="#L191">191</a></td>
+<td class="hits"></td>
+<td class="source"><code>          :error -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L192"><a href="#L192">192</a></td>
+<td class="hits"></td>
+<td class="source"><code>            # 4. Code in codespace but unmapped → U+FFFD + sentinel</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L193"><a href="#L193">193</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>            hex = String.pad_leading(Integer.to_string(code, 16), 4, "0")</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L194"><a href="#L194">194</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>            sentinel = {idx, "code:0x" &lt;&gt; hex}</code></td>
+</tr>
+<tr>
+<td class="line" id="L195"><a href="#L195">195</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L196"><a href="#L196">196</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>            decode_predefined_codes(</code></td>
+</tr>
+<tr>
+<td class="line" id="L197"><a href="#L197">197</a></td>
+<td class="hits"></td>
+<td class="source"><code>              rest,</code></td>
+</tr>
+<tr>
+<td class="line" id="L198"><a href="#L198">198</a></td>
+<td class="hits"></td>
+<td class="source"><code>              pred,</code></td>
+</tr>
+<tr>
+<td class="line" id="L199"><a href="#L199">199</a></td>
+<td class="hits"></td>
+<td class="source"><code>              reg,</code></td>
+</tr>
+<tr>
+<td class="line" id="L200"><a href="#L200">200</a></td>
+<td class="hits"></td>
+<td class="source"><code>              tou,</code></td>
+</tr>
+<tr>
+<td class="line" id="L201"><a href="#L201">201</a></td>
+<td class="hits"></td>
+<td class="source"><code>              [@unresolved_char | text_acc],</code></td>
+</tr>
+<tr>
+<td class="line" id="L202"><a href="#L202">202</a></td>
+<td class="hits"></td>
+<td class="source"><code>              [sentinel | unresolved_acc],</code></td>
+</tr>
+<tr>
+<td class="line" id="L203"><a href="#L203">203</a></td>
+<td class="hits"></td>
+<td class="source"><code>              idx + 1</code></td>
+</tr>
+<tr>
+<td class="line" id="L204"><a href="#L204">204</a></td>
+<td class="hits"></td>
+<td class="source"><code>            )</code></td>
+</tr>
+<tr>
+<td class="line" id="L205"><a href="#L205">205</a></td>
+<td class="hits"></td>
+<td class="source"><code>        end</code></td>
+</tr>
+<tr>
+<td class="line" id="L206"><a href="#L206">206</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L207"><a href="#L207">207</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L208"><a href="#L208">208</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L209"><a href="#L209">209</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ToUnicode lookup helper — returns {:ok, string} or :error</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L210"><a href="#L210">210</a></td>
+<td class="hits">12</td>
+<td class="source"><code>  defp to_unicode_lookup(nil, _code), do: :error</code></td>
+</tr>
+<tr>
+<td class="line" id="L211"><a href="#L211">211</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L212"><a href="#L212">212</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp to_unicode_lookup(%CMap{} = cmap, code) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L213"><a href="#L213">213</a></td>
+<td class="hits">1</td>
+<td class="source"><code>    case CMap.lookup(cmap, code) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L214"><a href="#L214">214</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      nil -&gt; :error</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L215"><a href="#L215">215</a></td>
+<td class="hits">1</td>
+<td class="source"><code>      string when is_binary(string) -&gt; {:ok, string}</code></td>
+</tr>
+<tr>
+<td class="line" id="L216"><a href="#L216">216</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L217"><a href="#L217">217</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L218"><a href="#L218">218</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L219"><a href="#L219">219</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L220"><a href="#L220">220</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Closure builder (Identity-H/V path)</code></td>
+</tr>
+<tr>
+<td class="line" id="L221"><a href="#L221">221</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L222"><a href="#L222">222</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L223"><a href="#L223">223</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp build_closure(cmap, registry_atom) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L224"><a href="#L224">224</a></td>
+<td class="hits">57</td>
+<td class="source"><code>    fn bytes -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L225"><a href="#L225">225</a></td>
+<td class="hits">17622</td>
+<td class="source"><code>      {text_chunks, unresolved, _idx} =</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L226"><a href="#L226">226</a></td>
+<td class="hits">17622</td>
+<td class="source"><code>        for &lt;&lt;cid::big-unsigned-16 &lt;- bytes&gt;&gt;, reduce: {[], [], 0} do</code></td>
+</tr>
+<tr>
+<td class="line" id="L227"><a href="#L227">227</a></td>
+<td class="hits"></td>
+<td class="source"><code>          {text_acc, unresolved_acc, idx} -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L228"><a href="#L228">228</a></td>
+<td class="hits">17622</td>
+<td class="source"><code>            case resolve_cid(cid, cmap, registry_atom) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L229"><a href="#L229">229</a></td>
+<td class="hits"></td>
+<td class="source"><code>              {:ok, codepoint} -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L230"><a href="#L230">230</a></td>
+<td class="hits">17617</td>
+<td class="source"><code>                {[text_acc, &lt;&lt;codepoint::utf8&gt;&gt;], unresolved_acc, idx + 1}</code></td>
+</tr>
+<tr>
+<td class="line" id="L231"><a href="#L231">231</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L232"><a href="#L232">232</a></td>
+<td class="hits"></td>
+<td class="source"><code>              :error -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L233"><a href="#L233">233</a></td>
+<td class="hits">5</td>
+<td class="source"><code>                sentinel =</code></td>
+</tr>
+<tr>
+<td class="line" id="L234"><a href="#L234">234</a></td>
+<td class="hits"></td>
+<td class="source"><code>                  {idx, "cid:0x" &lt;&gt; String.pad_leading(Integer.to_string(cid, 16), 4, "0")}</code></td>
+</tr>
+<tr>
+<td class="line" id="L235"><a href="#L235">235</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L236"><a href="#L236">236</a></td>
+<td class="hits">5</td>
+<td class="source"><code>                {[text_acc, @unresolved_char], [sentinel | unresolved_acc], idx + 1}</code></td>
+</tr>
+<tr>
+<td class="line" id="L237"><a href="#L237">237</a></td>
+<td class="hits"></td>
+<td class="source"><code>            end</code></td>
+</tr>
+<tr>
+<td class="line" id="L238"><a href="#L238">238</a></td>
+<td class="hits"></td>
+<td class="source"><code>        end</code></td>
+</tr>
+<tr>
+<td class="line" id="L239"><a href="#L239">239</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L240"><a href="#L240">240</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {IO.iodata_to_binary(text_chunks), Enum.reverse(unresolved)}</code></td>
+</tr>
+<tr>
+<td class="line" id="L241"><a href="#L241">241</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L242"><a href="#L242">242</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L243"><a href="#L243">243</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L244"><a href="#L244">244</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L245"><a href="#L245">245</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # CID resolution cascade</code></td>
+</tr>
+<tr>
+<td class="line" id="L246"><a href="#L246">246</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L247"><a href="#L247">247</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L248"><a href="#L248">248</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp resolve_cid(cid, cmap, registry_atom) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L249"><a href="#L249">249</a></td>
+<td class="hits">17622</td>
+<td class="source"><code>    cmap_result =</code></td>
+</tr>
+<tr>
+<td class="line" id="L250"><a href="#L250">250</a></td>
+<td class="hits"></td>
+<td class="source"><code>      case cmap do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L251"><a href="#L251">251</a></td>
+<td class="hits">21</td>
+<td class="source"><code>        nil -&gt; nil</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L252"><a href="#L252">252</a></td>
+<td class="hits">17601</td>
+<td class="source"><code>        _ -&gt; CMap.lookup(cmap, cid)</code></td>
+</tr>
+<tr>
+<td class="line" id="L253"><a href="#L253">253</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end</code></td>
+</tr>
+<tr>
+<td class="line" id="L254"><a href="#L254">254</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L255"><a href="#L255">255</a></td>
+<td class="hits">17622</td>
+<td class="source"><code>    case cmap_result do</code></td>
+</tr>
+<tr>
+<td class="line" id="L256"><a href="#L256">256</a></td>
+<td class="hits"></td>
+<td class="source"><code>      nil -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L257"><a href="#L257">257</a></td>
+<td class="hits">21</td>
+<td class="source"><code>        registry_lookup(cid, registry_atom)</code></td>
+</tr>
+<tr>
+<td class="line" id="L258"><a href="#L258">258</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L259"><a href="#L259">259</a></td>
+<td class="hits"></td>
+<td class="source"><code>      string when is_binary(string) -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L260"><a href="#L260">260</a></td>
+<td class="hits"></td>
+<td class="source"><code>        # CMap returns a UTF-8 string; extract the first codepoint.</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L261"><a href="#L261">261</a></td>
+<td class="hits">17601</td>
+<td class="source"><code>        case String.to_charlist(string) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L262"><a href="#L262">262</a></td>
+<td class="hits">17601</td>
+<td class="source"><code>          [cp | _] -&gt; {:ok, cp}</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L263"><a href="#L263">263</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>          [] -&gt; :error</code></td>
+</tr>
+<tr>
+<td class="line" id="L264"><a href="#L264">264</a></td>
+<td class="hits"></td>
+<td class="source"><code>        end</code></td>
+</tr>
+<tr>
+<td class="line" id="L265"><a href="#L265">265</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L266"><a href="#L266">266</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L267"><a href="#L267">267</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L268"><a href="#L268">268</a></td>
+<td class="hits">27</td>
+<td class="source"><code>  defp registry_lookup(cid, :japan1), do: AdobeJapan1.lookup(cid)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L269"><a href="#L269">269</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp registry_lookup(cid, :cns1), do: AdobeCNS1.lookup(cid)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L270"><a href="#L270">270</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp registry_lookup(cid, :korea1), do: AdobeKorea1.lookup(cid)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L271"><a href="#L271">271</a></td>
+<td class="hits">4</td>
+<td class="source"><code>  defp registry_lookup(cid, :gb1), do: AdobeGB1.lookup(cid)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L272"><a href="#L272">272</a></td>
+<td class="hits">2</td>
+<td class="source"><code>  defp registry_lookup(_cid, _), do: :error</code></td>
+</tr>
+<tr>
+<td class="line" id="L273"><a href="#L273">273</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L274"><a href="#L274">274</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L275"><a href="#L275">275</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Registry atom parsing</code></td>
+</tr>
+<tr>
+<td class="line" id="L276"><a href="#L276">276</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L277"><a href="#L277">277</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L278"><a href="#L278">278</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp parse_registry(descendant) when is_map(descendant) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L279"><a href="#L279">279</a></td>
+<td class="hits">72</td>
+<td class="source"><code>    case Map.get(descendant, "CIDSystemInfo") do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L280"><a href="#L280">280</a></td>
+<td class="hits">72</td>
+<td class="source"><code>      %{"Ordering" =&gt; ordering} -&gt; ordering_to_atom(ordering)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L281"><a href="#L281">281</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      _ -&gt; nil</code></td>
+</tr>
+<tr>
+<td class="line" id="L282"><a href="#L282">282</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L283"><a href="#L283">283</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L284"><a href="#L284">284</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L285"><a href="#L285">285</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # PDF strings come from the parser as {:string, value} or plain binary strings</code></td>
+</tr>
+<tr>
+<td class="line" id="L286"><a href="#L286">286</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # depending on how they appear in the PDF (literal string vs name).</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L287"><a href="#L287">287</a></td>
+<td class="hits">55</td>
+<td class="source"><code>  defp ordering_to_atom({:string, ordering}), do: ordering_to_atom(ordering)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L288"><a href="#L288">288</a></td>
+<td class="hits">31</td>
+<td class="source"><code>  defp ordering_to_atom("Japan1"), do: :japan1</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L289"><a href="#L289">289</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp ordering_to_atom("CNS1"), do: :cns1</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L290"><a href="#L290">290</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp ordering_to_atom("Korea1"), do: :korea1</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L291"><a href="#L291">291</a></td>
+<td class="hits">3</td>
+<td class="source"><code>  defp ordering_to_atom("GB1"), do: :gb1</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L292"><a href="#L292">292</a></td>
+<td class="hits">38</td>
+<td class="source"><code>  defp ordering_to_atom(_), do: nil</code></td>
+</tr>
+<tr>
+<td class="line" id="L293"><a href="#L293">293</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L294"><a href="#L294">294</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L295"><a href="#L295">295</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # DescendantFonts resolution</code></td>
+</tr>
+<tr>
+<td class="line" id="L296"><a href="#L296">296</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L297"><a href="#L297">297</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L298"><a href="#L298">298</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp resolve_descendant(font_dict, doc) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L299"><a href="#L299">299</a></td>
+<td class="hits">72</td>
+<td class="source"><code>    case Map.get(font_dict, "DescendantFonts") do</code></td>
+</tr>
+<tr>
+<td class="line" id="L300"><a href="#L300">300</a></td>
+<td class="hits"></td>
+<td class="source"><code>      [first | _] -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L301"><a href="#L301">301</a></td>
+<td class="hits">72</td>
+<td class="source"><code>        resolve_font_value(first, doc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L302"><a href="#L302">302</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L303"><a href="#L303">303</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      _ -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L304"><a href="#L304">304</a></td>
+<td class="hits"></td>
+<td class="source"><code>        {%{}, doc}</code></td>
+</tr>
+<tr>
+<td class="line" id="L305"><a href="#L305">305</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L306"><a href="#L306">306</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L307"><a href="#L307">307</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L308"><a href="#L308">308</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp resolve_font_value({:ref, _, _} = ref, doc) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L309"><a href="#L309">309</a></td>
+<td class="hits">55</td>
+<td class="source"><code>    case ObjectResolver.resolve(doc, ref) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L310"><a href="#L310">310</a></td>
+<td class="hits">55</td>
+<td class="source"><code>      {:ok, dict, doc2} when is_map(dict) -&gt; {dict, doc2}</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L311"><a href="#L311">311</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      _ -&gt; {%{}, doc}</code></td>
+</tr>
+<tr>
+<td class="line" id="L312"><a href="#L312">312</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L313"><a href="#L313">313</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L314"><a href="#L314">314</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L315"><a href="#L315">315</a></td>
+<td class="hits">17</td>
+<td class="source"><code>  defp resolve_font_value(dict, doc) when is_map(dict), do: {dict, doc}</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L316"><a href="#L316">316</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp resolve_font_value(_, doc), do: {%{}, doc}</code></td>
+</tr>
+<tr>
+<td class="line" id="L317"><a href="#L317">317</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L318"><a href="#L318">318</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L319"><a href="#L319">319</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # CMap resolution (mirrors Font.resolve_cmap pattern)</code></td>
+</tr>
+<tr>
+<td class="line" id="L320"><a href="#L320">320</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L321"><a href="#L321">321</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L322"><a href="#L322">322</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Test shortcut: pre-parsed CMap stored under "__test_cmap__" key.</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L323"><a href="#L323">323</a></td>
+<td class="hits">2</td>
+<td class="source"><code>  defp resolve_cmap(%{"__test_cmap__" =&gt; %CMap{} = cmap}, doc), do: {cmap, doc}</code></td>
+</tr>
+<tr>
+<td class="line" id="L324"><a href="#L324">324</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L325"><a href="#L325">325</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp resolve_cmap(font_dict, doc) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L326"><a href="#L326">326</a></td>
+<td class="hits">70</td>
+<td class="source"><code>    case Map.get(font_dict, "ToUnicode") do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L327"><a href="#L327">327</a></td>
+<td class="hits">34</td>
+<td class="source"><code>      nil -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L328"><a href="#L328">328</a></td>
+<td class="hits"></td>
+<td class="source"><code>        {nil, doc}</code></td>
+</tr>
+<tr>
+<td class="line" id="L329"><a href="#L329">329</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L330"><a href="#L330">330</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {:ref, _, _} = ref -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L331"><a href="#L331">331</a></td>
+<td class="hits">36</td>
+<td class="source"><code>        resolve_cmap_ref(ref, doc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L332"><a href="#L332">332</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L333"><a href="#L333">333</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      binary when is_binary(binary) -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L334"><a href="#L334">334</a></td>
+<td class="hits"></td>
+<td class="source"><code>        {CMap.parse(binary), doc}</code></td>
+</tr>
+<tr>
+<td class="line" id="L335"><a href="#L335">335</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L336"><a href="#L336">336</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L337"><a href="#L337">337</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L338"><a href="#L338">338</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp resolve_cmap_ref(ref, doc) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L339"><a href="#L339">339</a></td>
+<td class="hits">36</td>
+<td class="source"><code>    with {:ok, {:stream, dict, raw_bytes}, doc2} &lt;- ObjectResolver.resolve(doc, ref),</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L340"><a href="#L340">340</a></td>
+<td class="hits">36</td>
+<td class="source"><code>         filter = Map.get(dict, "Filter"),</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L341"><a href="#L341">341</a></td>
+<td class="hits">36</td>
+<td class="source"><code>         parms = Map.get(dict, "DecodeParms"),</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L342"><a href="#L342">342</a></td>
+<td class="hits">36</td>
+<td class="source"><code>         {:ok, decoded} &lt;- decode_stream(raw_bytes, filter, parms) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L343"><a href="#L343">343</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {CMap.parse(decoded), doc2}</code></td>
+</tr>
+<tr>
+<td class="line" id="L344"><a href="#L344">344</a></td>
+<td class="hits"></td>
+<td class="source"><code>    else</code></td>
+</tr>
+<tr>
+<td class="line" id="L345"><a href="#L345">345</a></td>
+<td class="hits"></td>
+<td class="source"><code>      _ -&gt; {nil, doc}</code></td>
+</tr>
+<tr>
+<td class="line" id="L346"><a href="#L346">346</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L347"><a href="#L347">347</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L348"><a href="#L348">348</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L349"><a href="#L349">349</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp decode_stream(raw_bytes, nil, _parms), do: {:ok, raw_bytes}</code></td>
+</tr>
+<tr>
+<td class="line" id="L350"><a href="#L350">350</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L351"><a href="#L351">351</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp decode_stream(raw_bytes, filter, parms) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L352"><a href="#L352">352</a></td>
+<td class="hits">36</td>
+<td class="source"><code>    Filter.apply_chain(raw_bytes, filter, parms || %{})</code></td>
+</tr>
+<tr>
+<td class="line" id="L353"><a href="#L353">353</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L354"><a href="#L354">354</a></td>
+<td class="hits"></td>
+<td class="source"><code>end</code></td>
+</tr>
+</tbody>
+<thead>
+<tr>
+<th>Line</th>
+<th>Hits</th>
+<th>Source</th>
+</tr>
+</thead>
+</table>
+</body>
+</html>

@@ -32,7 +32,47 @@ defmodule ExQR.Matrix do
 
     {best_mask, best_matrix} = select_best_mask(matrix, reserved, size)
 
-    apply_format_info(best_matrix, size, level, best_mask)
+    best_matrix
+    |> apply_format_info(size, level, best_mask)
+    |> apply_version_info(size, version)
+  end
+
+  # ── Version information (versions 7+) ──────────────────────────
+  #
+  # 18-bit sequence: 6-bit version number + 12-bit BCH(18,6) error
+  # correction (generator polynomial 0x1F25). Placed in two blocks:
+  # bottom-left (rows size-11..size-9, cols 0..5) and top-right
+  # (rows 0..5, cols size-11..size-9). Not subject to masking.
+
+  defp apply_version_info(matrix, size, version) when version >= 7 do
+    vbits = version_info_bits(version)
+
+    Enum.reduce(0..17, matrix, fn i, m ->
+      bit = (vbits >>> i) &&& 1
+      a = size - 11 + rem(i, 3)
+      b = div(i, 3)
+
+      m
+      |> Map.put({a, b}, bit)
+      |> Map.put({b, a}, bit)
+    end)
+  end
+
+  defp apply_version_info(matrix, _size, _version), do: matrix
+
+  defp version_info_bits(version) do
+    d = version <<< 12
+
+    rem =
+      Enum.reduce(17..12//-1, d, fn i, acc ->
+        if ((acc >>> i) &&& 1) == 1 do
+          bxor(acc, 0x1F25 <<< (i - 12))
+        else
+          acc
+        end
+      end)
+
+    bor(version <<< 12, rem &&& 0xFFF)
   end
 
   # ── Finder patterns (3 corners) ────────────────────────────────

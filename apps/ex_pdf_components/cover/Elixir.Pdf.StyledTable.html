@@ -1,0 +1,2744 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>cover/Elixir.Pdf.StyledTable.html</title>
+<style>body {
+  font: 14px/1.6 "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #000;
+  border-top: 2px solid #ddd;
+  background-color: #fff;
+
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+h1 {
+  width: 100%;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 0;
+  font-weight: 100;
+  font-size: 1.1em;
+  letter-spacing: 1px;
+}
+
+h1 code {
+  font-size: 0.96em;
+}
+
+code {
+  font: 12px monospace;
+}
+
+footer {
+  background: #eee;
+  width: 100%;
+  padding: 10px 0;
+  text-align: right;
+  border-top: 1px solid #ddd;
+  display: flex;
+  flex: 1;
+  order: 2;
+  justify-content: center;
+}
+
+table {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: collapse;
+  border: 1px solid #cbcbcb;
+  color: #000;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+}
+table thead {
+  display: none;
+}
+table td.line,
+table td.line a,
+table td.hits {
+  width: 20px;
+  background: #eaeaea;
+  text-align: center;
+  text-decoration: none;
+  font-size: 11px;
+  padding: 0 10px;
+  color: #949494;
+}
+table td.hits {
+  width: 10px;
+  text-align: right;
+  padding: 2px 5px;
+  color: rgba(0, 0, 0, 0.6);
+  background-color: #f0f0f0;
+}
+tr.miss td.line,
+tr.miss td.line a,
+tr.miss td.hits {
+  background-color: #ffdce0;
+  border-color: #fdaeb7;
+}
+tr.miss td {
+  background-color: #ffeef0;
+}
+tr.hit td.line,
+tr.hit td.line a,
+tr.hit td.hits {
+  background-color: #cdffd8;
+  border-color: #bef5cb;
+}
+tr.hit td {
+  background-color: #e6ffed;
+}
+td.source {
+  padding-left: 15px;
+  line-height: 15px;
+  white-space: pre;
+  font: 12px monospace;
+}
+</style>
+</head>
+<body>
+<h1><code>cover/Elixir.Pdf.StyledTable.html</code></h1>
+<footer><p>File generated from <code>/Users/amir/Documents/proyectos/recreando/elixir-pdf/apps/ex_pdf_components/lib/pdf/styled_table.ex</code> by <a href="http://erlang.org/doc/man/cover.html">cover</a> at 2026-05-27 at 22:52:55</p></footer>
+<table>
+<tbody>
+<tr>
+<td class="line" id="L1"><a href="#L1">1</a></td>
+<td class="hits"></td>
+<td class="source"><code>defmodule Pdf.StyledTable do</code></td>
+</tr>
+<tr>
+<td class="line" id="L2"><a href="#L2">2</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @moduledoc """</code></td>
+</tr>
+<tr>
+<td class="line" id="L3"><a href="#L3">3</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Styled table component with CSS-like configuration.</code></td>
+</tr>
+<tr>
+<td class="line" id="L4"><a href="#L4">4</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L5"><a href="#L5">5</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Renders data tables with customizable borders, rounded corners, backgrounds,</code></td>
+</tr>
+<tr>
+<td class="line" id="L6"><a href="#L6">6</a></td>
+<td class="hits"></td>
+<td class="source"><code>  padding, and per-row/cell styling using `Pdf.Style` maps.</code></td>
+</tr>
+<tr>
+<td class="line" id="L7"><a href="#L7">7</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L8"><a href="#L8">8</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Example</code></td>
+</tr>
+<tr>
+<td class="line" id="L9"><a href="#L9">9</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L10"><a href="#L10">10</a></td>
+<td class="hits"></td>
+<td class="source"><code>      Pdf.StyledTable.render(doc, [</code></td>
+</tr>
+<tr>
+<td class="line" id="L11"><a href="#L11">11</a></td>
+<td class="hits"></td>
+<td class="source"><code>        ["Name", "Qty", "Price"],</code></td>
+</tr>
+<tr>
+<td class="line" id="L12"><a href="#L12">12</a></td>
+<td class="hits"></td>
+<td class="source"><code>        ["Widget A", "5", "$10.00"],</code></td>
+</tr>
+<tr>
+<td class="line" id="L13"><a href="#L13">13</a></td>
+<td class="hits"></td>
+<td class="source"><code>        ["Widget B", "3", "$15.00"]</code></td>
+</tr>
+<tr>
+<td class="line" id="L14"><a href="#L14">14</a></td>
+<td class="hits"></td>
+<td class="source"><code>      ], %{</code></td>
+</tr>
+<tr>
+<td class="line" id="L15"><a href="#L15">15</a></td>
+<td class="hits"></td>
+<td class="source"><code>        columns: [</code></td>
+</tr>
+<tr>
+<td class="line" id="L16"><a href="#L16">16</a></td>
+<td class="hits"></td>
+<td class="source"><code>          %{width: 200},</code></td>
+</tr>
+<tr>
+<td class="line" id="L17"><a href="#L17">17</a></td>
+<td class="hits"></td>
+<td class="source"><code>          %{width: 80, align: :center},</code></td>
+</tr>
+<tr>
+<td class="line" id="L18"><a href="#L18">18</a></td>
+<td class="hits"></td>
+<td class="source"><code>          %{width: 120, align: :right}</code></td>
+</tr>
+<tr>
+<td class="line" id="L19"><a href="#L19">19</a></td>
+<td class="hits"></td>
+<td class="source"><code>        ],</code></td>
+</tr>
+<tr>
+<td class="line" id="L20"><a href="#L20">20</a></td>
+<td class="hits"></td>
+<td class="source"><code>        header: %{bold: true, background: {0.2, 0.3, 0.5}, color: :white, padding: 8},</code></td>
+</tr>
+<tr>
+<td class="line" id="L21"><a href="#L21">21</a></td>
+<td class="hits"></td>
+<td class="source"><code>        row: %{padding: 6, border_bottom: 1},</code></td>
+</tr>
+<tr>
+<td class="line" id="L22"><a href="#L22">22</a></td>
+<td class="hits"></td>
+<td class="source"><code>        alt_row: %{background: {0.95, 0.95, 1.0}},</code></td>
+</tr>
+<tr>
+<td class="line" id="L23"><a href="#L23">23</a></td>
+<td class="hits"></td>
+<td class="source"><code>        border: 1,</code></td>
+</tr>
+<tr>
+<td class="line" id="L24"><a href="#L24">24</a></td>
+<td class="hits"></td>
+<td class="source"><code>        border_color: {0.3, 0.3, 0.3},</code></td>
+</tr>
+<tr>
+<td class="line" id="L25"><a href="#L25">25</a></td>
+<td class="hits"></td>
+<td class="source"><code>        border_radius: 6</code></td>
+</tr>
+<tr>
+<td class="line" id="L26"><a href="#L26">26</a></td>
+<td class="hits"></td>
+<td class="source"><code>      })</code></td>
+</tr>
+<tr>
+<td class="line" id="L27"><a href="#L27">27</a></td>
+<td class="hits"></td>
+<td class="source"><code>  """</code></td>
+</tr>
+<tr>
+<td class="line" id="L28"><a href="#L28">28</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L29"><a href="#L29">29</a></td>
+<td class="hits"></td>
+<td class="source"><code>  alias Pdf.{Page, Style}</code></td>
+</tr>
+<tr>
+<td class="line" id="L30"><a href="#L30">30</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L31"><a href="#L31">31</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @default_opts %{</code></td>
+</tr>
+<tr>
+<td class="line" id="L32"><a href="#L32">32</a></td>
+<td class="hits"></td>
+<td class="source"><code>    columns: [],</code></td>
+</tr>
+<tr>
+<td class="line" id="L33"><a href="#L33">33</a></td>
+<td class="hits"></td>
+<td class="source"><code>    header: nil,</code></td>
+</tr>
+<tr>
+<td class="line" id="L34"><a href="#L34">34</a></td>
+<td class="hits"></td>
+<td class="source"><code>    row: %{},</code></td>
+</tr>
+<tr>
+<td class="line" id="L35"><a href="#L35">35</a></td>
+<td class="hits"></td>
+<td class="source"><code>    alt_row: nil,</code></td>
+</tr>
+<tr>
+<td class="line" id="L36"><a href="#L36">36</a></td>
+<td class="hits"></td>
+<td class="source"><code>    footer: nil,</code></td>
+</tr>
+<tr>
+<td class="line" id="L37"><a href="#L37">37</a></td>
+<td class="hits"></td>
+<td class="source"><code>    border: 0,</code></td>
+</tr>
+<tr>
+<td class="line" id="L38"><a href="#L38">38</a></td>
+<td class="hits"></td>
+<td class="source"><code>    border_color: :black,</code></td>
+</tr>
+<tr>
+<td class="line" id="L39"><a href="#L39">39</a></td>
+<td class="hits"></td>
+<td class="source"><code>    border_radius: 0,</code></td>
+</tr>
+<tr>
+<td class="line" id="L40"><a href="#L40">40</a></td>
+<td class="hits"></td>
+<td class="source"><code>    background: nil,</code></td>
+</tr>
+<tr>
+<td class="line" id="L41"><a href="#L41">41</a></td>
+<td class="hits"></td>
+<td class="source"><code>    padding: {4, 6, 4, 6},</code></td>
+</tr>
+<tr>
+<td class="line" id="L42"><a href="#L42">42</a></td>
+<td class="hits"></td>
+<td class="source"><code>    font: "Helvetica",</code></td>
+</tr>
+<tr>
+<td class="line" id="L43"><a href="#L43">43</a></td>
+<td class="hits"></td>
+<td class="source"><code>    font_size: 10,</code></td>
+</tr>
+<tr>
+<td class="line" id="L44"><a href="#L44">44</a></td>
+<td class="hits"></td>
+<td class="source"><code>    color: :black,</code></td>
+</tr>
+<tr>
+<td class="line" id="L45"><a href="#L45">45</a></td>
+<td class="hits"></td>
+<td class="source"><code>    line_height: 14</code></td>
+</tr>
+<tr>
+<td class="line" id="L46"><a href="#L46">46</a></td>
+<td class="hits"></td>
+<td class="source"><code>  }</code></td>
+</tr>
+<tr>
+<td class="line" id="L47"><a href="#L47">47</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L48"><a href="#L48">48</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @doc """</code></td>
+</tr>
+<tr>
+<td class="line" id="L49"><a href="#L49">49</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Render a styled table on the document at the current cursor position.</code></td>
+</tr>
+<tr>
+<td class="line" id="L50"><a href="#L50">50</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L51"><a href="#L51">51</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Returns the updated document with cursor moved below the table.</code></td>
+</tr>
+<tr>
+<td class="line" id="L52"><a href="#L52">52</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L53"><a href="#L53">53</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Options</code></td>
+</tr>
+<tr>
+<td class="line" id="L54"><a href="#L54">54</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L55"><a href="#L55">55</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `:columns` — list of column config maps: `%{width: n, align: :left|:center|:right, style: %{}}`</code></td>
+</tr>
+<tr>
+<td class="line" id="L56"><a href="#L56">56</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `:header` — style map for header row (first row of data), or `nil` to treat all rows as body</code></td>
+</tr>
+<tr>
+<td class="line" id="L57"><a href="#L57">57</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `:row` — default style map for body rows</code></td>
+</tr>
+<tr>
+<td class="line" id="L58"><a href="#L58">58</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `:alt_row` — style map merged into every other body row (zebra stripes)</code></td>
+</tr>
+<tr>
+<td class="line" id="L59"><a href="#L59">59</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `:footer` — style map for the last row</code></td>
+</tr>
+<tr>
+<td class="line" id="L60"><a href="#L60">60</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `:border` — outer border width (number)</code></td>
+</tr>
+<tr>
+<td class="line" id="L61"><a href="#L61">61</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `:border_color` — outer border color</code></td>
+</tr>
+<tr>
+<td class="line" id="L62"><a href="#L62">62</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `:border_radius` — corner radius for outer border</code></td>
+</tr>
+<tr>
+<td class="line" id="L63"><a href="#L63">63</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `:background` — default cell background</code></td>
+</tr>
+<tr>
+<td class="line" id="L64"><a href="#L64">64</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `:padding` — default cell padding (CSS shorthand)</code></td>
+</tr>
+<tr>
+<td class="line" id="L65"><a href="#L65">65</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `:font`, `:font_size`, `:color` — default text styling</code></td>
+</tr>
+<tr>
+<td class="line" id="L66"><a href="#L66">66</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `:line_height` — height per text line in points</code></td>
+</tr>
+<tr>
+<td class="line" id="L67"><a href="#L67">67</a></td>
+<td class="hits"></td>
+<td class="source"><code>  """</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L68"><a href="#L68">68</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  def render(document, data, opts \\ %{}) when is_list(data) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L69"><a href="#L69">69</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    opts = Map.merge(@default_opts, opts)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L70"><a href="#L70">70</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    pos = Pdf.cursor_xy(document)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L71"><a href="#L71">71</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    area = Pdf.content_area(document)</code></td>
+</tr>
+<tr>
+<td class="line" id="L72"><a href="#L72">72</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L73"><a href="#L73">73</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # Calculate column widths</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L74"><a href="#L74">74</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    cols = resolve_columns(data, opts, area.width)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L75"><a href="#L75">75</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    total_width = Enum.reduce(cols, 0, fn col, acc -&gt; acc + col.width end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L76"><a href="#L76">76</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L77"><a href="#L77">77</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # Calculate row heights</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L78"><a href="#L78">78</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    rows = prepare_rows(data, opts)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L79"><a href="#L79">79</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    total_height = Enum.reduce(rows, 0, fn row, acc -&gt; acc + row.height end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L80"><a href="#L80">80</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L81"><a href="#L81">81</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    table_x = pos.x</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L82"><a href="#L82">82</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    table_y = pos.y</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L83"><a href="#L83">83</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    r = opts.border_radius</code></td>
+</tr>
+<tr>
+<td class="line" id="L84"><a href="#L84">84</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L85"><a href="#L85">85</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # 1) Draw row backgrounds (clipped to rounded rect when border_radius &gt; 0)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L86"><a href="#L86">86</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    document =</code></td>
+</tr>
+<tr>
+<td class="line" id="L87"><a href="#L87">87</a></td>
+<td class="hits"></td>
+<td class="source"><code>      draw_clipped_backgrounds(</code></td>
+</tr>
+<tr>
+<td class="line" id="L88"><a href="#L88">88</a></td>
+<td class="hits"></td>
+<td class="source"><code>        document,</code></td>
+</tr>
+<tr>
+<td class="line" id="L89"><a href="#L89">89</a></td>
+<td class="hits"></td>
+<td class="source"><code>        rows,</code></td>
+</tr>
+<tr>
+<td class="line" id="L90"><a href="#L90">90</a></td>
+<td class="hits"></td>
+<td class="source"><code>        cols,</code></td>
+</tr>
+<tr>
+<td class="line" id="L91"><a href="#L91">91</a></td>
+<td class="hits"></td>
+<td class="source"><code>        {table_x, table_y},</code></td>
+</tr>
+<tr>
+<td class="line" id="L92"><a href="#L92">92</a></td>
+<td class="hits"></td>
+<td class="source"><code>        {total_width, total_height},</code></td>
+</tr>
+<tr>
+<td class="line" id="L93"><a href="#L93">93</a></td>
+<td class="hits"></td>
+<td class="source"><code>        r,</code></td>
+</tr>
+<tr>
+<td class="line" id="L94"><a href="#L94">94</a></td>
+<td class="hits"></td>
+<td class="source"><code>        opts</code></td>
+</tr>
+<tr>
+<td class="line" id="L95"><a href="#L95">95</a></td>
+<td class="hits"></td>
+<td class="source"><code>      )</code></td>
+</tr>
+<tr>
+<td class="line" id="L96"><a href="#L96">96</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L97"><a href="#L97">97</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # 2) Draw row borders + text (not clipped)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L98"><a href="#L98">98</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    {document, _y} =</code></td>
+</tr>
+<tr>
+<td class="line" id="L99"><a href="#L99">99</a></td>
+<td class="hits"></td>
+<td class="source"><code>      Enum.reduce(rows, {document, table_y}, fn row, {doc, y} -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L100"><a href="#L100">100</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        doc = draw_row_content(doc, row, cols, {table_x, y}, opts)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L101"><a href="#L101">101</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        {doc, y - row.height}</code></td>
+</tr>
+<tr>
+<td class="line" id="L102"><a href="#L102">102</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L103"><a href="#L103">103</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L104"><a href="#L104">104</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # 3) Draw outer border stroke on top</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L105"><a href="#L105">105</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    document = draw_outer_border(document, {table_x, table_y}, {total_width, total_height}, opts)</code></td>
+</tr>
+<tr>
+<td class="line" id="L106"><a href="#L106">106</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L107"><a href="#L107">107</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # Move cursor below table</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L108"><a href="#L108">108</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    Pdf.set_cursor(document, table_y - total_height)</code></td>
+</tr>
+<tr>
+<td class="line" id="L109"><a href="#L109">109</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L110"><a href="#L110">110</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L111"><a href="#L111">111</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @doc """</code></td>
+</tr>
+<tr>
+<td class="line" id="L112"><a href="#L112">112</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Render a styled table on a Page struct (low-level).</code></td>
+</tr>
+<tr>
+<td class="line" id="L113"><a href="#L113">113</a></td>
+<td class="hits"></td>
+<td class="source"><code>  """</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L114"><a href="#L114">114</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  def render_on_page(page, {x, y}, data, opts \\ %{}) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L115"><a href="#L115">115</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    opts = Map.merge(@default_opts, opts)</code></td>
+</tr>
+<tr>
+<td class="line" id="L116"><a href="#L116">116</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L117"><a href="#L117">117</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    cols = resolve_columns_with_total(data, opts)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L118"><a href="#L118">118</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    total_width = Enum.reduce(cols, 0, fn col, acc -&gt; acc + col.width end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L119"><a href="#L119">119</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L120"><a href="#L120">120</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    rows = prepare_rows(data, opts)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L121"><a href="#L121">121</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    total_height = Enum.reduce(rows, 0, fn row, acc -&gt; acc + row.height end)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L122"><a href="#L122">122</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    r = opts.border_radius</code></td>
+</tr>
+<tr>
+<td class="line" id="L123"><a href="#L123">123</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L124"><a href="#L124">124</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # 1) Clipped backgrounds</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L125"><a href="#L125">125</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    page =</code></td>
+</tr>
+<tr>
+<td class="line" id="L126"><a href="#L126">126</a></td>
+<td class="hits"></td>
+<td class="source"><code>      draw_clipped_backgrounds_page(</code></td>
+</tr>
+<tr>
+<td class="line" id="L127"><a href="#L127">127</a></td>
+<td class="hits"></td>
+<td class="source"><code>        page,</code></td>
+</tr>
+<tr>
+<td class="line" id="L128"><a href="#L128">128</a></td>
+<td class="hits"></td>
+<td class="source"><code>        rows,</code></td>
+</tr>
+<tr>
+<td class="line" id="L129"><a href="#L129">129</a></td>
+<td class="hits"></td>
+<td class="source"><code>        cols,</code></td>
+</tr>
+<tr>
+<td class="line" id="L130"><a href="#L130">130</a></td>
+<td class="hits"></td>
+<td class="source"><code>        {x, y},</code></td>
+</tr>
+<tr>
+<td class="line" id="L131"><a href="#L131">131</a></td>
+<td class="hits"></td>
+<td class="source"><code>        {total_width, total_height},</code></td>
+</tr>
+<tr>
+<td class="line" id="L132"><a href="#L132">132</a></td>
+<td class="hits"></td>
+<td class="source"><code>        r,</code></td>
+</tr>
+<tr>
+<td class="line" id="L133"><a href="#L133">133</a></td>
+<td class="hits"></td>
+<td class="source"><code>        opts</code></td>
+</tr>
+<tr>
+<td class="line" id="L134"><a href="#L134">134</a></td>
+<td class="hits"></td>
+<td class="source"><code>      )</code></td>
+</tr>
+<tr>
+<td class="line" id="L135"><a href="#L135">135</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L136"><a href="#L136">136</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # 2) Row borders + text</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L137"><a href="#L137">137</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    {page, _y} =</code></td>
+</tr>
+<tr>
+<td class="line" id="L138"><a href="#L138">138</a></td>
+<td class="hits"></td>
+<td class="source"><code>      Enum.reduce(rows, {page, y}, fn row, {pg, cy} -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L139"><a href="#L139">139</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        pg = draw_row_content_page(pg, row, cols, {x, cy}, opts)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L140"><a href="#L140">140</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        {pg, cy - row.height}</code></td>
+</tr>
+<tr>
+<td class="line" id="L141"><a href="#L141">141</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L142"><a href="#L142">142</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L143"><a href="#L143">143</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # 3) Outer border on top</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L144"><a href="#L144">144</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    draw_outer_border_page(page, {x, y}, {total_width, total_height}, opts)</code></td>
+</tr>
+<tr>
+<td class="line" id="L145"><a href="#L145">145</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L146"><a href="#L146">146</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L147"><a href="#L147">147</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ── Column resolution ──────────────────────────────────────────────</code></td>
+</tr>
+<tr>
+<td class="line" id="L148"><a href="#L148">148</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L149"><a href="#L149">149</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp resolve_columns(data, opts, available_width) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L150"><a href="#L150">150</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    num_cols = data |&gt; List.first([]) |&gt; length()</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L151"><a href="#L151">151</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    col_defs = opts.columns</code></td>
+</tr>
+<tr>
+<td class="line" id="L152"><a href="#L152">152</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L153"><a href="#L153">153</a></td>
+<td class="hits"></td>
+<td class="source"><code>    Enum.map(0..(num_cols - 1), fn i -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L154"><a href="#L154">154</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      col_def = Enum.at(col_defs, i, %{})</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L155"><a href="#L155">155</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      width = Map.get(col_def, :width)</code></td>
+</tr>
+<tr>
+<td class="line" id="L156"><a href="#L156">156</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L157"><a href="#L157">157</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      %{</code></td>
+</tr>
+<tr>
+<td class="line" id="L158"><a href="#L158">158</a></td>
+<td class="hits"></td>
+<td class="source"><code>        index: i,</code></td>
+</tr>
+<tr>
+<td class="line" id="L159"><a href="#L159">159</a></td>
+<td class="hits"></td>
+<td class="source"><code>        width: width,</code></td>
+</tr>
+<tr>
+<td class="line" id="L160"><a href="#L160">160</a></td>
+<td class="hits"></td>
+<td class="source"><code>        align: Map.get(col_def, :align, :left),</code></td>
+</tr>
+<tr>
+<td class="line" id="L161"><a href="#L161">161</a></td>
+<td class="hits"></td>
+<td class="source"><code>        style: Map.get(col_def, :style, %{})</code></td>
+</tr>
+<tr>
+<td class="line" id="L162"><a href="#L162">162</a></td>
+<td class="hits"></td>
+<td class="source"><code>      }</code></td>
+</tr>
+<tr>
+<td class="line" id="L163"><a href="#L163">163</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L164"><a href="#L164">164</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    |&gt; distribute_widths(available_width)</code></td>
+</tr>
+<tr>
+<td class="line" id="L165"><a href="#L165">165</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L166"><a href="#L166">166</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L167"><a href="#L167">167</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp resolve_columns_with_total(data, opts) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L168"><a href="#L168">168</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    num_cols = data |&gt; List.first([]) |&gt; length()</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L169"><a href="#L169">169</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    col_defs = opts.columns</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L170"><a href="#L170">170</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    total = Enum.reduce(col_defs, 0, fn c, acc -&gt; acc + Map.get(c, :width, 100) end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L171"><a href="#L171">171</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L172"><a href="#L172">172</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    Enum.map(0..(num_cols - 1), fn i -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L173"><a href="#L173">173</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      col_def = Enum.at(col_defs, i, %{})</code></td>
+</tr>
+<tr>
+<td class="line" id="L174"><a href="#L174">174</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L175"><a href="#L175">175</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      %{</code></td>
+</tr>
+<tr>
+<td class="line" id="L176"><a href="#L176">176</a></td>
+<td class="hits"></td>
+<td class="source"><code>        index: i,</code></td>
+</tr>
+<tr>
+<td class="line" id="L177"><a href="#L177">177</a></td>
+<td class="hits"></td>
+<td class="source"><code>        width: Map.get(col_def, :width, total / num_cols),</code></td>
+</tr>
+<tr>
+<td class="line" id="L178"><a href="#L178">178</a></td>
+<td class="hits"></td>
+<td class="source"><code>        align: Map.get(col_def, :align, :left),</code></td>
+</tr>
+<tr>
+<td class="line" id="L179"><a href="#L179">179</a></td>
+<td class="hits"></td>
+<td class="source"><code>        style: Map.get(col_def, :style, %{})</code></td>
+</tr>
+<tr>
+<td class="line" id="L180"><a href="#L180">180</a></td>
+<td class="hits"></td>
+<td class="source"><code>      }</code></td>
+</tr>
+<tr>
+<td class="line" id="L181"><a href="#L181">181</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L182"><a href="#L182">182</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L183"><a href="#L183">183</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L184"><a href="#L184">184</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp distribute_widths(cols, available_width) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L185"><a href="#L185">185</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    {fixed, flexible} = Enum.split_with(cols, fn c -&gt; c.width != nil end)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L186"><a href="#L186">186</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    fixed_total = Enum.reduce(fixed, 0, fn c, acc -&gt; acc + c.width end)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L187"><a href="#L187">187</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    remaining = available_width - fixed_total</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L188"><a href="#L188">188</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    flex_count = length(flexible)</code></td>
+</tr>
+<tr>
+<td class="line" id="L189"><a href="#L189">189</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L190"><a href="#L190">190</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    if flex_count &gt; 0 do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L191"><a href="#L191">191</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      flex_width = remaining / flex_count</code></td>
+</tr>
+<tr>
+<td class="line" id="L192"><a href="#L192">192</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L193"><a href="#L193">193</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      Enum.map(cols, fn c -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L194"><a href="#L194">194</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        if c.width == nil, do: %{c | width: flex_width}, else: c</code></td>
+</tr>
+<tr>
+<td class="line" id="L195"><a href="#L195">195</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L196"><a href="#L196">196</a></td>
+<td class="hits"></td>
+<td class="source"><code>    else</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L197"><a href="#L197">197</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      cols</code></td>
+</tr>
+<tr>
+<td class="line" id="L198"><a href="#L198">198</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L199"><a href="#L199">199</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L200"><a href="#L200">200</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L201"><a href="#L201">201</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ── Row preparation ────────────────────────────────────────────────</code></td>
+</tr>
+<tr>
+<td class="line" id="L202"><a href="#L202">202</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L203"><a href="#L203">203</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp prepare_rows(data, opts) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L204"><a href="#L204">204</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    total = length(data)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L205"><a href="#L205">205</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    has_header = opts.header != nil</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L206"><a href="#L206">206</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    has_footer = opts.footer != nil</code></td>
+</tr>
+<tr>
+<td class="line" id="L207"><a href="#L207">207</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L208"><a href="#L208">208</a></td>
+<td class="hits"></td>
+<td class="source"><code>    data</code></td>
+</tr>
+<tr>
+<td class="line" id="L209"><a href="#L209">209</a></td>
+<td class="hits"></td>
+<td class="source"><code>    |&gt; Enum.with_index()</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L210"><a href="#L210">210</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    |&gt; Enum.map(fn {cells, idx} -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L211"><a href="#L211">211</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      row_type =</code></td>
+</tr>
+<tr>
+<td class="line" id="L212"><a href="#L212">212</a></td>
+<td class="hits"></td>
+<td class="source"><code>        cond do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L213"><a href="#L213">213</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>          has_header and idx == 0 -&gt; :header</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L214"><a href="#L214">214</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>          has_footer and idx == total - 1 -&gt; :footer</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L215"><a href="#L215">215</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>          true -&gt; :body</code></td>
+</tr>
+<tr>
+<td class="line" id="L216"><a href="#L216">216</a></td>
+<td class="hits"></td>
+<td class="source"><code>        end</code></td>
+</tr>
+<tr>
+<td class="line" id="L217"><a href="#L217">217</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L218"><a href="#L218">218</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      body_idx = if has_header, do: idx - 1, else: idx</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L219"><a href="#L219">219</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      is_alt = rem(body_idx, 2) == 1</code></td>
+</tr>
+<tr>
+<td class="line" id="L220"><a href="#L220">220</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L221"><a href="#L221">221</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      row_style = row_style_for(row_type, is_alt, opts)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L222"><a href="#L222">222</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      padding = Style.expand_shorthand(Map.get(row_style, :padding, opts.padding))</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L223"><a href="#L223">223</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      {pt, _pr, pb, _pl} = padding</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L224"><a href="#L224">224</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      line_h = Map.get(row_style, :line_height, opts.line_height)</code></td>
+</tr>
+<tr>
+<td class="line" id="L225"><a href="#L225">225</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L226"><a href="#L226">226</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      %{</code></td>
+</tr>
+<tr>
+<td class="line" id="L227"><a href="#L227">227</a></td>
+<td class="hits"></td>
+<td class="source"><code>        cells: cells,</code></td>
+</tr>
+<tr>
+<td class="line" id="L228"><a href="#L228">228</a></td>
+<td class="hits"></td>
+<td class="source"><code>        type: row_type,</code></td>
+</tr>
+<tr>
+<td class="line" id="L229"><a href="#L229">229</a></td>
+<td class="hits"></td>
+<td class="source"><code>        style: row_style,</code></td>
+</tr>
+<tr>
+<td class="line" id="L230"><a href="#L230">230</a></td>
+<td class="hits"></td>
+<td class="source"><code>        height: pt + line_h + pb,</code></td>
+</tr>
+<tr>
+<td class="line" id="L231"><a href="#L231">231</a></td>
+<td class="hits"></td>
+<td class="source"><code>        padding: padding</code></td>
+</tr>
+<tr>
+<td class="line" id="L232"><a href="#L232">232</a></td>
+<td class="hits"></td>
+<td class="source"><code>      }</code></td>
+</tr>
+<tr>
+<td class="line" id="L233"><a href="#L233">233</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L234"><a href="#L234">234</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L235"><a href="#L235">235</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L236"><a href="#L236">236</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp row_style_for(:header, _is_alt, opts), do: opts.header || %{}</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L237"><a href="#L237">237</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp row_style_for(:footer, _is_alt, opts), do: Map.merge(opts.row, opts.footer || %{})</code></td>
+</tr>
+<tr>
+<td class="line" id="L238"><a href="#L238">238</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L239"><a href="#L239">239</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp row_style_for(:body, true, opts) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L240"><a href="#L240">240</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    if opts.alt_row, do: Map.merge(opts.row, opts.alt_row), else: opts.row</code></td>
+</tr>
+<tr>
+<td class="line" id="L241"><a href="#L241">241</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L242"><a href="#L242">242</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L243"><a href="#L243">243</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp row_style_for(:body, false, opts), do: opts.row</code></td>
+</tr>
+<tr>
+<td class="line" id="L244"><a href="#L244">244</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L245"><a href="#L245">245</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ── Drawing (Document level) ───────────────────────────────────────</code></td>
+</tr>
+<tr>
+<td class="line" id="L246"><a href="#L246">246</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L247"><a href="#L247">247</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp draw_clipped_backgrounds(document, rows, cols, {table_x, table_y}, {w, h}, r, opts) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L248"><a href="#L248">248</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # Draw table-level background</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L249"><a href="#L249">249</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    document =</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L250"><a href="#L250">250</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      if opts.background do</code></td>
+</tr>
+<tr>
+<td class="line" id="L251"><a href="#L251">251</a></td>
+<td class="hits"></td>
+<td class="source"><code>        document</code></td>
+</tr>
+<tr>
+<td class="line" id="L252"><a href="#L252">252</a></td>
+<td class="hits"></td>
+<td class="source"><code>        |&gt; Pdf.save_state()</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L253"><a href="#L253">253</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        |&gt; Pdf.set_fill_color(opts.background)</code></td>
+</tr>
+<tr>
+<td class="line" id="L254"><a href="#L254">254</a></td>
+<td class="hits"></td>
+<td class="source"><code>        |&gt; draw_shape(document, {table_x, table_y - h}, {w, h}, r)</code></td>
+</tr>
+<tr>
+<td class="line" id="L255"><a href="#L255">255</a></td>
+<td class="hits"></td>
+<td class="source"><code>        |&gt; Pdf.fill()</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L256"><a href="#L256">256</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        |&gt; Pdf.restore_state()</code></td>
+</tr>
+<tr>
+<td class="line" id="L257"><a href="#L257">257</a></td>
+<td class="hits"></td>
+<td class="source"><code>      else</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L258"><a href="#L258">258</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        document</code></td>
+</tr>
+<tr>
+<td class="line" id="L259"><a href="#L259">259</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end</code></td>
+</tr>
+<tr>
+<td class="line" id="L260"><a href="#L260">260</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L261"><a href="#L261">261</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # Check if any row has a background</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L262"><a href="#L262">262</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    has_row_bg = Enum.any?(rows, fn row -&gt; Map.get(row.style, :background) != nil end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L263"><a href="#L263">263</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L264"><a href="#L264">264</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    if has_row_bg do</code></td>
+</tr>
+<tr>
+<td class="line" id="L265"><a href="#L265">265</a></td>
+<td class="hits"></td>
+<td class="source"><code>      # Save state, set clipping path (rounded rect), then draw row backgrounds</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L266"><a href="#L266">266</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      document =</code></td>
+</tr>
+<tr>
+<td class="line" id="L267"><a href="#L267">267</a></td>
+<td class="hits"></td>
+<td class="source"><code>        document</code></td>
+</tr>
+<tr>
+<td class="line" id="L268"><a href="#L268">268</a></td>
+<td class="hits"></td>
+<td class="source"><code>        |&gt; Pdf.save_state()</code></td>
+</tr>
+<tr>
+<td class="line" id="L269"><a href="#L269">269</a></td>
+<td class="hits"></td>
+<td class="source"><code>        |&gt; draw_shape(document, {table_x, table_y - h}, {w, h}, r)</code></td>
+</tr>
+<tr>
+<td class="line" id="L270"><a href="#L270">270</a></td>
+<td class="hits"></td>
+<td class="source"><code>        |&gt; Pdf.clip()</code></td>
+</tr>
+<tr>
+<td class="line" id="L271"><a href="#L271">271</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L272"><a href="#L272">272</a></td>
+<td class="hits"></td>
+<td class="source"><code>      # Draw each row background inside the clip</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L273"><a href="#L273">273</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      {document, _y} =</code></td>
+</tr>
+<tr>
+<td class="line" id="L274"><a href="#L274">274</a></td>
+<td class="hits"></td>
+<td class="source"><code>        Enum.reduce(rows, {document, table_y}, fn row, {doc, y} -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L275"><a href="#L275">275</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>          row_h = row.height</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L276"><a href="#L276">276</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>          row_y = y - row_h</code></td>
+</tr>
+<tr>
+<td class="line" id="L277"><a href="#L277">277</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L278"><a href="#L278">278</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>          doc =</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L279"><a href="#L279">279</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>            case Map.get(row.style, :background) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L280"><a href="#L280">280</a></td>
+<td class="hits"></td>
+<td class="source"><code>              nil -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L281"><a href="#L281">281</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>                doc</code></td>
+</tr>
+<tr>
+<td class="line" id="L282"><a href="#L282">282</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L283"><a href="#L283">283</a></td>
+<td class="hits"></td>
+<td class="source"><code>              bg -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L284"><a href="#L284">284</a></td>
+<td class="hits"></td>
+<td class="source"><code>                doc</code></td>
+</tr>
+<tr>
+<td class="line" id="L285"><a href="#L285">285</a></td>
+<td class="hits"></td>
+<td class="source"><code>                |&gt; Pdf.save_state()</code></td>
+</tr>
+<tr>
+<td class="line" id="L286"><a href="#L286">286</a></td>
+<td class="hits"></td>
+<td class="source"><code>                |&gt; Pdf.set_fill_color(bg)</code></td>
+</tr>
+<tr>
+<td class="line" id="L287"><a href="#L287">287</a></td>
+<td class="hits"></td>
+<td class="source"><code>                |&gt; Pdf.Document.rectangle({table_x, row_y}, {total_width(cols), row_h})</code></td>
+</tr>
+<tr>
+<td class="line" id="L288"><a href="#L288">288</a></td>
+<td class="hits"></td>
+<td class="source"><code>                |&gt; Pdf.fill()</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L289"><a href="#L289">289</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>                |&gt; Pdf.restore_state()</code></td>
+</tr>
+<tr>
+<td class="line" id="L290"><a href="#L290">290</a></td>
+<td class="hits"></td>
+<td class="source"><code>            end</code></td>
+</tr>
+<tr>
+<td class="line" id="L291"><a href="#L291">291</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L292"><a href="#L292">292</a></td>
+<td class="hits"></td>
+<td class="source"><code>          {doc, y - row_h}</code></td>
+</tr>
+<tr>
+<td class="line" id="L293"><a href="#L293">293</a></td>
+<td class="hits"></td>
+<td class="source"><code>        end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L294"><a href="#L294">294</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L295"><a href="#L295">295</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      Pdf.restore_state(document)</code></td>
+</tr>
+<tr>
+<td class="line" id="L296"><a href="#L296">296</a></td>
+<td class="hits"></td>
+<td class="source"><code>    else</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L297"><a href="#L297">297</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      document</code></td>
+</tr>
+<tr>
+<td class="line" id="L298"><a href="#L298">298</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L299"><a href="#L299">299</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L300"><a href="#L300">300</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L301"><a href="#L301">301</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp draw_outer_border(document, {x, y}, {w, h}, opts) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L302"><a href="#L302">302</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    border = opts.border</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L303"><a href="#L303">303</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    r = opts.border_radius</code></td>
+</tr>
+<tr>
+<td class="line" id="L304"><a href="#L304">304</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L305"><a href="#L305">305</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    if border &gt; 0 do</code></td>
+</tr>
+<tr>
+<td class="line" id="L306"><a href="#L306">306</a></td>
+<td class="hits"></td>
+<td class="source"><code>      document</code></td>
+</tr>
+<tr>
+<td class="line" id="L307"><a href="#L307">307</a></td>
+<td class="hits"></td>
+<td class="source"><code>      |&gt; Pdf.save_state()</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L308"><a href="#L308">308</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      |&gt; Pdf.set_stroke_color(opts.border_color)</code></td>
+</tr>
+<tr>
+<td class="line" id="L309"><a href="#L309">309</a></td>
+<td class="hits"></td>
+<td class="source"><code>      |&gt; Pdf.set_line_width(border)</code></td>
+</tr>
+<tr>
+<td class="line" id="L310"><a href="#L310">310</a></td>
+<td class="hits"></td>
+<td class="source"><code>      |&gt; draw_shape(document, {x, y - h}, {w, h}, r)</code></td>
+</tr>
+<tr>
+<td class="line" id="L311"><a href="#L311">311</a></td>
+<td class="hits"></td>
+<td class="source"><code>      |&gt; Pdf.stroke()</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L312"><a href="#L312">312</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      |&gt; Pdf.restore_state()</code></td>
+</tr>
+<tr>
+<td class="line" id="L313"><a href="#L313">313</a></td>
+<td class="hits"></td>
+<td class="source"><code>    else</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L314"><a href="#L314">314</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      document</code></td>
+</tr>
+<tr>
+<td class="line" id="L315"><a href="#L315">315</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L316"><a href="#L316">316</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L317"><a href="#L317">317</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L318"><a href="#L318">318</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp draw_shape(doc, _doc_ref, {x, y}, {w, h}, r) when r &gt; 0 do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L319"><a href="#L319">319</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    Pdf.Document.rounded_rectangle(doc, {x, y}, {w, h}, r)</code></td>
+</tr>
+<tr>
+<td class="line" id="L320"><a href="#L320">320</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L321"><a href="#L321">321</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L322"><a href="#L322">322</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp draw_shape(doc, _doc_ref, {x, y}, {w, h}, _r) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L323"><a href="#L323">323</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    Pdf.Document.rectangle(doc, {x, y}, {w, h})</code></td>
+</tr>
+<tr>
+<td class="line" id="L324"><a href="#L324">324</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L325"><a href="#L325">325</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L326"><a href="#L326">326</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp draw_row_content(document, row, cols, {table_x, y}, opts) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L327"><a href="#L327">327</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    {pt, _pr, _pb, _pl} = row.padding</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L328"><a href="#L328">328</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    row_h = row.height</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L329"><a href="#L329">329</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    row_y = y - row_h</code></td>
+</tr>
+<tr>
+<td class="line" id="L330"><a href="#L330">330</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L331"><a href="#L331">331</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # Row bottom border</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L332"><a href="#L332">332</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    border_bottom = Map.get(row.style, :border_bottom, 0)</code></td>
+</tr>
+<tr>
+<td class="line" id="L333"><a href="#L333">333</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L334"><a href="#L334">334</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    document =</code></td>
+</tr>
+<tr>
+<td class="line" id="L335"><a href="#L335">335</a></td>
+<td class="hits"></td>
+<td class="source"><code>      if border_bottom &gt; 0 do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L336"><a href="#L336">336</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        bc = Map.get(row.style, :border_color, Map.get(opts, :border_color, :black))</code></td>
+</tr>
+<tr>
+<td class="line" id="L337"><a href="#L337">337</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L338"><a href="#L338">338</a></td>
+<td class="hits"></td>
+<td class="source"><code>        document</code></td>
+</tr>
+<tr>
+<td class="line" id="L339"><a href="#L339">339</a></td>
+<td class="hits"></td>
+<td class="source"><code>        |&gt; Pdf.save_state()</code></td>
+</tr>
+<tr>
+<td class="line" id="L340"><a href="#L340">340</a></td>
+<td class="hits"></td>
+<td class="source"><code>        |&gt; Pdf.set_stroke_color(bc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L341"><a href="#L341">341</a></td>
+<td class="hits"></td>
+<td class="source"><code>        |&gt; Pdf.set_line_width(border_bottom)</code></td>
+</tr>
+<tr>
+<td class="line" id="L342"><a href="#L342">342</a></td>
+<td class="hits"></td>
+<td class="source"><code>        |&gt; Pdf.line({table_x, row_y}, {table_x + total_width(cols), row_y})</code></td>
+</tr>
+<tr>
+<td class="line" id="L343"><a href="#L343">343</a></td>
+<td class="hits"></td>
+<td class="source"><code>        |&gt; Pdf.stroke()</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L344"><a href="#L344">344</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        |&gt; Pdf.restore_state()</code></td>
+</tr>
+<tr>
+<td class="line" id="L345"><a href="#L345">345</a></td>
+<td class="hits"></td>
+<td class="source"><code>      else</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L346"><a href="#L346">346</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        document</code></td>
+</tr>
+<tr>
+<td class="line" id="L347"><a href="#L347">347</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end</code></td>
+</tr>
+<tr>
+<td class="line" id="L348"><a href="#L348">348</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L349"><a href="#L349">349</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # Draw cells</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L350"><a href="#L350">350</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    font = Map.get(row.style, :font, opts.font)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L351"><a href="#L351">351</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    font_size = Map.get(row.style, :font_size, opts.font_size)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L352"><a href="#L352">352</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    bold = Map.get(row.style, :bold, false)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L353"><a href="#L353">353</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    italic = Map.get(row.style, :italic, false)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L354"><a href="#L354">354</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    color = Map.get(row.style, :color, opts.color)</code></td>
+</tr>
+<tr>
+<td class="line" id="L355"><a href="#L355">355</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L356"><a href="#L356">356</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    document = Pdf.set_font(document, font, font_size, bold: bold, italic: italic)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L357"><a href="#L357">357</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    document = Pdf.set_fill_color(document, color)</code></td>
+</tr>
+<tr>
+<td class="line" id="L358"><a href="#L358">358</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L359"><a href="#L359">359</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    {document, _x} =</code></td>
+</tr>
+<tr>
+<td class="line" id="L360"><a href="#L360">360</a></td>
+<td class="hits"></td>
+<td class="source"><code>      Enum.reduce(cols, {document, table_x}, fn col, {doc, cx} -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L361"><a href="#L361">361</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        cell_text = Enum.at(row.cells, col.index, "")</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L362"><a href="#L362">362</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        {_pt, pr, _pb, pl} = row.padding</code></td>
+</tr>
+<tr>
+<td class="line" id="L363"><a href="#L363">363</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L364"><a href="#L364">364</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        text_x =</code></td>
+</tr>
+<tr>
+<td class="line" id="L365"><a href="#L365">365</a></td>
+<td class="hits"></td>
+<td class="source"><code>          cell_text_x(</code></td>
+</tr>
+<tr>
+<td class="line" id="L366"><a href="#L366">366</a></td>
+<td class="hits"></td>
+<td class="source"><code>            cx,</code></td>
+</tr>
+<tr>
+<td class="line" id="L367"><a href="#L367">367</a></td>
+<td class="hits"></td>
+<td class="source"><code>            pl,</code></td>
+</tr>
+<tr>
+<td class="line" id="L368"><a href="#L368">368</a></td>
+<td class="hits"></td>
+<td class="source"><code>            pr,</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L369"><a href="#L369">369</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>            col.width,</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L370"><a href="#L370">370</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>            col.align,</code></td>
+</tr>
+<tr>
+<td class="line" id="L371"><a href="#L371">371</a></td>
+<td class="hits"></td>
+<td class="source"><code>            cell_text,</code></td>
+</tr>
+<tr>
+<td class="line" id="L372"><a href="#L372">372</a></td>
+<td class="hits"></td>
+<td class="source"><code>            font,</code></td>
+</tr>
+<tr>
+<td class="line" id="L373"><a href="#L373">373</a></td>
+<td class="hits"></td>
+<td class="source"><code>            font_size,</code></td>
+</tr>
+<tr>
+<td class="line" id="L374"><a href="#L374">374</a></td>
+<td class="hits"></td>
+<td class="source"><code>            bold,</code></td>
+</tr>
+<tr>
+<td class="line" id="L375"><a href="#L375">375</a></td>
+<td class="hits"></td>
+<td class="source"><code>            italic,</code></td>
+</tr>
+<tr>
+<td class="line" id="L376"><a href="#L376">376</a></td>
+<td class="hits"></td>
+<td class="source"><code>            doc</code></td>
+</tr>
+<tr>
+<td class="line" id="L377"><a href="#L377">377</a></td>
+<td class="hits"></td>
+<td class="source"><code>          )</code></td>
+</tr>
+<tr>
+<td class="line" id="L378"><a href="#L378">378</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L379"><a href="#L379">379</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        text_y = y - pt - font_size</code></td>
+</tr>
+<tr>
+<td class="line" id="L380"><a href="#L380">380</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L381"><a href="#L381">381</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        doc = Pdf.text_at(doc, {text_x, text_y}, cell_text)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L382"><a href="#L382">382</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        {doc, cx + col.width}</code></td>
+</tr>
+<tr>
+<td class="line" id="L383"><a href="#L383">383</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L384"><a href="#L384">384</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L385"><a href="#L385">385</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    document</code></td>
+</tr>
+<tr>
+<td class="line" id="L386"><a href="#L386">386</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L387"><a href="#L387">387</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L388"><a href="#L388">388</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp cell_text_x(cx, pl, _pr, _col_w, :left, _text, _font, _fs, _b, _i, _doc) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L389"><a href="#L389">389</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    cx + pl</code></td>
+</tr>
+<tr>
+<td class="line" id="L390"><a href="#L390">390</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L391"><a href="#L391">391</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L392"><a href="#L392">392</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp cell_text_x(cx, pl, pr, col_w, :center, text, font, font_size, bold, italic, doc) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L393"><a href="#L393">393</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    text_w = estimate_text_width(text, font, font_size, bold, italic, doc)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L394"><a href="#L394">394</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    inner = col_w - pl - pr</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L395"><a href="#L395">395</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    cx + pl + (inner - text_w) / 2</code></td>
+</tr>
+<tr>
+<td class="line" id="L396"><a href="#L396">396</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L397"><a href="#L397">397</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L398"><a href="#L398">398</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp cell_text_x(cx, _pl, pr, col_w, :right, text, font, font_size, bold, italic, doc) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L399"><a href="#L399">399</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    text_w = estimate_text_width(text, font, font_size, bold, italic, doc)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L400"><a href="#L400">400</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    cx + col_w - pr - text_w</code></td>
+</tr>
+<tr>
+<td class="line" id="L401"><a href="#L401">401</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L402"><a href="#L402">402</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L403"><a href="#L403">403</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp estimate_text_width(text, _font, font_size, _bold, _italic, _doc) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L404"><a href="#L404">404</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # Approximate: average char width ~0.5 * font_size for Helvetica</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L405"><a href="#L405">405</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    String.length(text) * font_size * 0.5</code></td>
+</tr>
+<tr>
+<td class="line" id="L406"><a href="#L406">406</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L407"><a href="#L407">407</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L408"><a href="#L408">408</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp total_width(cols), do: Enum.reduce(cols, 0, fn c, acc -&gt; acc + c.width end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L409"><a href="#L409">409</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L410"><a href="#L410">410</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ── Drawing (Page level) ───────────────────────────────────────────</code></td>
+</tr>
+<tr>
+<td class="line" id="L411"><a href="#L411">411</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L412"><a href="#L412">412</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp draw_shape_page(page, {x, y}, {w, h}, r) when r &gt; 0 do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L413"><a href="#L413">413</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    Page.rounded_rectangle(page, {x, y}, {w, h}, r)</code></td>
+</tr>
+<tr>
+<td class="line" id="L414"><a href="#L414">414</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L415"><a href="#L415">415</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L416"><a href="#L416">416</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp draw_shape_page(page, {x, y}, {w, h}, _r) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L417"><a href="#L417">417</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    Page.rectangle(page, {x, y}, {w, h})</code></td>
+</tr>
+<tr>
+<td class="line" id="L418"><a href="#L418">418</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L419"><a href="#L419">419</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L420"><a href="#L420">420</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp draw_clipped_backgrounds_page(page, rows, cols, {table_x, table_y}, {w, h}, r, opts) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L421"><a href="#L421">421</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    page =</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L422"><a href="#L422">422</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      if opts.background do</code></td>
+</tr>
+<tr>
+<td class="line" id="L423"><a href="#L423">423</a></td>
+<td class="hits"></td>
+<td class="source"><code>        page</code></td>
+</tr>
+<tr>
+<td class="line" id="L424"><a href="#L424">424</a></td>
+<td class="hits"></td>
+<td class="source"><code>        |&gt; Page.save_state()</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L425"><a href="#L425">425</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        |&gt; Page.set_fill_color(opts.background)</code></td>
+</tr>
+<tr>
+<td class="line" id="L426"><a href="#L426">426</a></td>
+<td class="hits"></td>
+<td class="source"><code>        |&gt; draw_shape_page({table_x, table_y - h}, {w, h}, r)</code></td>
+</tr>
+<tr>
+<td class="line" id="L427"><a href="#L427">427</a></td>
+<td class="hits"></td>
+<td class="source"><code>        |&gt; Page.fill()</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L428"><a href="#L428">428</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        |&gt; Page.restore_state()</code></td>
+</tr>
+<tr>
+<td class="line" id="L429"><a href="#L429">429</a></td>
+<td class="hits"></td>
+<td class="source"><code>      else</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L430"><a href="#L430">430</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        page</code></td>
+</tr>
+<tr>
+<td class="line" id="L431"><a href="#L431">431</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end</code></td>
+</tr>
+<tr>
+<td class="line" id="L432"><a href="#L432">432</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L433"><a href="#L433">433</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    has_row_bg = Enum.any?(rows, fn row -&gt; Map.get(row.style, :background) != nil end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L434"><a href="#L434">434</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L435"><a href="#L435">435</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    if has_row_bg do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L436"><a href="#L436">436</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      page =</code></td>
+</tr>
+<tr>
+<td class="line" id="L437"><a href="#L437">437</a></td>
+<td class="hits"></td>
+<td class="source"><code>        page</code></td>
+</tr>
+<tr>
+<td class="line" id="L438"><a href="#L438">438</a></td>
+<td class="hits"></td>
+<td class="source"><code>        |&gt; Page.save_state()</code></td>
+</tr>
+<tr>
+<td class="line" id="L439"><a href="#L439">439</a></td>
+<td class="hits"></td>
+<td class="source"><code>        |&gt; draw_shape_page({table_x, table_y - h}, {w, h}, r)</code></td>
+</tr>
+<tr>
+<td class="line" id="L440"><a href="#L440">440</a></td>
+<td class="hits"></td>
+<td class="source"><code>        |&gt; Page.clip()</code></td>
+</tr>
+<tr>
+<td class="line" id="L441"><a href="#L441">441</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L442"><a href="#L442">442</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      {page, _y} =</code></td>
+</tr>
+<tr>
+<td class="line" id="L443"><a href="#L443">443</a></td>
+<td class="hits"></td>
+<td class="source"><code>        Enum.reduce(rows, {page, table_y}, fn row, {pg, y} -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L444"><a href="#L444">444</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>          row_h = row.height</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L445"><a href="#L445">445</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>          row_y = y - row_h</code></td>
+</tr>
+<tr>
+<td class="line" id="L446"><a href="#L446">446</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L447"><a href="#L447">447</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>          pg =</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L448"><a href="#L448">448</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>            case Map.get(row.style, :background) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L449"><a href="#L449">449</a></td>
+<td class="hits"></td>
+<td class="source"><code>              nil -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L450"><a href="#L450">450</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>                pg</code></td>
+</tr>
+<tr>
+<td class="line" id="L451"><a href="#L451">451</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L452"><a href="#L452">452</a></td>
+<td class="hits"></td>
+<td class="source"><code>              bg -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L453"><a href="#L453">453</a></td>
+<td class="hits"></td>
+<td class="source"><code>                pg</code></td>
+</tr>
+<tr>
+<td class="line" id="L454"><a href="#L454">454</a></td>
+<td class="hits"></td>
+<td class="source"><code>                |&gt; Page.save_state()</code></td>
+</tr>
+<tr>
+<td class="line" id="L455"><a href="#L455">455</a></td>
+<td class="hits"></td>
+<td class="source"><code>                |&gt; Page.set_fill_color(bg)</code></td>
+</tr>
+<tr>
+<td class="line" id="L456"><a href="#L456">456</a></td>
+<td class="hits"></td>
+<td class="source"><code>                |&gt; Page.rectangle({table_x, row_y}, {total_width(cols), row_h})</code></td>
+</tr>
+<tr>
+<td class="line" id="L457"><a href="#L457">457</a></td>
+<td class="hits"></td>
+<td class="source"><code>                |&gt; Page.fill()</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L458"><a href="#L458">458</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>                |&gt; Page.restore_state()</code></td>
+</tr>
+<tr>
+<td class="line" id="L459"><a href="#L459">459</a></td>
+<td class="hits"></td>
+<td class="source"><code>            end</code></td>
+</tr>
+<tr>
+<td class="line" id="L460"><a href="#L460">460</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L461"><a href="#L461">461</a></td>
+<td class="hits"></td>
+<td class="source"><code>          {pg, y - row_h}</code></td>
+</tr>
+<tr>
+<td class="line" id="L462"><a href="#L462">462</a></td>
+<td class="hits"></td>
+<td class="source"><code>        end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L463"><a href="#L463">463</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L464"><a href="#L464">464</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      Page.restore_state(page)</code></td>
+</tr>
+<tr>
+<td class="line" id="L465"><a href="#L465">465</a></td>
+<td class="hits"></td>
+<td class="source"><code>    else</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L466"><a href="#L466">466</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      page</code></td>
+</tr>
+<tr>
+<td class="line" id="L467"><a href="#L467">467</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L468"><a href="#L468">468</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L469"><a href="#L469">469</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L470"><a href="#L470">470</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp draw_outer_border_page(page, {x, y}, {w, h}, opts) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L471"><a href="#L471">471</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    border = opts.border</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L472"><a href="#L472">472</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    r = opts.border_radius</code></td>
+</tr>
+<tr>
+<td class="line" id="L473"><a href="#L473">473</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L474"><a href="#L474">474</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    if border &gt; 0 do</code></td>
+</tr>
+<tr>
+<td class="line" id="L475"><a href="#L475">475</a></td>
+<td class="hits"></td>
+<td class="source"><code>      page</code></td>
+</tr>
+<tr>
+<td class="line" id="L476"><a href="#L476">476</a></td>
+<td class="hits"></td>
+<td class="source"><code>      |&gt; Page.save_state()</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L477"><a href="#L477">477</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      |&gt; Page.set_stroke_color(opts.border_color)</code></td>
+</tr>
+<tr>
+<td class="line" id="L478"><a href="#L478">478</a></td>
+<td class="hits"></td>
+<td class="source"><code>      |&gt; Page.set_line_width(border)</code></td>
+</tr>
+<tr>
+<td class="line" id="L479"><a href="#L479">479</a></td>
+<td class="hits"></td>
+<td class="source"><code>      |&gt; draw_shape_page({x, y - h}, {w, h}, r)</code></td>
+</tr>
+<tr>
+<td class="line" id="L480"><a href="#L480">480</a></td>
+<td class="hits"></td>
+<td class="source"><code>      |&gt; Page.stroke()</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L481"><a href="#L481">481</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      |&gt; Page.restore_state()</code></td>
+</tr>
+<tr>
+<td class="line" id="L482"><a href="#L482">482</a></td>
+<td class="hits"></td>
+<td class="source"><code>    else</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L483"><a href="#L483">483</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      page</code></td>
+</tr>
+<tr>
+<td class="line" id="L484"><a href="#L484">484</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L485"><a href="#L485">485</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L486"><a href="#L486">486</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L487"><a href="#L487">487</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp draw_row_content_page(page, row, cols, {table_x, y}, opts) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L488"><a href="#L488">488</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    {pt, _pr, _pb, _pl} = row.padding</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L489"><a href="#L489">489</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    row_h = row.height</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L490"><a href="#L490">490</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    row_y = y - row_h</code></td>
+</tr>
+<tr>
+<td class="line" id="L491"><a href="#L491">491</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L492"><a href="#L492">492</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    border_bottom = Map.get(row.style, :border_bottom, 0)</code></td>
+</tr>
+<tr>
+<td class="line" id="L493"><a href="#L493">493</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L494"><a href="#L494">494</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    page =</code></td>
+</tr>
+<tr>
+<td class="line" id="L495"><a href="#L495">495</a></td>
+<td class="hits"></td>
+<td class="source"><code>      if border_bottom &gt; 0 do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L496"><a href="#L496">496</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        bc = Map.get(row.style, :border_color, Map.get(opts, :border_color, :black))</code></td>
+</tr>
+<tr>
+<td class="line" id="L497"><a href="#L497">497</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L498"><a href="#L498">498</a></td>
+<td class="hits"></td>
+<td class="source"><code>        page</code></td>
+</tr>
+<tr>
+<td class="line" id="L499"><a href="#L499">499</a></td>
+<td class="hits"></td>
+<td class="source"><code>        |&gt; Page.save_state()</code></td>
+</tr>
+<tr>
+<td class="line" id="L500"><a href="#L500">500</a></td>
+<td class="hits"></td>
+<td class="source"><code>        |&gt; Page.set_stroke_color(bc)</code></td>
+</tr>
+<tr>
+<td class="line" id="L501"><a href="#L501">501</a></td>
+<td class="hits"></td>
+<td class="source"><code>        |&gt; Page.set_line_width(border_bottom)</code></td>
+</tr>
+<tr>
+<td class="line" id="L502"><a href="#L502">502</a></td>
+<td class="hits"></td>
+<td class="source"><code>        |&gt; Page.line({table_x, row_y}, {table_x + total_width(cols), row_y})</code></td>
+</tr>
+<tr>
+<td class="line" id="L503"><a href="#L503">503</a></td>
+<td class="hits"></td>
+<td class="source"><code>        |&gt; Page.stroke()</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L504"><a href="#L504">504</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        |&gt; Page.restore_state()</code></td>
+</tr>
+<tr>
+<td class="line" id="L505"><a href="#L505">505</a></td>
+<td class="hits"></td>
+<td class="source"><code>      else</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L506"><a href="#L506">506</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        page</code></td>
+</tr>
+<tr>
+<td class="line" id="L507"><a href="#L507">507</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end</code></td>
+</tr>
+<tr>
+<td class="line" id="L508"><a href="#L508">508</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L509"><a href="#L509">509</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    font = Map.get(row.style, :font, opts.font)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L510"><a href="#L510">510</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    font_size = Map.get(row.style, :font_size, opts.font_size)</code></td>
+</tr>
+<tr>
+<td class="line" id="L511"><a href="#L511">511</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L512"><a href="#L512">512</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    {page, _x} =</code></td>
+</tr>
+<tr>
+<td class="line" id="L513"><a href="#L513">513</a></td>
+<td class="hits"></td>
+<td class="source"><code>      Enum.reduce(cols, {page, table_x}, fn col, {pg, cx} -&gt;</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L514"><a href="#L514">514</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        cell_text = Enum.at(row.cells, col.index, "")</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L515"><a href="#L515">515</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        {_pt, _pr, _pb, pl} = row.padding</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L516"><a href="#L516">516</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        text_x = cx + pl</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L517"><a href="#L517">517</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        text_y = y - pt - font_size</code></td>
+</tr>
+<tr>
+<td class="line" id="L518"><a href="#L518">518</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L519"><a href="#L519">519</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        pg = Page.text_at(pg, {text_x, text_y}, cell_text, font: font, size: font_size)</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L520"><a href="#L520">520</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        {pg, cx + col.width}</code></td>
+</tr>
+<tr>
+<td class="line" id="L521"><a href="#L521">521</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L522"><a href="#L522">522</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L523"><a href="#L523">523</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    page</code></td>
+</tr>
+<tr>
+<td class="line" id="L524"><a href="#L524">524</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L525"><a href="#L525">525</a></td>
+<td class="hits"></td>
+<td class="source"><code>end</code></td>
+</tr>
+</tbody>
+<thead>
+<tr>
+<th>Line</th>
+<th>Hits</th>
+<th>Source</th>
+</tr>
+</thead>
+</table>
+</body>
+</html>

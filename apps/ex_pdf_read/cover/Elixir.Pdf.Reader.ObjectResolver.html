@@ -1,0 +1,1519 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>cover/Elixir.Pdf.Reader.ObjectResolver.html</title>
+<style>body {
+  font: 14px/1.6 "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #000;
+  border-top: 2px solid #ddd;
+  background-color: #fff;
+
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+h1 {
+  width: 100%;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 0;
+  font-weight: 100;
+  font-size: 1.1em;
+  letter-spacing: 1px;
+}
+
+h1 code {
+  font-size: 0.96em;
+}
+
+code {
+  font: 12px monospace;
+}
+
+footer {
+  background: #eee;
+  width: 100%;
+  padding: 10px 0;
+  text-align: right;
+  border-top: 1px solid #ddd;
+  display: flex;
+  flex: 1;
+  order: 2;
+  justify-content: center;
+}
+
+table {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: collapse;
+  border: 1px solid #cbcbcb;
+  color: #000;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+}
+table thead {
+  display: none;
+}
+table td.line,
+table td.line a,
+table td.hits {
+  width: 20px;
+  background: #eaeaea;
+  text-align: center;
+  text-decoration: none;
+  font-size: 11px;
+  padding: 0 10px;
+  color: #949494;
+}
+table td.hits {
+  width: 10px;
+  text-align: right;
+  padding: 2px 5px;
+  color: rgba(0, 0, 0, 0.6);
+  background-color: #f0f0f0;
+}
+tr.miss td.line,
+tr.miss td.line a,
+tr.miss td.hits {
+  background-color: #ffdce0;
+  border-color: #fdaeb7;
+}
+tr.miss td {
+  background-color: #ffeef0;
+}
+tr.hit td.line,
+tr.hit td.line a,
+tr.hit td.hits {
+  background-color: #cdffd8;
+  border-color: #bef5cb;
+}
+tr.hit td {
+  background-color: #e6ffed;
+}
+td.source {
+  padding-left: 15px;
+  line-height: 15px;
+  white-space: pre;
+  font: 12px monospace;
+}
+</style>
+</head>
+<body>
+<h1><code>cover/Elixir.Pdf.Reader.ObjectResolver.html</code></h1>
+<footer><p>File generated from <code>/Users/amir/Documents/proyectos/recreando/elixir-pdf/apps/ex_pdf_read/lib/pdf/reader/object_resolver.ex</code> by <a href="http://erlang.org/doc/man/cover.html">cover</a> at 2026-05-27 at 22:52:54</p></footer>
+<table>
+<tbody>
+<tr>
+<td class="line" id="L1"><a href="#L1">1</a></td>
+<td class="hits"></td>
+<td class="source"><code>defmodule Pdf.Reader.ObjectResolver do</code></td>
+</tr>
+<tr>
+<td class="line" id="L2"><a href="#L2">2</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @moduledoc """</code></td>
+</tr>
+<tr>
+<td class="line" id="L3"><a href="#L3">3</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Lazy indirect-object resolver with Map-based cache.</code></td>
+</tr>
+<tr>
+<td class="line" id="L4"><a href="#L4">4</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L5"><a href="#L5">5</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Per the design (`sdd/pdf-reader-core/design` § 5 "Lazy Resolution Contract"):</code></td>
+</tr>
+<tr>
+<td class="line" id="L6"><a href="#L6">6</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L7"><a href="#L7">7</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - **Cache**: a plain `Map` on `%Pdf.Reader.Document{}.cache`. No GenServer.</code></td>
+</tr>
+<tr>
+<td class="line" id="L8"><a href="#L8">8</a></td>
+<td class="hits"></td>
+<td class="source"><code>    Key: `{obj_num, gen_num}`. Value: the resolved Elixir term.</code></td>
+</tr>
+<tr>
+<td class="line" id="L9"><a href="#L9">9</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - **Signature**: `resolve(doc, {:ref, n, g}) :: {:ok, value, doc} | {:error, reason}`.</code></td>
+</tr>
+<tr>
+<td class="line" id="L10"><a href="#L10">10</a></td>
+<td class="hits"></td>
+<td class="source"><code>    The returned `doc` carries the updated cache. The caller threads `doc` forward</code></td>
+</tr>
+<tr>
+<td class="line" id="L11"><a href="#L11">11</a></td>
+<td class="hits"></td>
+<td class="source"><code>    for cache benefit; dropping the updated doc still yields correct results on</code></td>
+</tr>
+<tr>
+<td class="line" id="L12"><a href="#L12">12</a></td>
+<td class="hits"></td>
+<td class="source"><code>    the next call (re-parse, same value — the binary is immutable).</code></td>
+</tr>
+<tr>
+<td class="line" id="L13"><a href="#L13">13</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - **Idempotent**: calling `resolve/2` twice on the same ref with the same doc</code></td>
+</tr>
+<tr>
+<td class="line" id="L14"><a href="#L14">14</a></td>
+<td class="hits"></td>
+<td class="source"><code>    returns the same value. The cache is a hint, not state.</code></td>
+</tr>
+<tr>
+<td class="line" id="L15"><a href="#L15">15</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L16"><a href="#L16">16</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Resolution paths</code></td>
+</tr>
+<tr>
+<td class="line" id="L17"><a href="#L17">17</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L18"><a href="#L18">18</a></td>
+<td class="hits"></td>
+<td class="source"><code>  1. **Cache hit**: `Map.get(doc.cache, {n, g})` → immediate return.</code></td>
+</tr>
+<tr>
+<td class="line" id="L19"><a href="#L19">19</a></td>
+<td class="hits"></td>
+<td class="source"><code>  2. **In-use (classic)**: look up `{n, g}` in `doc.xref` → `{:in_use, offset, _gen}`.</code></td>
+</tr>
+<tr>
+<td class="line" id="L20"><a href="#L20">20</a></td>
+<td class="hits"></td>
+<td class="source"><code>     Slice `binary_part(doc.binary, offset, ...)`, run `Parser.parse_object/1`.</code></td>
+</tr>
+<tr>
+<td class="line" id="L21"><a href="#L21">21</a></td>
+<td class="hits"></td>
+<td class="source"><code>  3. **Compressed (ObjStm)**: look up `{n, g}` → `{:compressed, objstm_n, index}`.</code></td>
+</tr>
+<tr>
+<td class="line" id="L22"><a href="#L22">22</a></td>
+<td class="hits"></td>
+<td class="source"><code>     Recursively `resolve(doc, {:ref, objstm_n, 0})`, decode filters, then</code></td>
+</tr>
+<tr>
+<td class="line" id="L23"><a href="#L23">23</a></td>
+<td class="hits"></td>
+<td class="source"><code>     `ObjectStream.fetch/3`.</code></td>
+</tr>
+<tr>
+<td class="line" id="L24"><a href="#L24">24</a></td>
+<td class="hits"></td>
+<td class="source"><code>  4. **Free / absent**: `{:error, {:unresolved_ref, {n, g}}}`.</code></td>
+</tr>
+<tr>
+<td class="line" id="L25"><a href="#L25">25</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L26"><a href="#L26">26</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Ref chasing</code></td>
+</tr>
+<tr>
+<td class="line" id="L27"><a href="#L27">27</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L28"><a href="#L28">28</a></td>
+<td class="hits"></td>
+<td class="source"><code>  `resolve/2` does **NOT** automatically follow nested refs. If a resolved value</code></td>
+</tr>
+<tr>
+<td class="line" id="L29"><a href="#L29">29</a></td>
+<td class="hits"></td>
+<td class="source"><code>  is itself `{:ref, _, _}`, the caller decides whether to chase it. This avoids</code></td>
+</tr>
+<tr>
+<td class="line" id="L30"><a href="#L30">30</a></td>
+<td class="hits"></td>
+<td class="source"><code>  infinite loops on circular references and keeps the interface predictable.</code></td>
+</tr>
+<tr>
+<td class="line" id="L31"><a href="#L31">31</a></td>
+<td class="hits"></td>
+<td class="source"><code>  """</code></td>
+</tr>
+<tr>
+<td class="line" id="L32"><a href="#L32">32</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L33"><a href="#L33">33</a></td>
+<td class="hits"></td>
+<td class="source"><code>  alias Pdf.Reader.{Document, Filter, ObjectStream, Parser}</code></td>
+</tr>
+<tr>
+<td class="line" id="L34"><a href="#L34">34</a></td>
+<td class="hits"></td>
+<td class="source"><code>  alias Pdf.Reader.Encryption.{StandardHandler, V1V2, V4, V5}</code></td>
+</tr>
+<tr>
+<td class="line" id="L35"><a href="#L35">35</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L36"><a href="#L36">36</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L37"><a href="#L37">37</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Public API</code></td>
+</tr>
+<tr>
+<td class="line" id="L38"><a href="#L38">38</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L39"><a href="#L39">39</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L40"><a href="#L40">40</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @doc """</code></td>
+</tr>
+<tr>
+<td class="line" id="L41"><a href="#L41">41</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Resolve an indirect object reference to its value.</code></td>
+</tr>
+<tr>
+<td class="line" id="L42"><a href="#L42">42</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L43"><a href="#L43">43</a></td>
+<td class="hits"></td>
+<td class="source"><code>  Returns `{:ok, value, updated_doc}` on success, where `updated_doc` has</code></td>
+</tr>
+<tr>
+<td class="line" id="L44"><a href="#L44">44</a></td>
+<td class="hits"></td>
+<td class="source"><code>  the resolved value cached. Returns `{:error, reason}` on failure.</code></td>
+</tr>
+<tr>
+<td class="line" id="L45"><a href="#L45">45</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L46"><a href="#L46">46</a></td>
+<td class="hits"></td>
+<td class="source"><code>  The caller should thread the returned `doc` forward to benefit from caching</code></td>
+</tr>
+<tr>
+<td class="line" id="L47"><a href="#L47">47</a></td>
+<td class="hits"></td>
+<td class="source"><code>  on subsequent resolutions.</code></td>
+</tr>
+<tr>
+<td class="line" id="L48"><a href="#L48">48</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L49"><a href="#L49">49</a></td>
+<td class="hits"></td>
+<td class="source"><code>  ## Error reasons</code></td>
+</tr>
+<tr>
+<td class="line" id="L50"><a href="#L50">50</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L51"><a href="#L51">51</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `{:error, {:unresolved_ref, {n, g}}}` — ref is absent from xref or is a free entry.</code></td>
+</tr>
+<tr>
+<td class="line" id="L52"><a href="#L52">52</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `{:error, :malformed}` — parse failure.</code></td>
+</tr>
+<tr>
+<td class="line" id="L53"><a href="#L53">53</a></td>
+<td class="hits"></td>
+<td class="source"><code>  - `{:error, {:unsupported_filter, name}}` — propagated from filter chain.</code></td>
+</tr>
+<tr>
+<td class="line" id="L54"><a href="#L54">54</a></td>
+<td class="hits"></td>
+<td class="source"><code>  """</code></td>
+</tr>
+<tr>
+<td class="line" id="L55"><a href="#L55">55</a></td>
+<td class="hits"></td>
+<td class="source"><code>  @spec resolve(Document.t(), {:ref, pos_integer(), non_neg_integer()}) ::</code></td>
+</tr>
+<tr>
+<td class="line" id="L56"><a href="#L56">56</a></td>
+<td class="hits"></td>
+<td class="source"><code>          {:ok, term(), Document.t()} | {:error, term()}</code></td>
+</tr>
+<tr>
+<td class="line" id="L57"><a href="#L57">57</a></td>
+<td class="hits"></td>
+<td class="source"><code>  def resolve(%Document{} = doc, {:ref, n, g}) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L58"><a href="#L58">58</a></td>
+<td class="hits">3891</td>
+<td class="source"><code>    key = {n, g}</code></td>
+</tr>
+<tr>
+<td class="line" id="L59"><a href="#L59">59</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L60"><a href="#L60">60</a></td>
+<td class="hits">3891</td>
+<td class="source"><code>    case Map.get(doc.cache, key) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L61"><a href="#L61">61</a></td>
+<td class="hits"></td>
+<td class="source"><code>      nil -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L62"><a href="#L62">62</a></td>
+<td class="hits"></td>
+<td class="source"><code>        # Cache miss — look up in xref and resolve from binary.</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L63"><a href="#L63">63</a></td>
+<td class="hits">1644</td>
+<td class="source"><code>        do_resolve(doc, key)</code></td>
+</tr>
+<tr>
+<td class="line" id="L64"><a href="#L64">64</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L65"><a href="#L65">65</a></td>
+<td class="hits"></td>
+<td class="source"><code>      value -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L66"><a href="#L66">66</a></td>
+<td class="hits"></td>
+<td class="source"><code>        # Cache hit — return immediately, doc unchanged.</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L67"><a href="#L67">67</a></td>
+<td class="hits">2247</td>
+<td class="source"><code>        {:ok, value, doc}</code></td>
+</tr>
+<tr>
+<td class="line" id="L68"><a href="#L68">68</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L69"><a href="#L69">69</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L70"><a href="#L70">70</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L71"><a href="#L71">71</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L72"><a href="#L72">72</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Internal — xref dispatch</code></td>
+</tr>
+<tr>
+<td class="line" id="L73"><a href="#L73">73</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L74"><a href="#L74">74</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L75"><a href="#L75">75</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp do_resolve(doc, {n, g} = key) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L76"><a href="#L76">76</a></td>
+<td class="hits">1644</td>
+<td class="source"><code>    case Map.get(doc.xref, key) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L77"><a href="#L77">77</a></td>
+<td class="hits">25</td>
+<td class="source"><code>      nil -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L78"><a href="#L78">78</a></td>
+<td class="hits"></td>
+<td class="source"><code>        {:error, {:unresolved_ref, {n, g}}}</code></td>
+</tr>
+<tr>
+<td class="line" id="L79"><a href="#L79">79</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L80"><a href="#L80">80</a></td>
+<td class="hits">1</td>
+<td class="source"><code>      :free -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L81"><a href="#L81">81</a></td>
+<td class="hits"></td>
+<td class="source"><code>        {:error, {:unresolved_ref, {n, g}}}</code></td>
+</tr>
+<tr>
+<td class="line" id="L82"><a href="#L82">82</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L83"><a href="#L83">83</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {:in_use, offset, _gen} -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L84"><a href="#L84">84</a></td>
+<td class="hits">1329</td>
+<td class="source"><code>        resolve_in_use(doc, key, offset)</code></td>
+</tr>
+<tr>
+<td class="line" id="L85"><a href="#L85">85</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L86"><a href="#L86">86</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {:compressed, objstm_n, index} -&gt;</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L87"><a href="#L87">87</a></td>
+<td class="hits">289</td>
+<td class="source"><code>        resolve_compressed(doc, key, objstm_n, index)</code></td>
+</tr>
+<tr>
+<td class="line" id="L88"><a href="#L88">88</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L89"><a href="#L89">89</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L90"><a href="#L90">90</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L91"><a href="#L91">91</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L92"><a href="#L92">92</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Internal — in-use resolution path</code></td>
+</tr>
+<tr>
+<td class="line" id="L93"><a href="#L93">93</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L94"><a href="#L94">94</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L95"><a href="#L95">95</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp resolve_in_use(doc, {n, g} = key, offset) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L96"><a href="#L96">96</a></td>
+<td class="hits">1329</td>
+<td class="source"><code>    total = byte_size(doc.binary)</code></td>
+</tr>
+<tr>
+<td class="line" id="L97"><a href="#L97">97</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L98"><a href="#L98">98</a></td>
+<td class="hits">1329</td>
+<td class="source"><code>    if offset &gt;= total do</code></td>
+</tr>
+<tr>
+<td class="line" id="L99"><a href="#L99">99</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {:error, {:unresolved_ref, key}}</code></td>
+</tr>
+<tr>
+<td class="line" id="L100"><a href="#L100">100</a></td>
+<td class="hits"></td>
+<td class="source"><code>    else</code></td>
+</tr>
+<tr>
+<td class="line" id="L101"><a href="#L101">101</a></td>
+<td class="hits"></td>
+<td class="source"><code>      # Slice from offset to end of binary (Parser reads until endobj).</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L102"><a href="#L102">102</a></td>
+<td class="hits">1329</td>
+<td class="source"><code>      slice = binary_part(doc.binary, offset, total - offset)</code></td>
+</tr>
+<tr>
+<td class="line" id="L103"><a href="#L103">103</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L104"><a href="#L104">104</a></td>
+<td class="hits">1329</td>
+<td class="source"><code>      case Parser.parse_object(slice) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L105"><a href="#L105">105</a></td>
+<td class="hits"></td>
+<td class="source"><code>        {:ok, _ref, value, _rest} -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L106"><a href="#L106">106</a></td>
+<td class="hits"></td>
+<td class="source"><code>          # R-ENC9: decryption hook MUST be here, AFTER parse, BEFORE cache write.</code></td>
+</tr>
+<tr>
+<td class="line" id="L107"><a href="#L107">107</a></td>
+<td class="hits"></td>
+<td class="source"><code>          # R-ENC11: when doc.encryption is nil, skip entirely — no perf regression.</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L108"><a href="#L108">108</a></td>
+<td class="hits">1328</td>
+<td class="source"><code>          value = maybe_decrypt_value(value, n, g, doc.encryption)</code></td>
+</tr>
+<tr>
+<td class="line" id="L109"><a href="#L109">109</a></td>
+<td class="hits"></td>
+<td class="source"><code>          # Cache the resolved (and possibly decrypted) value.</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L110"><a href="#L110">110</a></td>
+<td class="hits">1328</td>
+<td class="source"><code>          updated_doc = %{doc | cache: Map.put(doc.cache, key, value)}</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L111"><a href="#L111">111</a></td>
+<td class="hits">1328</td>
+<td class="source"><code>          {:ok, value, updated_doc}</code></td>
+</tr>
+<tr>
+<td class="line" id="L112"><a href="#L112">112</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L113"><a href="#L113">113</a></td>
+<td class="hits">1</td>
+<td class="source"><code>        {:error, _} -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L114"><a href="#L114">114</a></td>
+<td class="hits"></td>
+<td class="source"><code>          {:error, :malformed}</code></td>
+</tr>
+<tr>
+<td class="line" id="L115"><a href="#L115">115</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end</code></td>
+</tr>
+<tr>
+<td class="line" id="L116"><a href="#L116">116</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L117"><a href="#L117">117</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L118"><a href="#L118">118</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L119"><a href="#L119">119</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L120"><a href="#L120">120</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Internal — compressed resolution path (ObjStm)</code></td>
+</tr>
+<tr>
+<td class="line" id="L121"><a href="#L121">121</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L122"><a href="#L122">122</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L123"><a href="#L123">123</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Per design § 5: ObjStm resolution steps:</code></td>
+</tr>
+<tr>
+<td class="line" id="L124"><a href="#L124">124</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # 1. Recursively resolve the ObjStm object itself → {:stream, dict, raw_bytes}.</code></td>
+</tr>
+<tr>
+<td class="line" id="L125"><a href="#L125">125</a></td>
+<td class="hits"></td>
+<td class="source"><code>  #    The ObjStm stream's raw bytes are decrypted by resolve_in_use/3 (the encryption</code></td>
+</tr>
+<tr>
+<td class="line" id="L126"><a href="#L126">126</a></td>
+<td class="hits"></td>
+<td class="source"><code>  #    hook fires there). After that point the ObjStm body is already plaintext.</code></td>
+</tr>
+<tr>
+<td class="line" id="L127"><a href="#L127">127</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # 2. Apply filter chain to decode the body.</code></td>
+</tr>
+<tr>
+<td class="line" id="L128"><a href="#L128">128</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # 3. Call ObjectStream.fetch/3 with decoded body, /First, and index.</code></td>
+</tr>
+<tr>
+<td class="line" id="L129"><a href="#L129">129</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # 4. Cache the result and return.</code></td>
+</tr>
+<tr>
+<td class="line" id="L130"><a href="#L130">130</a></td>
+<td class="hits"></td>
+<td class="source"><code>  #</code></td>
+</tr>
+<tr>
+<td class="line" id="L131"><a href="#L131">131</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # INVARIANT (R-ENC10): This function MUST NOT apply any decryption to inner</code></td>
+</tr>
+<tr>
+<td class="line" id="L132"><a href="#L132">132</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # objects. Objects extracted from an ObjStm are already plaintext after the</code></td>
+</tr>
+<tr>
+<td class="line" id="L133"><a href="#L133">133</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ObjStm stream itself was decrypted in step 1. Decrypting them here would</code></td>
+</tr>
+<tr>
+<td class="line" id="L134"><a href="#L134">134</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # corrupt their values (double-decryption). Never add a decrypt_value call</code></td>
+</tr>
+<tr>
+<td class="line" id="L135"><a href="#L135">135</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # anywhere in this function.</code></td>
+</tr>
+<tr>
+<td class="line" id="L136"><a href="#L136">136</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp resolve_compressed(doc, key, objstm_n, index) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L137"><a href="#L137">137</a></td>
+<td class="hits">289</td>
+<td class="source"><code>    with {:ok, stream_value, doc2} &lt;- resolve(doc, {:ref, objstm_n, 0}),</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L138"><a href="#L138">138</a></td>
+<td class="hits">289</td>
+<td class="source"><code>         {:stream, dict, raw_body} &lt;- ensure_stream(stream_value),</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L139"><a href="#L139">139</a></td>
+<td class="hits">289</td>
+<td class="source"><code>         {:ok, decoded_body} &lt;- decode_stream_body(dict, raw_body),</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L140"><a href="#L140">140</a></td>
+<td class="hits">289</td>
+<td class="source"><code>         {:ok, first} &lt;- extract_first(dict),</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L141"><a href="#L141">141</a></td>
+<td class="hits">289</td>
+<td class="source"><code>         {:ok, value} &lt;- ObjectStream.fetch(first, decoded_body, index) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L142"><a href="#L142">142</a></td>
+<td class="hits"></td>
+<td class="source"><code>      # Cache the compressed object under its own key.</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L143"><a href="#L143">143</a></td>
+<td class="hits">289</td>
+<td class="source"><code>      updated_doc = %{doc2 | cache: Map.put(doc2.cache, key, value)}</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L144"><a href="#L144">144</a></td>
+<td class="hits">289</td>
+<td class="source"><code>      {:ok, value, updated_doc}</code></td>
+</tr>
+<tr>
+<td class="line" id="L145"><a href="#L145">145</a></td>
+<td class="hits"></td>
+<td class="source"><code>    else</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L146"><a href="#L146">146</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      {:error, _} = err -&gt; err</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L147"><a href="#L147">147</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      :not_a_stream -&gt; {:error, {:objstm_unsupported, :not_a_stream}}</code></td>
+</tr>
+<tr>
+<td class="line" id="L148"><a href="#L148">148</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L149"><a href="#L149">149</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L150"><a href="#L150">150</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L151"><a href="#L151">151</a></td>
+<td class="hits">289</td>
+<td class="source"><code>  defp ensure_stream({:stream, _, _} = stream), do: stream</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L152"><a href="#L152">152</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp ensure_stream(_), do: :not_a_stream</code></td>
+</tr>
+<tr>
+<td class="line" id="L153"><a href="#L153">153</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L154"><a href="#L154">154</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Decode the ObjStm stream body through the filter chain.</code></td>
+</tr>
+<tr>
+<td class="line" id="L155"><a href="#L155">155</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Filter names may be {:name, binary()} tuples (from the parser) or plain strings.</code></td>
+</tr>
+<tr>
+<td class="line" id="L156"><a href="#L156">156</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Filter.apply_chain/3 handles both via its internal resolve_module/1.</code></td>
+</tr>
+<tr>
+<td class="line" id="L157"><a href="#L157">157</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp decode_stream_body(dict, raw_body) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L158"><a href="#L158">158</a></td>
+<td class="hits">289</td>
+<td class="source"><code>    filter = Map.get(dict, "Filter")</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L159"><a href="#L159">159</a></td>
+<td class="hits">289</td>
+<td class="source"><code>    parms = Map.get(dict, "DecodeParms")</code></td>
+</tr>
+<tr>
+<td class="line" id="L160"><a href="#L160">160</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L161"><a href="#L161">161</a></td>
+<td class="hits">289</td>
+<td class="source"><code>    if is_nil(filter) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L162"><a href="#L162">162</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {:ok, raw_body}</code></td>
+</tr>
+<tr>
+<td class="line" id="L163"><a href="#L163">163</a></td>
+<td class="hits"></td>
+<td class="source"><code>    else</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L164"><a href="#L164">164</a></td>
+<td class="hits">285</td>
+<td class="source"><code>      Filter.apply_chain(raw_body, filter, parms || %{})</code></td>
+</tr>
+<tr>
+<td class="line" id="L165"><a href="#L165">165</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L166"><a href="#L166">166</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L167"><a href="#L167">167</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L168"><a href="#L168">168</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp extract_first(dict) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L169"><a href="#L169">169</a></td>
+<td class="hits">289</td>
+<td class="source"><code>    case Map.get(dict, "First") do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L170"><a href="#L170">170</a></td>
+<td class="hits">289</td>
+<td class="source"><code>      v when is_integer(v) -&gt; {:ok, v}</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L171"><a href="#L171">171</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      _ -&gt; {:error, {:objstm_unsupported, :missing_first}}</code></td>
+</tr>
+<tr>
+<td class="line" id="L172"><a href="#L172">172</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L173"><a href="#L173">173</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L174"><a href="#L174">174</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L175"><a href="#L175">175</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L176"><a href="#L176">176</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Encryption value walker (R-ENC9, R-ENC11, R-ENC12, R-ENC16)</code></td>
+</tr>
+<tr>
+<td class="line" id="L177"><a href="#L177">177</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L178"><a href="#L178">178</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L179"><a href="#L179">179</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # R-ENC11: when encryption is nil, return value unchanged — no branches executed.</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L180"><a href="#L180">180</a></td>
+<td class="hits">1325</td>
+<td class="source"><code>  defp maybe_decrypt_value(value, _obj_num, _gen_num, nil), do: value</code></td>
+</tr>
+<tr>
+<td class="line" id="L181"><a href="#L181">181</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L182"><a href="#L182">182</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Dispatch by handler version to the correct decrypt module.</code></td>
+</tr>
+<tr>
+<td class="line" id="L183"><a href="#L183">183</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp maybe_decrypt_value(value, obj_num, gen_num, %StandardHandler{} = handler) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L184"><a href="#L184">184</a></td>
+<td class="hits">3</td>
+<td class="source"><code>    decrypt_value(value, obj_num, gen_num, handler)</code></td>
+</tr>
+<tr>
+<td class="line" id="L185"><a href="#L185">185</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L186"><a href="#L186">186</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L187"><a href="#L187">187</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Streams: decrypt raw_bytes, recurse into dict for embedded strings (R-ENC12, R-ENC16).</code></td>
+</tr>
+<tr>
+<td class="line" id="L188"><a href="#L188">188</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # R-ENC15: /EncryptMetadata false and /Identity crypt filter short-circuit in V4/V5.</code></td>
+</tr>
+<tr>
+<td class="line" id="L189"><a href="#L189">189</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # The stream dict may contain string values (e.g. /Author) that must also be decrypted.</code></td>
+</tr>
+<tr>
+<td class="line" id="L190"><a href="#L190">190</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp decrypt_value({:stream, dict, raw_bytes}, obj_num, gen_num, handler) do</code></td>
+</tr>
+<tr>
+<td class="line" id="L191"><a href="#L191">191</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # Decrypt the stream bytes using the version-appropriate function.</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L192"><a href="#L192">192</a></td>
+<td class="hits">2</td>
+<td class="source"><code>    decrypted_bytes =</code></td>
+</tr>
+<tr>
+<td class="line" id="L193"><a href="#L193">193</a></td>
+<td class="hits"></td>
+<td class="source"><code>      case do_decrypt_stream(raw_bytes, dict, obj_num, gen_num, handler) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L194"><a href="#L194">194</a></td>
+<td class="hits">2</td>
+<td class="source"><code>        {:ok, plain} -&gt; plain</code></td>
+</tr>
+<tr>
+<td class="line" id="L195"><a href="#L195">195</a></td>
+<td class="hits"></td>
+<td class="source"><code>        # On error (e.g. bad PKCS7 padding with wrong key), keep ciphertext intact</code></td>
+</tr>
+<tr>
+<td class="line" id="L196"><a href="#L196">196</a></td>
+<td class="hits"></td>
+<td class="source"><code>        # to avoid masking authentication failures with crashes.</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L197"><a href="#L197">197</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>        _ -&gt; raw_bytes</code></td>
+</tr>
+<tr>
+<td class="line" id="L198"><a href="#L198">198</a></td>
+<td class="hits"></td>
+<td class="source"><code>      end</code></td>
+</tr>
+<tr>
+<td class="line" id="L199"><a href="#L199">199</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L200"><a href="#L200">200</a></td>
+<td class="hits"></td>
+<td class="source"><code>    # Recurse into the stream dict to decrypt any embedded string values.</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L201"><a href="#L201">201</a></td>
+<td class="hits">2</td>
+<td class="source"><code>    decrypted_dict = decrypt_dict_values(dict, obj_num, gen_num, handler)</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L202"><a href="#L202">202</a></td>
+<td class="hits">2</td>
+<td class="source"><code>    {:stream, decrypted_dict, decrypted_bytes}</code></td>
+</tr>
+<tr>
+<td class="line" id="L203"><a href="#L203">203</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L204"><a href="#L204">204</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L205"><a href="#L205">205</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Dicts: recurse into values, decrypting every string leaf (R-ENC16).</code></td>
+</tr>
+<tr>
+<td class="line" id="L206"><a href="#L206">206</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp decrypt_value(dict, obj_num, gen_num, handler) when is_map(dict) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L207"><a href="#L207">207</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    decrypt_dict_values(dict, obj_num, gen_num, handler)</code></td>
+</tr>
+<tr>
+<td class="line" id="L208"><a href="#L208">208</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L209"><a href="#L209">209</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L210"><a href="#L210">210</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Arrays: recurse into each element (R-ENC16).</code></td>
+</tr>
+<tr>
+<td class="line" id="L211"><a href="#L211">211</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp decrypt_value(list, obj_num, gen_num, handler) when is_list(list) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L212"><a href="#L212">212</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    Enum.map(list, &amp;decrypt_value(&amp;1, obj_num, gen_num, handler))</code></td>
+</tr>
+<tr>
+<td class="line" id="L213"><a href="#L213">213</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L214"><a href="#L214">214</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L215"><a href="#L215">215</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # String values: decrypt using per-object key (R-ENC16).</code></td>
+</tr>
+<tr>
+<td class="line" id="L216"><a href="#L216">216</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp decrypt_value({:string, bytes}, obj_num, gen_num, handler) when is_binary(bytes) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L217"><a href="#L217">217</a></td>
+<td class="hits">1</td>
+<td class="source"><code>    case do_decrypt_string(bytes, obj_num, gen_num, handler) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L218"><a href="#L218">218</a></td>
+<td class="hits">1</td>
+<td class="source"><code>      {:ok, plain} -&gt; {:string, plain}</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L219"><a href="#L219">219</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      _ -&gt; {:string, bytes}</code></td>
+</tr>
+<tr>
+<td class="line" id="L220"><a href="#L220">220</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L221"><a href="#L221">221</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L222"><a href="#L222">222</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L223"><a href="#L223">223</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp decrypt_value({:hex_string, bytes}, obj_num, gen_num, handler) when is_binary(bytes) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L224"><a href="#L224">224</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    case do_decrypt_string(bytes, obj_num, gen_num, handler) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L225"><a href="#L225">225</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      {:ok, plain} -&gt; {:hex_string, plain}</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L226"><a href="#L226">226</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>      _ -&gt; {:hex_string, bytes}</code></td>
+</tr>
+<tr>
+<td class="line" id="L227"><a href="#L227">227</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end</code></td>
+</tr>
+<tr>
+<td class="line" id="L228"><a href="#L228">228</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L229"><a href="#L229">229</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L230"><a href="#L230">230</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Plain values (numbers, bools, names, refs, null, atoms) pass through unchanged.</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L231"><a href="#L231">231</a></td>
+<td class="hits">5</td>
+<td class="source"><code>  defp decrypt_value(value, _obj_num, _gen_num, _handler), do: value</code></td>
+</tr>
+<tr>
+<td class="line" id="L232"><a href="#L232">232</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L233"><a href="#L233">233</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L234"><a href="#L234">234</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Dict recursion — decrypt all string values in a dict map</code></td>
+</tr>
+<tr>
+<td class="line" id="L235"><a href="#L235">235</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L236"><a href="#L236">236</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L237"><a href="#L237">237</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp decrypt_dict_values(dict, obj_num, gen_num, handler) when is_map(dict) do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L238"><a href="#L238">238</a></td>
+<td class="hits">2</td>
+<td class="source"><code>    Map.new(dict, fn {k, v} -&gt;</code></td>
+</tr>
+<tr>
+<td class="line" id="L239"><a href="#L239">239</a></td>
+<td class="hits"></td>
+<td class="source"><code>      {k, decrypt_value(v, obj_num, gen_num, handler)}</code></td>
+</tr>
+<tr>
+<td class="line" id="L240"><a href="#L240">240</a></td>
+<td class="hits"></td>
+<td class="source"><code>    end)</code></td>
+</tr>
+<tr>
+<td class="line" id="L241"><a href="#L241">241</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L242"><a href="#L242">242</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L243"><a href="#L243">243</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L244"><a href="#L244">244</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Version dispatch for stream decryption</code></td>
+</tr>
+<tr>
+<td class="line" id="L245"><a href="#L245">245</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L246"><a href="#L246">246</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L247"><a href="#L247">247</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp do_decrypt_stream(bytes, stream_dict, obj_num, gen_num, %StandardHandler{version: v} = h)</code></td>
+</tr>
+<tr>
+<td class="line" id="L248"><a href="#L248">248</a></td>
+<td class="hits"></td>
+<td class="source"><code>       when v in [1, 2] do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L249"><a href="#L249">249</a></td>
+<td class="hits">2</td>
+<td class="source"><code>    V1V2.decrypt_stream(bytes, stream_dict, obj_num, gen_num, h)</code></td>
+</tr>
+<tr>
+<td class="line" id="L250"><a href="#L250">250</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L251"><a href="#L251">251</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L252"><a href="#L252">252</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp do_decrypt_stream(bytes, stream_dict, obj_num, gen_num, %StandardHandler{version: 4} = h) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L253"><a href="#L253">253</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    V4.decrypt_stream(bytes, stream_dict, obj_num, gen_num, h)</code></td>
+</tr>
+<tr>
+<td class="line" id="L254"><a href="#L254">254</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L255"><a href="#L255">255</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L256"><a href="#L256">256</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp do_decrypt_stream(bytes, stream_dict, obj_num, gen_num, %StandardHandler{version: 5} = h) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L257"><a href="#L257">257</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    V5.decrypt_stream(bytes, stream_dict, obj_num, gen_num, h)</code></td>
+</tr>
+<tr>
+<td class="line" id="L258"><a href="#L258">258</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L259"><a href="#L259">259</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L260"><a href="#L260">260</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp do_decrypt_stream(bytes, _stream_dict, _obj_num, _gen_num, _handler), do: {:ok, bytes}</code></td>
+</tr>
+<tr>
+<td class="line" id="L261"><a href="#L261">261</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L262"><a href="#L262">262</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L263"><a href="#L263">263</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # Version dispatch for string decryption</code></td>
+</tr>
+<tr>
+<td class="line" id="L264"><a href="#L264">264</a></td>
+<td class="hits"></td>
+<td class="source"><code>  # ---------------------------------------------------------------------------</code></td>
+</tr>
+<tr>
+<td class="line" id="L265"><a href="#L265">265</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L266"><a href="#L266">266</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp do_decrypt_string(bytes, obj_num, gen_num, %StandardHandler{version: v} = h)</code></td>
+</tr>
+<tr>
+<td class="line" id="L267"><a href="#L267">267</a></td>
+<td class="hits"></td>
+<td class="source"><code>       when v in [1, 2] do</code></td>
+</tr>
+<tr class="hit">
+<td class="line" id="L268"><a href="#L268">268</a></td>
+<td class="hits">1</td>
+<td class="source"><code>    V1V2.decrypt_string(bytes, obj_num, gen_num, h)</code></td>
+</tr>
+<tr>
+<td class="line" id="L269"><a href="#L269">269</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L270"><a href="#L270">270</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L271"><a href="#L271">271</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp do_decrypt_string(bytes, obj_num, gen_num, %StandardHandler{version: 4} = h) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L272"><a href="#L272">272</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    V4.decrypt_string(bytes, obj_num, gen_num, h)</code></td>
+</tr>
+<tr>
+<td class="line" id="L273"><a href="#L273">273</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L274"><a href="#L274">274</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr>
+<td class="line" id="L275"><a href="#L275">275</a></td>
+<td class="hits"></td>
+<td class="source"><code>  defp do_decrypt_string(bytes, obj_num, gen_num, %StandardHandler{version: 5} = h) do</code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L276"><a href="#L276">276</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>    V5.decrypt_string(bytes, obj_num, gen_num, h)</code></td>
+</tr>
+<tr>
+<td class="line" id="L277"><a href="#L277">277</a></td>
+<td class="hits"></td>
+<td class="source"><code>  end</code></td>
+</tr>
+<tr>
+<td class="line" id="L278"><a href="#L278">278</a></td>
+<td class="hits"></td>
+<td class="source"><code></code></td>
+</tr>
+<tr class="miss">
+<td class="line" id="L279"><a href="#L279">279</a></td>
+<td class="hits"><pre style="display: inline;">:-(</pre></td>
+<td class="source"><code>  defp do_decrypt_string(bytes, _obj_num, _gen_num, _handler), do: {:ok, bytes}</code></td>
+</tr>
+<tr>
+<td class="line" id="L280"><a href="#L280">280</a></td>
+<td class="hits"></td>
+<td class="source"><code>end</code></td>
+</tr>
+</tbody>
+<thead>
+<tr>
+<th>Line</th>
+<th>Hits</th>
+<th>Source</th>
+</tr>
+</thead>
+</table>
+</body>
+</html>

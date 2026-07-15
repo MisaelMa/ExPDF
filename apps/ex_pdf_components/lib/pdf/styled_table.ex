@@ -67,18 +67,29 @@ defmodule Pdf.StyledTable do
   """
   def render(document, data, opts \\ %{}) when is_list(data) do
     opts = Map.merge(@default_opts, opts)
-    pos = Pdf.cursor_xy(document)
+    {at, opts} = Map.pop(opts, :at)
+    table_width = Map.get(opts, :table_width)
+
     area = Pdf.content_area(document)
+    available_width = table_width || area.width
+
+    {table_x, table_y} =
+      case at do
+        {x, y} when is_number(x) and is_number(y) ->
+          {x, y}
+
+        _ ->
+          pos = Pdf.cursor_xy(document)
+          {pos.x, pos.y}
+      end
 
     # Calculate column widths
-    cols = resolve_columns(data, opts, area.width)
+    cols = resolve_columns(data, opts, available_width)
     total_width = Enum.reduce(cols, 0, fn col, acc -> acc + col.width end)
 
     rows = prepare_rows(data, opts, cols, document)
     total_height = Enum.reduce(rows, 0, fn row, acc -> acc + row.height end)
 
-    table_x = pos.x
-    table_y = pos.y
     r = opts.border_radius
 
     document = draw_clipped_backgrounds(document, rows, cols, {table_x, table_y}, {total_width, total_height}, r, opts)
@@ -91,7 +102,12 @@ defmodule Pdf.StyledTable do
 
     document = draw_outer_border(document, {table_x, table_y}, {total_width, total_height}, opts)
 
-    Pdf.set_cursor(document, table_y - total_height)
+    # Move cursor below table only when flowing at the cursor (not absolutely placed)
+    if at == nil do
+      Pdf.set_cursor(document, table_y - total_height)
+    else
+      document
+    end
   end
 
   def render_on_page(page, {x, y}, data, opts \\ %{}) do

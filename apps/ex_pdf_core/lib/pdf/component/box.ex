@@ -29,8 +29,19 @@ defmodule Pdf.Component.Box do
   - `:border_color` — border color (default `:black`)
   - `:border_radius` — corner radius (default `0`)
   - `:background` — fill color (default `nil`)
+  - `:clip` — clip children to inner area (default `false` when `reflow: true`, else `true`)
+  - `:break_text` — flow layout with word-wrapped text (default `false`)
+  - `:gap` — vertical spacing between flow children (default `0`)
   """
   def render(doc, {x, y}, {w, h}, style \\ %{}, callback) when is_function(callback, 2) do
+    clip? =
+      style
+      |> Map.get(:clip, not Map.get(style, :reflow, false))
+      |> then(fn
+        clip when is_boolean(clip) -> clip
+        _ -> true
+      end)
+
     style = Style.new(style)
     {mt, mr, mb, ml} = style.margin
     {pt, pr, pb, pl} = style.padding
@@ -64,7 +75,23 @@ defmodule Pdf.Component.Box do
     inner_w = outer_w - bl - br - pl - pr
     inner_h = outer_h - bt - bb - pt - pb
 
-    callback.(doc, %{x: inner_x, y: inner_y, width: inner_w, height: inner_h})
+    inner_area = %{x: inner_x, y: inner_y, width: inner_w, height: inner_h}
+
+    doc =
+      if clip? do
+        doc
+        |> Pdf.save_state()
+        |> draw_rect({inner_x, inner_y - inner_h}, {inner_w, inner_h}, 0)
+        |> Pdf.clip()
+        |> then(fn d ->
+          result = callback.(d, inner_area)
+          Pdf.restore_state(result)
+        end)
+      else
+        callback.(doc, inner_area)
+      end
+
+    doc
   end
 
   defp draw_rect(doc, {x, y}, {w, h}, r) when r > 0 do
