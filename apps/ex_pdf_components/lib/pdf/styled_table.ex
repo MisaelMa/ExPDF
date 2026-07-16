@@ -1,29 +1,7 @@
 defmodule Pdf.StyledTable do
   @moduledoc """
   Styled table component with CSS-like configuration.
-
-  Renders data tables with customizable borders, rounded corners, backgrounds,
-  padding, and per-row/cell styling using `Pdf.Style` maps.
-
-  ## Example
-
-      Pdf.StyledTable.render(doc, [
-        ["Name", "Qty", "Price"],
-        ["Widget A", "5", "$10.00"],
-        ["Widget B", "3", "$15.00"]
-      ], %{
-        columns: [
-          %{width: 200},
-          %{width: 80, align: :center},
-          %{width: 120, align: :right}
-        ],
-        header: %{bold: true, background: {0.2, 0.3, 0.5}, color: :white, padding: 8},
-        row: %{padding: 6, border_bottom: 1},
-        alt_row: %{background: {0.95, 0.95, 1.0}},
-        border: 1,
-        border_color: {0.3, 0.3, 0.3},
-        border_radius: 6
-      })
+  Includes custom word-wrap and multiline support for dynamic cell heights.
   """
 
   alias Pdf.{Page, Style}
@@ -45,26 +23,6 @@ defmodule Pdf.StyledTable do
     line_height: 14
   }
 
-  @doc """
-  Render a styled table on the document at the current cursor position.
-
-  Returns the updated document with cursor moved below the table.
-
-  ## Options
-
-  - `:columns` — list of column config maps: `%{width: n, align: :left|:center|:right, style: %{}}`
-  - `:header` — style map for header row (first row of data), or `nil` to treat all rows as body
-  - `:row` — default style map for body rows
-  - `:alt_row` — style map merged into every other body row (zebra stripes)
-  - `:footer` — style map for the last row
-  - `:border` — outer border width (number)
-  - `:border_color` — outer border color
-  - `:border_radius` — corner radius for outer border
-  - `:background` — default cell background
-  - `:padding` — default cell padding (CSS shorthand)
-  - `:font`, `:font_size`, `:color` — default text styling
-  - `:line_height` — height per text line in points
-  """
   def render(document, data, opts \\ %{}) when is_list(data) do
     opts = Map.merge(@default_opts, opts)
     {at, opts} = Map.pop(opts, :at)
@@ -87,19 +45,23 @@ defmodule Pdf.StyledTable do
     cols = resolve_columns(data, opts, available_width)
     total_width = Enum.reduce(cols, 0, fn col, acc -> acc + col.width end)
 
+    # Calculate row heights (MODIFICADO: Pasa cols y document para medir texto)
     rows = prepare_rows(data, opts, cols, document)
     total_height = Enum.reduce(rows, 0, fn row, acc -> acc + row.height end)
 
     r = opts.border_radius
 
+    # 1) Draw row backgrounds
     document = draw_clipped_backgrounds(document, rows, cols, {table_x, table_y}, {total_width, total_height}, r, opts)
 
+    # 2) Draw row borders + text
     {document, _y} =
       Enum.reduce(rows, {document, table_y}, fn row, {doc, y} ->
         doc = draw_row_content(doc, row, cols, {table_x, y}, opts)
         {doc, y - row.height}
       end)
 
+    # 3) Draw outer border stroke on top
     document = draw_outer_border(document, {table_x, table_y}, {total_width, total_height}, opts)
 
     # Move cursor below table only when flowing at the cursor (not absolutely placed)
@@ -116,6 +78,7 @@ defmodule Pdf.StyledTable do
     cols = resolve_columns_with_total(data, opts)
     total_width = Enum.reduce(cols, 0, fn col, acc -> acc + col.width end)
 
+    # MODIFICADO: Pasa cols y page
     rows = prepare_rows(data, opts, cols, page)
     total_height = Enum.reduce(rows, 0, fn row, acc -> acc + row.height end)
     r = opts.border_radius
@@ -185,7 +148,8 @@ defmodule Pdf.StyledTable do
     end
   end
 
-  # ── Row preparation ────────────────────────────────────────────────
+  # ── Row preparation (Multilínea inyectado) ─────────────────────────
+
   defp prepare_rows(data, opts, cols, doc \\ nil) do
     total = length(data)
     has_header = opts.header != nil
@@ -214,6 +178,7 @@ defmodule Pdf.StyledTable do
       italic = Map.get(row_style, :italic, false)
       line_h = Map.get(row_style, :line_height, opts.line_height)
 
+      # DIVISIÓN MULTILÍNEA: Envolvemos cada celda si excede el ancho
       wrapped_cells =
         Enum.map(cols, fn col ->
           cell_text = Enum.at(cells, col.index, "")
@@ -221,6 +186,7 @@ defmodule Pdf.StyledTable do
           wrap_text(cell_text, max_w, font, font_size, bold, italic, doc)
         end)
 
+      # ALTURA DINÁMICA: Calculamos la altura basándonos en la celda con más renglones
       max_lines = Enum.map(wrapped_cells, &length/1) |> Enum.max(fn -> 1 end)
 
       %{
@@ -235,6 +201,7 @@ defmodule Pdf.StyledTable do
     end)
   end
 
+  # Utilería para cortar texto respetando \n y envoltura de ancho
   defp wrap_text(text, max_width, font, font_size, bold, italic, doc) do
     text_str = to_string(text)
 
@@ -265,17 +232,14 @@ defmodule Pdf.StyledTable do
 
   defp row_style_for(:header, _is_alt, opts), do: opts.header || %{}
   defp row_style_for(:footer, _is_alt, opts), do: Map.merge(opts.row, opts.footer || %{})
-
   defp row_style_for(:body, true, opts) do
     if opts.alt_row, do: Map.merge(opts.row, opts.alt_row), else: opts.row
   end
-
   defp row_style_for(:body, false, opts), do: opts.row
 
   # ── Drawing (Document level) ───────────────────────────────────────
 
   defp draw_clipped_backgrounds(document, rows, cols, {table_x, table_y}, {w, h}, r, opts) do
-    # Draw table-level background
     document =
       if opts.background do
         document
@@ -288,18 +252,15 @@ defmodule Pdf.StyledTable do
         document
       end
 
-    # Check if any row has a background
     has_row_bg = Enum.any?(rows, fn row -> Map.get(row.style, :background) != nil end)
 
     if has_row_bg do
-      # Save state, set clipping path (rounded rect), then draw row backgrounds
       document =
         document
         |> Pdf.save_state()
         |> draw_shape(document, {table_x, table_y - h}, {w, h}, r)
         |> Pdf.clip()
 
-      # Draw each row background inside the clip
       {document, _y} =
         Enum.reduce(rows, {document, table_y}, fn row, {doc, y} ->
           row_h = row.height
@@ -307,9 +268,7 @@ defmodule Pdf.StyledTable do
 
           doc =
             case Map.get(row.style, :background) do
-              nil ->
-                doc
-
+              nil -> doc
               bg ->
                 doc
                 |> Pdf.save_state()
@@ -389,7 +348,7 @@ defmodule Pdf.StyledTable do
         lines = Enum.at(row.wrapped_cells, col.index, [])
         {_pt, pr, _pb, pl} = row.padding
         line_h = row.line_height
-        
+
         doc =
           lines
           |> Enum.with_index()
@@ -405,9 +364,7 @@ defmodule Pdf.StyledTable do
     document
   end
 
-  defp cell_text_x(cx, pl, _pr, _col_w, :left, _text, _font, _fs, _b, _i, _doc) do
-    cx + pl
-  end
+  defp cell_text_x(cx, pl, _pr, _col_w, :left, _text, _font, _fs, _b, _i, _doc), do: cx + pl
 
   defp cell_text_x(cx, pl, pr, col_w, :center, text, font, font_size, bold, italic, doc) do
     text_w = estimate_text_width(text, font, font_size, bold, italic, doc)
@@ -465,9 +422,7 @@ defmodule Pdf.StyledTable do
 
           pg =
             case Map.get(row.style, :background) do
-              nil ->
-                pg
-
+              nil -> pg
               bg ->
                 pg
                 |> Page.save_state()
