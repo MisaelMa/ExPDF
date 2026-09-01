@@ -1,5 +1,5 @@
 # `Pdf.Component.Chip`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/component/chip.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.5/lib/pdf/component/chip.ex#L1)
 
 Chip component for PDF documents.
 

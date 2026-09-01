@@ -1,5 +1,5 @@
 # `ExQR.Tables`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v0.1.0/lib/ex_qr/tables.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v0.1.1/lib/ex_qr/tables.ex#L1)
 
 QR Code version tables: data capacity, EC block structure,
 alignment pattern positions, and format/version information.

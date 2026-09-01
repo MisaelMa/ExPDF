@@ -1,5 +1,5 @@
 # `ExQR.GaloisField`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v0.1.0/lib/ex_qr/galois_field.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v0.1.1/lib/ex_qr/galois_field.ex#L1)
 
 GF(256) arithmetic for QR Code Reed-Solomon error correction.
 

@@ -1,4 +1,4 @@
-# ex_qr v0.1.0 - API Reference
+# ex_qr v0.1.1 - API Reference
 
 ## Modules
 

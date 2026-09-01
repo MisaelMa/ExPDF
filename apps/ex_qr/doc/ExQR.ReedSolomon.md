@@ -1,5 +1,5 @@
 # `ExQR.ReedSolomon`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v0.1.0/lib/ex_qr/reed_solomon.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v0.1.1/lib/ex_qr/reed_solomon.ex#L1)
 
 Reed-Solomon error correction encoding for QR codes.
 

@@ -1,9 +1,10 @@
-# ex_pdf_components v1.0.2 - API Reference
+# ex_pdf_components v1.0.5 - API Reference
 
 ## Modules
 
 - [Pdf.Builder](Pdf.Builder.md): Declarative PDF builder from template lists.
 - [Pdf.Component.Alert](Pdf.Component.Alert.md): Alert/Callout component for PDF documents.
+- [Pdf.Component.Aside](Pdf.Component.Aside.md): Panel `<aside>` promocional con ilustración, textos y QR.
 - [Pdf.Component.Avatar](Pdf.Component.Avatar.md): Avatar component for PDF documents.
 - [Pdf.Component.Badge](Pdf.Component.Badge.md): Badge component for PDF documents.
 - [Pdf.Component.Barcode](Pdf.Component.Barcode.md): Barcode PDF component — renders Code 128 barcodes onto a PDF.
@@ -13,10 +14,14 @@
 - [Pdf.Component.Chip](Pdf.Component.Chip.md): Chip component for PDF documents.
 - [Pdf.Component.CodeBlock](Pdf.Component.CodeBlock.md): Code block component for PDF documents.
 - [Pdf.Component.Divider](Pdf.Component.Divider.md): Divider component for PDF documents.
+- [Pdf.Component.Figure](Pdf.Component.Figure.md): `<figure>` de pago: QR, código de barras y total.
 - [Pdf.Component.Footnote](Pdf.Component.Footnote.md): Footnote component for PDF documents.
+- [Pdf.Component.Header](Pdf.Component.Header.md): Banda `<header>` de sección: barra verde con texto (periodo, referencia, etc.).
 - [Pdf.Component.KeyValue](Pdf.Component.KeyValue.md): Key-value pair component for PDF documents.
 - [Pdf.Component.List](Pdf.Component.List.md): List component for PDF documents.
+- [Pdf.Component.Meter](Pdf.Component.Meter.md): Indicador `<meter>` con icono y barra de gradiente.
 - [Pdf.Component.Metric](Pdf.Component.Metric.md): Metric comparison component for PDF documents.
+- [Pdf.Component.Nav](Pdf.Component.Nav.md): Barra `<nav>` de contacto / redes en el pie del documento.
 - [Pdf.Component.PageHeader](Pdf.Component.PageHeader.md): Automatic page header component for PDF documents.
 - [Pdf.Component.Paginator](Pdf.Component.Paginator.md): Paginator component for PDF documents.
 - [Pdf.Component.Progress](Pdf.Component.Progress.md): Progress bar component for PDF documents.
@@ -26,6 +31,11 @@
 - [Pdf.Component.StatCard](Pdf.Component.StatCard.md): Stat card component for PDF documents.
 - [Pdf.Component.StepIndicator](Pdf.Component.StepIndicator.md): Step indicator component for PDF documents.
 - [Pdf.Component.TOC](Pdf.Component.TOC.md): Table of Contents component for PDF documents.
+- [Pdf.Component.Table](Pdf.Component.Table.md): `<table>` con encabezados mergeados y subencabezados (grid de consumo).
 - [Pdf.Component.Timeline](Pdf.Component.Timeline.md): Timeline component for PDF documents.
-- [Pdf.StyledTable](Pdf.StyledTable.md): Styled table component with CSS-like configuration.
+- [Pdf.Layout.AbsoluteMeasure](Pdf.Layout.AbsoluteMeasure.md): Measures the minimum inner height for a box with absolutely-positioned children.
+- [Pdf.Layout.AbsoluteReflow](Pdf.Layout.AbsoluteReflow.md): HTML-like reflow for absolutely-positioned box children.
+- [Pdf.Layout.ContainingBlock](Pdf.Layout.ContainingBlock.md): CSS-like containing block — resolves relative sizes against a parent area.
+- [Pdf.Layout.Stack](Pdf.Layout.Stack.md): Vertical stack layout — children flow top-to-bottom without individual `y` positions.
+- [Pdf.StyledTable](Pdf.StyledTable.md): Styled table component with CSS-like configuration for PDF generation.
 

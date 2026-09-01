@@ -1,7 +1,7 @@
 defmodule ExPdfComponents.MixProject do
   use Mix.Project
 
-  @version "1.0.2"
+  @version "1.0.5"
   @github_url "https://github.com/MisaelMa/ExPDF"
 
   def project do

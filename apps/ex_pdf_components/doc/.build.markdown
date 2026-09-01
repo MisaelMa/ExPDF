@@ -1,5 +1,6 @@
 Pdf.Builder.md
 Pdf.Component.Alert.md
+Pdf.Component.Aside.md
 Pdf.Component.Avatar.md
 Pdf.Component.Badge.md
 Pdf.Component.Barcode.md
@@ -9,10 +10,14 @@ Pdf.Component.Chart.md
 Pdf.Component.Chip.md
 Pdf.Component.CodeBlock.md
 Pdf.Component.Divider.md
+Pdf.Component.Figure.md
 Pdf.Component.Footnote.md
+Pdf.Component.Header.md
 Pdf.Component.KeyValue.md
 Pdf.Component.List.md
+Pdf.Component.Meter.md
 Pdf.Component.Metric.md
+Pdf.Component.Nav.md
 Pdf.Component.PageHeader.md
 Pdf.Component.Paginator.md
 Pdf.Component.Progress.md
@@ -22,7 +27,12 @@ Pdf.Component.Signature.md
 Pdf.Component.StatCard.md
 Pdf.Component.StepIndicator.md
 Pdf.Component.TOC.md
+Pdf.Component.Table.md
 Pdf.Component.Timeline.md
+Pdf.Layout.AbsoluteMeasure.md
+Pdf.Layout.AbsoluteReflow.md
+Pdf.Layout.ContainingBlock.md
+Pdf.Layout.Stack.md
 Pdf.StyledTable.md
 api-reference.md
 llms.txt

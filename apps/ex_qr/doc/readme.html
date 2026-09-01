@@ -5,10 +5,10 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.40.2">
-    <meta name="project" content="ex_qr v0.1.0">
+    <meta name="project" content="ex_qr v0.1.1">
 
 
-    <title>ExQR — ex_qr v0.1.0</title>
+    <title>ExQR — ex_qr v0.1.1</title>
 
     <link rel="stylesheet" href="dist/html-elixir-NHQLCD6Y.css" />
 
@@ -37,7 +37,7 @@
 ex_qr
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v0.1.0
+          v0.1.1
         </div>
       </div>
     </div>
@@ -100,7 +100,7 @@ ex_qr
 </a>
 
 
-      <a href="https://github.com/MisaelMa/ExPDF/blob/v0.1.0/README.md#L1" title="View Source" class="icon-action" rel="help nofollow">
+      <a href="https://github.com/MisaelMa/ExPDF/blob/v0.1.1/README.md#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -111,12 +111,12 @@ ex_qr
 <p><a href="https://hex.pm/packages/ex_qr"><img src="https://img.shields.io/hexpm/v/ex_qr.svg" alt="Hex.pm"/></a>
 <a href="https://hexdocs.pm/ex_qr"><img src="https://img.shields.io/badge/docs-hexdocs-blue" alt="Docs"/></a>
 <a rel="nofollow" href="https://github.com/MisaelMa/ExPDF/blob/main/LICENSE.md"><img src="https://img.shields.io/hexpm/l/ex_qr.svg" alt="License"/></a></p><p>Pure Elixir QR code encoding — versions 1–20, error correction levels
-L/M/Q/H, byte mode. No external dependencies.</p><p>Part of the <a href="https://hex.pm/packages/ex_pdf">ExPDF</a> umbrella.</p><h2 id="installation" class="section-heading"><a href="#installation" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Installation</span></h2><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">deps</span><span class="w"> </span><span class="k" data-group-id="9940360759-1">do</span><span class="w">
-  </span><span class="p" data-group-id="9940360759-2">[</span><span class="w">
-    </span><span class="p" data-group-id="9940360759-3">{</span><span class="ss">:ex_qr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;~&gt; 0.1&quot;</span><span class="p" data-group-id="9940360759-3">}</span><span class="w">
-  </span><span class="p" data-group-id="9940360759-2">]</span><span class="w">
-</span><span class="k" data-group-id="9940360759-1">end</span></code></pre><h2 id="usage" class="section-heading"><a href="#usage" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Usage</span></h2><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="2536554277-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">matrix</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p" data-group-id="2536554277-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ExQR</span><span class="o">.</span><span class="n">encode</span><span class="p" data-group-id="2536554277-2">(</span><span class="s">&quot;https://example.com&quot;</span><span class="p" data-group-id="2536554277-2">)</span><span class="w">
-</span><span class="p" data-group-id="2536554277-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">matrix</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p" data-group-id="2536554277-3">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ExQR</span><span class="o">.</span><span class="n">encode</span><span class="p" data-group-id="2536554277-4">(</span><span class="s">&quot;Hello&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">:h</span><span class="p" data-group-id="2536554277-4">)</span></code></pre><p>The matrix is a map of <code class="inline">{row, col} =&gt; 0 | 1</code> where <code class="inline">1</code> = black module.</p><h3 id="converting-to-rows" class="section-heading"><a href="#converting-to-rows" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Converting to rows</span></h3><pre><code class="makeup elixir" translate="no"><span class="n">rows</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ExQR</span><span class="o">.</span><span class="n">matrix_to_rows</span><span class="p" data-group-id="7097831000-1">(</span><span class="n">matrix</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p" data-group-id="7097831000-1">)</span><span class="w">
+L/M/Q/H, byte mode. No external dependencies.</p><p>Part of the <a href="https://hex.pm/packages/ex_pdf">ExPDF</a> umbrella.</p><h2 id="installation" class="section-heading"><a href="#installation" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Installation</span></h2><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">deps</span><span class="w"> </span><span class="k" data-group-id="7603339644-1">do</span><span class="w">
+  </span><span class="p" data-group-id="7603339644-2">[</span><span class="w">
+    </span><span class="p" data-group-id="7603339644-3">{</span><span class="ss">:ex_qr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;~&gt; 0.1&quot;</span><span class="p" data-group-id="7603339644-3">}</span><span class="w">
+  </span><span class="p" data-group-id="7603339644-2">]</span><span class="w">
+</span><span class="k" data-group-id="7603339644-1">end</span></code></pre><h2 id="usage" class="section-heading"><a href="#usage" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Usage</span></h2><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="6571954850-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">matrix</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p" data-group-id="6571954850-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ExQR</span><span class="o">.</span><span class="n">encode</span><span class="p" data-group-id="6571954850-2">(</span><span class="s">&quot;https://example.com&quot;</span><span class="p" data-group-id="6571954850-2">)</span><span class="w">
+</span><span class="p" data-group-id="6571954850-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">matrix</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p" data-group-id="6571954850-3">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ExQR</span><span class="o">.</span><span class="n">encode</span><span class="p" data-group-id="6571954850-4">(</span><span class="s">&quot;Hello&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">:h</span><span class="p" data-group-id="6571954850-4">)</span></code></pre><p>The matrix is a map of <code class="inline">{row, col} =&gt; 0 | 1</code> where <code class="inline">1</code> = black module.</p><h3 id="converting-to-rows" class="section-heading"><a href="#converting-to-rows" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Converting to rows</span></h3><pre><code class="makeup elixir" translate="no"><span class="n">rows</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ExQR</span><span class="o">.</span><span class="n">matrix_to_rows</span><span class="p" data-group-id="7354266815-1">(</span><span class="n">matrix</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p" data-group-id="7354266815-1">)</span><span class="w">
 </span><span class="c1"># =&gt; [[0, 1, 1, ...], [1, 0, 0, ...], ...]</span></code></pre><h3 id="error-correction-levels" class="section-heading"><a href="#error-correction-levels" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Error correction levels</span></h3><ul><li><code class="inline">:l</code> — Low (~7% recovery)</li><li><code class="inline">:m</code> — Medium (~15% recovery, default)</li><li><code class="inline">:q</code> — Quartile (~25% recovery)</li><li><code class="inline">:h</code> — High (~30% recovery)</li></ul><h2 id="license" class="section-heading"><a href="#license" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">License</span></h2><p>MIT. See <a rel="nofollow" href="https://github.com/MisaelMa/ExPDF/blob/main/LICENSE.md">LICENSE.md</a>.</p>
 
 </div>
@@ -134,11 +134,11 @@ L/M/Q/H, byte mode. No external dependencies.</p><p>Part of the <a href="https:/
         <p>
 
             <span class="line">
-              <a href="https://hex.pm/packages/ex_qr/0.1.0">Hex Package</a>
+              <a href="https://hex.pm/packages/ex_qr/0.1.1">Hex Package</a>
 
-              <a href="https://preview.hex.pm/preview/ex_qr/0.1.0">Hex Preview</a>
+              <a href="https://preview.hex.pm/preview/ex_qr/0.1.1">Hex Preview</a>
 
-                (<a href="https://preview.hex.pm/preview/ex_qr/0.1.0/show/README.md">current file</a>)
+                (<a href="https://preview.hex.pm/preview/ex_qr/0.1.1/show/README.md">current file</a>)
 
             </span>
 

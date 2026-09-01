@@ -1,5 +1,5 @@
 # `Pdf.Builder`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/builder.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.5/lib/pdf/builder.ex#L1)
 
 Declarative PDF builder from template lists.
 
@@ -26,6 +26,19 @@ global configuration for page size, margins, fonts, and templates.
 
     doc = Pdf.Builder.render(template, config)
     binary = Pdf.export(doc)
+
+# `measure_box_height`
+
+Measure the outer height of a box using flow layout (`layout: :flow`).
+
+Useful when building templates with `size: {:full, :auto}`.
+
+# `measure_box_height_absolute`
+
+Measure the outer height of a box with absolutely-positioned children.
+
+Resolves `:full` widths against the inner area and accounts for wrapped
+key-value rows. Use with `size: {:full, :auto}` on reservation-style cards.
 
 # `render`
 

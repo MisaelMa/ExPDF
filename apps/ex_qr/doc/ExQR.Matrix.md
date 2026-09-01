@@ -1,5 +1,5 @@
 # `ExQR.Matrix`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v0.1.0/lib/ex_qr/matrix.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v0.1.1/lib/ex_qr/matrix.ex#L1)
 
 QR Code matrix construction: function patterns, data placement,
 masking, and format information.

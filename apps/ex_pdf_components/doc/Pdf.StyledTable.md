@@ -1,30 +1,31 @@
 # `Pdf.StyledTable`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.2/lib/pdf/styled_table.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v1.0.5/lib/pdf/styled_table.ex#L1)
 
-Styled table component with CSS-like configuration.
+Styled table component with CSS-like configuration for PDF generation.
 
-Renders data tables with customizable borders, rounded corners, backgrounds,
-padding, and per-row/cell styling using `Pdf.Style` maps.
+## Ejemplo de uso
 
-## Example
+    data = [
+      ["Nombre", "Cantidad", "Precio"],
+      ["Producto A", "10", "$100.00"],
+      [{:regular, "Producto B"}, {:bold, "5"}, {:regular, "$50.00"}]
+    ]
 
-    Pdf.StyledTable.render(doc, [
-      ["Name", "Qty", "Price"],
-      ["Widget A", "5", "$10.00"],
-      ["Widget B", "3", "$15.00"]
-    ], %{
+    Pdf.StyledTable.render(doc, data, %{
       columns: [
-        %{width: 200},
-        %{width: 80, align: :center},
-        %{width: 120, align: :right}
+        %{width: 200, align: :left},
+        %{width: 50, align: :center},
+        %{width: 100, align: :right}
       ],
-      header: %{bold: true, background: {0.2, 0.3, 0.5}, color: :white, padding: 8},
-      row: %{padding: 6, border_bottom: 1},
-      alt_row: %{background: {0.95, 0.95, 1.0}},
-      border: 1,
-      border_color: {0.3, 0.3, 0.3},
-      border_radius: 6
+      header: %{bold: true, background: "#E6E6E6", padding: 5},
+      row: %{padding: 5, border_bottom: 0.5},
+      border: 1
     })
+
+Este componente incluye soporte para:
+- Ajuste de texto automático (Word-wrap).
+- Estilos dinámicos por fila (Header, Body, Alt-row).
+- Texto enriquecido (Rich Text) pasando tuplas `{:bold, "texto"}` o `{:regular, "texto"}`.
 
 # `render`
 
@@ -48,8 +49,6 @@ Returns the updated document with cursor moved below the table.
 - `:line_height` — height per text line in points
 
 # `render_on_page`
-
-Render a styled table on a Page struct (low-level).
 
 ---
 

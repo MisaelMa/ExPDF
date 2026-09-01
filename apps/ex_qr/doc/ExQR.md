@@ -1,5 +1,5 @@
 # `ExQR`
-[🔗](https://github.com/MisaelMa/ExPDF/blob/v0.1.0/lib/ex_qr.ex#L1)
+[🔗](https://github.com/MisaelMa/ExPDF/blob/v0.1.1/lib/ex_qr.ex#L1)
 
 Pure Elixir QR code encoding library.
 
